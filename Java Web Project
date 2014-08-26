@@ -1,0 +1,34 @@
+Java Web Project.
+
+1. Deployment of the Environment.
+
+There are some necessary software to the java course. An installation usually demands the direct downloading from the official site or adding the new repository to apt. It will be discussed and practiced at our first lesson in the course.
+Demands:
+1) Java-jdk 1.7. (The Correct installation can be checked by `java -version` command in the terminal).
+2) Idea IDE. (Fortunately, we have the one-year license for professional tools produced by JetBrains). It also include the debugger, profiler, refactor and unit-testing tools. Please, try to explore these possibilities. 
+3) Maven. It is a tool for external libraries and resources manipulating.
+
+Note, after the installation you have to go in Idea project settings and declare the Maven and Jdk pathes.
+
+2. Jetty.
+
+Jetty is a java framework for developing backend. Jetty services can work self-sufficiently or as a proxy with apache or nginx. We can extend jetty classes for servlet and routing and append our own functionality.
+
+Please, look at `SystemCore.dia` graph. It describes the upper level of architecture of our backend.
+Every object from the diagramm will reside in its own thread. The event-sending will be maintained by special mechanism, which consists of threadpool, register and hierarchy of messages. There is no need to invent this mechanism, because we already have obligatory vesion in our `Java 2013 project`. For more information watch the git-repo: https://github.com/DunaevDmitrij/Java_2013_Technopark.git.
+
+3. The work plan.
+
+1. Servlet and requests for static pages.
+2. Web-pages and design.
+3. DB manipulations
+4. Requests with template processing.
+5. Multi-Threading and message service.
+6. Ajax requests.
+7. Game mechanic and game process.
+
+Thus, we get the ready project.
+Commentaries or objections greeted.
+
+2014 Technopark.
+Author: Kislenko Maksim.
