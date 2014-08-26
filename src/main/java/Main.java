@@ -21,11 +21,11 @@ public class Main
         return servlet;
     }
 
-    public static void main(String[] args) throws Exception
-    {
-        Servlet servlet = configure();
+    public static void main(String[] args) throws Exception {
+        final int SERVER_PORT = 8081;
 
-        Server server = new Server(8081);
+        Servlet servlet = configure();
+        Server server = new Server(SERVER_PORT);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(servlet), "/*");
