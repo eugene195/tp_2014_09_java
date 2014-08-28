@@ -1,42 +1,65 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.*;
 
 /**
  * Created by Евгений on 28.08.2014.
  */
 public class DataBaseManager {
 
-//
-//    Нужны методы Get и Set
-//
-    private final String baseUrl = "jdbc:mysql://localhost/java_db";
-    private final String baseUserName = "root";
-    private final String baseUserPasswd = "";
+    private static final String baseUrl = "jdbc:mysql://localhost/java_db";
+    private static final String baseUserName = "root";
+    private static final String baseUserPasswd = "22061994";
 
-    public void executeSql(String query){
-        Connection conn = null;
+    private Connection conn;
 
-        try{
+    public DataBaseManager() {
+        super();
+        try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            conn = DriverManager.getConnection(baseUrl, baseUserName, baseUserPasswd);
+            this.conn = DriverManager.getConnection(baseUrl, baseUserName, baseUserPasswd);
             System.out.println("DB connected");
         }
-        catch (Exception e){
+        catch (Exception e) {
             System.err.println ("Cannot connect to DB");
-            e.printStackTrace();
         }
-        finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                    System.out.println("DB connection terminated");
-                }
-                catch (Exception e) {
+    }
 
-                }
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        if (this.conn != null) {
+            try {
+                this.conn.close();
+                System.out.println("DB connection terminated");
+            }
+            catch (Exception e) {
+                System.out.println("DB cannot be terminated");
             }
         }
+    }
 
+    public ResultSet executeSql(String query) {
+        if (this.conn != null) {
+            try {
+                Statement statement = this.conn.createStatement();
+                ResultSet result = statement.executeQuery(query);
+                return result;
+            }
+            catch (SQLException e) {
+                System.out.println("sql exception during executeSql");
+            }
+        }
+        return null;
+    }
+
+    public void test() {
+        ResultSet result = this.executeSql("SELECT * FROM User;");
+        try {
+            result.next();
+            System.out.println(result.get);
+        }
+        catch (Exception e) {
+            System.out.println("Fucking shit");
+        }
 
     }
 

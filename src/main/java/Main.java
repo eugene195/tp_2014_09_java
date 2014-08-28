@@ -21,6 +21,9 @@ public class Main
 
         MessageSystem msys = new MessageSystem();
         Servlet servlet = new Servlet(msys);
+        DataBaseManager dbman = new DataBaseManager();
+
+        dbman.test();
 
         ExecutorService threadPool = Executors.newFixedThreadPool(THREADS_AMOUNT);
         threadPool.submit(servlet);
