@@ -52,12 +52,12 @@ public class Servlet extends HttpServlet implements Runnable {
         WebPage currentPage = getPageByURL(request);
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
-
+/* delete if/else */
         if (currentPage == null) {
             response.getWriter().println("<h1>Page not Found</h1>");
         }
         else {
-            /*currentPage.loadPage(response);*/
+            currentPage.handleGet(request, response);
         }
     }
 

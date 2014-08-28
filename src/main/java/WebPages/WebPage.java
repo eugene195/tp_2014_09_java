@@ -2,20 +2,41 @@ package WebPages;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by Евгений on 27.08.2014.
  * Abstract Page controller.
  */
 public abstract class WebPage {
+
     public abstract void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException;
 
 //    public abstract void handlePost(HttpServletRequest request, HttpServletResponse response)
 //            throws IOException;
 
-    protected void loadPage(String pathToFile) {
+    protected String loadPage(String pathToFile)
+            throws IOException
+    {
+        String page = null;
+        try {
+            File file = new File(pathToFile);
 
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(file)
+                    )
+            );
+
+            while ((page = br.readLine()) != null) {
+                System.out.println(page);
+            }
+            br.close();
+        }
+        catch (FileNotFoundException e){
+            System.out.println("File not found");
+        }
+        return page;
     }
 }
