@@ -17,9 +17,12 @@ import java.io.IOException;
 public class AuthPage extends WebPage {
 
     private final MessageSystem msys;
-    private HttpSession session;
+
+    private boolean successAuth;
+    private String loginAuth;
 
     public AuthPage(MessageSystem msys) {
+        super();
         this.msys = msys;
     }
 
@@ -49,17 +52,25 @@ public class AuthPage extends WebPage {
         String passw = request.getParameter("passw");
 
         this.msys.sendMessage(new AuthMsg(login, passw), "dbman");
-        this.session = request.getSession();
+        this.setZombie();
+
+        HttpSession session = request.getSession();
+
+        if (this.successAuth) {
+            response.getWriter().println("Success");
+            session.setAttribute("user", this.loginAuth);
+        }
+        else {
+            response.getWriter().println("Failure");
+            session.invalidate();
+        }
 
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
     public void finalizeAuth (CheckedAuthMsg msg) {
-        if(msg.isAuthSuccess()) {
-            this.session.setAttribute("user", msg.getLogin());
-        }
-        else {
-            this.session.invalidate();
-        }
+        this.successAuth = msg.isAuthSuccess();
+        this.loginAuth = msg.getLogin();
+        this.resume();
     }
 }

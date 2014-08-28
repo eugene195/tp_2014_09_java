@@ -11,6 +11,11 @@ import java.io.*;
 public abstract class WebPage {
 
     private static final String DEFAULT_TML_PATH = "src/main/tml/";
+    protected boolean zombie;
+
+    public WebPage() {
+        this.zombie = false;
+    }
 
     public abstract void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException;
@@ -46,5 +51,22 @@ public abstract class WebPage {
             System.out.println("File not found");
         }
         return page;
+    }
+
+    public void setZombie() {
+        this.zombie = true;
+
+        while (this.zombie) {
+            try {
+                Thread.sleep(10);
+            }
+            catch (Exception e) {
+                System.out.println("Zombie was interrupted");
+            }
+        }
+    }
+
+    public void resume() {
+        this.zombie = false;
     }
 }
