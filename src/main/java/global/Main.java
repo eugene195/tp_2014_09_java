@@ -1,3 +1,8 @@
+package global;
+
+import global.DataBaseManager;
+import global.MessageSystem;
+import global.Servlet;
 import org.eclipse.jetty.rewrite.handler.RedirectRegexRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.server.Handler;

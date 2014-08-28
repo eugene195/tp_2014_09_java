@@ -1,4 +1,6 @@
-import WebPages.*;
+package global;
+
+import global.webpages.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +28,7 @@ public class Servlet extends HttpServlet implements Runnable {
         this.msys = msys;
         msys.register(this, SERVLET_ADDRESS);
 
-        this.pageMap.put("/auth", new AuthPage());
+        this.pageMap.put("/auth", new AuthPage(this.msys));
         this.pageMap.put("/game", new GamePage());
         this.pageMap.put("/register", new RegisterPage());
         this.pageMap.put("/stat", new StatPage());

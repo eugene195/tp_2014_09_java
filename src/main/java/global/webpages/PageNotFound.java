@@ -1,4 +1,4 @@
-package WebPages;
+package global.webpages;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

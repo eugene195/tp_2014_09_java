@@ -1,3 +1,7 @@
+package global;
+
+import global.MessageSystem;
+
 import java.sql.*;
 
 import static java.lang.Thread.sleep;
