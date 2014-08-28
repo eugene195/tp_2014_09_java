@@ -1,4 +1,6 @@
-import messages.AbstractMsg;
+package global;
+
+import global.messages.AbstractMsg;
 
 import java.util.HashMap;
 import java.util.Map;
