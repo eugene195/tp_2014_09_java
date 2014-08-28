@@ -1,3 +1,4 @@
-.field > label {
-    width: 40%;
+.field label {
+    display: inline-block;
+    min-width: 150px;
 }
