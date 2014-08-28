@@ -26,6 +26,9 @@ public class AuthPage extends WebPage {
     public void handlePost(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
+        String login = request.getParameter("login");
+        String passw = request.getParameter("passw");
+        System.out.println(login + "  " + passw);
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }
