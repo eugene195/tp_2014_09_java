@@ -18,6 +18,10 @@ public class CheckedAuthMsg extends AbstractMsg {
         return this.success;
     }
 
+    public String getLogin(){
+        return this.login;
+    }
+
     @Override
     public void exec(Runnable abonent){
         if(abonent instanceof Servlet){
