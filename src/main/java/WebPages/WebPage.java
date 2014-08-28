@@ -9,7 +9,6 @@ import java.io.IOException;
  * Abstract Page controller.
  */
 public abstract class WebPage {
-
     public abstract void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException;
 
