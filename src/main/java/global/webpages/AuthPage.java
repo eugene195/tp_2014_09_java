@@ -19,17 +19,6 @@ public class AuthPage extends WebPage {
     private final MessageSystem msys;
     private HttpSession session;
 
-
-    public void finalizeAuth (CheckedAuthMsg msg) {
-        if(msg.isAuthSuccess()) {
-            this.session.setAttribute("user", msg.getLogin());
-        }
-        else {
-            this.session.invalidate();
-        }
-    }
-
-
     public AuthPage(MessageSystem msys) {
         this.msys = msys;
     }
@@ -63,5 +52,14 @@ public class AuthPage extends WebPage {
         this.session = request.getSession();
 
         response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+    public void finalizeAuth (CheckedAuthMsg msg) {
+        if(msg.isAuthSuccess()) {
+            this.session.setAttribute("user", msg.getLogin());
+        }
+        else {
+            this.session.invalidate();
+        }
     }
 }
