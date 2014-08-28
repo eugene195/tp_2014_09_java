@@ -49,25 +49,18 @@ public class Servlet extends HttpServlet implements Runnable {
                       HttpServletResponse response)
             throws IOException, ServletException
     {
-        WebPage currentPage = getPageByURL(request);
-        response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-
-        if (currentPage == null) {
-            response.getWriter().println("<h1>Page not Found</h1>");
-        }
-        else {
-            /*currentPage.loadPage(response);*/
-        }
+        WebPage currentPage = this.getPageByURL(request);
+        currentPage.handleGet(request, response);
     }
 
     private WebPage getPageByURL(HttpServletRequest request){
         String requestURI = request.getRequestURI();
+        WebPage currentPage = this.pageMap.get(requestURI);
 
-        /* DEBUG */
-        // System.out.print(requestURI + ":::" + request.getPathInfo() + "\n");
-
-        return this.pageMap.get(requestURI);
+        if (currentPage == null) {
+            currentPage = new PageNotFound();
+        }
+        return currentPage;
     }
 
     @Override

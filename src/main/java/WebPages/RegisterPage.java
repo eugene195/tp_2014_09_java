@@ -13,5 +13,8 @@ public class RegisterPage extends WebPage{
             throws IOException
     {
         response.getWriter().println("<h1>Hello REGISTER PAGE</h1>");
+
+        response.setContentType("text/html;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 }

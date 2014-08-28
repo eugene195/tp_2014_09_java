@@ -14,5 +14,8 @@ public class AuthPage extends WebPage {
             throws IOException
     {
         response.getWriter().println("<h1>Hello AUTH PAGE</h1>");
+
+        response.setContentType("text/html;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 }
