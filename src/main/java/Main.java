@@ -17,16 +17,15 @@ public class Main
     private static final String MAIN_PAGE_ADDRESS = "/main";
 
     private static Servlet configure() {
-        final int THREADS_AMOUNT = 1;
+        final int THREADS_AMOUNT = 2;
 
         MessageSystem msys = new MessageSystem();
         Servlet servlet = new Servlet(msys);
-        DataBaseManager dbman = new DataBaseManager();
-
-        dbman.test();
+        DataBaseManager dbman = new DataBaseManager(msys);
 
         ExecutorService threadPool = Executors.newFixedThreadPool(THREADS_AMOUNT);
         threadPool.submit(servlet);
+        threadPool.submit(dbman);
 
         return servlet;
     }
