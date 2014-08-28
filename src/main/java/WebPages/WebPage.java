@@ -26,10 +26,10 @@ public abstract class WebPage {
             File file = new File(DEFAULT_TML_PATH + pathToFile);
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 
-            String line = "";
+            String line = br.readLine();
             while (line != null) {
-                line = br.readLine();
                 page += line;
+                line = br.readLine();
             }
             br.close();
         }
