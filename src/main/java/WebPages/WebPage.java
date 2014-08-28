@@ -6,11 +6,17 @@ import java.io.IOException;
 
 /**
  * Created by Евгений on 27.08.2014.
+ * Abstract Page controller.
  */
-public interface WebPage {
+public abstract class WebPage {
 
-    void handleGet(HttpServletRequest request);
-
-    void loadPage(HttpServletResponse response)
+    public abstract void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException;
+
+//    public abstract void handlePost(HttpServletRequest request, HttpServletResponse response)
+//            throws IOException;
+
+    protected void loadPage(String pathToFile) {
+
+    }
 }

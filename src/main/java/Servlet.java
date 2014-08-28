@@ -59,7 +59,7 @@ public class Servlet extends HttpServlet implements Runnable {
             currentPage.loadPage(response);
     }
 
-    public WebPage getPageByURL(HttpServletRequest request){
+    private WebPage getPageByURL(HttpServletRequest request){
         String requestURI = request.getRequestURI();
 
         /* DEBUG */
