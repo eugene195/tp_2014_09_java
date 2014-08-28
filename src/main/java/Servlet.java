@@ -53,9 +53,11 @@ public class Servlet extends HttpServlet implements Runnable {
         currentPage.handleGet(request, response);
     }
 
-    private WebPage getPageByURL(HttpServletRequest request){
+    private WebPage getPageByURL(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         WebPage currentPage = this.pageMap.get(requestURI);
+
+        System.out.println(requestURI);
 
         if (currentPage == null) {
             currentPage = new PageNotFound();

@@ -10,7 +10,7 @@ import java.io.*;
  */
 public abstract class WebPage {
 
-    private final static String DEFAULT_TML_PATH = "../../tml/";
+    private static final String DEFAULT_TML_PATH = "src/main/tml/";
 
     public abstract void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException;
@@ -21,23 +21,17 @@ public abstract class WebPage {
     protected String loadPage(String pathToFile)
             throws IOException
     {
-        String page = null;
+        String page = "";
         try {
             File file = new File(DEFAULT_TML_PATH + pathToFile);
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 
-
-            System.out.println(DEFAULT_TML_PATH + pathToFile);
-
-
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(
-                            new FileInputStream(file)
-                    )
-            );
-
-            while ((page = br.readLine()) != null) {
-                /* System.out.println(page); */
+            String line = br.readLine();
+            while (line != null) {
+                page += line;
+                line = br.readLine();
             }
+
             br.close();
         }
         catch (FileNotFoundException e){
