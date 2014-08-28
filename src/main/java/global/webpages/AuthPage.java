@@ -1,7 +1,9 @@
 package global.webpages;
 
 import global.MessageSystem;
+import global.messages.AuthMsg;
 import global.messages.CheckedAuthMsg;
+import jdk.nashorn.internal.ir.RuntimeNode;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,10 +17,15 @@ import java.io.IOException;
 public class AuthPage extends WebPage {
 
     private final MessageSystem msys;
+    private HttpSession session;
+
 
     public void finalizeAuth (CheckedAuthMsg msg) {
         if(msg.isAuthSuccess()) {
-            // Создать сессию, записать имя User'a
+            this.session.setAttribute("user", msg.getLogin());
+        }
+        else {
+            this.session.invalidate();
         }
     }
 
@@ -52,13 +59,9 @@ public class AuthPage extends WebPage {
         String login = request.getParameter("login");
         String passw = request.getParameter("passw");
 
-//
-//      Validation of Password and login
-//
-        if (true) {
-            HttpSession session = request.getSession();
-            session.setAttribute("user", login);
-        }
+        this.msys.sendMessage(new AuthMsg(login, passw), "dbman");
+        this.session = request.getSession();
+
 
         response.setStatus(HttpServletResponse.SC_OK);
     }
