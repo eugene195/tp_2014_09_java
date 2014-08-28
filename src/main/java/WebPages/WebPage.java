@@ -40,7 +40,6 @@ public abstract class WebPage {
                 page += line;
                 line = br.readLine();
             }
-
             br.close();
         }
         catch (FileNotFoundException e){
