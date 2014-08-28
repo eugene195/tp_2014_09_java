@@ -7,10 +7,10 @@ import java.io.IOException;
 /**
  * Created by Евгений on 27.08.2014.
  */
-public interface WebPage {
+public abstract class WebPage {
 
-    void handleGet(HttpServletRequest request);
+    public abstract void handleGet(HttpServletRequest request);
 
-    void loadPage(HttpServletResponse response)
+    protected void loadPage(HttpServletResponse response)
             throws IOException;
 }

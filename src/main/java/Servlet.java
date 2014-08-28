@@ -26,10 +26,10 @@ public class Servlet extends HttpServlet implements Runnable {
         this.msys = msys;
         msys.register(this, SERVLET_ADDRESS);
 
-        pageMap.put("/auth", new AuthPage());
-        pageMap.put("/game", new GamePage());
-        pageMap.put("/register", new RegisterPage());
-        pageMap.put("/stat", new StatPage());
+        this.pageMap.put("/auth", new AuthPage());
+        this.pageMap.put("/game", new GamePage());
+        this.pageMap.put("/register", new RegisterPage());
+        this.pageMap.put("/stat", new StatPage());
     }
 
     @Override
@@ -53,10 +53,12 @@ public class Servlet extends HttpServlet implements Runnable {
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
-        if (currentPage == null)
+        if (currentPage == null) {
             response.getWriter().println("<h1>Page not Found</h1>");
-        else
-            currentPage.loadPage(response);
+        }
+        else {
+            /*currentPage.loadPage(response);*/
+        }
     }
 
     public WebPage getPageByURL(HttpServletRequest request){
@@ -65,7 +67,7 @@ public class Servlet extends HttpServlet implements Runnable {
         /* DEBUG */
         // System.out.print(requestURI + ":::" + request.getPathInfo() + "\n");
 
-        return pageMap.get(requestURI);
+        return this.pageMap.get(requestURI);
     }
 
     @Override
