@@ -70,5 +70,7 @@ public class Servlet extends HttpServlet implements Runnable {
                       HttpServletResponse response)
             throws IOException, ServletException
     {
+        WebPage currentPage = this.getPageByURL(request);
+        currentPage.handlePost(request, response);
     }
 }

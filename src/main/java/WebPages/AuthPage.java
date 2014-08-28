@@ -21,4 +21,11 @@ public class AuthPage extends WebPage {
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
     }
+
+    @Override
+    public void handlePost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException
+    {
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
 }
