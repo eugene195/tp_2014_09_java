@@ -1,18 +1,26 @@
 import java.sql.*;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created by Евгений on 28.08.2014.
  */
-public class DataBaseManager {
+public class DataBaseManager implements Runnable {
 
     private static final String baseUrl = "jdbc:mysql://localhost/java_db";
     private static final String baseUserName = "root";
     private static final String baseUserPasswd = "22061994";
 
     private Connection conn;
+    private static final String DBMAN_ADDRESS = "dbman";
+    private final MessageSystem msys;
 
-    public DataBaseManager() {
+    public DataBaseManager(MessageSystem msys) {
         super();
+
+        this.msys = msys;
+        msys.register(this, DBMAN_ADDRESS);
+
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             this.conn = DriverManager.getConnection(baseUrl, baseUserName, baseUserPasswd);
@@ -54,13 +62,27 @@ public class DataBaseManager {
     public void test() {
         ResultSet result = this.executeSql("SELECT * FROM User;");
         try {
-            result.next();
-            System.out.println(result.get);
+
+            while (result.next()) {
+                System.out.println(result.getString("login"));
+            }
         }
         catch (Exception e) {
             System.out.println("Fucking shit");
         }
 
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            this.msys.executeFor(this);
+            try {
+                sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
