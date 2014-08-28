@@ -15,8 +15,17 @@ public abstract class WebPage {
     public abstract void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException;
 
-//    public abstract void handlePost(HttpServletRequest request, HttpServletResponse response)
-//            throws IOException;
+    /**
+     * HandlePost can be overriden by concrete pages or not.
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    public void handlePost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException
+    {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    }
 
     protected String loadPage(String pathToFile)
             throws IOException
