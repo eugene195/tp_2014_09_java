@@ -15,6 +15,9 @@ public class GamePage extends WebPage {
         loadPage(request.getPathInfo());
         response.getWriter().println("<h1>Hello GAME PAGE</h1>");
 
+
+
+
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
     }
