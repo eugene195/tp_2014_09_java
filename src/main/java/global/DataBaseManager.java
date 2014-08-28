@@ -71,10 +71,15 @@ public class DataBaseManager implements Runnable {
     }
 
     public void checkAuth(String login, String passw) {
-        String query = "SELECT * FROM User WHERE `login`=`" + login + "`, AND `passw`=md5(`"+ passw + "`);";
+        String query = "SELECT * FROM User WHERE `login`='" + login + "' AND `passw`=md5('"+ passw + "');";
         ResultSet result = this.executeSql(query);
 
         try {
+
+            while (result.next()) {
+                System.out.println(result.getString("login"));
+            }
+
             if (this.getResultCount(result) == 1) {
                 result.next();
                 this.msys.sendMessage(new CheckedAuthMsg(true, login), "servlet");

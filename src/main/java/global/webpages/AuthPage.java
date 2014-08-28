@@ -1,6 +1,7 @@
 package global.webpages;
 
 import global.MessageSystem;
+import global.messages.AuthMsg;
 import global.messages.CheckedAuthMsg;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +56,8 @@ public class AuthPage extends WebPage {
 //
 //      Validation of Password and login
 //
+        this.msys.sendMessage(new AuthMsg(login, passw), "dbman");
+
         if (true) {
             HttpSession session = request.getSession();
             session.setAttribute("user", login);
