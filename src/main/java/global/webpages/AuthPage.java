@@ -1,6 +1,7 @@
 package global.webpages;
 
 import global.MessageSystem;
+import global.messages.CheckedAuthMsg;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,13 @@ import java.io.IOException;
 public class AuthPage extends WebPage {
 
     private final MessageSystem msys;
+
+    public void finalizeAuth (CheckedAuthMsg msg) {
+        if(msg.isAuthSuccess()) {
+            // Создать сессию, записать имя User'a
+        }
+    }
+
 
     public AuthPage(MessageSystem msys) {
         this.msys = msys;

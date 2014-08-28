@@ -1,6 +1,6 @@
 package global;
 
-import global.MessageSystem;
+import global.messages.CheckedAuthMsg;
 
 import java.sql.*;
 
@@ -61,6 +61,31 @@ public class DataBaseManager implements Runnable {
             }
         }
         return null;
+    }
+
+    private int getResultCount(ResultSet resultSet) throws SQLException {
+        resultSet.last();
+        int count = resultSet.getRow();
+        resultSet.beforeFirst();
+        return count;
+    }
+
+    public void checkAuth(String login, String passw) {
+        String query = "SELECT * FROM User WHERE `login`=`" + login + "`, AND `passw`=md5(`"+ passw + "`);";
+        ResultSet result = this.executeSql(query);
+
+        try {
+            if (this.getResultCount(result) == 1) {
+                result.next();
+                this.msys.sendMessage(new CheckedAuthMsg(true, login), "servlet");
+                return;
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Sql exception during checkAuth()");
+        }
+
+        this.msys.sendMessage(new CheckedAuthMsg(false, ""), "servlet");
     }
 
     public void test() {

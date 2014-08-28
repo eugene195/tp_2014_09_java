@@ -1,5 +1,7 @@
 package global;
 
+import global.messages.AbstractMsg;
+import global.messages.CheckedAuthMsg;
 import global.webpages.*;
 
 import javax.servlet.ServletException;
@@ -74,5 +76,13 @@ public class Servlet extends HttpServlet implements Runnable {
     {
         WebPage currentPage = this.getPageByURL(request);
         currentPage.handlePost(request, response);
+    }
+
+    public void transmit(CheckedAuthMsg msg){
+        WebPage page = this.pageMap.get("/auth");
+        if ( (page != null) && (page instanceof AuthPage) ) {
+            AuthPage aPage = (AuthPage) page;
+            aPage.finalizeAuth(msg);
+        }
     }
 }
