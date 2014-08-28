@@ -1,0 +1,30 @@
+<!Doctype html>
+<html>
+
+<head>
+  <meta charset = "utf-8">
+  <meta http-equiv = "Content-Type" content = "text/html" charset = "utf-8">
+  <meta name = "description" content = "Форма авторизации"/>
+  <link href="../static/AuthPage.css" rel="stylesheet"/>
+</head>
+<!-- ------------------------------------------------------------------------------------------------ -->
+<body>
+  <div id="container">
+    <h2>Hello. This is auth page.</h2>
+    <hr>
+    <form id="auth-form" action="/auth" method="POST">
+      <div class="field">
+        <label for="login">Login:</label>
+        <input id="login" name="login" type="text" required autocomplete = "on" pattern = "[a-zA-ZА-Яа-я]+" value = ""/>        
+      </div>
+      <div class="field">
+        <label for="passw">Password:</label>
+        <input id="passw" name="passw" type="password"/>    
+      </div>
+      <div id="controls">
+        <button id="submit" type="submit">Send</button>
+        <button id="cleaner" type="reset">Clean</button>
+      </div>
+    </form>
+  </div>
+</body>

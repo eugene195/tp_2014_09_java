@@ -5,16 +5,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by Евгений on 28.08.2014.
+ * Created by max on 28.08.14.
  */
-public class StatPage extends WebPage {
+public class PageNotFound extends WebPage {
     @Override
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException
-    {
-        response.getWriter().println("<h1>Hello STAT PAGE</h1>");
+            throws IOException {
 
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().println("<h1>Page not Found</h1>");
     }
 }

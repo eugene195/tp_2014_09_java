@@ -10,6 +10,8 @@ import java.io.*;
  */
 public abstract class WebPage {
 
+    private final static String DEFAULT_TML_PATH = "../../tml/";
+
     public abstract void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException;
 
@@ -21,7 +23,11 @@ public abstract class WebPage {
     {
         String page = null;
         try {
-            File file = new File(pathToFile);
+            File file = new File(DEFAULT_TML_PATH + pathToFile);
+
+
+            System.out.println(DEFAULT_TML_PATH + pathToFile);
+
 
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(
@@ -30,7 +36,7 @@ public abstract class WebPage {
             );
 
             while ((page = br.readLine()) != null) {
-                System.out.println(page);
+                /* System.out.println(page); */
             }
             br.close();
         }
