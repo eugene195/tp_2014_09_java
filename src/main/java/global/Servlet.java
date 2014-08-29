@@ -1,6 +1,5 @@
 package global;
 
-import global.messages.AbstractMsg;
 import global.messages.CheckedAuthMsg;
 import global.webpages.*;
 
@@ -33,7 +32,7 @@ public class Servlet extends HttpServlet implements Runnable {
         this.pageMap.put("/auth", new AuthPage(this.msys));
         this.pageMap.put("/game", new GamePage());
         this.pageMap.put("/register", new RegisterPage());
-        this.pageMap.put("/stat", new StatPage());
+        this.pageMap.put("/profile", new ProfilePage());
     }
 
     @Override

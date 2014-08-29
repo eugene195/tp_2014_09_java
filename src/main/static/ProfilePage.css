@@ -1,0 +1,16 @@
+body {
+    background-color: #f5ffff;
+    font-size: 20px;
+}
+
+#avatar {
+    float: left;
+}
+
+#info {
+    display: block;
+}
+
+#history {
+    clear: both;
+}

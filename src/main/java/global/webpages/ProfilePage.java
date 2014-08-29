@@ -6,13 +6,15 @@ import java.io.IOException;
 
 /**
  * Created by Евгений on 28.08.2014.
+ * The Profile page with settings and battle statistics
  */
-public class StatPage extends WebPage {
+public class ProfilePage extends WebPage {
     @Override
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-        response.getWriter().println("<h1>Hello STAT PAGE</h1>");
+        String tml = this.loadPage("ProfilePage.html");
+        response.getWriter().println(tml);
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
