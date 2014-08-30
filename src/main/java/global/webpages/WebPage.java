@@ -1,5 +1,7 @@
 package global.webpages;
 
+import global.messages.AbstractMsg;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -9,8 +11,13 @@ import java.io.*;
  * Abstract Page controller.
  */
 public abstract class WebPage {
+    // Important variables for every page
+    public static final String URL = "";
+    public static final String TML_PATH = "";
 
-    private static final String DEFAULT_TML_PATH = "src/main/tml/";
+
+    private static final String TML_CATALOG = "src/main/tml/";
+    protected static final String CONTENT_TYPE = "text/html;charset=utf-8";
     protected boolean zombie;
 
     public WebPage() {
@@ -37,7 +44,7 @@ public abstract class WebPage {
     {
         String page = "";
         try {
-            File file = new File(DEFAULT_TML_PATH + pathToFile);
+            File file = new File(TML_CATALOG + pathToFile);
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 
             String line = br.readLine();
@@ -53,6 +60,17 @@ public abstract class WebPage {
         return page;
     }
 
+    /**
+     * It is a final handler of the async query, from the Concrete Page.
+     * @param msg message to page
+     */
+    public void finalize(AbstractMsg msg) {
+        System.out.println("Warning! WebPage.finalize was invoked");
+    }
+
+    /**
+     * This method enforces the Servlet thread await for the async query.
+     */
     public void setZombie() {
         this.zombie = true;
 

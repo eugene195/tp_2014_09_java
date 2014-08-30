@@ -13,7 +13,7 @@ public class PageNotFound extends WebPage {
             throws IOException {
 
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        response.setContentType("text/html;charset=utf-8");
+        response.setContentType(WebPage.CONTENT_TYPE);
         response.getWriter().println("<h1>Page not Found</h1>");
     }
 }

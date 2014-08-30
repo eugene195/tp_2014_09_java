@@ -1,6 +1,6 @@
 package global;
 
-import global.messages.CheckedAuthMsg;
+import global.messages.AbstractMsg;
 import global.webpages.*;
 
 import javax.servlet.ServletException;
@@ -29,10 +29,10 @@ public class Servlet extends HttpServlet implements Runnable {
         this.msys = msys;
         msys.register(this, SERVLET_ADDRESS);
 
-        this.pageMap.put("/auth", new AuthPage(this.msys));
-        this.pageMap.put("/game", new GamePage());
-        this.pageMap.put("/register", new RegisterPage());
-        this.pageMap.put("/profile", new ProfilePage());
+        this.pageMap.put(AuthPage.URL, new AuthPage(this.msys));
+        this.pageMap.put(GamePage.URL, new GamePage());
+        this.pageMap.put(RegisterPage.URL, new RegisterPage());
+        this.pageMap.put(ProfilePage.URL, new ProfilePage());
     }
 
     @Override
@@ -77,11 +77,10 @@ public class Servlet extends HttpServlet implements Runnable {
         currentPage.handlePost(request, response);
     }
 
-    public void transmit(CheckedAuthMsg msg){
-        WebPage page = this.pageMap.get("/auth");
-        if ( (page != null) && (page instanceof AuthPage) ) {
-            AuthPage aPage = (AuthPage) page;
-            aPage.finalizeAuth(msg);
+    public void transmitToPage(String URL, AbstractMsg msg) {
+        WebPage page = this.pageMap.get(URL);
+        if (page != null) {
+            page.finalize(msg);
         }
     }
 }

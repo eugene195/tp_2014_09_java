@@ -1,6 +1,8 @@
 package global.webpages;
 
+import global.DataBaseManager;
 import global.MessageSystem;
+import global.messages.AbstractMsg;
 import global.messages.AuthMsg;
 import global.messages.CheckedAuthMsg;
 import jdk.nashorn.internal.ir.RuntimeNode;
@@ -15,7 +17,8 @@ import java.io.IOException;
  * The page for a user authentication.
  */
 public class AuthPage extends WebPage {
-
+    public static final String URL = "/auth";
+    public static final String TML_PATH = "AuthPage.html";
     private final MessageSystem msys;
 
     private boolean successAuth;
@@ -30,9 +33,9 @@ public class AuthPage extends WebPage {
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-        String tml = this.loadPage("AuthPage.html");
+        String tml = this.loadPage(TML_PATH);
         response.getWriter().println(tml);
-        response.setContentType("text/html;charset=utf-8");
+        response.setContentType(WebPage.CONTENT_TYPE);
 
         HttpSession session = request.getSession(false);
         if(session != null){
@@ -68,9 +71,13 @@ public class AuthPage extends WebPage {
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
-    public void finalizeAuth (CheckedAuthMsg msg) {
-        this.successAuth = msg.isAuthSuccess();
-        this.loginAuth = msg.getLogin();
-        this.resume();
+    @Override
+    public void finalize(AbstractMsg abs_msg) {
+        if (abs_msg instanceof CheckedAuthMsg) {
+            CheckedAuthMsg msg = (CheckedAuthMsg) abs_msg;
+            this.successAuth = msg.isAuthSuccess();
+            this.loginAuth = msg.getLogin();
+            this.resume();
+        }
     }
 }

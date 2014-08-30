@@ -9,14 +9,17 @@ import java.io.IOException;
  * The Profile page with settings and battle statistics
  */
 public class ProfilePage extends WebPage {
+    public static final String URL = "/profile";
+    public static final String TML_PATH = "ProfilePage.html";
+
     @Override
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-        String tml = this.loadPage("ProfilePage.html");
+        String tml = this.loadPage(TML_PATH);
         response.getWriter().println(tml);
 
-        response.setContentType("text/html;charset=utf-8");
+        response.setContentType(WebPage.CONTENT_TYPE);
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

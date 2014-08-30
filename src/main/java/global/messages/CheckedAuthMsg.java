@@ -1,6 +1,7 @@
 package global.messages;
 
 import global.Servlet;
+import global.webpages.AuthPage;
 
 /**
  * Created by Евгений on 28.08.2014.
@@ -26,7 +27,7 @@ public class CheckedAuthMsg extends AbstractMsg {
     public void exec(Runnable abonent){
         if(abonent instanceof Servlet){
             Servlet srv = (Servlet) abonent;
-            srv.transmit(this);
+            srv.transmitToPage(AuthPage.URL, this);
         }
     }
 }
