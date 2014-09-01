@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.Thread.sleep;
 
@@ -24,7 +26,7 @@ public class Servlet extends HttpServlet implements Runnable {
     private final MessageSystem msys;
     private final Map<String, WebPage> pageMap = new HashMap<>();
 
-    public Servlet(MessageSystem msys){
+    public Servlet(MessageSystem msys) {
         super();
         this.msys = msys;
         msys.register(this, SERVLET_ADDRESS);
@@ -32,7 +34,8 @@ public class Servlet extends HttpServlet implements Runnable {
         this.pageMap.put(AuthPage.URL, new AuthPage(this.msys));
         this.pageMap.put(GamePage.URL, new GamePage());
         this.pageMap.put(RegisterPage.URL, new RegisterPage());
-        this.pageMap.put(ProfilePage.URL, new ProfilePage());
+        this.pageMap.put(ProfilePage.URL, new ProfilePage(this.msys));
+        this.pageMap.put("/logout", new LogoutPage());
     }
 
     @Override
@@ -58,14 +61,20 @@ public class Servlet extends HttpServlet implements Runnable {
 
     private WebPage getPageByURL(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
-        WebPage currentPage = this.pageMap.get(requestURI);
+        Matcher matcher = Pattern.compile("^/\\w+").matcher(requestURI);
 
         System.out.println(requestURI);
+        if (matcher.find()) {
+            String requestURL = matcher.group();
+            // System.out.println(requestURL);
+            WebPage currentPage = this.pageMap.get(matcher.group());
 
-        if (currentPage == null) {
-            currentPage = new PageNotFound();
+            if (currentPage != null) {
+                return currentPage;
+            }
         }
-        return currentPage;
+
+        return new PageNotFound();
     }
 
     @Override

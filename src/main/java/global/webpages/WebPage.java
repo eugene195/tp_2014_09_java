@@ -1,10 +1,14 @@
 package global.webpages;
 
 import global.messages.AbstractMsg;
+import global.Templater;
+import org.apache.velocity.exception.ResourceNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Евгений on 27.08.2014.
@@ -21,6 +25,7 @@ public abstract class WebPage {
     protected boolean zombie;
 
     public WebPage() {
+        super();
         this.zombie = false;
     }
 
@@ -37,25 +42,16 @@ public abstract class WebPage {
             throws IOException
     {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        System.out.println("Warning! WebPage.handlePost was invoked");
     }
 
-    protected String loadPage(String pathToFile)
-            throws IOException
-    {
+    protected String generateHTML(String PathToVML, Map<String, Object> context){
         String page = "";
         try {
-            File file = new File(TML_CATALOG + pathToFile);
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-
-            String line = br.readLine();
-            while (line != null) {
-                page += line;
-                line = br.readLine();
-            }
-            br.close();
+            page = Templater.getInstance().generate(PathToVML, context);
         }
-        catch (FileNotFoundException e){
-            System.out.println("File not found");
+        catch (ResourceNotFoundException exception) {
+            page = "Template Page not found" + PathToVML;
         }
         return page;
     }

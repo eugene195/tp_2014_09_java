@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    #include ( "Base.html" )
+    <br>
+    #if ($errorList.size() > 0)
+        #foreach( $error in $errorList )
+            <li>$error</li> <br>
+        #end
+    #else
+        Hello $login!  Welcome to MyJavaProject! This is Game Page
+    #end
+
+</body>
+</html>

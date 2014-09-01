@@ -1,6 +1,7 @@
 package global;
 
-import global.messages.CheckedAuthMsg;
+import global.messages.AuthAnswer;
+import global.messages.ProfileInfoAnswer;
 
 import java.sql.*;
 
@@ -75,14 +76,10 @@ public class DataBaseManager implements Runnable {
         ResultSet result = this.executeSql(query);
 
         try {
-
-            while (result.next()) {
-                System.out.println(result.getString("login"));
-            }
-
             if (this.getResultCount(result) == 1) {
                 result.next();
-                this.msys.sendMessage(new CheckedAuthMsg(true, login), "servlet");
+                long userId = result.getLong("userId");
+                this.msys.sendMessage(new AuthAnswer(true, login, userId), "servlet");
                 return;
             }
         }
@@ -90,9 +87,14 @@ public class DataBaseManager implements Runnable {
             System.out.println("Sql exception during checkAuth()");
         }
 
-        this.msys.sendMessage(new CheckedAuthMsg(false, ""), "servlet");
+        this.msys.sendMessage(new AuthAnswer(false, "", -1), "servlet");
     }
 
+    public void getProfileInfo(long userId) {
+        this.msys.sendMessage(new ProfileInfoAnswer(), "servlet");
+    }
+
+    @Deprecated
     public void test() {
         ResultSet result = this.executeSql("SELECT * FROM User;");
         try {

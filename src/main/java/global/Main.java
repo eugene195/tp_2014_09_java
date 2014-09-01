@@ -8,6 +8,7 @@ import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 
+import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -18,8 +19,8 @@ import java.util.concurrent.Executors;
 
 public class Main
 {
-    private static final String STATIC_DIR = "src/main/static/";
-    private static final String MAIN_PAGE_ADDRESS = "/main";
+    private static final String STATIC_DIR = "src/main/static";
+    private static final String MAIN_PAGE_ADDRESS = "/auth";
 
     private static Servlet configure() {
         final int THREADS_AMOUNT = 2;
@@ -40,9 +41,9 @@ public class Main
      * @return Список обработчиков.
      */
     private static HandlerList makeServerHandlers() {
-        ResourceHandler resource_handler = new ResourceHandler();
-        resource_handler.setDirectoriesListed(false); // не показывать содержание директории при переходе по /
-        resource_handler.setResourceBase(STATIC_DIR); //путь к папке статики от корня проекта
+        ResourceHandler resourceHandler = new ResourceHandler();
+        resourceHandler.setDirectoriesListed(false); // не показывать содержание директории при переходе по /
+        resourceHandler.setResourceBase(STATIC_DIR); //путь к папке статики от корня проекта
 
         //переадресация пользователя с / на нужный нам адрес
         RewriteHandler rewriteHandler = new RewriteHandler();
@@ -51,12 +52,12 @@ public class Main
         rewriteHandler.setOriginalPathAttribute("requestedPath");
 
         RedirectRegexRule rule = new RedirectRegexRule();
-        rule.setRegex("/");  //здесь устанавливаем откуда перенаправлять
-        rule.setReplacement(MAIN_PAGE_ADDRESS);  //а здесь - куда
+        rule.setRegex("/");
+        rule.setReplacement(MAIN_PAGE_ADDRESS);
         rewriteHandler.addRule(rule);
 
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] {rewriteHandler, resource_handler});
+        handlers.setHandlers(new Handler[] {rewriteHandler, resourceHandler});
         return handlers;
     }
 
@@ -67,7 +68,7 @@ public class Main
         Server server = new Server(SERVER_PORT);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(servlet), "/*");
+        context.addServlet(new ServletHolder(servlet), "/");
 
         HandlerList handlers = makeServerHandlers();
 

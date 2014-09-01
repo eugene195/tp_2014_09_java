@@ -10,30 +10,37 @@
 </head>
 <!-- ------------------------------------------------------------------------------------------------ -->
 <body>
+
+  #include ( "Base.html" )
+  <br>
   <div class="container">    
     <hr>
-
     <div id="profile-data">
+
       <div id="avatar">
-        <img src="empty_avatar.jpg" alt="Empty Avatar" align="left" hspace="25" vspace="25"/>
+        <img src="empty_avatar.jpg" alt="Empty Avatar" height="100px" width="80px"/>
         <br>
         <a href="#">Load avatar</a>
       </div>
 
       <ul id="info">
-        <li class="info-field">
-          <span>Login: </span>
-          <span>max</span>
+        <li class="field">
+          <span class="key">Login: </span>
+          <span class="value">login</span>
         </li>
-        <li class="info-field">
-          <span>Connect data: </span>
-          <span>15:06:2014</span>
+        <li class="field">
+          <span class="key">Connect data: </span>
+          <span class="value">15:06:2014</span>
+        </li>
+        <li class="field">
+          <span class="key">General score: </span>
+          <span class="value">100</span>
         </li>
       </ul>
       
     </div>
-    <hr>
 
+    <hr class="clear">
     <table id="history">
       <tr>
         <th>Enemy</th>

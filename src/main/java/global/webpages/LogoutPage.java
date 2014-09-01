@@ -9,11 +9,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Created by Евгений on 28.08.2014.
+ * Created by Евгений on 31.08.2014.
  */
-public class GamePage extends WebPage {
-    public static final String URL = "/game";
-    public static final String TML_PATH = "GamePage.html";
+public class LogoutPage extends WebPage {
+    private static final String TML_PATH = "LogoutPage.html";
 
     @Override
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
@@ -23,17 +22,17 @@ public class GamePage extends WebPage {
         ArrayList<String> errorList = new ArrayList<>();
 
         HttpSession session = request.getSession(false);
-        if (session != null) {
+        if(session != null) {
             context.put("login", session.getAttribute("login").toString());
+            session.invalidate();
         }
         else {
-            errorList.add("You must be authorized to view this page");
+            errorList.add("Sorry. You haven't been authorized yet");
         }
         context.put("errorList", errorList);
         String page = this.generateHTML(TML_PATH, context);
         response.getWriter().print(page);
         response.setContentType("text/html;charset=utf-8");
-        response.setContentType(WebPage.CONTENT_TYPE);
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

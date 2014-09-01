@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    #include ( "Base.html" )
+    <br>
+    #if ($errorList.size() > 0)
+        #foreach( $error in $errorList )
+            <li>$error</li> <br>
+        #end
+    #else
+        Goodbye, <h3>$login</h3> We will be missing you
+    #end
+
+</body>
+</html>

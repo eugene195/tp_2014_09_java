@@ -1,16 +1,38 @@
 body {
-    background-color: #f5ffff;
     font-size: 20px;
+}
+
+.container {
+    margin: 25px;
 }
 
 #avatar {
     float: left;
+    width: 10%;
+    min-width: 100px;
+}
+
+#avatar > a {
+    font-size: 14px;
 }
 
 #info {
+    list-style-type: none;
     display: block;
 }
 
+.key {
+    min-width: 200px;
+    display: inline-block;
+}
+
 #history {
+    width: 100%;
+    text-align: center;
+    border-color: black;
+}
+
+.clear {
     clear: both;
+    margin-top: 100px;
 }
