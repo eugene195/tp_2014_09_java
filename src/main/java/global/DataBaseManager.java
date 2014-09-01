@@ -2,8 +2,10 @@ package global;
 
 import global.messages.AuthAnswer;
 import global.messages.ProfileInfoAnswer;
+import org.apache.velocity.exception.ResourceNotFoundException;
 
 import java.sql.*;
+import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
@@ -62,6 +64,17 @@ public class DataBaseManager implements Runnable {
             }
         }
         return null;
+    }
+
+    public String generateSQL(String pathToSQL, Map<String, Object> context) {
+        String query = "";
+        try {
+            query = Templater.getInstance().generate(pathToSQL, context);
+        }
+        catch (ResourceNotFoundException exception) {
+            query = "SQL template not found" + pathToSQL;
+        }
+        return query;
     }
 
     private int getResultCount(ResultSet resultSet) throws SQLException {
