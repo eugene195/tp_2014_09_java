@@ -43,27 +43,24 @@ public class ProfilePage extends WebPage {
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-        Map<String, Object> context = new LinkedHashMap<>();
-        ArrayList<String> errorList = new ArrayList<>();
-
         this.session = request.getSession(false);
         if (this.session == null) {
+            //TODO: Send error to AuthPage
             response.sendRedirect(AuthPage.URL);
             return;
         }
 
         long userId = this.getUserId(request);
         if (userId == -1) {
+            //TODO: Send error to AuthPage
             response.sendRedirect(AuthPage.URL);
             return;
         }
 
-        System.out.println(userId);
-
         this.msys.sendMessage(new ProfileInfoQuery(userId), "dbman");
         this.setZombie();
 
-        context.put("errorList", errorList);
+        Map<String, Object> context = new LinkedHashMap<>();
         String page = this.generateHTML(TML_PATH, context);
         response.getWriter().print(page);
 

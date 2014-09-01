@@ -12,6 +12,7 @@ import java.util.Map;
  * Created by Евгений on 31.08.2014.
  */
 public class LogoutPage extends WebPage {
+    public static final String URL = "/logout";
     private static final String TML_PATH = "LogoutPage.html";
 
     @Override
@@ -19,7 +20,6 @@ public class LogoutPage extends WebPage {
             throws IOException
     {
         Map<String, Object> context = new LinkedHashMap<>();
-        ArrayList<String> errorList = new ArrayList<>();
 
         HttpSession session = request.getSession(false);
         if(session != null) {
@@ -27,12 +27,14 @@ public class LogoutPage extends WebPage {
             session.invalidate();
         }
         else {
-            errorList.add("Sorry. You haven't been authorized yet");
+            //TODO: Send error to AuthPage
+            response.sendRedirect(AuthPage.URL);
         }
-        context.put("errorList", errorList);
+
         String page = this.generateHTML(TML_PATH, context);
         response.getWriter().print(page);
-        response.setContentType("text/html;charset=utf-8");
+
+        response.setContentType(WebPage.CONTENT_TYPE);
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

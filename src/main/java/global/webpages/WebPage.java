@@ -19,8 +19,6 @@ public abstract class WebPage {
     public static final String URL = "";
     public static final String TML_PATH = "";
 
-
-    private static final String TML_CATALOG = "src/main/tml/";
     protected static final String CONTENT_TYPE = "text/html;charset=utf-8";
     protected boolean zombie;
 

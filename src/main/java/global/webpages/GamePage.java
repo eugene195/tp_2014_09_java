@@ -20,19 +20,18 @@ public class GamePage extends WebPage {
             throws IOException
     {
         Map<String, Object> context = new LinkedHashMap<>();
-        ArrayList<String> errorList = new ArrayList<>();
 
         HttpSession session = request.getSession(false);
         if (session != null) {
             context.put("login", session.getAttribute("login").toString());
         }
         else {
-            errorList.add("You must be authorized to view this page");
+            //TODO: Send error to AuthPage
+            response.sendRedirect(AuthPage.URL);
         }
-        context.put("errorList", errorList);
         String page = this.generateHTML(TML_PATH, context);
+
         response.getWriter().print(page);
-        response.setContentType("text/html;charset=utf-8");
         response.setContentType(WebPage.CONTENT_TYPE);
         response.setStatus(HttpServletResponse.SC_OK);
     }

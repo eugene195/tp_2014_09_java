@@ -27,11 +27,12 @@ public class AuthPage extends WebPage {
     private String loginAuth;
     private Long userId;
 
-    private static final String PAGE_VML = "AuthPage.html";
+    private boolean notValid;
 
     public AuthPage(MessageSystem msys) {
         super();
         this.msys = msys;
+        this.notValid = false;
     }
 
     @Override
@@ -43,19 +44,26 @@ public class AuthPage extends WebPage {
         Map<String, Object> context = new LinkedHashMap<>();
         ArrayList<String> errorList = new ArrayList<>();
 
-        if(session != null){
+        if (session != null) {
             context.put("isAuthorized", true);
             context.put("login", session.getAttribute("login").toString());
             errorList.add("You have already been authorized");
         }
-        else{
-            context.put("isAuthorized", "false");
+        else {
+            context.put("isAuthorized", false);
         }
+
+        if (this.notValid) {
+            errorList.add("Your data is not valid");
+            this.notValid = false;
+        }
+
         context.put("errorList", errorList);
-        String page = this.generateHTML(PAGE_VML, context);
+
+        String page = this.generateHTML(TML_PATH, context);
         response.getWriter().print(page);
         response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType("text/html;charset=utf-8");
+        response.setContentType(WebPage.CONTENT_TYPE);
     }
 
     @Override
@@ -64,24 +72,19 @@ public class AuthPage extends WebPage {
     {
         String login = request.getParameter("login");
         String passw = request.getParameter("passw");
-        Map<String, Object> context = new LinkedHashMap<>();
-        ArrayList<String> messageList = new ArrayList<>();
 
         this.msys.sendMessage(new AuthQuery(login, passw), "dbman");
         this.setZombie();
 
-        HttpSession session = request.getSession();
-
         if (this.successAuth) {
+            HttpSession session = request.getSession();
             session.setAttribute("login", this.loginAuth);
             session.setAttribute("userId", this.userId);
             response.sendRedirect(ProfilePage.URL);
             response.setStatus(HttpServletResponse.SC_OK);
         }
         else {
-            messageList.add("Authorisation Failed, login or password incorrect");
-            context.put("isAuthorized", "false");
-            session.invalidate();
+            this.notValid = true;
             response.sendRedirect(AuthPage.URL);
         }
     }

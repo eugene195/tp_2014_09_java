@@ -16,25 +16,29 @@ public class Templater {
 
     private static Templater instance;
     private static final String DEFAULT_TML_PATH = "src/main/tml/";
-    private VelocityEngine vEngine;
+    private final VelocityEngine vEngine;
 
     public static Templater getInstance(){
-        if( instance == null) {
+        if (instance == null) {
             instance = new Templater();
         }
         return  instance;
     }
-    private Templater(){
+
+    private Templater() {
         Properties props = new Properties();
         props.put("file.resource.loader.path",DEFAULT_TML_PATH);
+
         this.vEngine = new VelocityEngine();
         this.vEngine.init(props);
     }
-    public String generate(String filePathToVML, Map<String, Object> pageContext){
+
+    public String generate(String filePathToVML, Map<String, Object> pageContext) {
         Template template = this.vEngine.getTemplate(filePathToVML);
         VelocityContext context = new VelocityContext(pageContext);
+
         StringWriter writer = new StringWriter();
-        template.merge( context, writer );
+        template.merge(context, writer);
         return writer.toString();
     }
 
