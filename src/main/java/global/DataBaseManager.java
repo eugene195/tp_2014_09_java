@@ -2,6 +2,7 @@ package global;
 
 import global.messages.AuthAnswer;
 import global.messages.ProfileInfoAnswer;
+import global.messages.RegistrationAnswer;
 
 import java.sql.*;
 
@@ -72,8 +73,17 @@ public class DataBaseManager implements Runnable {
     }
 
     public void checkAuth(String login, String passw) {
-        String query = "SELECT * FROM User WHERE `login`='" + login + "' AND `passw`=md5('"+ passw + "');";
-        ResultSet result = this.executeSql(query);
+        String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
+        ResultSet result = null;
+        try {
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, login);
+            statement.setString(2, passw);
+            result = statement.executeQuery();
+        }
+        catch (Exception e){
+            System.out.println("Sql exception during checkAuth()");
+        }
 
         try {
             if (this.getResultCount(result) == 1) {
@@ -88,6 +98,25 @@ public class DataBaseManager implements Runnable {
         }
 
         this.msys.sendMessage(new AuthAnswer(false, "", -1), "servlet");
+    }
+
+    public void registerUser(String login, String passw){
+        String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
+        try {
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, login);
+            statement.setString(2, passw);
+
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected < 1){
+                System.out.println("Smth bad happened. Insert affected < 1 rows");
+                this.msys.sendMessage(new RegistrationAnswer(false, ""), "servlet");
+            }
+        }
+        catch (Exception e){
+            System.out.println("Exception during DB insert");
+        }
+        this.msys.sendMessage(new RegistrationAnswer(true, login), "servlet");
     }
 
     public void getProfileInfo(long userId) {
