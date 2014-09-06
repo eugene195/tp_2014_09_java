@@ -14,12 +14,15 @@ import global.webpages.RegisterPage;
 public class RegistrationAnswer extends AbstractMsg {
     private final boolean success;
     private final String login;
+    private final String errorMessage;
 
-    public RegistrationAnswer(boolean success, String login) {
+    public RegistrationAnswer(boolean success, String login, String errMsg) {
         super();
         this.success = success;
         this.login = login;
+        this.errorMessage = errMsg;
     }
+
 
     public boolean isRegistrationSuccess(){
         return this.success;
@@ -28,6 +31,8 @@ public class RegistrationAnswer extends AbstractMsg {
     public String getLogin(){
         return this.login;
     }
+
+    public String getErrMsg() { return this.errorMessage; }
 
     @Override
     public void exec(Runnable abonent){

@@ -51,25 +51,30 @@ public class DataBaseManager implements Runnable {
         }
     }
 
-    public ResultSet executeSql(String query) {
-        if (this.conn != null) {
-            try {
-                Statement statement = this.conn.createStatement();
-                ResultSet result = statement.executeQuery(query);
-                return result;
-            }
-            catch (SQLException e) {
-                System.out.println("sql exception during executeSql");
-            }
-        }
-        return null;
-    }
-
     private int getResultCount(ResultSet resultSet) throws SQLException {
         resultSet.last();
         int count = resultSet.getRow();
         resultSet.beforeFirst();
         return count;
+    }
+
+    private boolean exists(String login){
+        PreparedStatement statement = null;
+        ResultSet result = null;
+
+        String query = "SELECT * FROM User WHERE login=?;";
+        try {
+            statement = conn.prepareStatement(query);
+            statement.setString(1, login);
+            result = statement.executeQuery();
+            if (this.getResultCount(result) >= 1) {
+                return true;
+            }
+        }
+        catch (Exception e){
+            System.out.println("Exception during DB Select in registration");
+        }
+        return false;
     }
 
     public void checkAuth(String login, String passw) {
@@ -101,22 +106,31 @@ public class DataBaseManager implements Runnable {
     }
 
     public void registerUser(String login, String passw){
-        String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = null;
+
+        if (this.exists(login)) {
+            this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already exists"), "servlet");
+            return;
+        }
+
+        query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
         try {
-            PreparedStatement statement = conn.prepareStatement(query);
+            statement = conn.prepareStatement(query);
             statement.setString(1, login);
             statement.setString(2, passw);
 
             int rowsAffected = statement.executeUpdate();
             if(rowsAffected < 1){
                 System.out.println("Smth bad happened. Insert affected < 1 rows");
-                this.msys.sendMessage(new RegistrationAnswer(false, ""), "servlet");
+                this.msys.sendMessage(new RegistrationAnswer(false, "", "SQL Insert error"), "servlet");
             }
         }
         catch (Exception e){
-            System.out.println("Exception during DB insert");
+            System.out.println("Exception during DB insert  in registration");
         }
-        this.msys.sendMessage(new RegistrationAnswer(true, login), "servlet");
+        this.msys.sendMessage(new RegistrationAnswer(true, login, ""), "servlet");
     }
 
     public void getProfileInfo(long userId) {
@@ -125,7 +139,9 @@ public class DataBaseManager implements Runnable {
 
     @Deprecated
     public void test() {
-        ResultSet result = this.executeSql("SELECT * FROM User;");
+        System.out.println("Achtung! You are using deprecated method!");
+        ResultSet result = null;
+//        ResultSet result = this.executeSql("SELECT * FROM User;");
         try {
 
             while (result.next()) {
