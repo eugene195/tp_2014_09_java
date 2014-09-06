@@ -39,17 +39,17 @@ public abstract class WebPage {
     public void handlePost(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         System.out.println("Warning! WebPage.handlePost was invoked");
     }
 
-    protected String generateHTML(String PathToVML, Map<String, Object> context){
+    protected String generateHTML(String pathToVML, Map<String, Object> context){
         String page = "";
         try {
-            page = Templater.getInstance().generate(PathToVML, context);
+            page = Templater.getInstance().generate(pathToVML, context);
         }
         catch (ResourceNotFoundException exception) {
-            page = "Template Page not found" + PathToVML;
+            page = "Template Page not found" + pathToVML;
         }
         return page;
     }

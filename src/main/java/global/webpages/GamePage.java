@@ -27,6 +27,7 @@ public class GamePage extends WebPage {
         }
         else {
             //TODO: Send error to AuthPage
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.sendRedirect(AuthPage.URL);
         }
         String page = this.generateHTML(TML_PATH, context);

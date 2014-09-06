@@ -28,6 +28,7 @@ public class LogoutPage extends WebPage {
         }
         else {
             //TODO: Send error to AuthPage
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.sendRedirect(AuthPage.URL);
         }
 
