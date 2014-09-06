@@ -5,7 +5,6 @@ import global.messages.ProfileInfoAnswer;
 import global.messages.RegistrationAnswer;
 
 import java.sql.*;
-import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
@@ -59,15 +58,13 @@ public class DataBaseManager implements Runnable {
         return count;
     }
 
-    private boolean exists(String login){
-        PreparedStatement statement = null;
-        ResultSet result = null;
-
+    private boolean userExists(String login){
         String query = "SELECT * FROM User WHERE login=?;";
         try {
-            statement = this.conn.prepareStatement(query);
+            PreparedStatement statement = this.conn.prepareStatement(query);
             statement.setString(1, login);
-            result = statement.executeQuery();
+
+            ResultSet result = statement.executeQuery();
             if (getResultCount(result) >= 1) {
                 return true;
             }
@@ -80,18 +77,13 @@ public class DataBaseManager implements Runnable {
 
     public void checkAuth(String login, String passw) {
         String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
-        ResultSet result = null;
+
         try {
             PreparedStatement statement = this.conn.prepareStatement(query);
             statement.setString(1, login);
             statement.setString(2, passw);
-            result = statement.executeQuery();
-        }
-        catch (Exception e){
-            System.out.println("Sql exception during checkAuth()");
-        }
+            ResultSet result = statement.executeQuery();
 
-        try {
             if (getResultCount(result) == 1) {
                 result.next();
                 long userId = result.getLong("userId");
@@ -107,23 +99,19 @@ public class DataBaseManager implements Runnable {
     }
 
     public void registerUser(String login, String passw){
-        PreparedStatement statement = null;
-        ResultSet result = null;
-        String query = null;
-
-        if (this.exists(login)) {
-            this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already exists"), "servlet");
+        if (this.userExists(login)) {
+            this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already userExists"), "servlet");
             return;
         }
 
-        query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
+        String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
         try {
-            statement = this.conn.prepareStatement(query);
+            PreparedStatement statement = this.conn.prepareStatement(query);
             statement.setString(1, login);
             statement.setString(2, passw);
 
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected < 1){
+            if(rowsAffected < 1) {
                 System.out.println("Smth bad happened. Insert affected < 1 rows");
                 this.msys.sendMessage(new RegistrationAnswer(false, "", "SQL Insert error"), "servlet");
             }

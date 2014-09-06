@@ -24,19 +24,19 @@ public class RegistrationAnswer extends AbstractMsg {
     }
 
 
-    public boolean isRegistrationSuccess(){
+    public boolean isRegistrationSuccess() {
         return this.success;
     }
 
-    public String getLogin(){
+    public String getLogin() {
         return this.login;
     }
 
     public String getErrMsg() { return this.errorMessage; }
 
     @Override
-    public void exec(Runnable abonent){
-        if(abonent instanceof Servlet){
+    public void exec(Runnable abonent) {
+        if(abonent instanceof Servlet) {
             Servlet srv = (Servlet) abonent;
             srv.transmitToPage(RegisterPage.URL, this);
         }

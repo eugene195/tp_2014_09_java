@@ -14,14 +14,12 @@ import java.util.Map;
 /**
  * Created by Евгений on 28.08.2014.
  */
-public class RegisterPage extends WebPage{
+public class RegisterPage extends WebPage {
     public static final String URL = "/register";
     public static final String TML_PATH = "RegisterPage.html";
     private final MessageSystem msys;
 
     private boolean successReg;
-    private String loginReg;
-    private boolean notValid;
     private final ArrayList<String> msgList = new ArrayList<>();
 
     public RegisterPage(MessageSystem msys) {
@@ -34,14 +32,14 @@ public class RegisterPage extends WebPage{
             throws IOException
     {
         Map<String, Object> context = new LinkedHashMap<>();
-        context.put("errorList", msgList);
+        context.put("errorList", this.msgList);
         String page = this.generateHTML(TML_PATH, context);
 
         response.getWriter().print(page);
         response.setContentType(WebPage.CONTENT_TYPE);
         response.setStatus(HttpServletResponse.SC_OK);
 
-        msgList.clear();
+        this.msgList.clear();
     }
 
     @Override
@@ -52,7 +50,7 @@ public class RegisterPage extends WebPage{
         String passw = request.getParameter("passw");
         String repeatPassw = request.getParameter("repeatPassw");
 
-        if(!passw.equals(repeatPassw)){
+        if (!passw.equals(repeatPassw)) {
             response.getWriter().println("Passwords do not match");
             response.setContentType(WebPage.CONTENT_TYPE);
             response.setStatus(HttpServletResponse.SC_OK);
@@ -67,8 +65,8 @@ public class RegisterPage extends WebPage{
             response.setStatus(HttpServletResponse.SC_OK);
         }
         else {
-            this.notValid = true;
             response.sendRedirect(RegisterPage.URL);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -79,7 +77,6 @@ public class RegisterPage extends WebPage{
             RegistrationAnswer msg = (RegistrationAnswer) abs_msg;
 
             this.successReg = msg.isRegistrationSuccess();
-            this.loginReg = msg.getLogin();
             this.msgList.add(msg.getErrMsg());
             this.resume();
         }
