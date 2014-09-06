@@ -8,6 +8,9 @@
     #include ( "Base.html" )
     <br>
     <h2>Welcome! Please register here</h2>
+    #foreach( $error in $errorList )
+        <li>$error</li> <br>
+    #end
     <form id="registration-form" action="/register" method="POST">
         <div class="field">
             <label for="login">Login:</label>

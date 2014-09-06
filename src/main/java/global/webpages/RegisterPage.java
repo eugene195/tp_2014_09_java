@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ public class RegisterPage extends WebPage{
     private boolean successReg;
     private String loginReg;
     private boolean notValid;
+    private final ArrayList<String> msgList = new ArrayList<>();
 
     public RegisterPage(MessageSystem msys) {
         super();
@@ -32,11 +34,14 @@ public class RegisterPage extends WebPage{
             throws IOException
     {
         Map<String, Object> context = new LinkedHashMap<>();
-
+        context.put("errorList", msgList);
         String page = this.generateHTML(TML_PATH, context);
+
         response.getWriter().print(page);
         response.setContentType(WebPage.CONTENT_TYPE);
         response.setStatus(HttpServletResponse.SC_OK);
+
+        msgList.clear();
     }
 
     @Override
@@ -58,11 +63,6 @@ public class RegisterPage extends WebPage{
         this.setZombie();
 
         if (this.successReg) {
-//            Стоит ли создавать сессию? Или отправлять на AuthPage?
-//            HttpSession session = request.getSession();
-//            session.setAttribute("login", this.loginAuth);
-//            session.setAttribute("userId", this.userId);
-//            response.sendRedirect(ProfilePage.URL);
             response.sendRedirect(AuthPage.URL);
             response.setStatus(HttpServletResponse.SC_OK);
         }
@@ -80,6 +80,7 @@ public class RegisterPage extends WebPage{
 
             this.successReg = msg.isRegistrationSuccess();
             this.loginReg = msg.getLogin();
+            this.msgList.add(msg.getErrMsg());
             this.resume();
         }
     }
