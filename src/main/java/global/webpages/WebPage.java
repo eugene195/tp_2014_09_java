@@ -39,7 +39,7 @@ public abstract class WebPage {
     public void handlePost(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         System.out.println("Warning! WebPage.handlePost was invoked");
     }
 

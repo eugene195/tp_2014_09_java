@@ -2,7 +2,7 @@ package global;
 
 import global.messages.AuthAnswer;
 import global.messages.ProfileInfoAnswer;
-import org.apache.velocity.exception.ResourceNotFoundException;
+import global.messages.RegistrationAnswer;
 
 import java.sql.*;
 import java.util.Map;
@@ -52,44 +52,47 @@ public class DataBaseManager implements Runnable {
         }
     }
 
-    public ResultSet executeSql(String query) {
-        if (this.conn != null) {
-            try {
-                Statement statement = this.conn.createStatement();
-                ResultSet result = statement.executeQuery(query);
-                return result;
-            }
-            catch (SQLException e) {
-                System.out.println("sql exception during executeSql");
-            }
-        }
-        return null;
-    }
-
-    public String generateSQL(String pathToSQL, Map<String, Object> context) {
-        String query = "";
-        try {
-            query = Templater.getInstance().generate(pathToSQL, context);
-        }
-        catch (ResourceNotFoundException exception) {
-            query = "SQL template not found" + pathToSQL;
-        }
-        return query;
-    }
-
-    private int getResultCount(ResultSet resultSet) throws SQLException {
+    private static int getResultCount(ResultSet resultSet) throws SQLException {
         resultSet.last();
         int count = resultSet.getRow();
         resultSet.beforeFirst();
         return count;
     }
 
+    private boolean exists(String login){
+        PreparedStatement statement = null;
+        ResultSet result = null;
+
+        String query = "SELECT * FROM User WHERE login=?;";
+        try {
+            statement = this.conn.prepareStatement(query);
+            statement.setString(1, login);
+            result = statement.executeQuery();
+            if (getResultCount(result) >= 1) {
+                return true;
+            }
+        }
+        catch (Exception e){
+            System.out.println("Exception during DB Select in registration");
+        }
+        return false;
+    }
+
     public void checkAuth(String login, String passw) {
-        String query = "SELECT * FROM User WHERE `login`='" + login + "' AND `passw`=md5('"+ passw + "');";
-        ResultSet result = this.executeSql(query);
+        String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
+        ResultSet result = null;
+        try {
+            PreparedStatement statement = this.conn.prepareStatement(query);
+            statement.setString(1, login);
+            statement.setString(2, passw);
+            result = statement.executeQuery();
+        }
+        catch (Exception e){
+            System.out.println("Sql exception during checkAuth()");
+        }
 
         try {
-            if (this.getResultCount(result) == 1) {
+            if (getResultCount(result) == 1) {
                 result.next();
                 long userId = result.getLong("userId");
                 this.msys.sendMessage(new AuthAnswer(true, login, userId), "servlet");
@@ -103,23 +106,36 @@ public class DataBaseManager implements Runnable {
         this.msys.sendMessage(new AuthAnswer(false, "", -1), "servlet");
     }
 
-    public void getProfileInfo(long userId) {
-        this.msys.sendMessage(new ProfileInfoAnswer(), "servlet");
-    }
+    public void registerUser(String login, String passw){
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = null;
 
-    @Deprecated
-    public void test() {
-        ResultSet result = this.executeSql("SELECT * FROM User;");
+        if (this.exists(login)) {
+            this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already exists"), "servlet");
+            return;
+        }
+
+        query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
         try {
+            statement = this.conn.prepareStatement(query);
+            statement.setString(1, login);
+            statement.setString(2, passw);
 
-            while (result.next()) {
-                System.out.println(result.getString("login"));
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected < 1){
+                System.out.println("Smth bad happened. Insert affected < 1 rows");
+                this.msys.sendMessage(new RegistrationAnswer(false, "", "SQL Insert error"), "servlet");
             }
         }
-        catch (Exception e) {
-            System.out.println("Fucking shit");
+        catch (Exception e){
+            System.out.println("Exception during DB insert  in registration");
         }
+        this.msys.sendMessage(new RegistrationAnswer(true, login, ""), "servlet");
+    }
 
+    public void getProfileInfo(long userId) {
+        this.msys.sendMessage(new ProfileInfoAnswer(), "servlet");
     }
 
     @Override

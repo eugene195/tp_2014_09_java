@@ -46,6 +46,7 @@ public class ProfilePage extends WebPage {
         this.session = request.getSession(false);
         if (this.session == null) {
             //TODO: Send error to AuthPage
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.sendRedirect(AuthPage.URL);
             return;
         }
@@ -53,6 +54,7 @@ public class ProfilePage extends WebPage {
         long userId = this.getUserId(request);
         if (userId == -1) {
             //TODO: Send error to AuthPage
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.sendRedirect(AuthPage.URL);
             return;
         }
