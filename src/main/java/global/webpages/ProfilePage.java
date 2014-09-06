@@ -62,7 +62,9 @@ public class ProfilePage extends WebPage {
         this.msys.sendMessage(new ProfileInfoQuery(userId), "dbman");
         this.setZombie();
 
+
         Map<String, Object> context = new LinkedHashMap<>();
+        context.put("login", session.getAttribute("login").toString());
         String page = this.generateHTML(TML_PATH, context);
         response.getWriter().print(page);
 
