@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ public class AuthPage extends WebPage {
     public static final String URL = "/auth";
     public static final String TML_PATH = "AuthPage.html";
 
+    private final Map<String, HttpSession> authSessions = new HashMap<>();
     private final MessageSystem msys;
 
     private boolean successAuth;
@@ -73,6 +75,12 @@ public class AuthPage extends WebPage {
         String login = request.getParameter("login");
         String passw = request.getParameter("passw");
 
+        if (this.authSessions.containsKey(login)) {
+            this.authSessions.get(login).invalidate();
+            this.authSessions.remove(login);
+        }
+
+
         this.msys.sendMessage(new AuthQuery(login, passw), "dbman");
         this.setZombie();
 
@@ -80,6 +88,8 @@ public class AuthPage extends WebPage {
             HttpSession session = request.getSession();
             session.setAttribute("login", this.loginAuth);
             session.setAttribute("userId", this.userId);
+            this.authSessions.put(this.loginAuth, session);
+
             response.sendRedirect(ProfilePage.URL);
             response.setStatus(HttpServletResponse.SC_OK);
         }
