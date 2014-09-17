@@ -1,0 +1,5 @@
+<fest:template xmlns:fest="http://fest.mail.ru">
+	<p><span class="js-start-game link">Start Game</span></p>
+	<p><span class="js-login link">Login</span></p>
+	<p><span class="js-scoreboard link">Scoreboard</span></p>
+</fest:template>

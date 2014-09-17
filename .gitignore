@@ -23,3 +23,7 @@ hs_err_pid*
 .idea/.name
 .idea/libraries/*
 target/
+
+frontend-stub/node_modules/
+.idea/artifacts/
+src/main/java/META-INF/MANIFEST.MF
