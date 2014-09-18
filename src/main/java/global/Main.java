@@ -64,18 +64,48 @@ public class Main
     public static void main(String[] args) throws Exception {
         final int SERVER_PORT = 8081;
 
-        Servlet servlet = configure();
-        Server server = new Server(SERVER_PORT);
 
+
+
+        int port = 8080;
+        if (args.length == 1) {
+            String portString = args[0];
+            port = Integer.valueOf(portString);
+        }
+
+        System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
+
+        Servlet frontend = configure();
+
+        Server server = new Server(port);
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(servlet), "/");
+        context.addServlet(new ServletHolder(frontend), "/api/v1/auth/signin");
 
-        HandlerList handlers = makeServerHandlers();
+        ResourceHandler resource_handler = new ResourceHandler();
+        resource_handler.setDirectoriesListed(true);
+        resource_handler.setResourceBase("frontend-stub/public_html");
 
-        handlers.addHandler(context);
+        HandlerList handlers = new HandlerList();
+        handlers.setHandlers(new Handler[]{resource_handler, context});
         server.setHandler(handlers);
 
         server.start();
         server.join();
+
+
+//
+//        Servlet servlet = configure();
+//        Server server = new Server(SERVER_PORT);
+//
+//        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+//        context.addServlet(new ServletHolder(servlet), "/");
+//
+//        HandlerList handlers = makeServerHandlers();
+//
+//        handlers.addHandler(context);
+//        server.setHandler(handlers);
+//
+//        server.start();
+//        server.join();
     }
 }
