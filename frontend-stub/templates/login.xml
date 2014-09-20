@@ -1,5 +1,5 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
-<form id="auth-form" action="/api/v1/auth/signin" method="POST">
+<form id="auth-form" action="/auth" method="POST">
           <div class="field">
               <label for="login">Login:</label>
               <input name="login" type="text" value = ""/>

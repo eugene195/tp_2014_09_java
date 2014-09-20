@@ -75,37 +75,23 @@ public class Main
 
         System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
 
-        Servlet frontend = configure();
-
+        Servlet servlet = configure();
         Server server = new Server(port);
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(frontend), "/api/v1/auth/signin");
 
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+//        context.addServlet(new ServletHolder(servlet), "/api/v1/auth/signin");         FRONTEND REALIZATION
+        context.addServlet(new ServletHolder(servlet), "/");
         ResourceHandler resource_handler = new ResourceHandler();
         resource_handler.setDirectoriesListed(true);
         resource_handler.setResourceBase("frontend-stub/public_html");
 
-        HandlerList handlers = new HandlerList();
+//        HandlerList handlers = new HandlerList();        FRONTEND REALIZATION
+        HandlerList handlers = makeServerHandlers();
+        handlers.addHandler(context);
         handlers.setHandlers(new Handler[]{resource_handler, context});
         server.setHandler(handlers);
 
         server.start();
         server.join();
-
-
-//
-//        Servlet servlet = configure();
-//        Server server = new Server(SERVER_PORT);
-//
-//        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-//        context.addServlet(new ServletHolder(servlet), "/");
-//
-//        HandlerList handlers = makeServerHandlers();
-//
-//        handlers.addHandler(context);
-//        server.setHandler(handlers);
-//
-//        server.start();
-//        server.join();
     }
 }
