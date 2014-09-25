@@ -1,2 +1,16 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
+<form id="auth-form" action="/api/v1/auth/signin" method="POST">
+          <div class="field">
+              <label for="login">Login:</label>
+              <input name="login" type="text" value = ""/>
+          </div>
+          <div class="field">
+              <label for="passw">Password:</label>
+              <input id="passw" name="passw" type="password"/>
+          </div>
+          <div id="controls">
+              <button id="submit" type="submit">Send</button>
+          </div>
+      </form>
+	<p><span class="js-back link">Back</span></p>
 </fest:template>

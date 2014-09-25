@@ -19,8 +19,7 @@ import java.util.concurrent.Executors;
 
 public class Main
 {
-    private static final String STATIC_DIR = "src/main/static";
-    private static final String MAIN_PAGE_ADDRESS = "/auth";
+    private static final String STATIC_DIR = "public_html";
 
     private static Servlet configure() {
         final int THREADS_AMOUNT = 2;
@@ -45,49 +44,32 @@ public class Main
         resourceHandler.setDirectoriesListed(false); // не показывать содержание директории при переходе по /
         resourceHandler.setResourceBase(STATIC_DIR); //путь к папке статики от корня проекта
 
-        //переадресация пользователя с / на нужный нам адрес
-        RewriteHandler rewriteHandler = new RewriteHandler();
-        rewriteHandler.setRewriteRequestURI(true);
-        rewriteHandler.setRewritePathInfo(true);
-        rewriteHandler.setOriginalPathAttribute("requestedPath");
-
-        RedirectRegexRule rule = new RedirectRegexRule();
-        rule.setRegex("/");
-        rule.setReplacement(MAIN_PAGE_ADDRESS);
-        rewriteHandler.addRule(rule);
-
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] {rewriteHandler, resourceHandler});
+        handlers.setHandlers(new Handler[]{resourceHandler});
+
         return handlers;
     }
 
     public static void main(String[] args) throws Exception {
-        final int SERVER_PORT = 8081;
+        int SERVER_PORT = 8081;
 
-
-
-
-        int port = 8080;
         if (args.length == 1) {
             String portString = args[0];
-            port = Integer.valueOf(portString);
+            SERVER_PORT = Integer.valueOf(portString);
         }
 
-        System.out.append("Starting at port: ").append(String.valueOf(port)).append('\n');
+        System.out.append("Starting at port: ").append(String.valueOf(SERVER_PORT)).append('\n');
 
         Servlet frontend = configure();
 
-        Server server = new Server(port);
+        Server server = new Server(SERVER_PORT);
+
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(frontend), "/");
+
         HandlerList handlers = makeServerHandlers();
 
-        ResourceHandler resource_handler = new ResourceHandler();
-        resource_handler.setDirectoriesListed(true);
-        resource_handler.setResourceBase("frontend-stub/public_html");
-
-
-        handlers.setHandlers(new Handler[]{resource_handler, context});
+        handlers.addHandler(context);
         server.setHandler(handlers);
 
         server.start();
