@@ -60,6 +60,7 @@ public class Main
 
         System.out.append("Starting at port: ").append(String.valueOf(SERVER_PORT)).append('\n');
 
+
         Servlet frontend = configure();
 
         Server server = new Server(SERVER_PORT);
@@ -70,6 +71,7 @@ public class Main
         HandlerList handlers = makeServerHandlers();
 
         handlers.addHandler(context);
+
         server.setHandler(handlers);
 
         server.start();
