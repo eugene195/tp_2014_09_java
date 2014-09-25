@@ -5,7 +5,6 @@ import global.messages.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -23,7 +22,6 @@ public class RegisterPage extends WebPage {
     private final ArrayList<String> msgList = new ArrayList<>();
 
     public RegisterPage(MessageSystem msys) {
-        super();
         this.msys = msys;
     }
 

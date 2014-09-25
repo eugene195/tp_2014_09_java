@@ -1,10 +1,12 @@
 package global.webpages;
 
+import global.MessageSystem;
+import global.messages.LogoutMsg;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -14,6 +16,11 @@ import java.util.Map;
 public class LogoutPage extends WebPage {
     public static final String URL = "/logout";
     private static final String TML_PATH = "LogoutPage.html";
+    private final MessageSystem msys;
+
+    public LogoutPage(MessageSystem msys) {
+        this.msys = msys;
+    }
 
     @Override
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
@@ -23,8 +30,9 @@ public class LogoutPage extends WebPage {
 
         HttpSession session = request.getSession(false);
         if(session != null) {
-            context.put("login", session.getAttribute("login").toString());
-            session.invalidate();
+            String login = session.getAttribute("login").toString();
+            context.put("login", login);
+            this.msys.sendMessage(new LogoutMsg(login), "servlet");
         }
         else {
             //TODO: Send error to AuthPage

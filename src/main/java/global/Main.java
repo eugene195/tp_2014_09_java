@@ -1,14 +1,10 @@
 package global;
 
-import global.DataBaseManager;
-import global.MessageSystem;
-import global.Servlet;
 import org.eclipse.jetty.rewrite.handler.RedirectRegexRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 
-import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -21,6 +17,28 @@ public class Main
 {
     private static final String STATIC_DIR = "src/main/static";
     private static final String MAIN_PAGE_ADDRESS = "/auth";
+    private static final int DEFAULT_SERVER_PORT = 8081;
+
+    /**
+     * Создание объекта сервера.
+     * Внутри осуществляется выбор номера порта.
+     * @param args параметры запуска приложения.
+     * @return объект Server.
+     */
+    private static Server makeServer(String args[]) {
+        //проверяем наличие параметра порт.
+        // Если не передан - запускаемся на порту по умолчанию(переменная DEFAULT_SERVER_PORT).
+        int port;
+        if (args.length < 1) {
+            System.out.append("No port in parametrs. Using default port " + DEFAULT_SERVER_PORT + ".\n");
+            port = DEFAULT_SERVER_PORT;
+        } else {
+            String portString = args[0];
+            port = Integer.valueOf(portString);
+            System.out.append("Starting at port: ").append(portString).append('\n');
+        }
+        return new Server(port);
+    }
 
     private static Servlet configure() {
         final int THREADS_AMOUNT = 2;
@@ -62,10 +80,8 @@ public class Main
     }
 
     public static void main(String[] args) throws Exception {
-        final int SERVER_PORT = 8081;
-
         Servlet servlet = configure();
-        Server server = new Server(SERVER_PORT);
+        Server server = makeServer(args);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(servlet), "/");

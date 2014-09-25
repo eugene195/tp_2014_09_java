@@ -27,7 +27,6 @@ public class Servlet extends HttpServlet implements Runnable {
     private final Map<String, WebPage> pageMap = new HashMap<>();
 
     public Servlet(MessageSystem msys) {
-        super();
         this.msys = msys;
         msys.register(this, SERVLET_ADDRESS);
 
@@ -35,7 +34,7 @@ public class Servlet extends HttpServlet implements Runnable {
         this.pageMap.put(GamePage.URL, new GamePage());
         this.pageMap.put(RegisterPage.URL, new RegisterPage(this.msys));
         this.pageMap.put(ProfilePage.URL, new ProfilePage(this.msys));
-        this.pageMap.put(LogoutPage.URL, new LogoutPage());
+        this.pageMap.put(LogoutPage.URL, new LogoutPage(this.msys));
     }
 
     @Override
@@ -55,19 +54,18 @@ public class Servlet extends HttpServlet implements Runnable {
                       HttpServletResponse response)
             throws IOException, ServletException
     {
-        WebPage currentPage = this.getPageByURL(request);
+        WebPage currentPage = this.getPageByURL(request.getRequestURI());
         currentPage.handleGet(request, response);
     }
 
-    private WebPage getPageByURL(HttpServletRequest request) {
-        String requestURI = request.getRequestURI();
+    private WebPage getPageByURL(String requestURI) {
         Matcher matcher = Pattern.compile("^/\\w+").matcher(requestURI);
 
         System.out.println(requestURI);
         if (matcher.find()) {
             String requestURL = matcher.group();
             // System.out.println(requestURL);
-            WebPage currentPage = this.pageMap.get(matcher.group());
+            WebPage currentPage = this.pageMap.get(requestURL);
 
             if (currentPage != null) {
                 return currentPage;
@@ -82,7 +80,7 @@ public class Servlet extends HttpServlet implements Runnable {
                       HttpServletResponse response)
             throws IOException, ServletException
     {
-        WebPage currentPage = this.getPageByURL(request);
+        WebPage currentPage = this.getPageByURL(request.getRequestURI());
         currentPage.handlePost(request, response);
     }
 

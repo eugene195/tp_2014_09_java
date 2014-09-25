@@ -9,7 +9,6 @@ public class ProfileInfoQuery extends AbstractMsg {
     private final long userId;
 
     public ProfileInfoQuery(long userId) {
-        super();
         this.userId = userId;
     }
 

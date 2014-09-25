@@ -17,7 +17,6 @@ public class RegistrationAnswer extends AbstractMsg {
     private final String errorMessage;
 
     public RegistrationAnswer(boolean success, String login, String errMsg) {
-        super();
         this.success = success;
         this.login = login;
         this.errorMessage = errMsg;

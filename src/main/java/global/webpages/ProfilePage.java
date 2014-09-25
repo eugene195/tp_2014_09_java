@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -27,7 +26,6 @@ public class ProfilePage extends WebPage {
     private final MessageSystem msys;
 
     public ProfilePage(MessageSystem msys) {
-        super();
         this.msys = msys;
     }
 

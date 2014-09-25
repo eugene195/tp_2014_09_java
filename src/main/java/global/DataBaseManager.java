@@ -3,6 +3,7 @@ package global;
 import global.messages.AuthAnswer;
 import global.messages.ProfileInfoAnswer;
 import global.messages.RegistrationAnswer;
+import global.models.UserSession;
 
 import java.sql.*;
 
@@ -22,7 +23,6 @@ public class DataBaseManager implements Runnable {
     private final MessageSystem msys;
 
     public DataBaseManager(MessageSystem msys) {
-        super();
 
         this.msys = msys;
         msys.register(this, DBMAN_ADDRESS);
@@ -39,7 +39,6 @@ public class DataBaseManager implements Runnable {
 
     @Override
     protected void finalize() throws Throwable {
-        super.finalize();
         if (this.conn != null) {
             try {
                 this.conn.close();
@@ -75,19 +74,22 @@ public class DataBaseManager implements Runnable {
         return false;
     }
 
-    public void checkAuth(String login, String passw) {
+    public void checkAuth(UserSession userSession, String passw) {
         String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
 
         try {
             PreparedStatement statement = this.conn.prepareStatement(query);
-            statement.setString(1, login);
+            statement.setString(1, userSession.getLogin());
             statement.setString(2, passw);
             ResultSet result = statement.executeQuery();
 
             if (getResultCount(result) == 1) {
                 result.next();
                 long userId = result.getLong("userId");
-                this.msys.sendMessage(new AuthAnswer(true, login, userId), "servlet");
+
+                userSession.setSuccessAuth(true);
+                userSession.setUserId(userId);
+                this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
                 return;
             }
         }
@@ -95,7 +97,8 @@ public class DataBaseManager implements Runnable {
             System.out.println("Sql exception during checkAuth()");
         }
 
-        this.msys.sendMessage(new AuthAnswer(false, "", -1), "servlet");
+        userSession.setSuccessAuth(false);
+        this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
     }
 
     public void registerUser(String login, String passw){

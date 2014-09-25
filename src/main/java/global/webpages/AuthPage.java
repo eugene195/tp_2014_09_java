@@ -4,6 +4,8 @@ import global.MessageSystem;
 import global.messages.AbstractMsg;
 import global.messages.AuthQuery;
 import global.messages.AuthAnswer;
+import global.messages.LogoutMsg;
+import global.models.UserSession;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,17 +24,14 @@ public class AuthPage extends WebPage {
     public static final String URL = "/auth";
     public static final String TML_PATH = "AuthPage.html";
 
-    private final Map<String, HttpSession> authSessions = new HashMap<>();
+    private final Map<String, HttpSession> httpSessions = new HashMap<>();
+    private final Map<String, UserSession> userSessions = new HashMap<>();
     private final MessageSystem msys;
 
-    private boolean successAuth;
-    private String loginAuth;
-    private Long userId;
-
+    private UserSession userSession;
     private boolean notValid;
 
     public AuthPage(MessageSystem msys) {
-        super();
         this.msys = msys;
         this.notValid = false;
     }
@@ -68,6 +67,17 @@ public class AuthPage extends WebPage {
         response.setContentType(WebPage.CONTENT_TYPE);
     }
 
+    private void cleanSessions(final String login) {
+        if (this.httpSessions.containsKey(login)) {
+            this.httpSessions.get(login).invalidate();
+            this.httpSessions.remove(login);
+        }
+
+        if (this.userSessions.containsKey(login)) {
+            this.userSessions.remove(login);
+        }
+    }
+
     @Override
     public void handlePost(HttpServletRequest request, HttpServletResponse response)
             throws IOException
@@ -75,20 +85,20 @@ public class AuthPage extends WebPage {
         String login = request.getParameter("login");
         String passw = request.getParameter("passw");
 
-        if (this.authSessions.containsKey(login)) {
-            this.authSessions.get(login).invalidate();
-            this.authSessions.remove(login);
-        }
+        this.cleanSessions(login);
 
-
-        this.msys.sendMessage(new AuthQuery(login, passw), "dbman");
+        this.userSession = new UserSession(login);
+        this.msys.sendMessage(new AuthQuery(this.userSession, passw), "dbman");
         this.setZombie();
 
-        if (this.successAuth) {
+        if (this.userSession.isAuthSuccess()) {
+            String userLogin = this.userSession.getLogin();
+
             HttpSession session = request.getSession();
-            session.setAttribute("login", this.loginAuth);
-            session.setAttribute("userId", this.userId);
-            this.authSessions.put(this.loginAuth, session);
+            session.setAttribute("login", userLogin);
+            session.setAttribute("userId", this.userSession.getUserId());
+            this.httpSessions.put(userLogin, session);
+            this.userSessions.put(userLogin, this.userSession);
 
             response.sendRedirect(ProfilePage.URL);
             response.setStatus(HttpServletResponse.SC_OK);
@@ -101,14 +111,16 @@ public class AuthPage extends WebPage {
 
     @Override
     public void finalize(AbstractMsg abs_msg) {
+
         if (abs_msg instanceof AuthAnswer) {
             AuthAnswer msg = (AuthAnswer) abs_msg;
-
-            this.successAuth = msg.isAuthSuccess();
-            this.loginAuth = msg.getLogin();
-            this.userId = msg.getUserId();
-
+            this.userSession = msg.getUserSession();
             this.resume();
+        }
+        else if (abs_msg instanceof LogoutMsg) {
+            LogoutMsg msg = (LogoutMsg) abs_msg;
+            this.cleanSessions(msg.getLogin());
+            // System.out.println("ura: " + msg.getLogin());
         }
     }
 }

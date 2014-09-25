@@ -1,33 +1,21 @@
 package global.messages;
 
 import global.Servlet;
+import global.models.UserSession;
 import global.webpages.AuthPage;
 
 /**
  * Created by Евгений on 28.08.2014.
  */
 public class AuthAnswer extends AbstractMsg {
-    private final boolean success;
-    private final String login;
-    private final long userId;
+    private final UserSession userSession;
 
-    public AuthAnswer(boolean success, String login, long userId) {
-        super();
-        this.success = success;
-        this.login = login;
-        this.userId = userId;
+    public AuthAnswer(UserSession userSession) {
+        this.userSession = userSession;
     }
 
-    public boolean isAuthSuccess(){
-        return this.success;
-    }
-
-    public String getLogin(){
-        return this.login;
-    }
-
-    public Long getUserId() {
-        return this.userId;
+    public UserSession getUserSession(){
+        return this.userSession;
     }
 
     @Override
