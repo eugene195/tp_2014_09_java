@@ -10,10 +10,10 @@ define([
 
         template: tmpl,
         initialize: function () {
-            // TODO
+            this.render();
         },
         render: function () {
-            // TODO
+            this.$el.html(this.template());
         },
         show: function () {
             // TODO

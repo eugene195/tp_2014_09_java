@@ -1,4 +1,4 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
 	PERFECT	Game
-	<p><span class="js-back link">Back</span></p>
+	<a href="#">Back</a>
 </fest:template>

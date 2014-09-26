@@ -1,6 +1,6 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
 	<h1>EPIC GAME</h1>
-	<p><button class="js-start-game link">Start Game</button></p>
-	<p><button class="js-login link">Login</button></p>
-	<p><button class="js-scoreboard link">Scoreboard</button></p>
+	<a href="#game" Start Game </a>
+	<a href="#login" Login> </a>
+	<a href="#scoreboard" Scoreboard</button></a>
 </fest:template>
