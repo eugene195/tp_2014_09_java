@@ -35,6 +35,7 @@ public class Servlet extends HttpServlet implements Runnable {
         this.pageMap.put(RegisterPage.URL, new RegisterPage(this.msys));
         this.pageMap.put(ProfilePage.URL, new ProfilePage(this.msys));
         this.pageMap.put(LogoutPage.URL, new LogoutPage(this.msys));
+        this.pageMap.put(AdminPage.URL, new AdminPage(this.msys));
     }
 
     @Override

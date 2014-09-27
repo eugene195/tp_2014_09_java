@@ -1,10 +1,8 @@
 package global.webpages;
 
 import global.MessageSystem;
-import global.messages.AbstractMsg;
-import global.messages.AuthQuery;
-import global.messages.AuthAnswer;
-import global.messages.LogoutMsg;
+import global.Servlet;
+import global.messages.*;
 import global.models.UserSession;
 
 import javax.servlet.http.HttpServletRequest;
@@ -121,6 +119,9 @@ public class AuthPage extends WebPage {
             LogoutMsg msg = (LogoutMsg) abs_msg;
             this.cleanSessions(msg.getLogin());
             // System.out.println("ura: " + msg.getLogin());
+        }
+        else if (abs_msg instanceof GetOnlineUsersQuery) {
+            this.msys.sendMessage(new GetOnlineUsersAnswer(this.userSessions.keySet()), "servlet");
         }
     }
 }

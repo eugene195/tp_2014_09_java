@@ -1,11 +1,14 @@
 package global;
 
 import global.messages.AuthAnswer;
+import global.messages.GetUsersAnswer;
 import global.messages.ProfileInfoAnswer;
 import global.messages.RegistrationAnswer;
 import global.models.UserSession;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import static java.lang.Thread.sleep;
 
@@ -16,7 +19,7 @@ public class DataBaseManager implements Runnable {
 
     private static final String baseUrl = "jdbc:mysql://localhost/java_db";
     private static final String baseUserName = "root";
-    private static final String baseUserPasswd = "22061994";
+    private static final String baseUserPasswd = "root";
 
     private Connection conn;
     private static final String DBMAN_ADDRESS = "dbman";
@@ -72,6 +75,29 @@ public class DataBaseManager implements Runnable {
             System.out.println("Exception during DB Select in registration");
         }
         return false;
+    }
+
+    public void getUsers(){
+        String query = "SELECT * FROM User;";
+        try {
+            PreparedStatement statement = this.conn.prepareStatement(query);
+            ResultSet result = statement.executeQuery();
+
+            int rows = getResultCount(result);
+            HashMap<String, Long> map = new HashMap<>();
+            while(rows > 0) {
+                result.next();
+                Long userId = result.getLong("userId");
+                String username = result.getString("login");
+                map.put(username, userId);
+                rows--;
+            }
+            this.msys.sendMessage(new GetUsersAnswer(map), "servlet");
+            return;
+        }
+        catch (Exception e) {
+            System.out.println("Sql exception during checkAuth()");
+        }
     }
 
     public void checkAuth(UserSession userSession, String passw) {
