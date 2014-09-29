@@ -5,17 +5,17 @@
 <div class="user-icon"></div>
 <div class="pass-icon"></div>
   
-<form name="login-form" class="login-form" action="/auth" method="POST">
+<form name="login-form" class="login-form" action="/register" method="POST">
  
   <div class="header">
-    <h1>Login Form</h1>
+    <h1>Register Form</h1>
     <span>Let's get started.</span>
   </div>
 
   <div class="content">
     <!--USERNAME-->
-    <div id="login-error" class="alert-error">
-      <p id="login-error-message"></p>
+    <div id="register-error" class="alert-error">
+      <p id="register-error-message"></p>
     </div>  
     
     <input name="login" type="text" class="input username" value="Username" onfocus="this.value=''" />
@@ -25,13 +25,20 @@
       <p id="passw-error-message"></p>
     </div>
     
-    <input name="passw" type="password" class="input password" value="Password" onfocus="this.value=''" />
+    <input id="passw" name="passw" type="password" class="input password" value="Password" onfocus="this.value=''" />
+
+    <!--CONFIRM PASSWORD-->
+    <div id="passw2-error" class="alert-error">
+      <p id="passw2-error-message"></p>
+    </div>
+    
+    <input id="passw2" name="passw2" type="password" class="input password" value="Password" onfocus="this.value=''" />
   
   </div>
 
   <div class="footer">
     <!--LOGIN-->
-    <input id="login" type="submit" name="submit" value="Login" class="button" />
+    <input id="register" type="submit" name="submit" value="Register" class="button" />
     <!--BACK-->
     <input type="button" value="Back" class="button button-orange" onClick="location.href='#'"/>
   </div>

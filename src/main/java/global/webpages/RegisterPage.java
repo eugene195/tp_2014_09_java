@@ -5,18 +5,20 @@ import global.messages.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
+import java.io.PrintWriter;
+import org.json.JSONObject;
+
 
 /**
  * Created by Евгений on 28.08.2014.
  */
 public class RegisterPage extends WebPage {
     public static final String URL = "/register";
-    public static final String TML_PATH = "RegisterPage.html";
+
     private final MessageSystem msys;
 
     private boolean successReg;
@@ -31,13 +33,7 @@ public class RegisterPage extends WebPage {
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-        Map<String, Object> context = new LinkedHashMap<>();
-        context.put("errorList", this.msgList);
-        String page = this.generateHTML(TML_PATH, context);
 
-        response.getWriter().print(page);
-        response.setContentType(WebPage.CONTENT_TYPE);
-        response.setStatus(HttpServletResponse.SC_OK);
 
         this.msgList.clear();
     }
@@ -48,10 +44,9 @@ public class RegisterPage extends WebPage {
     {
         String login = request.getParameter("login");
         String passw = request.getParameter("passw");
-        String repeatPassw = request.getParameter("repeatPassw");
+        String repeatPassw = request.getParameter("passw2");
 
         if (!passw.equals(repeatPassw)) {
-            response.getWriter().println("Passwords do not match");
             response.setContentType(WebPage.CONTENT_TYPE);
             response.setStatus(HttpServletResponse.SC_OK);
             return;
@@ -60,14 +55,20 @@ public class RegisterPage extends WebPage {
         this.msys.sendMessage(new RegistrationQuery(login, passw), "dbman");
         this.setZombie();
 
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter printout = response.getWriter();
+        JSONObject JObject = new JSONObject();
+
         if (this.successReg) {
-            response.sendRedirect(AuthPage.URL);
-            response.setStatus(HttpServletResponse.SC_OK);
+            JObject.put("status", "1");
+
         }
         else {
-            response.sendRedirect(RegisterPage.URL);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            JObject.put("status", "-1");
+            JObject.put("message", "Username already exists");
         }
+        printout.print(JObject);
+        printout.flush();
     }
 
 

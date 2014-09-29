@@ -9,10 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
+
+import java.io.PrintWriter;
+import org.json.JSONObject;
 
 /**
  * Created by Евгений on 28.08.2014.
@@ -20,7 +21,6 @@ import java.util.Map;
  */
 public class AuthPage extends WebPage {
     public static final String URL = "/auth";
-    public static final String TML_PATH = "AuthPage.html";
 
     private final Map<String, HttpSession> authSessions = new HashMap<>();
     private final MessageSystem msys;
@@ -29,43 +29,16 @@ public class AuthPage extends WebPage {
     private String loginAuth;
     private Long userId;
 
-    private boolean notValid;
-
     public AuthPage(MessageSystem msys) {
         super();
         this.msys = msys;
-        this.notValid = false;
     }
 
     @Override
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-        HttpSession session = request.getSession(false);
 
-        Map<String, Object> context = new LinkedHashMap<>();
-        ArrayList<String> errorList = new ArrayList<>();
-
-        if (session != null) {
-            context.put("isAuthorized", true);
-            context.put("login", session.getAttribute("login").toString());
-            errorList.add("You have already been authorized");
-        }
-        else {
-            context.put("isAuthorized", false);
-        }
-
-        if (this.notValid) {
-            errorList.add("Your data is not valid");
-            this.notValid = false;
-        }
-
-        context.put("errorList", errorList);
-
-        String page = this.generateHTML(TML_PATH, context);
-        response.getWriter().print(page);
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType(WebPage.CONTENT_TYPE);
     }
 
     @Override
@@ -80,23 +53,26 @@ public class AuthPage extends WebPage {
             this.authSessions.remove(login);
         }
 
-
         this.msys.sendMessage(new AuthQuery(login, passw), "dbman");
         this.setZombie();
+
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter printout = response.getWriter();
+        JSONObject JObject = new JSONObject();
 
         if (this.successAuth) {
             HttpSession session = request.getSession();
             session.setAttribute("login", this.loginAuth);
             session.setAttribute("userId", this.userId);
             this.authSessions.put(this.loginAuth, session);
-
-            response.sendRedirect(ProfilePage.URL);
-            response.setStatus(HttpServletResponse.SC_OK);
+            JObject.put("status", "1");
         }
         else {
-            this.notValid = true;
-            response.sendRedirect(AuthPage.URL);
+            JObject.put("status", "-1");
+            JObject.put("message", "Incorrect login or password");
         }
+        printout.print(JObject);
+        printout.flush();
     }
 
     @Override

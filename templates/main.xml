@@ -1,6 +1,36 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
-	<h1>EPIC GAME</h1>
-	<a href="#game" Start Game </a>
-	<a href="#login" Login> </a>
-	<a href="#scoreboard" Scoreboard</button></a>
+<div id="wrapper">
+
+<div class="user-icon"></div>
+<div class="pass-icon"></div>
+  
+<form name="login-form" class="login-form" action="/auth" method="POST">
+ 
+  <div class="header">
+     <h1>Tentacle Wars</h1>
+   </div>
+
+  <div class="content">
+  	<div class="menu-item">
+		<a href="#game">Start Game</a>
+	</div>
+	<div class="menu-item">
+		<a href="#scoreboard">Scoreboard</a>
+	</div>
+
+  </div>
+
+  <div class="footer">
+	  <!--LOGIN-->
+	  <input type="button" value="Sign in" class="button" onClick="location.href='#login'"/>
+	  <!--REGISTER-->
+	  <input type="button" value="Sign up" class="button button-orange" onClick="location.href='#register'"/>
+  </div>
+  
+    </form>
+</div>
+
+<div class="gradient"></div>
+	
+	
 </fest:template>

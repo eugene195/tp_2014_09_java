@@ -1,6 +1,6 @@
 define([
     'backbone',
-    'tmpl/login'
+    'tmpl/register'
 ], function(
     Backbone,
     tmpl
@@ -11,11 +11,11 @@ define([
         template: tmpl,
 
         events: {
-            "click #login": "buttonClick",
+            "click #register": "buttonClick",
             "click .username": "loginClick",
-            "click .password": "passwordClick",
+            "click #passw": "passwordClick",
             "blur .username": "loginBlur",
-            "blur .password": "passwordBlur",
+            "blur #passw": "passwordBlur",
         },
 
         initialize: function () {
@@ -25,8 +25,7 @@ define([
             this.$el.html(this.template());
         },
         show: function () {
-            $("#login-error").hide();
-            $("#passw-error").hide();
+            //TODo
         },
         hide: function () {
             // TODO
@@ -34,45 +33,57 @@ define([
         buttonClick: function(event) {
             event.preventDefault();
             var username = $(".username").val();
-            var password = $(".password").val();
+            var password = $("#passw").val();
+            var password2 = $("#passw2").val();
             var wasError = false;
-            $("#login").prop('disabled', true).delay(1700).queue(
+            $("#register").prop('disabled', true).delay(1700).queue(
                 function(next) { $(this).attr('disabled', false);
                 next();
                 });
-            $("#login").addClass("button-disabled").delay(1700).queue(
+            $("#register").addClass("button-disabled").delay(1700).queue(
                 function(next) { $(this).removeClass("button-disabled");
                 next();
                 });
 
             if (username == '') {
                 wasError = true;
-                $("#login-error").slideDown().delay(3000).slideUp();
-                $("#login-error-message").html('Missing username');
+                $("#register-error").slideDown().delay(3000).slideUp();
+                $("#register-error-message").html('Missing username');
             }
             if (password == '') {
                 wasError = true;
                 $("#passw-error").slideDown().delay(3000).slideUp();
                 $("#passw-error-message").html('Missing password');
+            }   
+            else if (password2 == '') {
+                wasError = true;
+                $("#passw2-error").slideDown().delay(3000).slideUp();
+                $("#passw2-error-message").html('Missing confirm password');
+            }   
+            else if (password != password2) {
+                wasError = true;
+                $("#passw2-error").slideDown().delay(3000).slideUp();
+                $("#passw2-error-message").html('Passwords does not match');
             }
             if (wasError) {
                 return;
             }
             
             $.ajax({
-                url: "/auth",
+                url: "/register",
                 method: "POST",
                 data:  {
                     login: username,
                     passw: password,
+                    passw2: password,
                 },
             dataType: "json"
             }).done(function(data){
                 if (data.status == 1) {
-                    window.location.replace('#');
+                    window.location.replace('#login');
                 } else {
-                    $("#login-error").slideDown().delay(3000).slideUp();
-                    $("#login-error-message").html(data.message);
+                    $("#register-error").slideDown().delay(3000).slideUp();
+                    $("#register-error-message").html(data.message);
                 }
             }).fail(function(data) {
                 alert("Error, please try again later");
@@ -90,8 +101,6 @@ define([
         passwordBlur: function() {
             $(".pass-icon").css("left","0px");
         },
-
-
     });
 
     return new View();
