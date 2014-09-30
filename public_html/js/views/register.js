@@ -14,8 +14,10 @@ define([
             "click #register": "buttonClick",
             "click .username": "loginClick",
             "click #passw": "passwordClick",
+            "click #passw2": "password2Click",
             "blur .username": "loginBlur",
             "blur #passw": "passwordBlur",
+            "blur #passw2": "password2Blur",
         },
 
         initialize: function () {
@@ -95,12 +97,19 @@ define([
         passwordClick: function() {
             $(".pass-icon").css("left","-48px");
         },
+        password2Click: function() {
+            $(".pass-icon2").css("left","-48px");
+        },
         loginBlur: function() {
             $(".user-icon").css("left","0px");
         },
         passwordBlur: function() {
             $(".pass-icon").css("left","0px");
         },
+        password2Blur: function() {
+            $(".pass-icon2").css("left","0px");
+        },
+
     });
 
     return new View();

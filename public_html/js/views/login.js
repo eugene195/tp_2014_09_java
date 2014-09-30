@@ -25,8 +25,7 @@ define([
             this.$el.html(this.template());
         },
         show: function () {
-            $("#login-error").hide();
-            $("#passw-error").hide();
+            
         },
         hide: function () {
             // TODO
@@ -36,6 +35,7 @@ define([
             var username = $(".username").val();
             var password = $(".password").val();
             var wasError = false;
+
             $("#login").prop('disabled', true).delay(1700).queue(
                 function(next) { $(this).attr('disabled', false);
                 next();
@@ -55,6 +55,7 @@ define([
                 $("#passw-error").slideDown().delay(3000).slideUp();
                 $("#passw-error-message").html('Missing password');
             }
+            
             if (wasError) {
                 return;
             }

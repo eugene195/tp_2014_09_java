@@ -17,14 +17,20 @@
 	<div class="menu-item">
 		<a href="#scoreboard">Scoreboard</a>
 	</div>
+	<div id="profile" class="menu-item hidden">
+		<a href="#profile">Profile</a>
+	</div>
+	<div id="exit" class="menu-item hidden">
+		<a id="logout" href="#">Exit</a>
+	</div>
 
   </div>
 
   <div class="footer">
 	  <!--LOGIN-->
-	  <input type="button" value="Sign in" class="button" onClick="location.href='#login'"/>
+	  <input id="login" type="button" value="Sign in" class="button hidden" onClick="location.href='#login'"/>
 	  <!--REGISTER-->
-	  <input type="button" value="Sign up" class="button button-orange" onClick="location.href='#register'"/>
+	  <input id="register" type="button" value="Sign up" class="button button-orange hidden" onClick="location.href='#register'"/>
   </div>
   
     </form>
