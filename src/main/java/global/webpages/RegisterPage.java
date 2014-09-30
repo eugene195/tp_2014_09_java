@@ -25,7 +25,6 @@ public class RegisterPage extends WebPage {
     private final ArrayList<String> msgList = new ArrayList<>();
 
     public RegisterPage(MessageSystem msys) {
-        super();
         this.msys = msys;
     }
 

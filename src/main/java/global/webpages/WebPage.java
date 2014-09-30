@@ -7,7 +7,6 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -15,15 +14,10 @@ import java.util.Map;
  * Abstract Page controller.
  */
 public abstract class WebPage {
-    // Important variables for every page
-    public static final String URL = "";
-    public static final String TML_PATH = "";
-
     protected static final String CONTENT_TYPE = "text/html;charset=utf-8";
     protected boolean zombie;
 
     public WebPage() {
-        super();
         this.zombie = false;
     }
 

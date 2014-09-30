@@ -10,7 +10,6 @@ public class RegistrationQuery extends AbstractMsg {
     private final String password;
 
     public RegistrationQuery(String login, String password) {
-        super();
         this.login = login;
         this.password = password;
     }

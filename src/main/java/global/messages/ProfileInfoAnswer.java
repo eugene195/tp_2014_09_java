@@ -8,10 +8,6 @@ import global.webpages.ProfilePage;
  */
 public class ProfileInfoAnswer extends AbstractMsg {
 
-    public ProfileInfoAnswer() {
-        super();
-    }
-
     @Override
     public void exec(Runnable abonent) {
         if (abonent instanceof Servlet) {
