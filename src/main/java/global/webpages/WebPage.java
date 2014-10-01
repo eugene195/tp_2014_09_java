@@ -21,8 +21,12 @@ public abstract class WebPage {
         this.zombie = false;
     }
 
-    public abstract void handleGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException;
+    public void handleGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException
+    {
+        response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+        System.out.println("Warning! WebPage.handleGet was invoked");
+    }
 
     /**
      * HandlePost can be overriden by concrete pages or not.
