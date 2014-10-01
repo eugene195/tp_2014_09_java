@@ -1,13 +1,14 @@
 package global.webpages;
 
 import global.MessageSystem;
-import global.messages.LogoutMsg;
+import global.models.UserSession;
+import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.LinkedHashMap;
+import java.io.PrintWriter;
 import java.util.Map;
 
 /**
@@ -18,32 +19,38 @@ public class LogoutPage extends WebPage {
     private static final String TML_PATH = "LogoutPage.html";
     private final MessageSystem msys;
 
-    public LogoutPage(MessageSystem msys) {
+    private final Map<String, UserSession> userSessions;
+
+    public LogoutPage(MessageSystem msys, Map<String, UserSession> userSessions) {
         this.msys = msys;
+        this.userSessions = userSessions;
     }
 
     @Override
-    public void handleGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException
+    public void handlePost(HttpServletRequest request, HttpServletResponse response)
+        throws IOException
     {
-        Map<String, Object> context = new LinkedHashMap<>();
+        PrintWriter printout = response.getWriter();
+        JSONObject JObject = new JSONObject();
 
         HttpSession session = request.getSession(false);
-        if(session != null) {
+        if (session != null) {
             String login = session.getAttribute("login").toString();
-            context.put("login", login);
-            this.msys.sendMessage(new LogoutMsg(login), "servlet");
+            session.invalidate();
+
+            if (this.userSessions.containsKey(login)) {
+                this.userSessions.remove(login);
+            }
+
+            JObject.put("status", "1");
         }
         else {
-            //TODO: Send error to AuthPage
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.sendRedirect(AuthPage.URL);
+            JObject.put("status", "-1");
+            JObject.put("message", "There is no session for you");
         }
 
-        String page = this.generateHTML(TML_PATH, context);
-        response.getWriter().print(page);
-
-        response.setContentType(WebPage.CONTENT_TYPE);
-        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json; charset=UTF-8");
+        printout.print(JObject);
+        printout.flush();
     }
 }

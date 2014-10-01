@@ -52,7 +52,25 @@ define([
         },
         logout: function (event) {
             event.preventDefault();
-            // TODO            
+
+            $.ajax({
+                url: "/logout",
+                method: "POST",
+                data: {
+                    data: 'data'
+                },
+                dataType: "json"
+            }).done(function(data){
+                if (data.status == 1) {
+                    window.location.replace('#login');
+                }
+                else {
+                    $("#logout-error").slideDown().delay(3000).slideUp();
+                    $("#logout-error-message").html(data.message);
+                }
+            }).fail (function(data) {
+                alert("Error, please try again later");
+            });
         }
 
     });

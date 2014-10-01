@@ -1,6 +1,7 @@
 package global;
 
 import global.messages.AbstractMsg;
+import global.models.UserSession;
 import global.webpages.*;
 
 import javax.servlet.ServletException;
@@ -25,16 +26,17 @@ public class Servlet extends HttpServlet implements Runnable {
     private static final String SERVLET_ADDRESS = "servlet";
     private final MessageSystem msys;
     private final Map<String, WebPage> pageMap = new HashMap<>();
+    private final Map<String, UserSession> userSessions = new HashMap<>();
 
     public Servlet(MessageSystem msys) {
         this.msys = msys;
         msys.register(this, SERVLET_ADDRESS);
 
-        this.pageMap.put(AuthPage.URL, new AuthPage(this.msys));
+        this.pageMap.put(AuthPage.URL, new AuthPage(this.msys, this.userSessions));
         this.pageMap.put(GamePage.URL, new GamePage());
         this.pageMap.put(RegisterPage.URL, new RegisterPage(this.msys));
         this.pageMap.put(ProfilePage.URL, new ProfilePage(this.msys));
-        this.pageMap.put(LogoutPage.URL, new LogoutPage(this.msys));
+        this.pageMap.put(LogoutPage.URL, new LogoutPage(this.msys, this.userSessions));
         this.pageMap.put(IdentifyUserPage.URL, new IdentifyUserPage());
         this.pageMap.put(AdminPage.URL, new AdminPage(this.msys));
     }
