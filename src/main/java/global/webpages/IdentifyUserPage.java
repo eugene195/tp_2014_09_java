@@ -18,18 +18,6 @@ public class IdentifyUserPage extends WebPage {
     public static final String URL = "/identifyuser";
 
 
-    public IdentifyUserPage() {
-        super();
-
-    }
-
-    @Override
-    public void handleGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException
-    {
-
-    }
-
     private long getUserId(HttpSession session) {
         Object userObjId = session.getAttribute("userId");
         if (userObjId != null) {

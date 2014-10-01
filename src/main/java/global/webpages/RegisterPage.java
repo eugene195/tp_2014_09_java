@@ -32,8 +32,6 @@ public class RegisterPage extends WebPage {
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-
-
         this.msgList.clear();
     }
 

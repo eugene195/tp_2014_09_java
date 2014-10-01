@@ -16,7 +16,6 @@ import java.util.Map;
  */
 public class LogoutPage extends WebPage {
     public static final String URL = "/logout";
-    private static final String TML_PATH = "LogoutPage.html";
     private final MessageSystem msys;
 
     private final Map<String, UserSession> userSessions;
