@@ -1,6 +1,6 @@
 define([
     'backbone',
-    'tmpl/register'
+    'tmpl/profile'
 ], function(
     Backbone,
     tmpl
@@ -12,15 +12,10 @@ define([
         el: $('#page'),
         events: {
             "click #register": "buttonClick",
-            "click #username": "loginClick",
             "click #passw": "passwordClick",
             "click #passw2": "password2Click",
-            "blur #username": "loginBlur",
             "blur #passw": "passwordBlur",
             "blur #passw2": "password2Blur",
-            "focus #passw": "passwFocus",
-            "focus #passw2": "passw2Focus",
-            "focus #username": "usernameFocus"
         },
 
         initialize: function () {
@@ -28,6 +23,22 @@ define([
         },
         render: function () {
             this.$el.html(this.template());
+
+            $.ajax({
+                url: "/identifyuser",
+                method: "POST",
+                data:  {
+                    data: 'data'
+                },
+            dataType: "json"
+            }).done(function(data){
+                // if user is identified
+                if (data.status == 1) {
+                    $('h1').html("Profile " + data.login)
+                }
+            }).fail(function(data) {
+                alert("Error, please try again later");
+            }) 
         },
         show: function () {
             //TODo
@@ -37,7 +48,7 @@ define([
         },
         buttonClick: function(event) {
             event.preventDefault();
-            var username = $("#username").val();
+            
             var password = $("#passw").val();
             var password2 = $("#passw2").val();
             var wasError = false;
@@ -50,11 +61,7 @@ define([
                 next();
                 });
 
-            if (username == '') {
-                wasError = true;
-                $("#register-error").slideDown().delay(3000).slideUp();
-                $("#register-error-message").html('Missing username');
-            }
+            
             if (password == '') {
                 wasError = true;
                 $("#passw-error").slideDown().delay(3000).slideUp();
@@ -78,7 +85,6 @@ define([
                 method: "POST",
                 url: $('.form').data('action'),
                 data:  {
-                    login: username,
                     passw: password,
                     passw2: password,
                 },
@@ -94,32 +100,17 @@ define([
                 alert("Error, please try again later");
             })           
         },
-        loginClick: function() {
-            $(".form__content__user-icon").css("left","-48px");
-        },
         passwordClick: function() {
             $(".form__content__pass-icon").css("left","-48px");
         },
         password2Click: function() {
             $(".form__content__pass-icon2").css("left","-48px");
         },
-        loginBlur: function() {
-            $(".form__content__user-icon").css("left","0px");
-        },
         passwordBlur: function() {
             $(".form__content__pass-icon").css("left","0px");
         },
         password2Blur: function() {
             $(".form__content__pass-icon2").css("left","0px");
-        },
-        passwFocus: function() {
-            $("#passw").val("");
-        },
-        passw2Focus: function() {
-            $("#passw2").val("");
-        },
-        usernameFocus: function() {
-            $("#username").val("");
         }
 
     });

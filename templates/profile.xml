@@ -1,0 +1,52 @@
+<fest:template xmlns:fest="http://fest.mail.ru">
+
+<div id="wrapper">
+
+<div class="form__content__user-icon"></div>
+<div class="form__content__pass-icon"></div>
+<div class="form__content__pass-icon2"></div>
+  
+<form name="register-form" class="form" data-action="/profile" method="POST">
+ 
+  <div class="form__header">
+    <h1>Profile</h1>
+    <span>Change your password</span>
+  </div>
+
+  <div class="form__content">
+    <!--PASSWORD-->
+    <div id="cur-passw-error" class="alert-error">
+      <p id="cur-passw-error-message"></p>
+    </div>
+    
+    <input id="cur-passw" name="cur-passw" type="password" class="form__content__input" value="Password"/>
+
+    <!--PASSWORD-->
+    <div id="passw-error" class="alert-error">
+      <p id="passw-error-message"></p>
+    </div>
+    
+    <input id="passw" name="passw" type="password" class="form__content__input form__content__input--password" value="Password"/>
+
+    <!--CONFIRM PASSWORD-->
+    <div id="passw2-error" class="alert-error">
+      <p id="passw2-error-message"></p>
+    </div>
+    
+    <input id="passw2" name="passw2" type="password" class="form__content__input form__content__input--password" value="Password"/>
+  
+  </div>
+
+  <div class="form__footer">
+    <!--LOGIN-->
+    <input id="save_profile" type="submit" name="submit" value="Save" class="form__footer__button" />
+    <!--BACK-->
+    <a href="#" class="form__footer__button form__footer__button--orange">Back</a>
+  </div>
+  
+    </form>
+</div>
+
+<div class="gradient"></div> 
+
+</fest:template>

@@ -28,9 +28,9 @@
 
   <div class="form__footer">
 	  <!--LOGIN-->
-	  <input id="auth" type="button" value="Sign in" class="form__footer__button" onClick="location.href='#login'"/>
+	  <a id="auth" href="#login" class="form__footer__button">Sign in</a>
 	  <!--REGISTER-->
-	  <input id="reg" type="button" value="Sign up" class="form__footer__button form__footer__button--orange" onClick="location.href='#register'"/>
+	  <a id="reg" href="#register" class="form__footer__button form__footer__button--orange">Sign up</a>
   </div>
   
     </form>

@@ -16,6 +16,8 @@ define([
             "click #passw": "passwordClick",
             "blur #username": "loginBlur",
             "blur #passw": "passwordBlur",
+            "focus #passw": "passwFocus",
+            "focus #username": "usernameFocus"
         },
 
         initialize: function () {
@@ -91,6 +93,12 @@ define([
         passwordBlur: function() {
             $(".form__content__pass-icon").css("left","0px");
         },
+        passwFocus: function() {
+            $("#passw").val("");
+        },
+        usernameFocus: function() {
+            $("#username").val("");
+        }
 
 
     });
