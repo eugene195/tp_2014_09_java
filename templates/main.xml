@@ -4,33 +4,33 @@
 <div class="user-icon"></div>
 <div class="pass-icon"></div>
   
-<form name="login-form" class="login-form" action="/auth" method="POST">
+<form name="login-form" class="form" action="/auth" method="POST">
  
-  <div class="header">
+  <div class="form__header">
      <h1>Tentacle Wars</h1>
    </div>
 
-  <div class="content">
-  	<div class="menu-item">
+  <div class="form__content">
+  	<div class="form__content__menu-item">
 		<a href="#game">Start Game</a>
 	</div>
-	<div class="menu-item">
+	<div class="form__content__menu-item">
 		<a href="#scoreboard">Scoreboard</a>
 	</div>
-	<div id="profile" class="menu-item hidden">
+	<div id="profile" class="form__content__menu-item">
 		<a href="#profile">Profile</a>
 	</div>
-	<div id="exit" class="menu-item hidden">
+	<div id="exit" class="form__content__menu-item">
 		<a id="logout" href="#">Exit</a>
 	</div>
 
   </div>
 
-  <div class="footer">
+  <div class="form__footer">
 	  <!--LOGIN-->
-	  <input id="auth" type="button" value="Sign in" class="button hidden" onClick="location.href='#login'"/>
+	  <input id="auth" type="button" value="Sign in" class="form__footer__button" onClick="location.href='#login'"/>
 	  <!--REGISTER-->
-	  <input id="reg" type="button" value="Sign up" class="button button-orange hidden" onClick="location.href='#register'"/>
+	  <input id="reg" type="button" value="Sign up" class="form__footer__button form__footer__button--orange" onClick="location.href='#register'"/>
   </div>
   
     </form>

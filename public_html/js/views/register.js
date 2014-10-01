@@ -12,10 +12,10 @@ define([
         el: $('#page'),
         events: {
             "click #register": "buttonClick",
-            "click .username": "loginClick",
+            "click #username": "loginClick",
             "click #passw": "passwordClick",
             "click #passw2": "password2Click",
-            "blur .username": "loginBlur",
+            "blur #username": "loginBlur",
             "blur #passw": "passwordBlur",
             "blur #passw2": "password2Blur",
         },
@@ -34,7 +34,7 @@ define([
         },
         buttonClick: function(event) {
             event.preventDefault();
-            var username = $(".username").val();
+            var username = $("#username").val();
             var password = $("#passw").val();
             var password2 = $("#passw2").val();
             var wasError = false;
@@ -42,8 +42,8 @@ define([
                 function(next) { $(this).attr('disabled', false);
                 next();
                 });
-            $("#register").addClass("button-disabled").delay(1700).queue(
-                function(next) { $(this).removeClass("button-disabled");
+            $("#register").addClass("form__footer__button--disabled").delay(1700).queue(
+                function(next) { $(this).removeClass("form__footer__button--disabled");
                 next();
                 });
 
@@ -92,22 +92,22 @@ define([
             })           
         },
         loginClick: function() {
-            $(".user-icon").css("left","-48px");
+            $(".form__content__user-icon").css("left","-48px");
         },
         passwordClick: function() {
-            $(".pass-icon").css("left","-48px");
+            $(".form__content__pass-icon").css("left","-48px");
         },
         password2Click: function() {
-            $(".pass-icon2").css("left","-48px");
+            $(".form__content__pass-icon2").css("left","-48px");
         },
         loginBlur: function() {
-            $(".user-icon").css("left","0px");
+            $(".form__content__user-icon").css("left","0px");
         },
         passwordBlur: function() {
-            $(".pass-icon").css("left","0px");
+            $(".form__content__pass-icon").css("left","0px");
         },
         password2Blur: function() {
-            $(".pass-icon2").css("left","0px");
+            $(".form__content__pass-icon2").css("left","0px");
         },
 
     });

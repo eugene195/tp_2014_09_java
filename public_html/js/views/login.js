@@ -12,10 +12,10 @@ define([
         el: $('#page'),
         events: {
             "click #login": "authClick",
-            "click .username": "loginClick",
-            "click .password": "passwordClick",
-            "blur .username": "loginBlur",
-            "blur .password": "passwordBlur",
+            "click #username": "loginClick",
+            "click #passw": "passwordClick",
+            "blur #username": "loginBlur",
+            "blur #passw": "passwordBlur",
         },
 
         initialize: function () {
@@ -32,16 +32,16 @@ define([
         },
         authClick: function(event) {
             event.preventDefault();
-            var username = $(".username").val();
-            var password = $(".password").val();
+            var username = $("#username").val();
+            var password = $("#passw").val();
             var wasError = false;
 
             $("#login").prop('disabled', true).delay(1700).queue(
                 function(next) { $(this).attr('disabled', false);
                 next();
                 });
-            $("#login").addClass("button-disabled").delay(1700).queue(
-                function(next) { $(this).removeClass("button-disabled");
+            $("#login").addClass("form__footer__button--disabled").delay(1700).queue(
+                function(next) { $(this).removeClass("form__footer__button--disabled");
                 next();
                 });
 
@@ -61,7 +61,7 @@ define([
             }
             
             $.ajax({
-                url: "/auth",
+                url: $('.form').data('action'),
                 method: "POST",
                 data:  {
                     login: username,
@@ -80,16 +80,16 @@ define([
             })           
         },
         loginClick: function() {
-            $(".user-icon").css("left","-48px");
+            $(".form__content__user-icon").css("left","-48px");
         },
         passwordClick: function() {
-            $(".pass-icon").css("left","-48px");
+            $(".form__content__pass-icon").css("left","-48px");
         },
         loginBlur: function() {
-            $(".user-icon").css("left","0px");
+            $(".form__content__user-icon").css("left","0px");
         },
         passwordBlur: function() {
-            $(".pass-icon").css("left","0px");
+            $(".form__content__pass-icon").css("left","0px");
         },
 
 

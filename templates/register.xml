@@ -2,46 +2,46 @@
 
 <div id="wrapper">
 
-<div class="user-icon"></div>
-<div class="pass-icon"></div>
-<div class="pass-icon2"></div>
+<div class="form__content__user-icon"></div>
+<div class="form__content__pass-icon"></div>
+<div class="form__content__pass-icon2"></div>
   
-<form name="register-form" class="login-form" action="/register" method="POST">
+<form name="register-form" class="form" action="/register" method="POST">
  
-  <div class="header">
+  <div class="form__header">
     <h1>Register Form</h1>
     <span>Let's get started.</span>
   </div>
 
-  <div class="content">
+  <div class="form__content">
     <!--USERNAME-->
     <div id="register-error" class="alert-error">
       <p id="register-error-message"></p>
     </div>  
     
-    <input name="login" type="text" class="input username" value="Username" onfocus="this.value=''" />
+    <input id="username" name="login" type="text" class="form__content__input" value="Username" onfocus="this.value=''" />
     
     <!--PASSWORD-->
     <div id="passw-error" class="alert-error">
       <p id="passw-error-message"></p>
     </div>
     
-    <input id="passw" name="passw" type="password" class="input password" value="Password" onfocus="this.value=''" />
+    <input id="passw" name="passw" type="password" class="form__content__input form__content__input--password" value="Password" onfocus="this.value=''" />
 
     <!--CONFIRM PASSWORD-->
     <div id="passw2-error" class="alert-error">
       <p id="passw2-error-message"></p>
     </div>
     
-    <input id="passw2" name="passw2" type="password" class="input password" value="Password" onfocus="this.value=''" />
+    <input id="passw2" name="passw2" type="password" class="form__content__input form__content__input--password" value="Password" onfocus="this.value=''" />
   
   </div>
 
-  <div class="footer">
+  <div class="form__footer">
     <!--LOGIN-->
-    <input id="register" type="submit" name="submit" value="Register" class="button" />
+    <input id="register" type="submit" name="submit" value="Register" class="form__footer__button" />
     <!--BACK-->
-    <input type="button" value="Back" class="button button-orange" onClick="location.href='#'"/>
+    <input type="button" value="Back" class="form__footer__button form__footer__button--orange" onClick="location.href='#'"/>
   </div>
   
     </form>
