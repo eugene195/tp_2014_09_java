@@ -18,14 +18,14 @@
       <p id="login-error-message"></p>
     </div>  
     
-    <input id="username" name="login" type="text" class="form__content__input" value="Username" onfocus="this.value=''" />
+    <input id="username" name="login" type="text" class="form__content__input" value="Username"/>
     
     <!--PASSWORD-->
     <div id="passw-error" class="alert-error">
       <p id="passw-error-message"></p>
     </div>
     
-    <input id="passw" name="passw" type="password" class="form__content__input form__content__input--password" value="Password" onfocus="this.value=''" />
+    <input id="passw" name="passw" type="password" class="form__content__input form__content__input--password" value="Password"/>
   
   </div>
 
@@ -33,7 +33,7 @@
     <!--LOGIN-->
     <input id="login" type="submit" name="submit" value="Login" class="form__footer__button" />
     <!--BACK-->
-    <input type="button" value="Back" class="form__footer__button form__footer__button--orange" onClick="location.href='#'"/>
+    <a href="#" class="form__footer__button form__footer__button--orange">Back</a>
   </div>
   
     </form>

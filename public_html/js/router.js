@@ -4,14 +4,16 @@ define([
     'views/game',
     'views/login',
     'views/scoreboard',
-    'views/register'
+    'views/register',
+    'views/profile'
 ], function(
     Backbone,
     main,
     game,
     login,
     scoreboard,
-    register
+    register,
+    profile
     
 ){
 
@@ -21,6 +23,7 @@ define([
             'game': 'gameAction',
             'login': 'loginAction',
             'register': 'registerAction',
+            'profile': 'profileAction',
             '*default': 'defaultActions'
         },
         defaultActions: function () {
@@ -37,6 +40,9 @@ define([
         },
         registerAction: function () {
             register.render();
+        },
+        profileAction: function () {
+            profile.render();
         }
     });
 

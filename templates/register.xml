@@ -41,7 +41,7 @@
     <!--LOGIN-->
     <input id="register" type="submit" name="submit" value="Register" class="form__footer__button" />
     <!--BACK-->
-    <input type="button" value="Back" class="form__footer__button form__footer__button--orange" onClick="location.href='#'"/>
+     <a href="#" class="form__footer__button form__footer__button--orange">Back</a>
   </div>
   
     </form>
