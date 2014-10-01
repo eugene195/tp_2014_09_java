@@ -74,6 +74,7 @@ define([
             $.ajax({
                 url: "/register",
                 method: "POST",
+                url: $('.form').data('action'),
                 data:  {
                     login: username,
                     passw: password,
