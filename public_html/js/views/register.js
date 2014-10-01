@@ -9,7 +9,7 @@ define([
     var View = Backbone.View.extend({
 
         template: tmpl,
-
+        el: $('#page'),
         events: {
             "click #register": "buttonClick",
             "click .username": "loginClick",
@@ -21,7 +21,7 @@ define([
         },
 
         initialize: function () {
-            this.render();
+            //this.render();
         },
         render: function () {
             this.$el.html(this.template());

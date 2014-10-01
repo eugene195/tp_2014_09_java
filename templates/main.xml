@@ -28,9 +28,9 @@
 
   <div class="footer">
 	  <!--LOGIN-->
-	  <input id="login" type="button" value="Sign in" class="button hidden" onClick="location.href='#login'"/>
+	  <input id="auth" type="button" value="Sign in" class="button hidden" onClick="location.href='#login'"/>
 	  <!--REGISTER-->
-	  <input id="register" type="button" value="Sign up" class="button button-orange hidden" onClick="location.href='#register'"/>
+	  <input id="reg" type="button" value="Sign up" class="button button-orange hidden" onClick="location.href='#register'"/>
   </div>
   
     </form>

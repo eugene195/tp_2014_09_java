@@ -9,13 +9,13 @@ define([
     var View = Backbone.View.extend({
 
         template: tmpl,
-
+        el: $('#page'),
 
         events: {
             "click #logout": "logout",
         },
         initialize: function () {
-            this.render();
+            //this.render();
         },
         render: function () {
             this.$el.html(this.template());
@@ -32,13 +32,13 @@ define([
                 if (data.status == 1) {
                     $("#profile").show();
                     $("#exit").show();
-                    $("#login").hide();
-                    $("#register").hide();
+                    $("#auth").hide();
+                    $("#reg").hide();
                 } else {
                     $("#profile").hide();
                     $("#exit").hide();
-                    $("#login").show();
-                    $("#register").show();
+                    $("#auth").show();
+                    $("#reg").show();
                 }
             }).fail(function(data) {
                 alert("Error, please try again later");

@@ -12,6 +12,7 @@ define([
     login,
     scoreboard,
     register
+    
 ){
 
     var Router = Backbone.Router.extend({
@@ -23,19 +24,19 @@ define([
             '*default': 'defaultActions'
         },
         defaultActions: function () {
-            $('#page').html(main.$el);
+            main.render();
         },
         scoreboardAction: function () {
-            $('#page').html(scoreboard.$el);
+            scoreboard.render();
         },
         gameAction: function () {
-            $('#page').html(game.$el);
+            game.render();
         },
         loginAction: function () {
-            $('#page').html(login.$el);
+            login.render();
         },
         registerAction: function () {
-            $('#page').html(register.$el);
+            register.render();
         }
     });
 

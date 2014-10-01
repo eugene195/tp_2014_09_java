@@ -9,9 +9,9 @@ define([
     var View = Backbone.View.extend({
 
         template: tmpl,
-
+        el: $('#page'),
         events: {
-            "click #login": "buttonClick",
+            "click #login": "authClick",
             "click .username": "loginClick",
             "click .password": "passwordClick",
             "blur .username": "loginBlur",
@@ -19,7 +19,7 @@ define([
         },
 
         initialize: function () {
-            this.render();
+            //this.render();
         },
         render: function () {
             this.$el.html(this.template());
@@ -30,7 +30,7 @@ define([
         hide: function () {
             // TODO
         },
-        buttonClick: function(event) {
+        authClick: function(event) {
             event.preventDefault();
             var username = $(".username").val();
             var password = $(".password").val();
