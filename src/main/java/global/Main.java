@@ -1,7 +1,5 @@
 package global;
 
-import org.eclipse.jetty.rewrite.handler.RedirectRegexRule;
-import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 

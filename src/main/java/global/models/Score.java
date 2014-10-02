@@ -6,11 +6,19 @@ import java.io.Serializable;
  * Created by max on 02.10.14.
  */
 public class Score implements Serializable {
-    public String login;
-    public int score;
+    private String login;
+    private int score;
 
     public Score(String login, int score) {
         this.login = login;
         this.score = score;
+    }
+
+    public String getLogin() {
+        return this.login;
+    }
+
+    public int getScore() {
+        return this.score;
     }
 }
