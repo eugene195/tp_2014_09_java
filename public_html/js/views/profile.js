@@ -11,11 +11,7 @@ define([
         template: tmpl,
         el: $('#page'),
         events: {
-            "click #register": "buttonClick",
-            "click #passw": "passwordClick",
-            "click #passw2": "password2Click",
-            "blur #passw": "passwordBlur",
-            "blur #passw2": "password2Blur",
+            "click #save_profile": "saveProfileClick",
         },
 
         initialize: function () {
@@ -35,6 +31,8 @@ define([
                 // if user is identified
                 if (data.status == 1) {
                     $('h1').html("Profile " + data.login)
+                } else {
+                    window.location.replace('#login');
                 }
             }).fail(function(data) {
                 alert("Error, please try again later");
@@ -46,12 +44,13 @@ define([
         hide: function () {
             // TODO
         },
-        buttonClick: function(event) {
+        saveProfileClick: function(event) {
             event.preventDefault();
-            
+            var curPassword = $("#cur-passw").val();
             var password = $("#passw").val();
             var password2 = $("#passw2").val();
             var wasError = false;
+            
             $("#register").prop('disabled', true).delay(1700).queue(
                 function(next) { $(this).attr('disabled', false);
                 next();
@@ -61,11 +60,15 @@ define([
                 next();
                 });
 
-            
-            if (password == '') {
+            if (curPassword == '') {
+                wasError = true;
+                $("#cur-passw-error").slideDown().delay(3000).slideUp();
+                $("#cur-passw-error-message").html('Missing current password');
+            } 
+            else if (password == '') {
                 wasError = true;
                 $("#passw-error").slideDown().delay(3000).slideUp();
-                $("#passw-error-message").html('Missing password');
+                $("#passw-error-message").html('Missing new password');
             }   
             else if (password2 == '') {
                 wasError = true;
@@ -85,35 +88,26 @@ define([
                 method: "POST",
                 url: $('.form').data('action'),
                 data:  {
-                    passw: password,
-                    passw2: password,
+                    curPassw: curPassword,
+                    newPassw: password,
+                    confirmPassw: password2,
                 },
             dataType: "json"
             }).done(function(data){
                 if (data.status == 1) {
-                    window.location.replace('#login');
+                    $("#success").slideDown().delay(3000).slideUp();
+                    $("#success-message").html("Password successfully changed");
                 } else {
-                    $("#register-error").slideDown().delay(3000).slideUp();
-                    $("#register-error-message").html(data.message);
+                    $("#cur-passw-error").slideDown().delay(3000).slideUp();
+                    $("#cur-passw-error-message").html(data.message);
                 }
             }).fail(function(data) {
                 alert("Error, please try again later");
             })           
-        },
-        passwordClick: function() {
-            $(".form__content__pass-icon").css("left","-48px");
-        },
-        password2Click: function() {
-            $(".form__content__pass-icon2").css("left","-48px");
-        },
-        passwordBlur: function() {
-            $(".form__content__pass-icon").css("left","0px");
-        },
-        password2Blur: function() {
-            $(".form__content__pass-icon2").css("left","0px");
         }
+        
 
     });
-
+    
     return new View();
 });
