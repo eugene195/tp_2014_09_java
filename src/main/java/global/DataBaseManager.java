@@ -4,10 +4,10 @@ import global.messages.AuthAnswer;
 import global.messages.GetUsersAnswer;
 import global.messages.ProfileInfoAnswer;
 import global.messages.RegistrationAnswer;
+import global.messages.ChangePasswordAnswer;
 import global.models.UserSession;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static java.lang.Thread.sleep;
@@ -19,9 +19,7 @@ public class DataBaseManager implements Runnable {
 
     private static final String baseUrl = "jdbc:mysql://localhost/java_db";
     private static final String baseUserName = "root";
-    private static final String baseUserPasswd = "root";
-
-
+    private static final String baseUserPasswd = "drovosek";
 
     private Connection conn;
     private static final String DBMAN_ADDRESS = "dbman";
@@ -151,6 +149,39 @@ public class DataBaseManager implements Runnable {
             System.out.println("Exception during DB insert  in registration");
         }
         this.msys.sendMessage(new RegistrationAnswer(true, login, ""), "servlet");
+    }
+
+    public void changePassword(String login, String curPassw, String newPassw) {
+        String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
+        try {
+            PreparedStatement statement = this.conn.prepareStatement(query);
+            statement.setString(1, login);
+            statement.setString(2, curPassw);
+            ResultSet result = statement.executeQuery();
+
+            if (getResultCount(result) == 1) {
+                query = "UPDATE User Set passw = md5(?) WHERE login = ?;";
+                statement = this.conn.prepareStatement(query);
+                statement.setString(1, newPassw);
+                statement.setString(2, login);
+
+                int rowsAffected = statement.executeUpdate();
+                if(rowsAffected < 1) {
+                    System.out.println("Smth bad happened. Update password affected < 1 rows");
+                    this.msys.sendMessage(new ChangePasswordAnswer(false, "Failed to change password"), "servlet");
+                    return;
+                }
+                this.msys.sendMessage(new ChangePasswordAnswer(true, ""), "servlet");
+                return;
+            }
+
+        }
+        catch (Exception e) {
+            System.out.println("Sql exception during changePassword()");
+        }
+
+        this.msys.sendMessage(new ChangePasswordAnswer(false, "Wrong current password"), "servlet");
+        return;
     }
 
     public void getProfileInfo(long userId) {

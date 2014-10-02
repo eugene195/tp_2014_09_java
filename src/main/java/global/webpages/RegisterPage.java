@@ -28,14 +28,6 @@ public class RegisterPage extends WebPage {
         this.msys = msys;
     }
 
-    @Override
-    public void handleGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException
-    {
-
-
-        this.msgList.clear();
-    }
 
     @Override
     public void handlePost(HttpServletRequest request, HttpServletResponse response)

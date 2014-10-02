@@ -120,6 +120,14 @@ CONTENT
 	padding: 0 30px 25px 30px;
 }
 
+.form .form__content .form__content__label {
+	font-family: 'Bree Serif', serif;
+	font-size: 15px;
+	line-height: 16px;
+	color: #678889;
+	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
+}
+
 /* Input field */
 .form .form__content .form__content__input {
 	width: 188px;
@@ -479,5 +487,20 @@ ERROR INFO
 	-webkit-border-radius: 4px;
 	 -moz-border-radius: 4px;
 	      border-radius: 4px;
+}
+
+.alert-success {
+  display: none;
+  padding: 8px 35px 8px 14px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  color: #468847;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  border: 1px solid #fbeed5;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+      border-radius: 4px;
 }
 

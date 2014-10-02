@@ -80,7 +80,7 @@ define([
                 data:  {
                     login: username,
                     passw: password,
-                    passw2: password,
+                    passw2: password2,
                 },
             dataType: "json"
             }).done(function(data){

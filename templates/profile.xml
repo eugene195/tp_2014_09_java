@@ -2,10 +2,6 @@
 
 <div id="wrapper">
 
-<div class="form__content__user-icon"></div>
-<div class="form__content__pass-icon"></div>
-<div class="form__content__pass-icon2"></div>
-  
 <form name="register-form" class="form" data-action="/profile" method="POST">
  
   <div class="form__header">
@@ -14,32 +10,39 @@
   </div>
 
   <div class="form__content">
-    <!--PASSWORD-->
+    <!--Current PASSWORD-->
     <div id="cur-passw-error" class="alert-error">
       <p id="cur-passw-error-message"></p>
     </div>
-    
-    <input id="cur-passw" name="cur-passw" type="password" class="form__content__input" value="Password"/>
 
-    <!--PASSWORD-->
+    <div id="success" class="alert-success">
+      <p id="success-message"></p>
+    </div>
+    
+    <label for="cur-passw" class="form__content__label">Current password:</label>
+    <input id="cur-passw" name="cur-passw" type="password" class="form__content__input"/>
+
+    <!--NEW PASSWORD-->
     <div id="passw-error" class="alert-error">
       <p id="passw-error-message"></p>
     </div>
     
-    <input id="passw" name="passw" type="password" class="form__content__input form__content__input--password" value="Password"/>
+    <label for="passw" class="form__content__label">New password:</label>
+    <input id="passw" name="passw" type="password" class="form__content__input"/>
 
     <!--CONFIRM PASSWORD-->
+    <label for="passw" class="form__content__label">Confirm password:</label>
     <div id="passw2-error" class="alert-error">
       <p id="passw2-error-message"></p>
     </div>
     
-    <input id="passw2" name="passw2" type="password" class="form__content__input form__content__input--password" value="Password"/>
+    <input id="passw2" name="passw2" type="password" class="form__content__input" />
   
   </div>
 
   <div class="form__footer">
     <!--LOGIN-->
-    <input id="save_profile" type="submit" name="submit" value="Save" class="form__footer__button" />
+    <input id="save_profile" type="submit" name="submit" class="form__footer__button" value="Save"/>
     <!--BACK-->
     <a href="#" class="form__footer__button form__footer__button--orange">Back</a>
   </div>
