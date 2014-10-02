@@ -1,14 +1,13 @@
 package global;
 
-import global.messages.AuthAnswer;
-import global.messages.GetUsersAnswer;
-import global.messages.ProfileInfoAnswer;
-import global.messages.RegistrationAnswer;
+import global.messages.*;
+import global.models.Score;
 import global.models.UserSession;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
@@ -151,6 +150,28 @@ public class DataBaseManager implements Runnable {
             System.out.println("Exception during DB insert  in registration");
         }
         this.msys.sendMessage(new RegistrationAnswer(true, login, ""), "servlet");
+    }
+
+    public void bestScores() {
+        String query = "SELECT login, score FROM User ORDER BY score DESC LIMIT 10;";
+
+        try {
+            PreparedStatement statement = this.conn.prepareStatement(query);
+            ResultSet result = statement.executeQuery();
+
+            ArrayList<Score> scores = new ArrayList<>();
+
+            String login; int score;
+            while(result.next()) {
+                login = result.getString("login");
+                score = result.getInt("score");
+                scores.add(new Score(login, score));
+            }
+            this.msys.sendMessage(new BestScoresAnswer(scores), "servlet");
+        }
+        catch (Exception e){
+            System.out.println("Exception during DB insert  in registration");
+        }
     }
 
     public void getProfileInfo(long userId) {

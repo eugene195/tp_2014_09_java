@@ -1,11 +1,15 @@
 define([
-    'backbone'
+    'backbone',
+    'models/score'
 ], function(
-    Backbone
+    Backbone,
+    ScoreModel
 ){
 
-    var Collection = Backbone.Collection.extend({
+    var ScoreCollection = Backbone.Collection.extend({
+        model: ScoreModel,
+        url: "/scores"
     });
 
-    return new Collection();
+    return new ScoreCollection();
 });
