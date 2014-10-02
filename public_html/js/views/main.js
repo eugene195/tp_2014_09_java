@@ -15,7 +15,7 @@ define([
             "click #logout": "logout",
         },
         initialize: function () {
-            //this.render();
+            // TODO
         },
         render: function () {
             this.$el.html(this.template());
