@@ -1,4 +1,22 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
-	PERFECT	Game
-	<a href="#">Back</a>
+
+    <div class="gamepage__header">
+        <div class="gamepage__header__infobar--status">
+            Score: Over 9000
+            Lives left: 3
+        </div>
+        <a href="#" class="gamepage__menu__infobar__menu-btn">Pause</a>
+        <a href="#" class="gamepage__menu__infobar__menu-btn">Quit</a>
+    </div>
+
+    <div class="gamepage__body">
+        <input type="button" id="gmscr" value="Play" name="gamebtn" />
+        Game Screen
+    </div>
+
+    <div class="gamepage__footer">
+        <div class="gamepage__footer__controlbar-status">
+            Footer info
+        </div>
+    </div>
 </fest:template>

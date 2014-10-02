@@ -21,8 +21,6 @@ public class DataBaseManager implements Runnable {
     private static final String baseUserName = "root";
     private static final String baseUserPasswd = "drovosek";
 
-
-
     private Connection conn;
     private static final String DBMAN_ADDRESS = "dbman";
     private final MessageSystem msys;
