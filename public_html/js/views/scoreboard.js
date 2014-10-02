@@ -20,7 +20,7 @@ var View = Backbone.View.extend({
             this.collection.bind("reset", this.render, this);
         },
         render: function () {
-            scoreCollection.fetch();
+            this.collection.fetch();
             var renderedContext = this.template(this.collection.toJSON());
             this.$el.html(renderedContext);
         },
