@@ -11,13 +11,14 @@ define([
         URL: "/scores",
 
         fetch: function () {
+        	var that = this;
             $.ajax({
                 url: "/scores",
                 type: "POST",
                 dataType: "json"
             }).done(function (response) {
                 if (response.status == 1)
-                    this.reset(response.bestScores);
+                    that.reset(response.bestScores);
             });
         }
     });
