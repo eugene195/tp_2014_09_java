@@ -6,23 +6,28 @@ define([
     tmpl
 ){
 
-    var View = Backbone.View.extend({
+var View = Backbone.View.extend({
 
         template: tmpl,
+        el: $('#page'),
+        events: {
+
+        },
+
         initialize: function () {
-            this.render();
+            //this.render();
         },
         render: function () {
             this.$el.html(this.template());
         },
         show: function () {
-            // TODO
+
         },
         hide: function () {
             // TODO
-        }
-
+        },
     });
+
 
     return new View();
 });
