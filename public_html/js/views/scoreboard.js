@@ -21,10 +21,8 @@ var View = Backbone.View.extend({
         },
         render: function () {
             this.collection.fetch();
-            var ren = this.template({scores: this.collection.toJSON()});
-            this.$el.html(ren);
-            //var scores = that.collection.toJSON();
-            //that.$el.html(that.template(scores));
+            this.$el.html(this.template({scores: this.collection.toJSON()}));
+            alert(this.collection.toJSON());
         },
         show: function () {
 
