@@ -1,10 +1,10 @@
-<fest:template xmlns:fest="http://fest.mail.ru">
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="scores">
 	<h1>Score Board</h1>
 	<div class="scoreboard">
         <fest:each iterate="scores" index="i" value="score">
-            <div><fest:value>score.login</fest:value></div>
-            <div><fest:value>score.value</fest:value></div>
+            <div><fest:value>score.login</fest:value>...
+           <fest:value>score.score</fest:value></div>
         </fest:each>
     </div>
-    <a href="#">Back</a>
+     <a href="#" class="gamepage__menu__infobar__menu-btn">Quit</a>
 </fest:template>
