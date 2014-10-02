@@ -8,24 +8,29 @@ define([
     ScoreCollection
 ){
 
-    var View = Backbone.View.extend({
+var View = Backbone.View.extend({
 
         template: tmpl,
+        el: $('#page'),
+        events: {
+
+        },
+
         initialize: function () {
-            this.render();
+            //this.render();
         },
         render: function () {
             this.$el.html(this.template());
             ScoreCollection.fetch();
         },
         show: function () {
-            // TODO
+
         },
         hide: function () {
             // TODO
-        }
-
+        },
     });
+
 
     return new View();
 });

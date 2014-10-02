@@ -18,9 +18,7 @@ public class DataBaseManager implements Runnable {
 
     private static final String baseUrl = "jdbc:mysql://localhost/java_db";
     private static final String baseUserName = "root";
-    private static final String baseUserPasswd = "22061994";
-
-
+    private static final String baseUserPasswd = "drovosek";
 
     private Connection conn;
     private static final String DBMAN_ADDRESS = "dbman";
@@ -152,6 +150,7 @@ public class DataBaseManager implements Runnable {
         this.msys.sendMessage(new RegistrationAnswer(true, login, ""), "servlet");
     }
 
+
     public void bestScores() {
         String query = "SELECT login, score FROM User ORDER BY score DESC LIMIT 10;";
 
@@ -161,17 +160,50 @@ public class DataBaseManager implements Runnable {
 
             ArrayList<Score> scores = new ArrayList<>();
 
-            String login; int score;
-            while(result.next()) {
+            String login;
+            int score;
+            while (result.next()) {
                 login = result.getString("login");
                 score = result.getInt("score");
                 scores.add(new Score(login, score));
             }
             this.msys.sendMessage(new BestScoresAnswer(scores), "servlet");
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Exception during DB insert  in registration");
         }
+    }
+
+
+    public void changePassword(String login, String curPassw, String newPassw) {
+        String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
+        try {
+            PreparedStatement statement = this.conn.prepareStatement(query);
+            statement.setString(1, login);
+            statement.setString(2, curPassw);
+            ResultSet result = statement.executeQuery();
+
+            if (getResultCount(result) == 1) {
+                query = "UPDATE User Set passw = md5(?) WHERE login = ?;";
+                statement = this.conn.prepareStatement(query);
+                statement.setString(1, newPassw);
+                statement.setString(2, login);
+
+                int rowsAffected = statement.executeUpdate();
+                if(rowsAffected < 1) {
+                    System.out.println("Smth bad happened. Update password affected < 1 rows");
+                    this.msys.sendMessage(new ChangePasswordAnswer(false, "Failed to change password"), "servlet");
+                    return;
+                }
+                this.msys.sendMessage(new ChangePasswordAnswer(true, ""), "servlet");
+                return;
+            }
+
+        }
+        catch (Exception e) {
+            System.out.println("Sql exception during changePassword()");
+        }
+
+        this.msys.sendMessage(new ChangePasswordAnswer(false, "Wrong current password"), "servlet");
     }
 
     public void getProfileInfo(long userId) {

@@ -4,8 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import java.io.PrintWriter;
 import org.json.JSONObject;
@@ -16,7 +14,6 @@ import org.json.JSONObject;
  */
 public class IdentifyUserPage extends WebPage {
     public static final String URL = "/identifyuser";
-
 
     private long getUserId(HttpSession session) {
         Object userObjId = session.getAttribute("userId");

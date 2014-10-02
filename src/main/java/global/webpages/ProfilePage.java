@@ -1,15 +1,16 @@
 package global.webpages;
 
 import global.MessageSystem;
-import global.messages.AbstractMsg;
-import global.messages.ProfileInfoAnswer;
-import global.messages.ProfileInfoQuery;
+import global.messages.*;
+import javafx.collections.ListChangeListener;
+import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -20,60 +21,59 @@ import java.util.Map;
 public class ProfilePage extends WebPage {
 
     public static final String URL = "/profile";
-    public static final String TML_PATH = "ProfilePage.html";
 
-    protected HttpSession session;
     private final MessageSystem msys;
+
+    private boolean successChangeProfile;
+    private String messageError;
 
     public ProfilePage(MessageSystem msys) {
         this.msys = msys;
     }
 
-    private long getUserId(HttpServletRequest request) {
-        Object userObjId = this.session.getAttribute("userId");
-        if (userObjId != null) {
-            return (long) userObjId;
-        }
-
-        return -1;
-    }
     @Override
-    public void handleGet(HttpServletRequest request, HttpServletResponse response)
+    public void handlePost(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-        this.session = request.getSession(false);
-        if (this.session == null) {
-            //TODO: Send error to AuthPage
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.sendRedirect(AuthPage.URL);
+        String passw = request.getParameter("newPassw");
+        String repeatPassw = request.getParameter("confirmPassw");
+        String curPassw = request.getParameter("curPassw");
+
+        HttpSession session = request.getSession(false);
+
+        if (session == null || curPassw == "" || passw == "" || !passw.equals(repeatPassw) ) {
+            response.setContentType(WebPage.CONTENT_TYPE);
+            response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
 
-        long userId = this.getUserId(request);
-        if (userId == -1) {
-            //TODO: Send error to AuthPage
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.sendRedirect(AuthPage.URL);
-            return;
-        }
+        String login = session.getAttribute("login").toString();
 
-        this.msys.sendMessage(new ProfileInfoQuery(userId), "dbman");
+        this.msys.sendMessage(new ChangePasswordQuery(login, curPassw, passw), "dbman");
         this.setZombie();
 
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter printout = response.getWriter();
+        JSONObject JObject = new JSONObject();
 
-        Map<String, Object> context = new LinkedHashMap<>();
-        context.put("login", session.getAttribute("login").toString());
-        String page = this.generateHTML(TML_PATH, context);
-        response.getWriter().print(page);
-
-        response.setContentType(WebPage.CONTENT_TYPE);
-        response.setStatus(HttpServletResponse.SC_OK);
+        if (this.successChangeProfile) {
+            JObject.put("status", "1");
+        }
+        else {
+            JObject.put("status", "-1");
+            JObject.put("message", messageError);
+        }
+        printout.print(JObject);
+        printout.flush();
     }
+
 
     @Override
     public void finalize(AbstractMsg abs_msg) {
-        if (abs_msg instanceof ProfileInfoAnswer) {
-            ProfileInfoAnswer msg = (ProfileInfoAnswer) abs_msg;
+        if (abs_msg instanceof ChangePasswordAnswer) {
+            ChangePasswordAnswer msg = (ChangePasswordAnswer) abs_msg;
+            this.successChangeProfile = msg.isChangePasswordSuccess();
+            this.messageError = msg.getErrMsg();
             this.resume();
         }
     }
