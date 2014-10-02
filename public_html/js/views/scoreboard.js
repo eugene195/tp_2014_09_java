@@ -5,7 +5,7 @@ define([
 ], function(
     Backbone,
     tmpl,
-    ScoreCollection
+    scoreCollection
 ){
 
 var View = Backbone.View.extend({
@@ -17,11 +17,12 @@ var View = Backbone.View.extend({
         },
 
         initialize: function () {
-            // TODO
+            this.collection.bind("reset", this.render, this);
         },
         render: function () {
-            this.$el.html(this.template());
-            ScoreCollection.fetch();
+            scoreCollection.fetch();
+            var renderedContext = this.template(this.collection.toJSON());
+            this.$el.html(renderedContext);
         },
         show: function () {
 
@@ -32,5 +33,5 @@ var View = Backbone.View.extend({
     });
 
 
-    return new View();
+    return new View({collection: scoreCollection});
 });

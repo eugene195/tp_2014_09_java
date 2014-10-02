@@ -1,28 +1,10 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
 	<h1>Score Board</h1>
 	<div class="scoreboard">
-		<table>
-			<tr>
-				<th>RANK</th>
-				<th>NAME</th>
-				<th>SCORE</th>	
-			</tr>
-			<tr>
-				<td>1</td>
-				<td>Pupkin</td>
-				<td>111</td>	
-			</tr>
-			<tr>
-				<td>2</td>
-				<td>Invader</td>
-				<td>109</td>	
-			</tr>
-			<tr>
-				<td>3</td>
-				<td>Calvin</td>
-				<td>107</td>	
-			</tr>	
-		</table>	
+        <fest:each iterate="scores" index="i" value="score">
+            <div><fest:value>score.login</fest:value></div>
+            <div><fest:value>score.value</fest:value></div>
+        </fest:each>
     </div>
     <a href="#">Back</a>
 </fest:template>
