@@ -15,19 +15,44 @@ public class Main
 {
 
     private static final String STATIC_DIR = "public_html";
-    private static Servlet configure() {
-        final int THREADS_AMOUNT = 2;
 
-        MessageSystem msys = new MessageSystem();
-        Servlet servlet = new Servlet(msys);
-        DataBaseManager dbman = new DataBaseManager(msys);
-
-        ExecutorService threadPool = Executors.newFixedThreadPool(THREADS_AMOUNT);
-        threadPool.submit(servlet);
-        threadPool.submit(dbman);
-
-        return servlet;
+    private static void configureThreads(Runnable ... tasks) {
+        ExecutorService threadPool = Executors.newFixedThreadPool(tasks.length);
+        for(Runnable task : tasks)
+            threadPool.submit(task);
     }
+
+    private static Server createAndConfigureServer(int serverPort, HandlerList handlers) {
+        System.out.append("Starting at port: ").append(String.valueOf(serverPort)).append('\n');
+        Server server = new Server(serverPort);
+        server.setHandler(handlers);
+        return server;
+    }
+
+    private static Servlet createServlet(MessageSystem msys) {
+        return new Servlet(msys);
+    }
+
+    private static DataBaseManager createDbMan(MessageSystem msys) {
+        return new DataBaseManager(msys);
+    }
+
+    private static int getServerPort(String[] args) {
+        int SERVER_PORT = 8081;
+
+        if (args.length == 1) {
+            String portString = args[0];
+            SERVER_PORT = Integer.valueOf(portString);
+        }
+        return SERVER_PORT;
+    }
+
+    private static ServletContextHandler createContext(Servlet servlet) {
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.addServlet(new ServletHolder(servlet), "/");
+        return context;
+    }
+
 
     /**
      * Создание и настройка обработчиков для внутренних нужд сервера.
@@ -44,29 +69,21 @@ public class Main
         return handlers;
     }
 
+
     public static void main(String[] args) throws Exception {
+        MessageSystem msys = new MessageSystem();
+        Servlet servlet = createServlet(msys);
+        DataBaseManager dbman = createDbMan(msys);
 
-        int SERVER_PORT = 8081;
+        configureThreads(servlet, dbman);
 
-        if (args.length == 1) {
-            String portString = args[0];
-            SERVER_PORT = Integer.valueOf(portString);
-        }
-        System.out.append("Starting at port: ").append(String.valueOf(SERVER_PORT)).append('\n');
-
-
-        Servlet frontend = configure();
-        Server server = new Server(SERVER_PORT);
-
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(frontend), "/");
-
+        ServletContextHandler context = createContext(servlet);
         HandlerList handlers = makeServerHandlers();
         handlers.addHandler(context);
-        server.setHandler(handlers);
 
+        int serverPort = getServerPort(args);
+        Server server = createAndConfigureServer(serverPort, handlers);
         server.start();
         server.join();
-
     }
 }

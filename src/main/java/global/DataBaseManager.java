@@ -17,7 +17,7 @@ public class DataBaseManager implements Runnable {
 
     private static final String baseUrl = "jdbc:mysql://localhost/java_db";
     private static final String baseUserName = "root";
-    private static final String baseUserPasswd = "drovosek";
+    private static final String baseUserPasswd = "root";
 
     private Connection conn;
     private static final String DBMAN_ADDRESS = "dbman";
