@@ -16,15 +16,9 @@ hs_err_pid*
 ##################
 *.iws
 *.iml
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/misc.xml
-.idea/dictionaries/*
-.idea/.name
-.idea/libraries/*
+.idea/
 target/
 
 node_modules/
-.idea/artifacts/
 src/main/java/META-INF/MANIFEST.MF
 

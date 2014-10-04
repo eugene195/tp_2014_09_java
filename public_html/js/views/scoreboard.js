@@ -17,18 +17,14 @@ var View = Backbone.View.extend({
         },
 
         initialize: function () {
-            //this.collection.bind("reset", this.render, this);
+            this.collection.on("reset", this.render, this);
         },
         render: function () {
-            var that = this;
-            this.collection.fetch(function success() {
-                var scores = that.collection.toJSON()
-                that.$el.html(that.template(scores));
-            });
-      
+            var scores = this.collection.toJSON();
+            this.$el.html(this.template(scores));
         },
         show: function () {
-
+            this.collection.fetch();
         },
         hide: function () {
             // TODO

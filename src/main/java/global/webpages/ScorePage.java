@@ -27,7 +27,7 @@ public class ScorePage extends WebPage {
     }
 
     @Override
-    public void handlePost(HttpServletRequest request, HttpServletResponse response)
+    public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
         PrintWriter printout = response.getWriter();

@@ -30,7 +30,7 @@ define([
             main.render();
         },
         scoreboardAction: function () {
-            scoreboard.render();
+            scoreboard.show();
         },
         gameAction: function () {
             game.render();

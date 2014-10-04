@@ -8,21 +8,16 @@ define([
 
     var ScoreCollection = Backbone.Collection.extend({
         model: ScoreModel,
-        URL: "/scores",
+        url: "/scores",
 
-        fetch: function (success) {
-        	var that = this;
-            $.ajax({
-                url: "/scores",
-                type: "POST",
-                dataType: "json"
-            }).done(function (response) {
-                if (response.status == 1) {
-                    that.reset(response.bestScores);
-                	success();
-                }
-            
-            });
+        parse: function (response) {
+            if (response.status == 1) {
+                this.reset(response.bestScores);
+            }
+        },
+
+        comparator: function (model) {
+            return -model.get('score');
         }
     });
 
