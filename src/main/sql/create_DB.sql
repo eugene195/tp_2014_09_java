@@ -1,5 +1,6 @@
 DROP DATABASE IF EXISTS g01_java_db;
 
+CREATE DATABASE g01_java_db;
 GRANT ALL PRIVILEGES ON g01_java_db.* TO g01_user IDENTIFIED BY 'drovosek';
 
 USE g01_java_db;
