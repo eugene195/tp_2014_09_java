@@ -151,7 +151,7 @@ public class DataBaseManager implements Runnable {
 
 
     public void bestScores() {
-        String query = "SELECT login, score FROM User LIMIT 10;";
+        String query = "SELECT login, score ORDER BY score DESC FROM User LIMIT 10;";
 
         try {
             PreparedStatement statement = this.conn.prepareStatement(query);

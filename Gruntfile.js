@@ -7,7 +7,7 @@ module.exports = function (grunt) {
                 stderr: true
             },
             server: {
-                command: 'java -cp out/artifacts/2014_Java_Technopark_jar/2014_Java_Technopark.jar global.Main 8082'
+                command: 'java -cp out/artifacts/2014_Java_Technopark_jar/2014_Java_Technopark.jar global.Main 8081'
             }
         },
         fest: {

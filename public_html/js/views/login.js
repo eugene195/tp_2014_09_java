@@ -34,8 +34,8 @@ define([
         },
         authClick: function(event) {
             event.preventDefault();
-            var username = this.$el.$("#username").val(),
-                password = this.$el.$("#passw").val(),
+            var username = $("#username").val(),
+                password = $("#passw").val(),
                 wasError = false;
 
             $("#login").prop('disabled', true).delay(1700).queue(
