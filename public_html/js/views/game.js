@@ -21,7 +21,7 @@ var View = Backbone.View.extend({
             this.$el.html(this.template());
         },
         show: function () {
-
+            this.render()
         },
         hide: function () {
             // TODO

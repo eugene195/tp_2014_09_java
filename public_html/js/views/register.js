@@ -1,14 +1,16 @@
 define([
     'backbone',
-    'tmpl/register'
+    'tmpl/register',
+    'models/session'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    sessionModel
 ){
 
     var View = Backbone.View.extend({
-
         template: tmpl,
+        session: sessionModel,
         el: $('#page'),
         events: {
             "click #register": "buttonClick",
@@ -24,48 +26,50 @@ define([
         },
 
         initialize: function () {
-            // TODO
+            this.listenTo(this.session, 'successReg', this.redirectLogin);
+            this.listenTo(this.session, 'errorReg', this.showError);
         },
         render: function () {
             this.$el.html(this.template());
         },
         show: function () {
-            //TODO
+            this.render();
         },
         hide: function () {
             // TODO
         },
         buttonClick: function(event) {
             event.preventDefault();
-            var username = $("#username").val();
-            var password = $("#passw").val();
-            var password2 = $("#passw2").val();
-            var wasError = false;
+            var username = $("#username").val(),
+                newPassw = $("#passw").val(),
+                confirmPassw = $("#passw2").val(),
+                wasError = false;
+
             $("#register").prop('disabled', true).delay(1700).queue(
                 function(next) { $(this).attr('disabled', false);
                 next();
-                });
+            });
             $("#register").addClass("form__footer__button--disabled").delay(1700).queue(
                 function(next) { $(this).removeClass("form__footer__button--disabled");
                 next();
-                });
+            });
 
             if (username == '') {
                 wasError = true;
                 $("#register-error").slideDown().delay(3000).slideUp();
                 $("#register-error-message").html('Missing username');
             }
-            if (password == '') {
+            if (newPassw == '') {
                 wasError = true;
                 $("#passw-error").slideDown().delay(3000).slideUp();
                 $("#passw-error-message").html('Missing password');
             }   
-            else if (password2 == '') {
+            else if (confirmPassw == '') {
                 wasError = true;
                 $("#passw2-error").slideDown().delay(3000).slideUp();
                 $("#passw2-error-message").html('Missing confirm password');
             }   
-            else if (password != password2) {
+            else if (newPassw != confirmPassw) {
                 wasError = true;
                 $("#passw2-error").slideDown().delay(3000).slideUp();
                 $("#passw2-error-message").html('Passwords does not match');
@@ -73,26 +77,19 @@ define([
             if (wasError) {
                 return;
             }
-            
-            $.ajax({
-                method: "POST",
-                url: $('.form').data('action'),
-                data:  {
-                    login: username,
-                    passw: password,
-                    passw2: password2,
-                },
-            dataType: "json"
-            }).done(function(data){
-                if (data.status == 1) {
-                    window.location.replace('#login');
-                } else {
-                    $("#register-error").slideDown().delay(3000).slideUp();
-                    $("#register-error-message").html(data.message);
-                }
-            }).fail(function(data) {
-                alert("Error, please try again later");
-            })           
+
+            this.session.postReg({
+                username: username,
+                newPassw: newPassw,
+                confirmPassw: confirmPassw,
+            });
+        },
+        redirectLogin: function() {
+            window.location.replace('#login');
+        },
+        showError: function(message) {
+            $("#register-error").slideDown().delay(3000).slideUp();
+            $("#register-error-message").html(message);
         },
         loginClick: function() {
             $(".form__content__user-icon").css("left","-48px");

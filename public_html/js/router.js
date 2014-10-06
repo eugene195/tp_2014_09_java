@@ -27,22 +27,22 @@ define([
             '*default': 'defaultActions'
         },
         defaultActions: function () {
-            main.render();
+            main.show();
         },
         scoreboardAction: function () {
             scoreboard.show();
         },
         gameAction: function () {
-            game.render();
+            game.show();
         },
         loginAction: function () {
-            login.render();
+            login.show();
         },
         registerAction: function () {
-            register.render();
+            register.show();
         },
         profileAction: function () {
-            profile.render();
+            profile.show();
         }
     });
 

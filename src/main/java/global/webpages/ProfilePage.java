@@ -41,7 +41,8 @@ public class ProfilePage extends WebPage {
 
         HttpSession session = request.getSession(false);
 
-        if (session == null || curPassw == "" || passw == "" || !passw.equals(repeatPassw) ) {
+        if (session == null || passw == null || repeatPassw == null || curPassw == null
+            || curPassw == "" || passw == "" || !passw.equals(repeatPassw)) {
             response.setContentType(WebPage.CONTENT_TYPE);
             response.setStatus(HttpServletResponse.SC_OK);
             return;

@@ -1,78 +1,57 @@
 define([
     'backbone',
-    'tmpl/main'
+    'tmpl/main',
+    'models/session'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    sessionModel
 ){
 
     var View = Backbone.View.extend({
-
         template: tmpl,
+        session: sessionModel,
         el: $('#page'),
-
         events: {
             "click #logout": "logout",
         },
         initialize: function () {
-            // TODO
+            this.listenTo(this.session, 'userNotIdentified', this.userNotIdentified);
+            this.listenTo(this.session, 'userIdentified', this.userIdentified);
+            this.listenTo(this.session, 'successLogout', this.show);
+            this.listenTo(this.session, 'errorLogout', this.showErrorLogout);
         },
         render: function () {
             this.$el.html(this.template());
-
-            $.ajax({
-                url: "/identifyuser",
-                method: "POST",
-                data:  {
-                    data: 'data'
-                },
-            dataType: "json"
-            }).done(function(data){
-                // if user is identified
-                if (data.status == 1) {
-                    $("#profile").show();
-                    $("#exit").show();
-                    $("#auth").hide();
-                    $("#reg").hide();
-                } else {
-                    $("#profile").hide();
-                    $("#exit").hide();
-                    $("#auth").show();
-                    $("#reg").show();
-                }
-            }).fail(function(data) {
-                alert("Error, please try again later");
-            }) 
+            this.session.postIdentifyUser();
         },
         show: function () {
-            
+            this.render();
         },
         hide: function () {
             // TODO
         },
         logout: function (event) {
             event.preventDefault();
-
-            $.ajax({
-                url: "/logout",
-                method: "POST",
-                data: {
-                    data: 'data'
-                },
-                dataType: "json"
-            }).done(function(data){
-                if (data.status == 1) {
-                    window.location.replace('#login');
-                }
-                else {
-                    $("#logout-error").slideDown().delay(3000).slideUp();
-                    $("#logout-error-message").html(data.message);
-                }
-            }).fail (function(data) {
-                alert("Error, please try again later");
-            });
-        }
-
+            this.session.postLogout();
+        },
+        userIdentified: function(data) {
+            $("#profile").show();
+            $("#exit").show();
+            $("#auth").hide();
+            $("#reg").hide();
+        },
+        userNotIdentified: function() {
+            $("#profile").hide();
+            $("#exit").hide();
+            $("#auth").show();
+            $("#reg").show();
+        },
+        showErrorLogout: function(message) {
+            $("#logout-error").slideDown().delay(3000).slideUp();
+            $("#logout-error-message").html(message);
+        },
+        
     });
 
     return new View();

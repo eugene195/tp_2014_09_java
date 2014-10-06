@@ -1,14 +1,16 @@
 define([
     'backbone',
-    'tmpl/login'
+    'tmpl/login',
+    'models/session'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    sessionModel
 ){
 
     var View = Backbone.View.extend({
-
         template: tmpl,
+        session: sessionModel,
         el: $('#page'),
         events: {
             "click #login": "authClick",
@@ -21,13 +23,14 @@ define([
         },
 
         initialize: function () {
-            // TODO
+            this.listenTo(this.session, 'successAuth', this.redirectMain);
+            this.listenTo(this.session, 'errorAuth', this.showError);
         },
         render: function () {
             this.$el.html(this.template());
         },
         show: function () {
-            
+            this.render();
         },
         hide: function () {
             // TODO
@@ -41,11 +44,11 @@ define([
             $("#login").prop('disabled', true).delay(1700).queue(
                 function(next) { $(this).attr('disabled', false);
                 next();
-                });
+            });
             $("#login").addClass("form__footer__button--disabled").delay(1700).queue(
                 function(next) { $(this).removeClass("form__footer__button--disabled");
                 next();
-                });
+            });
 
             if (username == '') {
                 wasError = true;
@@ -61,25 +64,18 @@ define([
             if (wasError) {
                 return;
             }
-            
-            $.ajax({
-                url: $('.form').data('action'),
-                method: "POST",
-                data:  {
-                    login: username,
-                    passw: password,
-                },
-            dataType: "json"
-            }).done(function(data){
-                if (data.status == 1) {
-                    window.location.replace('#');
-                } else {
-                    $("#login-error").slideDown().delay(3000).slideUp();
-                    $("#login-error-message").html(data.message);
-                }
-            }).fail(function(data) {
-                alert("Error, please try again later");
-            })           
+
+            this.session.postAuth({
+                username: username,
+                password: password
+            });
+        },
+        redirectMain: function() {
+            window.location.replace('#');
+        },
+        showError: function(message) {
+            $("#login-error").slideDown().delay(3000).slideUp();
+            $("#login-error-message").html(message);
         },
         loginClick: function() {
             $(".form__content__user-icon").css("left","-48px");
