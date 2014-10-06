@@ -1,13 +1,14 @@
-DROP DATABASE IF EXISTS java_db;
+DROP DATABASE IF EXISTS g01_java_db;
 
-CREATE DATABASE java_db;
-USE java_db;
+GRANT ALL PRIVILEGES ON g01_java_db.* TO g01_user IDENTIFIED BY 'drovosek';
+
+USE g01_java_db;
 
 CREATE TABLE User(
 	userId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	login VARCHAR(50) NOT NULL,
-  passw VARCHAR(32) NOT NULL,
-  score INT NOT NULL,
+    passw VARCHAR(32) NOT NULL,
+    score INT NOT NULL,
 	created TIMESTAMP DEFAULT NOW()
 );
 
