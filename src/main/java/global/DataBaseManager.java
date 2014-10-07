@@ -151,7 +151,7 @@ public class DataBaseManager implements Runnable {
 
 
     public void bestScores() {
-        String query = "SELECT login, score ORDER BY score DESC FROM User LIMIT 10;";
+        String query = "SELECT login, score FROM User ORDER BY score DESC LIMIT 10;";
 
         try {
             PreparedStatement statement = this.conn.prepareStatement(query);
@@ -168,7 +168,7 @@ public class DataBaseManager implements Runnable {
             }
             this.msys.sendMessage(new BestScoresAnswer(scores), "servlet");
         } catch (Exception e) {
-            System.out.println("Exception during DB insert  in registration");
+            System.out.println("Exception during DB insert  in bestScores");
         }
     }
 
