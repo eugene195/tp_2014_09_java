@@ -1,12 +1,12 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
 
-<div id="wrapper">
+<div class="wrapper">
 
 <form name="register-form" class="form" data-action="/profile" method="POST">
  
-  <div class="form__header">
-    <h1>Profile</h1>
-    <span>Change your password</span>
+  <div class="form form__header">
+    <h1 class="form__header__h1">Profile</h1>
+    <span class="form__header__span">Change your password</span>
   </div>
 
   <div class="form__content">
@@ -44,7 +44,7 @@
     <!--LOGIN-->
     <input id="save_profile" type="submit" name="submit" class="form__footer__button" value="Save"/>
     <!--BACK-->
-    <a href="#" class="form__footer__button form__footer__button--orange">Back</a>
+    <a href="#" class="form__footer__button form__footer__button_orange">Back</a>
   </div>
   
     </form>

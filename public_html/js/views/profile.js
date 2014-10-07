@@ -43,8 +43,8 @@ define([
                 function(next) { $(this).attr('disabled', false);
                 next();
                 });
-            $("#register").addClass("form__footer__button--disabled").delay(1700).queue(
-                function(next) { $(this).removeClass("form__footer__button--disabled");
+            $("#register").addClass("form__footer__button_disabled").delay(1700).queue(
+                function(next) { $(this).removeClass("form__footer__button_disabled");
                 next();
                 });
 

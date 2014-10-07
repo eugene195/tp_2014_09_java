@@ -1,6 +1,6 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
 
-<div id="wrapper">
+<div class="wrapper">
 
 <div class="form__content__user-icon"></div>
 <div class="form__content__pass-icon"></div>
@@ -8,8 +8,8 @@
 <form name="login-form" class="form" data-action="/auth" method="POST">
  
   <div class="form__header">
-    <h1>Login Form</h1>
-    <span>Let's get started.</span>
+    <h1 class="form__header__h1">Login Form</h1>
+    <span class="form__header__span">Let's get started.</span>
   </div>
 
   <div class="form__content">
@@ -25,7 +25,7 @@
       <p id="passw-error-message"></p>
     </div>
     
-    <input id="passw" name="passw" type="password" class="form__content__input form__content__input--password" value="Password"/>
+    <input id="passw" name="passw" type="password" class="form__content__input form__content__input_password" value="Password"/>
   
   </div>
 
@@ -33,7 +33,7 @@
     <!--LOGIN-->
     <input id="login" type="submit" name="submit" value="Login" class="form__footer__button" />
     <!--BACK-->
-    <a href="#" class="form__footer__button form__footer__button--orange">Back</a>
+    <a href="#" class="form__footer__button form__footer__button_orange">Back</a>
   </div>
   
     </form>
