@@ -9,7 +9,7 @@ define([
         postAuth: function(args) {
             var self = this;
             $.ajax({
-                url: $('.form').data('action'),
+                url: args.url,
                 method: "POST",
                 data:  {
                     login: args.username,
@@ -30,7 +30,7 @@ define([
             var self = this;
             $.ajax({
                 method: "POST",
-                url: $('.form').data('action'),
+                url: args.url,
                 data:  {
                     login: args.username,
                     passw: args.newPassw,
@@ -51,7 +51,7 @@ define([
             var self = this;
             $.ajax({
                 method: "POST",
-                url: $('.form').data('action'),
+                url: args.url,
                 data:  {
                     curPassw: args.curPassw,
                     newPassw: args.newPassw,

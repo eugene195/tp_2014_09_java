@@ -3,7 +3,7 @@
 
 	<div class="form">
  
-	  <div class="form form__header">
+	  <div class="form__header">
 	    <h1 class="form__header__h1">Scoreboard</h1>
 	    <span class="form__header__span">Top users</span>
 	  </div>

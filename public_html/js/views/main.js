@@ -11,9 +11,9 @@ define([
     var View = Backbone.View.extend({
         template: tmpl,
         session: sessionModel,
-        el: $('#page'),
+        el: $('.main'),
         events: {
-            "click #logout": "logout",
+            "click .logout": "logout",
         },
         initialize: function () {
             this.listenTo(this.session, 'userNotIdentified', this.userNotIdentified);
@@ -27,31 +27,33 @@ define([
         },
         show: function () {
             this.render();
+            this.$el.show();
         },
         hide: function () {
-            // TODO
+            this.$el.hide();
         },
         logout: function (event) {
             event.preventDefault();
             this.session.postLogout();
         },
         userIdentified: function(data) {
-            $("#profile").show();
-            $("#exit").show();
-            $("#auth").hide();
-            $("#reg").hide();
+            var elem = this.$el.find('.form');
+            elem.find(".profile").show();
+            elem.find(".exit").show();
+            elem.find(".auth").hide();
+            elem.find(".reg").hide();
         },
         userNotIdentified: function() {
-            $("#profile").hide();
-            $("#exit").hide();
-            $("#auth").show();
-            $("#reg").show();
+            var elem = this.$el.find('.form');
+            elem.find(".profile").hide();
+            elem.find(".exit").hide();
+            elem.find(".auth").show();
+            elem.find(".reg").show();
         },
         showErrorLogout: function(message) {
-            $("#logout-error").slideDown().delay(3000).slideUp();
-            $("#logout-error-message").html(message);
+            var elem = this.$el.find(".alert-error").slideDown().delay(3000).slideUp();
+            elem.append("<p>" + message + "</p>");
         },
-        
     });
 
     return new View();

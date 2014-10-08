@@ -8,38 +8,29 @@
   
 <form name="register-form" class="form" data-action="/register" method="POST">
  
-  <div class="form form__header">
+  <div class="form__header">
     <h1 class="form__header__h1">Register Form</h1>
     <span class="form__header__span">Let's get started.</span>
   </div>
 
   <div class="form__content">
     <!--USERNAME-->
-    <div id="register-error" class="alert-error">
-      <p id="register-error-message"></p>
-    </div>  
-    
-    <input id="username" name="login" type="text" class="form__content__input" value="Username" onfocus="this.value=''" />
+    <div class="alert-error register-error"></div>  
+    <input name="login" type="text" class="form__content__input" value="Username"/>
     
     <!--PASSWORD-->
-    <div id="passw-error" class="alert-error">
-      <p id="passw-error-message"></p>
-    </div>
-    
-    <input id="passw" name="passw" type="password" class="form__content__input form__content__input_password" value="Password" onfocus="this.value=''" />
+    <div class="alert-error passw-error"></div>
+    <input name="passw" type="password" class="form__content__input form__content__input_password" value="Password"/>
 
     <!--CONFIRM PASSWORD-->
-    <div id="passw2-error" class="alert-error">
-      <p id="passw2-error-message"></p>
-    </div>
-    
-    <input id="passw2" name="passw2" type="password" class="form__content__input form__content__input_password" value="Password" onfocus="this.value=''" />
+    <div class="alert-error confirm-passw-error"></div>
+    <input name="confirm_passw" type="password" class="form__content__input form__content__input_password" value="Password"/>
   
   </div>
 
   <div class="form__footer">
     <!--LOGIN-->
-    <input id="register" type="submit" name="submit" value="Register" class="form__footer__button" />
+    <input type="submit" name="submit" value="Register" class="form__footer__button" />
     <!--BACK-->
      <a href="#" class="form__footer__button form__footer__button_orange">Back</a>
   </div>

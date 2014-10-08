@@ -11,7 +11,7 @@ define([
 var View = Backbone.View.extend({
 
         template: tmpl,
-        el: $('#page'),
+        el: $('.scoreboard'),
         events: {
 
         },
@@ -25,9 +25,10 @@ var View = Backbone.View.extend({
         },
         show: function () {
             this.collection.fetch();
+            this.$el.show();
         },
         hide: function () {
-            // TODO
+            this.$el.hide();
         },
     });
 

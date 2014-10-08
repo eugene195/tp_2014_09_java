@@ -11,18 +11,18 @@ define([
     var View = Backbone.View.extend({
         template: tmpl,
         session: sessionModel,
-        el: $('#page'),
+        el: $('.register'),
         events: {
-            "click #register": "buttonClick",
-            "click #username": "loginClick",
-            "click #passw": "passwordClick",
-            "click #passw2": "password2Click",
-            "blur #username": "loginBlur",
-            "blur #passw": "passwordBlur",
-            "blur #passw2": "password2Blur",
-            "focus #passw": "passwFocus",
-            "focus #passw2": "passw2Focus",
-            "focus #username": "usernameFocus"
+            "click input[name=submit]": "registerClick",
+            "click input[name=login]": "loginClick",
+            "click input[name=passw]": "passwClick",
+            "click input[name=confirm_passw]": "confirmPasswClick",
+            "blur input[name=login]": "loginBlur",
+            "blur input[name=passw]": "passwBlur",
+            "blur input[name=confirm_passw]": "confirmPasswBlur",
+            "focus input[name=passw]": "passwFocus",
+            "focus input[name=confirm_passw]": "confirmPasswFocus",
+            "focus input[name=login]": "usernameFocus"
         },
 
         initialize: function () {
@@ -34,45 +34,50 @@ define([
         },
         show: function () {
             this.render();
+            this.$el.show();
         },
         hide: function () {
-            // TODO
+            this.$el.hide();
         },
-        buttonClick: function(event) {
+        registerClick: function(event) {
             event.preventDefault();
-            var username = $("#username").val(),
-                newPassw = $("#passw").val(),
-                confirmPassw = $("#passw2").val(),
+            var username = this.$el.find("input[name=login]").val(),
+                newPassw = this.$el.find("input[name=passw]").val(),
+                confirmPassw = this.$el.find("input[name=confirm_passw]").val(),
                 wasError = false;
 
-            $("#register").prop('disabled', true).delay(1700).queue(
+            var butSubmit = this.$el.find("input[name=submit]").prop('disabled', true).delay(1700).queue(
                 function(next) { $(this).attr('disabled', false);
                 next();
             });
-            $("#register").addClass("form__footer__button_disabled").delay(1700).queue(
+            butSubmit.addClass("form__footer__button_disabled").delay(1700).queue(
                 function(next) { $(this).removeClass("form__footer__button_disabled");
                 next();
             });
 
             if (username == '') {
                 wasError = true;
-                $("#register-error").slideDown().delay(3000).slideUp();
-                $("#register-error-message").html('Missing username');
+                var elem = this.$el.find(".register-error").slideDown().delay(3000).slideUp();
+                elem.html('');
+                elem.append("<p>Missing username</p>");
             }
             if (newPassw == '') {
                 wasError = true;
-                $("#passw-error").slideDown().delay(3000).slideUp();
-                $("#passw-error-message").html('Missing password');
+                var elem = this.$el.find(".passw-error").slideDown().delay(3000).slideUp();
+                elem.html('');
+                elem.append("<p>Missing password</p>");
             }   
             else if (confirmPassw == '') {
                 wasError = true;
-                $("#passw2-error").slideDown().delay(3000).slideUp();
-                $("#passw2-error-message").html('Missing confirm password');
+                var elem = this.$el.find(".confirm-passw-error").slideDown().delay(3000).slideUp();
+                elem.html('');
+                elem.append("<p>Missing confirm password</p>");
             }   
             else if (newPassw != confirmPassw) {
                 wasError = true;
-                $("#passw2-error").slideDown().delay(3000).slideUp();
-                $("#passw2-error-message").html('Passwords does not match');
+                var elem = this.$el.find(".confirm-passw-error").slideDown().delay(3000).slideUp();
+                elem.html('');
+                elem.append("<p>Passwords does not match</p>");
             }
             if (wasError) {
                 return;
@@ -82,44 +87,44 @@ define([
                 username: username,
                 newPassw: newPassw,
                 confirmPassw: confirmPassw,
+                url: this.$el.find('.form').data('action'),
             });
         },
         redirectLogin: function() {
             window.location.replace('#login');
         },
         showError: function(message) {
-            $("#register-error").slideDown().delay(3000).slideUp();
-            $("#register-error-message").html(message);
+            var elem = this.$el.find(".register-error").slideDown().delay(3000).slideUp();
+            elem.html('');
+            elem.append("<p>" + message + "</p>");
         },
         loginClick: function() {
-            $(".form__content__user-icon").css("left","-48px");
+            this.$el.find(".form__content__user-icon").css("left","-48px");
         },
-        passwordClick: function() {
-            $(".form__content__pass-icon").css("left","-48px");
+        passwClick: function() {
+            this.$el.find(".form__content__pass-icon").css("left","-48px");
         },
-        password2Click: function() {
-            $(".form__content__pass-icon2").css("left","-48px");
+        confirmPasswClick: function() {
+            this.$el.find(".form__content__pass-icon2").css("left","-48px");
         },
         loginBlur: function() {
-            $(".form__content__user-icon").css("left","0px");
+            this.$el.find(".form__content__user-icon").css("left","0px");
         },
-        passwordBlur: function() {
-            $(".form__content__pass-icon").css("left","0px");
+        passwBlur: function() {
+            this.$el.find(".form__content__pass-icon").css("left","0px");
         },
-        password2Blur: function() {
-            $(".form__content__pass-icon2").css("left","0px");
+        confirmPasswBlur: function() {
+            this.$el.find(".form__content__pass-icon2").css("left","0px");
         },
         passwFocus: function() {
-            $("#passw").val("");
+            this.$el.find("input[name=passw]").val("");
         },
-        passw2Focus: function() {
-            $("#passw2").val("");
+        confirmPasswFocus: function() {
+            this.$el.find("input[name=confirm_passw]").val("");
         },
         usernameFocus: function() {
-            $("#username").val("");
+            this.$el.find("input[name=login]").val("");
         }
-
     });
-
     return new View();
 });

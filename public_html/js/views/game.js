@@ -9,7 +9,7 @@ define([
 var View = Backbone.View.extend({
 
         template: tmpl,
-        el: $('#page'),
+        el: $('.page'),
         events: {
             "click #gmscr": "gameClick"
         },
@@ -21,10 +21,11 @@ var View = Backbone.View.extend({
             this.$el.html(this.template());
         },
         show: function () {
-            this.render()
+            this.render();
+            this.$el.show();
         },
         hide: function () {
-            // TODO
+            this.$el.hide();
         },
         gameClick: function(event) {
             alert("Great shot");

@@ -11,15 +11,15 @@ define([
     var View = Backbone.View.extend({
         template: tmpl,
         session: sessionModel,
-        el: $('#page'),
+        el: $('.login'),
         events: {
-            "click #login": "authClick",
-            "click #username": "loginClick",
-            "click #passw": "passwordClick",
-            "blur #username": "loginBlur",
-            "blur #passw": "passwordBlur",
-            "focus #passw": "passwFocus",
-            "focus #username": "usernameFocus"
+            "click input[name=submit]": "authClick",
+            "click input[name=login]": "loginClick",
+            "click input[name=passw]": "passwordClick",
+            "blur input[name=login]": "loginBlur",
+            "blur input[name=passw]": "passwordBlur",
+            "focus input[name=passw]": "passwFocus",
+            "focus input[name=login]": "usernameFocus"
         },
 
         initialize: function () {
@@ -31,72 +31,75 @@ define([
         },
         show: function () {
             this.render();
+            this.$el.show();
         },
         hide: function () {
-            // TODO
+            this.$el.hide();
         },
         authClick: function(event) {
             event.preventDefault();
-            var username = $("#username").val(),
-                password = $("#passw").val(),
+            var username = this.$el.find("input[name=login]").val(),
+                password = this.$el.find("input[name=passw]").val(),
                 wasError = false;
 
-            $("#login").prop('disabled', true).delay(1700).queue(
+            var butSubmit = this.$el.find("input[name=submit]").prop('disabled', true).delay(1700).queue(
                 function(next) { $(this).attr('disabled', false);
                 next();
             });
-            $("#login").addClass("form__footer__button_disabled").delay(1700).queue(
+            butSubmit.addClass("form__footer__button_disabled").delay(1700).queue(
                 function(next) { $(this).removeClass("form__footer__button_disabled");
                 next();
             });
 
             if (username == '') {
                 wasError = true;
-                $("#login-error").slideDown().delay(3000).slideUp();
-                $("#login-error-message").html('Missing username');
+                var elem = this.$el.find(".login-error").slideDown().delay(3000).slideUp();
+                elem.html('');
+                elem.append("<p>Missing username</p>");
             }
             if (password == '') {
                 wasError = true;
-                $("#passw-error").slideDown().delay(3000).slideUp();
-                $("#passw-error-message").html('Missing password');
+                var elem = this.$el.find(".passw-error").slideDown().delay(3000).slideUp();
+                elem.html('');
+                elem.append("<p>Missing password</p>");
             }
-            
+
             if (wasError) {
                 return;
             }
 
             this.session.postAuth({
                 username: username,
-                password: password
+                password: password,
+                url: this.$el.find('.form').data('action'), 
             });
         },
         redirectMain: function() {
             window.location.replace('#');
         },
         showError: function(message) {
-            $("#login-error").slideDown().delay(3000).slideUp();
-            $("#login-error-message").html(message);
+            var elem = this.$el.find(".login-error").slideDown().delay(3000).slideUp();
+            elem.html('');
+            elem.append("<p>" + message + "</p>");
         },
         loginClick: function() {
-            $(".form__content__user-icon").css("left","-48px");
+            this.$el.find(".form__content__user-icon").css("left","-48px");
         },
         passwordClick: function() {
-            $(".form__content__pass-icon").css("left","-48px");
+            this.$el.find(".form__content__pass-icon").css("left","-48px");
         },
         loginBlur: function() {
-            $(".form__content__user-icon").css("left","0px");
+            this.$el.find(".form__content__user-icon").css("left","0px");
         },
         passwordBlur: function() {
-            $(".form__content__pass-icon").css("left","0px");
+            this.$el.find(".form__content__pass-icon").css("left","0px");
         },
         passwFocus: function() {
-            $("#passw").val("");
+            this.$el.find("input[name=passw]").val("");
         },
         usernameFocus: function() {
-            $("#username").val("");
+            this.$el.find("input[name=login]").val("");
         }
-
-
     });
 
     return new View();

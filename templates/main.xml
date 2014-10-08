@@ -11,33 +11,31 @@
    </div>
 
   <div class="form__content">
+  	<div class="alert-error"></div>
+
   	<div class="form__content__menu-item">
 		<a href="#game" class="form__content__menu-item__link">Start Game</a>
 	</div>
 	<div class="form__content__menu-item">
 		<a href="#scoreboard" class="form__content__menu-item__link">Scoreboard</a>
 	</div>
-	<div id="profile" class="form__content__menu-item">
+	<div class="form__content__menu-item profile">
 		<a href="#profile" class="form__content__menu-item__link">Profile</a>
 	</div>
-	<div id="exit" class="form__content__menu-item">
-		<a id="logout" href="#" class="form__content__menu-item__link">Exit</a>
+	<div class="form__content__menu-item exit">
+		<a href="#" class="form__content__menu-item__link logout">Exit</a>
 	</div>
 
   </div>
 
   <div class="form__footer">
 	  <!--LOGIN-->
-	  <a id="auth" href="#login" class="form__footer__button">Sign in</a>
+	  <a href="#login" class="form__footer__button auth">Sign in</a>
 	  <!--REGISTER-->
-	  <a id="reg" href="#register" class="form__footer__button form__footer__button_orange">Sign up</a>
+	  <a href="#register" class="form__footer__button form__footer__button_orange reg">Sign up</a>
   </div>
   
     </form>
-
-    <div id="logout-error" class="alert-error">
-        <p id="logout-error-message"></p>
-    </div>
 
 </div>
 
