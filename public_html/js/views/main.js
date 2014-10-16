@@ -12,18 +12,19 @@ define([
         template: tmpl,
         session: sessionModel,
         events: {
-            "click .logout": "logout",
+            "click .logout": "logout"
         },
         initialize: function () {
-            this.listenTo(this.session, 'userNotIdentified', this.userNotIdentified);
-            this.listenTo(this.session, 'userIdentified', this.userIdentified);
+            this.listenTo(this.session, 'main:anonymous', this.userNotIdentified);
+            this.listenTo(this.session, 'main:known', this.userIdentified);
             this.listenTo(this.session, 'successLogout', this.logoutSuccess);
             this.listenTo(this.session, 'errorLogout', this.logoutError);
+
             this.render();
         },
         render: function () {
             this.$el.html(this.template());
-            this.session.postIdentifyUser();
+            this.session.postIdentifyUser('main');
             return this.$el;
         },
         show: function () {
@@ -33,28 +34,28 @@ define([
             event.preventDefault();
             this.session.postLogout();
         },
+        
         userIdentified: function(data) {
-            var elem = this.$el.find('.form');
-            elem.find(".profile").show();
-            elem.find(".exit").show();
-            elem.find(".auth").hide();
-            elem.find(".reg").hide();
+            var form = this.$('.form');
+            form.find(".profile").show();
+            form.find(".exit").show();
+            form.find(".auth").hide();
+            form.find(".reg").hide();
         },
         userNotIdentified: function() {
-            var elem = this.$el.find('.form');
-            elem.find(".profile").hide();
-            elem.find(".exit").hide();
-            elem.find(".auth").show();
-            elem.find(".reg").show();
+            var form = this.$('.form');
+            form.find(".profile").hide();
+            form.find(".exit").hide();
+            form.find(".auth").show();
+            form.find(".reg").show();
         },
 
         logoutSuccess: function () {
-            this.show();
-            this.trigger('success', this);
+            this.trigger('success');
         },
 
         logoutError: function (message) {
-            var elem = this.$el.find(".alert-error").slideDown().delay(3000).slideUp();
+            var elem = this.$(".alert-error").slideDown().delay(3000).slideUp();
             elem.append("<p>" + message + "</p>");
         }
     });

@@ -4,8 +4,7 @@ define([
     Backbone
 ){
     var SessionModel = Backbone.Model.extend({
-        initialize: function() {
-        },
+
         postAuth: function(args) {
             var self = this;
             $.ajax({
@@ -68,7 +67,7 @@ define([
                 self.trigger("errorChangePassword", "Error, please try again later");
             })
         },
-        postIdentifyUser: function() {
+        postIdentifyUser: function(prefix) {
             var self = this;
             $.ajax({
                 url: "/identifyuser",
@@ -80,12 +79,12 @@ define([
             }).done(function(data){
                 // if user is identified
                 if (data.status == 1) {
-                    self.trigger("userIdentified", {login: data.login});
+                    self.trigger(prefix + ":known", {login: data.login});
                 } else {
-                    self.trigger("userNotIdentified");
+                    self.trigger(prefix + ":anonymous");
                 }
             }).fail(function(data) {
-                self.trigger("userNotIdentified");
+                self.trigger(prefix + ":anonymous");
             }) 
         },
         postLogout: function() {

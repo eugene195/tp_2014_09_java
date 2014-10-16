@@ -20,30 +20,29 @@ define([
         },
 
         initialize: function () {
-            this.listenTo(this.session, 'successAuth', this.sessionSuccess);
-            this.listenTo(this.session, 'errorAuth', this.sessionError);
+            this.listenTo(this.session, 'successAuth', this.loginSuccess);
+            this.listenTo(this.session, 'errorAuth', this.loginError);
             this.render();
         },
+
         render: function () {
             this.$el.html(this.template());
             return this.$el;
         },
+
         show: function () {
             this.trigger('show', this);
         },
+
         authClick: function(event) {
             event.preventDefault();
-            var username = this.$el.find("input[name=login]").val(),
-                password = this.$el.find("input[name=passw]").val();
+            var username = this.$("input[name=login]").val(),
+                password = this.$("input[name=passw]").val();
 
-            var butSubmit = this.$el.find("input[name=submit]").prop('disabled', true).delay(1700).queue(
+            var btnSubmit = this.$("input[name=submit]");
+            btnSubmit.prop('disabled', true).addClass("form__footer__button_disabled").delay(1700).queue(
                 function(next) {
                     $(this).attr('disabled', false);
-                    next();
-                }
-            );
-            butSubmit.addClass("form__footer__button_disabled").delay(1700).queue(
-                function(next) {
                     $(this).removeClass("form__footer__button_disabled");
                     next();
                 }
@@ -53,21 +52,24 @@ define([
                 this.session.postAuth({
                     username: username,
                     password: password,
-                    url: this.$el.find('.form').data('action'), 
+                    url: this.$('.form').data('action')
                 });
             }
         },
-        sessionSuccess: function() {
-            this.trigger('success', this);
+
+        loginSuccess: function() {
+            this.trigger('success');
         },
-        sessionError: function(message) {
+
+        loginError: function(message) {
             this.showError(message, ".login-error");
         },
+
         showError: function(message, div_error) {
-            var elem = this.$el.find(div_error).slideDown().delay(3000).slideUp();
-            elem.html('');
-            elem.append("<p>" + message + "</p>");
+            var elem = this.$(div_error).slideDown().delay(3000).slideUp();
+            elem.html("<p>" + message + "</p>");
         },
+
         validate: function(username, password) {
             var status= true;
             if (username == '') {
@@ -80,17 +82,18 @@ define([
             }
             return status;
         },
+
         loginClick: function() {
-            this.$el.find(".form__content__user-icon").css("left","-48px");
+            this.$(".form__content__user-icon").css("left","-48px");
         },
         passwordClick: function() {
-            this.$el.find(".form__content__pass-icon").css("left","-48px");
+            this.$(".form__content__pass-icon").css("left","-48px");
         },
         loginBlur: function() {
-            this.$el.find(".form__content__user-icon").css("left","0px");
+            this.$(".form__content__user-icon").css("left","0px");
         },
         passwordBlur: function() {
-            this.$el.find(".form__content__pass-icon").css("left","0px");
+            this.$(".form__content__pass-icon").css("left","0px");
         }
     });
 
