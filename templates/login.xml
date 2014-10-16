@@ -15,11 +15,11 @@
   <div class="form__content">
     <!--USERNAME-->
     <div class="alert-error login-error"></div>  
-    <input name="login" type="text" class="form__content__input" value="Username"/>
+    <input name="login" type="text" class="form__content__input" placeholder="Username"/>
     
     <!--PASSWORD-->
     <div class="alert-error passw-error"></div>
-    <input name="passw" type="password" class="form__content__input form__content__input_password" value="Password"/>
+    <input name="passw" type="password" class="form__content__input form__content__input_password" placeholder="Password"/>
   
   </div>
 

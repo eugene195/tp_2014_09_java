@@ -20,9 +20,6 @@ define([
             "blur input[name=login]": "loginBlur",
             "blur input[name=passw]": "passwBlur",
             "blur input[name=confirm_passw]": "confirmPasswBlur",
-            "focus input[name=passw]": "passwFocus",
-            "focus input[name=confirm_passw]": "confirmPasswFocus",
-            "focus input[name=login]": "usernameFocus"
         },
 
         initialize: function () {
@@ -115,15 +112,6 @@ define([
         },
         confirmPasswBlur: function() {
             this.$el.find(".form__content__pass-icon2").css("left","0px");
-        },
-        passwFocus: function() {
-            this.$el.find("input[name=passw]").val("");
-        },
-        confirmPasswFocus: function() {
-            this.$el.find("input[name=confirm_passw]").val("");
-        },
-        usernameFocus: function() {
-            this.$el.find("input[name=login]").val("");
         }
     });
     return new View();
