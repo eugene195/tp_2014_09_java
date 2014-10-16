@@ -163,7 +163,7 @@ public class DataBaseManagerImpl implements global.base.DataBaseManager {
             return false;
         }
 
-        String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
+        String query = "INSERT INTO User (login, passw, score)" + " VALUES (?, md5(?), 0);";
         try {
             PreparedStatement statement = this.conn.prepareStatement(query);
             statement.setString(1, login);

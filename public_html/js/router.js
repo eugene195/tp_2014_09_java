@@ -27,22 +27,36 @@ define([
             '*default': 'defaultActions'
         },
         defaultActions: function () {
-            main.render();
+            this.hidePrev();
+            main.show();
         },
         scoreboardAction: function () {
+            this.hidePrev();
             scoreboard.show();
         },
         gameAction: function () {
-            game.render();
+            this.hidePrev();
+            game.show();
         },
         loginAction: function () {
-            login.render();
+            this.hidePrev();
+            login.show();
         },
         registerAction: function () {
-            register.render();
+            this.hidePrev();
+            register.show();
         },
         profileAction: function () {
-            profile.render();
+            this.hidePrev();
+            profile.show();
+        },
+        hidePrev: function () {
+            main.hide();
+            scoreboard.hide();
+            game.hide();
+            login.hide();
+            register.hide();
+            profile.hide();
         }
     });
 
