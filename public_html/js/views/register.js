@@ -24,7 +24,7 @@ define([
 
         initialize: function () {
             this.listenTo(this.session, 'successReg', this.redirectLogin);
-            this.listenTo(this.session, 'errorReg', this.showError);
+            this.listenTo(this.session, 'errorReg', this.handleSessionError);
         },
         render: function () {
             this.$el.html(this.template());
@@ -40,8 +40,7 @@ define([
             event.preventDefault();
             var username = this.$el.find("input[name=login]").val(),
                 newPassw = this.$el.find("input[name=passw]").val(),
-                confirmPassw = this.$el.find("input[name=confirm_passw]").val(),
-                wasError = false;
+                confirmPassw = this.$el.find("input[name=confirm_passw]").val();
 
             var butSubmit = this.$el.find("input[name=submit]").prop('disabled', true).delay(1700).queue(
                 function(next) { $(this).attr('disabled', false);
@@ -52,43 +51,45 @@ define([
                 next();
             });
        
-
-            this.session.postReg({
-                username: username,
-                newPassw: newPassw,
-                confirmPassw: confirmPassw,
-                url: this.$el.find('.form').data('action'),
-            });
-        },
+            if (this.validate(username, newPassw, confirmPassw)) {
+                this.session.postReg({
+                    username: username,
+                    newPassw: newPassw,
+                    confirmPassw: confirmPassw,
+                    url: this.$el.find('.form').data('action'),
+                });   
+            }
+         },
         redirectLogin: function() {
             window.location.replace('#login');
         },
+        handleSessionError: function(message) {
+            this.showError(message, ".register-error")
+        },
         showError: function(message, div_error) {
-            var div_error = div_error || ".register-error";
             var elem = this.$el.find(div_error).slideDown().delay(3000).slideUp();
             elem.html('');
             elem.append("<p>" + message + "</p>");
         },
         validate: function(username, newPassw, confirmPassw){
+            var status = true;
             if (username == '') {
-                wasError = true;
-                this.showError("Missing username");
+                status = false;
+                this.showError("Missing username", ".register-error");
             }
             if (newPassw == '') {
-                wasError = true;
+                status = false;
                 this.showError("Missing password", ".passw-error");
             }   
             else if (confirmPassw == '') {
-                wasError = true;
+                status = false;
                 this.showError("Missing confirm password", ".confirm-passw-error");
             }   
             else if (newPassw != confirmPassw) {
-                wasError = true;
+                status = false;
                 this.showError("Passwords does not match", ".confirm-passw-error");
             }
-            if (wasError) {
-                return;
-            }
+            return status;
         },
         loginClick: function() {
             this.$el.find(".form__content__user-icon").css("left","-48px");

@@ -22,7 +22,7 @@ define([
 
         initialize: function () {
             this.listenTo(this.session, 'successAuth', this.redirectMain);
-            this.listenTo(this.session, 'errorAuth', this.showError);
+            this.listenTo(this.session, 'errorAuth', this.handleSessionError);
         },
         render: function () {
             this.$el.html(this.template());
@@ -37,8 +37,7 @@ define([
         authClick: function(event) {
             event.preventDefault();
             var username = this.$el.find("input[name=login]").val(),
-                password = this.$el.find("input[name=passw]").val(),
-                wasError = false;
+                password = this.$el.find("input[name=passw]").val();
 
             var butSubmit = this.$el.find("input[name=submit]").prop('disabled', true).delay(1700).queue(
                 function(next) { $(this).attr('disabled', false);
@@ -60,8 +59,10 @@ define([
         redirectMain: function() {
             window.location.replace('#');
         },
+        handleSessionError: function(message) {
+            this.showError(message, ".login-error");
+        },
         showError: function(message, div_error) {
-            var div_error = div_error || ".login-error";
             var elem = this.$el.find(div_error).slideDown().delay(3000).slideUp();
             elem.html('');
             elem.append("<p>" + message + "</p>");
@@ -70,7 +71,7 @@ define([
             var status= true;
             if (username == '') {
                 status = false;
-                this.showError("Missing username");
+                this.showError("Missing username", ".login-error");
             }
             if (password == '') {
                 status = false;
