@@ -1,6 +1,7 @@
 package global.messages;
 
-import global.DataBaseManager;
+import global.DataBaseManagerImpl;
+import global.base.DataBaseManager;
 import global.models.UserSession;
 
 /**
@@ -17,8 +18,8 @@ public class AuthQuery extends AbstractMsg {
 
     @Override
     public void exec(Runnable abonent){
-        if(abonent instanceof DataBaseManager){
-            DataBaseManager dbman = (DataBaseManager)abonent;
+        if(abonent instanceof DataBaseManagerImpl){
+            DataBaseManager dbman = (DataBaseManagerImpl)abonent;
             dbman.checkAuth(this.userSession, this.password);
         }
         else{

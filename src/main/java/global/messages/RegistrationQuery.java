@@ -1,6 +1,7 @@
 package global.messages;
 
-import global.DataBaseManager;
+import global.DataBaseManagerImpl;
+import global.base.DataBaseManager;
 
 /**
  * Created by Евгений on 01.09.2014.
@@ -16,8 +17,8 @@ public class RegistrationQuery extends AbstractMsg {
 
     @Override
     public void exec(Runnable abonent) {
-        if(abonent instanceof DataBaseManager) {
-            DataBaseManager dbman = (DataBaseManager)abonent;
+        if(abonent instanceof DataBaseManagerImpl) {
+            DataBaseManager dbman = (DataBaseManagerImpl)abonent;
             dbman.registerUser(this.login, this.password);
         }
         else {
