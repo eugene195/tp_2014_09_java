@@ -11,8 +11,9 @@ define([
     var View = Backbone.View.extend({
         template: tmpl,
         session: sessionModel,
+
         events: {
-            "click input[name=submit]": "authClick",
+            "submit form[name=login-form]": "authClick",
             "click input[name=login]": "loginClick",
             "click input[name=passw]": "passwordClick",
             "blur input[name=login]": "loginBlur",
@@ -49,15 +50,16 @@ define([
             );
 
             if (this.validate(username, password)) {
-                this.session.postAuth({
-                    username: username,
-                    password: password,
-                    url: this.$('.form').data('action')
+                var url = this.$('.form').data('action');
+
+                this.session.postAuth(url, {
+                    login: username,
+                    passw: password
                 });
             }
         },
 
-        loginSuccess: function() {
+        loginSuccess: function(data) {
             this.trigger('success');
         },
 

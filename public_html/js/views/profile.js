@@ -23,8 +23,8 @@ define([
         },
 
         render: function () {
-            this.$el.html(this.template());
             this.session.postIdentifyUser('profile');
+            this.$el.html(this.template());
             return this.$el;
         },
 
@@ -48,11 +48,11 @@ define([
             );
 
             if (this.validate(curPassw, newPassw, confirmPassw)) {
-                this.session.postChangePassword({
+                var url = this.$('.form').data('action');
+                this.session.postChangePassword(url, {
                     curPassw: curPassw,
                     newPassw: newPassw,
-                    confirmPassw: confirmPassw,
-                    url: this.$('.form').data('action')
+                    confirmPassw: confirmPassw
                 });
             }
         },
@@ -81,7 +81,7 @@ define([
             this.showError(message, ".confirm-passw-error");
         },
 
-        passwSuccess: function() {
+        passwSuccess: function(data) {
             this.showError("Password successfully changed", ".alert-success");
         },
 

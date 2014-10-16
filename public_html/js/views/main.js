@@ -23,8 +23,8 @@ define([
             this.render();
         },
         render: function () {
-            this.$el.html(this.template());
             this.session.postIdentifyUser('main');
+            this.$el.html(this.template());
             return this.$el;
         },
         show: function () {
@@ -50,8 +50,9 @@ define([
             form.find(".reg").show();
         },
 
-        logoutSuccess: function () {
+        logoutSuccess: function (data) {
             this.trigger('success');
+            this.show();
         },
 
         logoutError: function (message) {

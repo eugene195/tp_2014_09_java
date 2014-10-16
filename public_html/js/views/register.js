@@ -13,7 +13,7 @@ define([
         session: sessionModel,
 
         events: {
-            "click input[name=submit]": "registerClick",
+            "submit form[name=register-form]": "registerClick",
             "click input[name=login]": "loginClick",
             "click input[name=passw]": "passwClick",
             "click input[name=confirm_passw]": "confirmPasswClick",
@@ -53,16 +53,17 @@ define([
             );
        
             if (this.validate(username, newPassw, confirmPassw)) {
-                this.session.postReg({
-                    username: username,
-                    newPassw: newPassw,
-                    confirmPassw: confirmPassw,
-                    url: this.$('.form').data('action')
-                });   
+                var url = this.$('.form').data('action');
+
+                this.session.postReg(url, {
+                    login: username,
+                    passw: newPassw,
+                    passw2: confirmPassw
+                });
             }
         },
 
-        registerSuccess: function() {
+        registerSuccess: function(data) {
             this.trigger('success');
         },
 
@@ -72,7 +73,7 @@ define([
 
         showError: function(message, div_error) {
             var elem = this.$(div_error).slideDown().delay(3000).slideUp();
-            elem.append("<p>" + message + "</p>");
+            elem.html("<p>" + message + "</p>");
         },
 
         validate: function(username, newPassw, confirmPassw) {
