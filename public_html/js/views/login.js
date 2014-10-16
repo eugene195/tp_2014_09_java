@@ -34,17 +34,20 @@ define([
         authClick: function(event) {
             event.preventDefault();
             var username = this.$el.find("input[name=login]").val(),
-                password = this.$el.find("input[name=passw]").val(),
-                wasError = false;
+                password = this.$el.find("input[name=passw]").val();
 
             var butSubmit = this.$el.find("input[name=submit]").prop('disabled', true).delay(1700).queue(
-                function(next) { $(this).attr('disabled', false);
-                next();
-            });
+                function(next) {
+                    $(this).attr('disabled', false);
+                    next();
+                }
+            );
             butSubmit.addClass("form__footer__button_disabled").delay(1700).queue(
-                function(next) { $(this).removeClass("form__footer__button_disabled");
-                next();
-            });
+                function(next) {
+                    $(this).removeClass("form__footer__button_disabled");
+                    next();
+                }
+            );
 
             if (this.validate(username, password)) {
                 this.session.postAuth({
