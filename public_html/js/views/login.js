@@ -11,7 +11,6 @@ define([
     var View = Backbone.View.extend({
         template: tmpl,
         session: sessionModel,
-        el: $('.login'),
         events: {
             "click input[name=submit]": "authClick",
             "click input[name=login]": "loginClick",
@@ -23,16 +22,14 @@ define([
         initialize: function () {
             this.listenTo(this.session, 'successAuth', this.redirectMain);
             this.listenTo(this.session, 'errorAuth', this.handleSessionError);
+
         },
         render: function () {
             this.$el.html(this.template());
+            return this;
         },
         show: function () {
-            this.render();
-            this.$el.show();
-        },
-        hide: function () {
-            this.$el.hide();
+            this.trigger('show', this);
         },
         authClick: function(event) {
             event.preventDefault();
@@ -40,13 +37,17 @@ define([
                 password = this.$el.find("input[name=passw]").val();
 
             var butSubmit = this.$el.find("input[name=submit]").prop('disabled', true).delay(1700).queue(
-                function(next) { $(this).attr('disabled', false);
-                next();
-            });
+                function(next) {
+                    $(this).attr('disabled', false);
+                    next();
+                }
+            );
             butSubmit.addClass("form__footer__button_disabled").delay(1700).queue(
-                function(next) { $(this).removeClass("form__footer__button_disabled");
-                next();
-            });
+                function(next) {
+                    $(this).removeClass("form__footer__button_disabled");
+                    next();
+                }
+            );
 
             if (this.validate(username, password)) {
                 this.session.postAuth({

@@ -1,6 +1,7 @@
 package global.messages;
 
-import global.DataBaseManager;
+import global.DataBaseManagerImpl;
+import global.base.DataBaseManager;
 
 /**
  * Created by max on 31.08.14.
@@ -14,8 +15,8 @@ public class ProfileInfoQuery extends AbstractMsg {
 
     @Override
     public void exec(Runnable abonent) {
-        if (abonent instanceof DataBaseManager) {
-            DataBaseManager dbman = (DataBaseManager) abonent;
+        if (abonent instanceof DataBaseManagerImpl) {
+            DataBaseManager dbman = (DataBaseManagerImpl) abonent;
             dbman.getProfileInfo(this.userId);
         }
         else {

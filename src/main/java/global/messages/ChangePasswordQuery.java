@@ -1,6 +1,7 @@
 package global.messages;
 
-import global.DataBaseManager;
+import global.DataBaseManagerImpl;
+import global.base.DataBaseManager;
 
 /**
  * Created by Moiseev Maxim on 02.10.14.
@@ -19,8 +20,8 @@ public class ChangePasswordQuery extends AbstractMsg {
 
     @Override
     public void exec(Runnable abonent) {
-        if(abonent instanceof DataBaseManager) {
-            DataBaseManager dbman = (DataBaseManager)abonent;
+        if(abonent instanceof DataBaseManagerImpl) {
+            DataBaseManager dbman = (DataBaseManagerImpl)abonent;
             dbman.changePassword(this.login, this.curPassw, this.newPassw);
         }
         else {

@@ -1,5 +1,6 @@
 package global;
 
+import global.base.DataBaseManager;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 
@@ -34,7 +35,7 @@ public class Main
     }
 
     private static DataBaseManager createDbMan(MessageSystem msys) {
-        return new DataBaseManager(msys);
+        return new DataBaseManagerImpl(msys);
     }
 
     private static int getServerPort(String[] args) {

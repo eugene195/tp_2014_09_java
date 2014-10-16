@@ -11,7 +11,6 @@ define([
     var View = Backbone.View.extend({
         template: tmpl,
         session: sessionModel,
-        el: $('.profile'),
         events: {
             "click input[name=submit]": "saveProfileClick",
         },
@@ -21,17 +20,15 @@ define([
             this.listenTo(this.session, 'errorChangePassword', this.showError);
             this.listenTo(this.session, 'userNotIdentified', this.userNotIdentified);
             this.listenTo(this.session, 'userIdentified', this.userIdentified);
+            this.render();
         },
         render: function () {
             this.$el.html(this.template());
             this.session.postIdentifyUser();
+            return this;
         },
         show: function () {
-            this.render();
-            this.$el.show();
-        },
-        hide: function () {
-            this.$el.hide();
+            this.trigger('show', this);
         },
         saveProfileClick: function(event) {
             event.preventDefault();
