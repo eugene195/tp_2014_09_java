@@ -49,36 +49,34 @@ define([
                 next();
             });
 
-            if (username == '') {
-                wasError = true;
-                var elem = this.$el.find(".login-error").slideDown().delay(3000).slideUp();
-                elem.html('');
-                elem.append("<p>Missing username</p>");
+            if (this.validate(username, password)) {
+                this.session.postAuth({
+                    username: username,
+                    password: password,
+                    url: this.$el.find('.form').data('action'), 
+                });
             }
-            if (password == '') {
-                wasError = true;
-                var elem = this.$el.find(".passw-error").slideDown().delay(3000).slideUp();
-                elem.html('');
-                elem.append("<p>Missing password</p>");
-            }
-
-            if (wasError) {
-                return;
-            }
-
-            this.session.postAuth({
-                username: username,
-                password: password,
-                url: this.$el.find('.form').data('action'), 
-            });
         },
         redirectMain: function() {
             window.location.replace('#');
         },
-        showError: function(message) {
-            var elem = this.$el.find(".login-error").slideDown().delay(3000).slideUp();
+        showError: function(message, div_error) {
+            var div_error = div_error || ".login-error";
+            var elem = this.$el.find(div_error).slideDown().delay(3000).slideUp();
             elem.html('');
             elem.append("<p>" + message + "</p>");
+        },
+        validate: function(username, password) {
+            var status= true;
+            if (username == '') {
+                status = false;
+                this.showError("Missing username");
+            }
+            if (password == '') {
+                status = false;
+                this.showError("Missing password", ".passw-error");
+            }
+            return status;
         },
         loginClick: function() {
             this.$el.find(".form__content__user-icon").css("left","-48px");

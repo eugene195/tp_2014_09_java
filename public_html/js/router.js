@@ -14,9 +14,7 @@ define([
     scoreboard,
     register,
     profile
-    
 ){
-
     var Router = Backbone.Router.extend({
         routes: {
             'scoreboard': 'scoreboardAction',
