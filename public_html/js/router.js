@@ -5,7 +5,8 @@ define([
     'views/login',
     'views/scoreboard',
     'views/register',
-    'views/profile'
+    'views/profile',
+    'viewman'
 ], function(
     Backbone,
     main,
@@ -13,12 +14,19 @@ define([
     login,
     scoreboard,
     register,
-    profile
+    profile,
+    viewman
     
 ){
+    viewman.subscribe([main, game, login, scoreboard, register, profile])
 
     var Router = Backbone.Router.extend({
+        initialize: function () {
+            this.index();
+        },
+
         routes: {
+            '': 'index',
             'scoreboard': 'scoreboardAction',
             'game': 'gameAction',
             'login': 'loginAction',
@@ -26,37 +34,27 @@ define([
             'profile': 'profileAction',
             '*default': 'defaultActions'
         },
-        defaultActions: function () {
-            this.hidePrev();
+
+        index: function () {
             main.show();
         },
+        defaultActions: function () {
+            alert('404');
+        },
         scoreboardAction: function () {
-            this.hidePrev();
             scoreboard.show();
         },
         gameAction: function () {
-            this.hidePrev();
             game.show();
         },
         loginAction: function () {
-            this.hidePrev();
             login.show();
         },
         registerAction: function () {
-            this.hidePrev();
             register.show();
         },
         profileAction: function () {
-            this.hidePrev();
             profile.show();
-        },
-        hidePrev: function () {
-            main.hide();
-            scoreboard.hide();
-            game.hide();
-            login.hide();
-            register.hide();
-            profile.hide();
         }
     });
 

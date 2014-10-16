@@ -11,7 +11,6 @@ define([
     var View = Backbone.View.extend({
         template: tmpl,
         session: sessionModel,
-        el: $('.main'),
         events: {
             "click .logout": "logout",
         },
@@ -20,17 +19,15 @@ define([
             this.listenTo(this.session, 'userIdentified', this.userIdentified);
             this.listenTo(this.session, 'successLogout', this.show);
             this.listenTo(this.session, 'errorLogout', this.showErrorLogout);
+            this.render();
         },
         render: function () {
             this.$el.html(this.template());
             this.session.postIdentifyUser();
+            return this;
         },
         show: function () {
-            this.render();
-            this.$el.show();
-        },
-        hide: function () {
-            this.$el.hide();
+            this.trigger('show', this);
         },
         logout: function (event) {
             event.preventDefault();

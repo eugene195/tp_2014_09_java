@@ -11,7 +11,6 @@ define([
     var View = Backbone.View.extend({
         template: tmpl,
         session: sessionModel,
-        el: $('.register'),
         events: {
             "click input[name=submit]": "registerClick",
             "click input[name=login]": "loginClick",
@@ -25,16 +24,14 @@ define([
         initialize: function () {
             this.listenTo(this.session, 'successReg', this.redirectLogin);
             this.listenTo(this.session, 'errorReg', this.showError);
+            this.render();
         },
         render: function () {
             this.$el.html(this.template());
+            return this;
         },
         show: function () {
-            this.render();
-            this.$el.show();
-        },
-        hide: function () {
-            this.$el.hide();
+            this.trigger('show', this);
         },
         registerClick: function(event) {
             event.preventDefault();
