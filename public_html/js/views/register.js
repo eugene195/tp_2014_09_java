@@ -48,34 +48,7 @@ define([
                 function(next) { $(this).removeClass("form__footer__button_disabled");
                 next();
             });
-
-            if (username == '') {
-                wasError = true;
-                var elem = this.$el.find(".register-error").slideDown().delay(3000).slideUp();
-                elem.html('');
-                elem.append("<p>Missing username</p>");
-            }
-            if (newPassw == '') {
-                wasError = true;
-                var elem = this.$el.find(".passw-error").slideDown().delay(3000).slideUp();
-                elem.html('');
-                elem.append("<p>Missing password</p>");
-            }   
-            else if (confirmPassw == '') {
-                wasError = true;
-                var elem = this.$el.find(".confirm-passw-error").slideDown().delay(3000).slideUp();
-                elem.html('');
-                elem.append("<p>Missing confirm password</p>");
-            }   
-            else if (newPassw != confirmPassw) {
-                wasError = true;
-                var elem = this.$el.find(".confirm-passw-error").slideDown().delay(3000).slideUp();
-                elem.html('');
-                elem.append("<p>Passwords does not match</p>");
-            }
-            if (wasError) {
-                return;
-            }
+       
 
             this.session.postReg({
                 username: username,
@@ -87,10 +60,32 @@ define([
         redirectLogin: function() {
             window.location.replace('#login');
         },
-        showError: function(message) {
-            var elem = this.$el.find(".register-error").slideDown().delay(3000).slideUp();
+        showError: function(message, div_error) {
+            var div_error = div_error || ".register-error";
+            var elem = this.$el.find(div_error).slideDown().delay(3000).slideUp();
             elem.html('');
             elem.append("<p>" + message + "</p>");
+        },
+        validate: function(username, newPassw, confirmPassw){
+            if (username == '') {
+                wasError = true;
+                this.showError("Missing username");
+            }
+            if (newPassw == '') {
+                wasError = true;
+                this.showError("Missing password", ".passw-error");
+            }   
+            else if (confirmPassw == '') {
+                wasError = true;
+                this.showError("Missing confirm password", ".confirm-passw-error");
+            }   
+            else if (newPassw != confirmPassw) {
+                wasError = true;
+                this.showError("Passwords does not match", ".confirm-passw-error");
+            }
+            if (wasError) {
+                return;
+            }
         },
         loginClick: function() {
             this.$el.find(".form__content__user-icon").css("left","-48px");
