@@ -17,7 +17,7 @@ define([
 
         initialize: function () {
             this.listenTo(this.session, 'successChangePassword', this.showSuccess);
-            this.listenTo(this.session, 'errorChangePassword', this.showError);
+            this.listenTo(this.session, 'errorChangePassword', this.handleSessionError);
             this.listenTo(this.session, 'userNotIdentified', this.userNotIdentified);
             this.listenTo(this.session, 'userIdentified', this.userIdentified);
             this.render();
@@ -46,49 +46,48 @@ define([
                 next();
             });
 
-            if (curPassw == '') {
-                wasError = true;
-                var elem = this.$el.find(".cur-passw-error").slideDown().delay(3000).slideUp();
-                elem.html('');
-                elem.append("<p>Missing current password</p>");
-            }
-            else if (newPassw == '') {
-                wasError = true;
-                var elem = this.$el.find(".passw-error").slideDown().delay(3000).slideUp();
-                elem.html('');
-                elem.append("<p>Missing new password</p>");
-            }
-            else if (confirmPassw == '') {
-                wasError = true;
-                var elem = this.$el.find(".confirm-passw-error").slideDown().delay(3000).slideUp();
-                elem.html('');
-                elem.append("<p>Missing confirm password</p>");
-            }
-            else if (newPassw != confirmPassw) {
-                wasError = true;
-                var elem = this.$el.find(".confirm-passw-error").slideDown().delay(3000).slideUp();
-                elem.html('');
-                elem.append("<p>Passwords does not match</p>");
-            }
-            if (wasError) {
-                return;
-            }
 
-            this.session.postChangePassword({
-                curPassw: curPassw,
-                newPassw: newPassw,
-                confirmPassw: confirmPassw,
-                url: this.$el.find('.form').data('action'),
-            });
-
+            if (this.validate(curPassw, newPassw, confirmPassw)) {
+                this.session.postChangePassword({
+                    curPassw: curPassw,
+                    newPassw: newPassw,
+                    confirmPassw: confirmPassw,
+                    url: this.$el.find('.form').data('action'),
+                });
+            }
         },
+
+        validate: function (curPassw, newPassw, confirmPassw) {
+            if (curPassw == '') {
+                this.showError("Missing current password", ".cur-passw-error");
+                return false;
+            }
+            if (newPassw == '') {
+                this.showError("Missing new password", ".passw-error");
+                return false;
+            }
+            if (confirmPassw == '') {
+                this.showError("Missing confirm password", ".confirm-passw-error");
+                return false;
+            }
+            if (newPassw != confirmPassw) {
+                this.showError("Passwords does not match", ".confirm-passw-error");
+                return false;
+            }
+            return true;
+        },
+
+        handleSessionError: function (message) {
+            this.showError(message, ".confirm-passw-error");
+        },
+
         showSuccess: function() {
             var elem = this.$el.find(".alert-success").slideDown().delay(3000).slideUp();
             elem.html('');
             elem.append("<p>Password successfully changed</p>");
         },
-        showError: function(message) {
-            var elem = this.$el.find(".cur-passw-error").slideDown().delay(3000).slideUp();
+        showError: function(message, div_error) {
+            var elem = this.$el.find(div_error).slideDown().delay(3000).slideUp();
             elem.html('');
             elem.append("<p>" + message + "</p>");
         },
