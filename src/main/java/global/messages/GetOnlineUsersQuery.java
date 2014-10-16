@@ -1,6 +1,7 @@
 package global.messages;
 
-import global.Servlet;
+import global.ServletImpl;
+import global.base.Servlet;
 import global.webpages.AuthPage;
 
 /**

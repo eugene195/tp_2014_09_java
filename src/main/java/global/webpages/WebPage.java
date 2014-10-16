@@ -61,7 +61,7 @@ public abstract class WebPage {
     }
 
     /**
-     * This method enforces the Servlet thread await for the async query.
+     * This method enforces the ServletImpl thread await for the async query.
      */
     public void setZombie() {
         this.zombie = true;

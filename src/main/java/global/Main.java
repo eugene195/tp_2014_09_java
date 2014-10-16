@@ -30,8 +30,8 @@ public class Main
         return server;
     }
 
-    private static Servlet createServlet(MessageSystem msys) {
-        return new Servlet(msys);
+    private static ServletImpl createServlet(MessageSystem msys) {
+        return new ServletImpl(msys);
     }
 
     private static DataBaseManager createDbMan(MessageSystem msys) {
@@ -48,9 +48,9 @@ public class Main
         return SERVER_PORT;
     }
 
-    private static ServletContextHandler createContext(Servlet servlet) {
+    private static ServletContextHandler createContext(ServletImpl servletImpl) {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(servlet), "/");
+        context.addServlet(new ServletHolder(servletImpl), "/");
         return context;
     }
 
@@ -73,12 +73,12 @@ public class Main
 
     public static void main(String[] args) throws Exception {
         MessageSystem msys = new MessageSystem();
-        Servlet servlet = createServlet(msys);
+        ServletImpl servletImpl = createServlet(msys);
         DataBaseManager dbman = createDbMan(msys);
 
-        configureThreads(servlet, dbman);
+        configureThreads(servletImpl, dbman);
 
-        ServletContextHandler context = createContext(servlet);
+        ServletContextHandler context = createContext(servletImpl);
         HandlerList handlers = makeServerHandlers();
         handlers.addHandler(context);
 

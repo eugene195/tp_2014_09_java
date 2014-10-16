@@ -4,7 +4,8 @@ package global.messages;
  * Created by Евгений on 06.09.2014.
  */
 
-import global.Servlet;
+import global.ServletImpl;
+import global.base.Servlet;
 import global.webpages.RegisterPage;
 
 /**

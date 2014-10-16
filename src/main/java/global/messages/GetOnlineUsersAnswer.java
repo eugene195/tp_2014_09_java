@@ -1,9 +1,9 @@
 package global.messages;
 
-import global.Servlet;
+import global.ServletImpl;
+import global.base.Servlet;
 import global.webpages.AdminPage;
 
-import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -23,7 +23,7 @@ public class GetOnlineUsersAnswer extends AbstractMsg {
     @Override
     public void exec(Runnable abonent) {
         if (abonent instanceof Servlet) {
-            Servlet servlet = (Servlet) abonent;
+            Servlet servlet = (ServletImpl) abonent;
             servlet.transmitToPage(AdminPage.URL, this);
         }
         else{

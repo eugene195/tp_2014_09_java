@@ -1,6 +1,7 @@
 package global.messages;
 
-import global.Servlet;
+import global.ServletImpl;
+import global.base.Servlet;
 import global.models.Score;
 import global.webpages.ScorePage;
 
@@ -24,8 +25,8 @@ public class BestScoresAnswer extends AbstractMsg {
     @Override
     public void exec(Runnable runnable) {
         if (runnable instanceof Servlet) {
-            Servlet servlet = (Servlet) runnable;
-            servlet.transmitToPage(ScorePage.URL, this);
+            Servlet servletImpl = (Servlet) runnable;
+            servletImpl.transmitToPage(ScorePage.URL, this);
         }
     }
 }

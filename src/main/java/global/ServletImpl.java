@@ -1,5 +1,6 @@
 package global;
 
+import global.base.Servlet;
 import global.messages.AbstractMsg;
 import global.models.UserSession;
 import global.webpages.*;
@@ -21,14 +22,14 @@ import static java.lang.Thread.sleep;
  * Extended jetty servlet.
  */
 
-public class Servlet extends HttpServlet implements Runnable {
+public class ServletImpl extends HttpServlet implements Servlet {
 
     private static final String SERVLET_ADDRESS = "servlet";
     private final MessageSystem msys;
     private final Map<String, WebPage> pageMap = new HashMap<>();
     private final Map<String, UserSession> userSessions = new HashMap<>();
 
-    public Servlet(MessageSystem msys) {
+    public ServletImpl(MessageSystem msys) {
         this.msys = msys;
         msys.register(this, SERVLET_ADDRESS);
 
@@ -89,10 +90,12 @@ public class Servlet extends HttpServlet implements Runnable {
         currentPage.handlePost(request, response);
     }
 
+    @Override
     public void transmitToPage(String URL, AbstractMsg msg) {
         WebPage page = this.pageMap.get(URL);
         if (page != null) {
             page.finalize(msg);
         }
     }
+
 }
