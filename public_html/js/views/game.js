@@ -18,7 +18,7 @@ var View = Backbone.View.extend({
         },
         render: function () {
             this.$el.html(this.template());
-            return this;
+            return this.$el;
         },
         show: function () {
             this.trigger('show', this);

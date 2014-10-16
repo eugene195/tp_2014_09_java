@@ -25,7 +25,7 @@ define([
         render: function () {
             this.$el.html(this.template());
             this.session.postIdentifyUser();
-            return this;
+            return this.$el;
         },
         show: function () {
             this.trigger('show', this);

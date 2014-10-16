@@ -6,7 +6,7 @@ define([
     'views/scoreboard',
     'views/register',
     'views/profile',
-    'viewman'
+    'views/viewman'
 ], function(
     Backbone,
     main,
@@ -22,7 +22,8 @@ define([
 
     var Router = Backbone.Router.extend({
         initialize: function () {
-            this.index();
+            this.listenTo(login, 'success', this.toIndex);
+            this.listenTo(main, 'success', this.toIndex);
         },
 
         routes: {
@@ -55,6 +56,12 @@ define([
         },
         profileAction: function () {
             profile.show();
+        },
+        toIndex: function () {
+            this.navigate('', {trigger: true});
+        },
+        toLogin: function () {
+            this.navigate('login', {trigger: true});
         }
     });
 

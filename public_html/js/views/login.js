@@ -20,13 +20,13 @@ define([
         },
 
         initialize: function () {
-            this.listenTo(this.session, 'successAuth', this.redirectMain);
-            this.listenTo(this.session, 'errorAuth', this.handleSessionError);
-
+            this.listenTo(this.session, 'successAuth', this.sessionSuccess);
+            this.listenTo(this.session, 'errorAuth', this.sessionError);
+            this.render();
         },
         render: function () {
             this.$el.html(this.template());
-            return this;
+            return this.$el;
         },
         show: function () {
             this.trigger('show', this);
@@ -57,10 +57,10 @@ define([
                 });
             }
         },
-        redirectMain: function() {
-            window.location.replace('#');
+        sessionSuccess: function() {
+            this.trigger('success', this);
         },
-        handleSessionError: function(message) {
+        sessionError: function(message) {
             this.showError(message, ".login-error");
         },
         showError: function(message, div_error) {

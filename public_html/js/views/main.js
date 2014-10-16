@@ -17,14 +17,14 @@ define([
         initialize: function () {
             this.listenTo(this.session, 'userNotIdentified', this.userNotIdentified);
             this.listenTo(this.session, 'userIdentified', this.userIdentified);
-            this.listenTo(this.session, 'successLogout', this.show);
-            this.listenTo(this.session, 'errorLogout', this.showErrorLogout);
+            this.listenTo(this.session, 'successLogout', this.logoutSuccess);
+            this.listenTo(this.session, 'errorLogout', this.logoutError);
             this.render();
         },
         render: function () {
             this.$el.html(this.template());
             this.session.postIdentifyUser();
-            return this;
+            return this.$el;
         },
         show: function () {
             this.trigger('show', this);
@@ -47,10 +47,16 @@ define([
             elem.find(".auth").show();
             elem.find(".reg").show();
         },
-        showErrorLogout: function(message) {
+
+        logoutSuccess: function () {
+            this.show();
+            this.trigger('success', this);
+        },
+
+        logoutError: function (message) {
             var elem = this.$el.find(".alert-error").slideDown().delay(3000).slideUp();
             elem.append("<p>" + message + "</p>");
-        },
+        }
     });
 
     return new View();

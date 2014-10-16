@@ -3,12 +3,11 @@
  */
 
 define([
-    'underscore',
     'backbone'
-], function (_, Backbone) {
+], function (Backbone) {
 
-    var manager = _.extend({
-        $el: $('#page'),
+    var Manager = Backbone.View.extend({
+        el: $('#page'),
 
         subscribe: function (views) {
             for (var I in views) {
@@ -21,10 +20,10 @@ define([
         },
 
         add: function (view) {
-            this.$el.html(view.render().$el);
+            this.$el.html(view.render());
         }
 
-    }, Backbone.Events);
+    });
 
-    return manager;
+    return new Manager();
 });
