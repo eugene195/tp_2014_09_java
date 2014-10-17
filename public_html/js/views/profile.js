@@ -23,13 +23,12 @@ define([
         },
 
         render: function () {
-            this.session.postIdentifyUser('profile');
             this.$el.html(this.template());
             return this.$el;
         },
 
         show: function () {
-            this.trigger('show', this);
+            this.session.postIdentifyUser('profile');
         },
 
         saveProfileClick: function(event) {
@@ -94,6 +93,8 @@ define([
             if (window.location.hash.substring(1) == 'profile') { // TODO delete
                 this.$('h1').html("Profile " + data.login)
             }
+
+            this.trigger('show', this);
         },
 
         userNotIdentified: function() {

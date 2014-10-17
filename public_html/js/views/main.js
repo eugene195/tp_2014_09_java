@@ -27,32 +27,25 @@ define([
             return this.$el;
         },
         show: function () {
+            this.$(".auth, .reg, .profile, .exit").hide();
             this.session.postIdentifyUser('main');
         },
         logout: function (event) {
-            event.preventDefault();
+            //event.preventDefault();
             this.session.postLogout();
         },
         
         userIdentified: function(data) {
-            var form = this.$('.form');
-            form.find(".profile").show();
-            form.find(".exit").show();
-            form.find(".auth").hide();
-            form.find(".reg").hide();
+            this.$(".profile, .exit").show();
             this.trigger('show', this);
         },
         userNotIdentified: function() {
-            var form = this.$('.form');
-            form.find(".profile").hide();
-            form.find(".exit").hide();
-            form.find(".auth").show();
-            form.find(".reg").show();
+            this.$(".auth, .reg").show();
+            this.trigger('show', this);
         },
 
         logoutSuccess: function (data) {
             this.trigger('success');
-            this.show();
         },
 
         logoutError: function (message) {
