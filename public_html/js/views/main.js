@@ -23,12 +23,11 @@ define([
             this.render();
         },
         render: function () {
-            this.session.postIdentifyUser('main');
             this.$el.html(this.template());
             return this.$el;
         },
         show: function () {
-            this.trigger('show', this);
+            this.session.postIdentifyUser('main');
         },
         logout: function (event) {
             event.preventDefault();
@@ -41,6 +40,7 @@ define([
             form.find(".exit").show();
             form.find(".auth").hide();
             form.find(".reg").hide();
+            this.trigger('show', this);
         },
         userNotIdentified: function() {
             var form = this.$('.form');
@@ -57,7 +57,7 @@ define([
 
         logoutError: function (message) {
             var elem = this.$(".alert-error").slideDown().delay(3000).slideUp();
-            elem.append("<p>" + message + "</p>");
+            elem.html("<p>" + message + "</p>");
         }
     });
 

@@ -87,7 +87,7 @@ define([
 
         showError: function(message, div_error) {
             var elem = this.$(div_error).slideDown().delay(3000).slideUp();
-            elem.append("<p>" + message + "</p>");
+            elem.html("<p>" + message + "</p>");
         },
 
         userIdentified: function(data) {
