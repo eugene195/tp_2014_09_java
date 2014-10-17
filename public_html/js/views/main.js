@@ -23,8 +23,9 @@ define([
             this.render();
         },
         render: function () {
-            this.session.postIdentifyUser('main');
             this.$el.html(this.template());
+            this.$(".auth, .reg, .profile, .exit").hide();
+            this.session.postIdentifyUser('main');
             return this.$el;
         },
         show: function () {
@@ -36,18 +37,10 @@ define([
         },
         
         userIdentified: function(data) {
-            var form = this.$('.form');
-            form.find(".profile").show();
-            form.find(".exit").show();
-            form.find(".auth").hide();
-            form.find(".reg").hide();
+            this.$(".profile, .exit").show();
         },
         userNotIdentified: function() {
-            var form = this.$('.form');
-            form.find(".profile").hide();
-            form.find(".exit").hide();
-            form.find(".auth").show();
-            form.find(".reg").show();
+            this.$(".auth, .reg").show();
         },
 
         logoutSuccess: function (data) {
