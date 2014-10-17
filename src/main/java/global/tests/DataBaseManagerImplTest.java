@@ -35,7 +35,7 @@ public class DataBaseManagerImplTest extends TestCase {
 
 
         // Check non-existent pass
-        Assert.assertFalse("Sql exception during changePassword()", dbMan.changePassword(username, userpass, newuserpass));
+        Assert.assertFalse(dbMan.changePassword(username, userpass, newuserpass));
 
         // authorize non-existent user
         Assert.assertFalse(dbMan.checkAuth(session, userpass));
@@ -44,7 +44,7 @@ public class DataBaseManagerImplTest extends TestCase {
         Assert.assertTrue(dbMan.registerUser(username, userpass));
 
         // Try to register user that already exists
-        Assert.assertFalse("User with this login already Exists", dbMan.registerUser(username, userpass));
+        Assert.assertFalse(dbMan.registerUser(username, userpass));
 
         // authorize new user
         Assert.assertTrue(dbMan.checkAuth(session, userpass));
