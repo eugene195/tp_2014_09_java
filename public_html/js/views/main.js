@@ -19,36 +19,42 @@ define([
             this.listenTo(this.session, 'main:known', this.userIdentified);
             this.listenTo(this.session, 'successLogout', this.logoutSuccess);
             this.listenTo(this.session, 'errorLogout', this.logoutError);
-
             this.render();
         },
+
         render: function () {
             this.$el.html(this.template());
             return this.$el;
         },
+
         show: function () {
-            this.$(".auth, .reg, .profile, .exit").hide();
             this.session.postIdentifyUser('main');
         },
         logout: function (event) {
-            //event.preventDefault();
+            debugger;
+            event.preventDefault();
             this.session.postLogout();
         },
         
         userIdentified: function(data) {
-            this.$(".profile, .exit").show();
             this.trigger('show', this);
+            this.$(".auth, .reg, .profile, .exit").hide();
+            this.$(".profile, .exit").show();
         },
         userNotIdentified: function() {
-            this.$(".auth, .reg").show();
             this.trigger('show', this);
+            this.$(".auth, .reg, .profile, .exit").hide();
+            this.$(".auth, .reg").show();
         },
 
         logoutSuccess: function (data) {
+            debugger;
             this.trigger('success');
+            this.show();
         },
 
         logoutError: function (message) {
+            debugger;
             var elem = this.$(".alert-error").slideDown().delay(3000).slideUp();
             elem.html("<p>" + message + "</p>");
         }

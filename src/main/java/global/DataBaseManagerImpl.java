@@ -120,6 +120,8 @@ public class DataBaseManagerImpl implements global.base.DataBaseManager {
                 return true;
             }
             else {
+                userSession.setSuccessAuth(false);
+                this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
                 return false;
             }
         }

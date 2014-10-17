@@ -68,7 +68,7 @@ public class AuthPage extends WebPage {
             JObject.put("status", "1");
         }
         else {
-            JObject.put("status", "2");
+            JObject.put("status", "-1");
             JObject.put("message", "Incorrect login or password");
         }
         printout.print(JObject);
