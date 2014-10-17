@@ -1,4 +1,4 @@
-package global.base;
+package global;
 
 import global.messages.AbstractMsg;
 

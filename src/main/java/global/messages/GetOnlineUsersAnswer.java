@@ -1,7 +1,7 @@
 package global.messages;
 
-import global.ServletImpl;
-import global.base.Servlet;
+import global.implementations.ServletImpl;
+import global.Servlet;
 import global.webpages.AdminPage;
 
 import java.util.Set;

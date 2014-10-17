@@ -1,6 +1,7 @@
-package global;
+package global.implementations;
 
-import global.base.Servlet;
+import global.MessageSystem;
+import global.Servlet;
 import global.messages.AbstractMsg;
 import global.models.UserSession;
 import global.webpages.*;

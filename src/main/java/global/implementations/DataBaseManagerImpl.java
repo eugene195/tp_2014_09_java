@@ -1,5 +1,7 @@
-package global;
+package global.implementations;
 
+import global.DataBaseManager;
+import global.MessageSystem;
 import global.messages.*;
 import global.models.Score;
 import global.models.UserSession;
@@ -13,7 +15,7 @@ import static java.lang.Thread.sleep;
 /**
  * Created by Евгений on 28.08.2014.
  */
-public class DataBaseManagerImpl implements global.base.DataBaseManager {
+public class DataBaseManagerImpl implements DataBaseManager {
 
     private static final String baseUrl = "jdbc:mysql://localhost/g01_java_db";
     private static final String baseUserName = "g01_user";

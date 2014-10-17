@@ -1,4 +1,4 @@
-import global.DataBaseManagerImpl;
+import global.implementations.DataBaseManagerImpl;
 import global.MessageSystem;
 import global.models.UserSession;
 import org.junit.*;

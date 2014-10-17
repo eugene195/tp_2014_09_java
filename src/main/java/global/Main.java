@@ -1,6 +1,7 @@
 package global;
 
-import global.base.DataBaseManager;
+import global.implementations.DataBaseManagerImpl;
+import global.implementations.ServletImpl;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 

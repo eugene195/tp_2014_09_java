@@ -1,7 +1,6 @@
 package global.messages;
 
-import global.ServletImpl;
-import global.base.Servlet;
+import global.Servlet;
 import global.models.Score;
 import global.webpages.ScorePage;
 

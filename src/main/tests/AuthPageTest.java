@@ -1,9 +1,7 @@
-import global.DataBaseManagerImpl;
 import global.MessageSystem;
 import global.models.UserSession;
 import global.webpages.AuthPage;
 import junit.framework.TestCase;
-import org.mockito.Mock;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
