@@ -1,5 +1,3 @@
-package global.tests;
-
 import global.DataBaseManagerImpl;
 import global.MessageSystem;
 import global.models.UserSession;
