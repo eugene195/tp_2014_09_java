@@ -61,7 +61,7 @@ public class AdminPage extends WebPage {
         String page = this.generateHTML(TML_PATH, context);
         response.getWriter().print(page);
     }
-    public void finalize(AbstractMsg abs_msg) {
+    public void finalizeAsync(AbstractMsg abs_msg) {
 
         if (abs_msg instanceof GetUsersAnswer) {
             GetUsersAnswer msg = (GetUsersAnswer) abs_msg;

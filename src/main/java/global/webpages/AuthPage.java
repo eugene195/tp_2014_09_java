@@ -70,7 +70,7 @@ public class AuthPage extends WebPage {
     }
 
     @Override
-    public void finalize(AbstractMsg abs_msg) {
+    public void finalizeAsync(AbstractMsg abs_msg) {
 
         if (abs_msg instanceof AuthAnswer) {
             AuthAnswer msg = (AuthAnswer) abs_msg;

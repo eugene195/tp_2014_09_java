@@ -95,7 +95,7 @@ public class ServletImpl extends HttpServlet implements Servlet {
     public void transmitToPage(String URL, AbstractMsg msg) {
         WebPage page = this.pageMap.get(URL);
         if (page != null) {
-            page.finalize(msg);
+            page.finalizeAsync(msg);
         }
     }
 

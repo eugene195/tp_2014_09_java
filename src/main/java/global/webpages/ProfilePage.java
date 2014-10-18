@@ -69,7 +69,7 @@ public class ProfilePage extends WebPage {
 
 
     @Override
-    public void finalize(AbstractMsg abs_msg) {
+    public void finalizeAsync(AbstractMsg abs_msg) {
         if (abs_msg instanceof ChangePasswordAnswer) {
             ChangePasswordAnswer msg = (ChangePasswordAnswer) abs_msg;
             this.successChangeProfile = msg.isChangePasswordSuccess();

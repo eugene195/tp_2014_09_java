@@ -17,25 +17,26 @@ import static java.lang.Thread.sleep;
  */
 public class DataBaseManagerImpl implements DataBaseManager {
 
-    private static final String baseUrl = "jdbc:mysql://localhost/g01_java_db";
-    private static final String baseUserName = "g01_user";
-    private static final String baseUserPasswd = "drovosek";
-
     private Connection conn;
     private static final String DBMAN_ADDRESS = "dbman";
     private final MessageSystem msys;
 
-    public DataBaseManagerImpl(MessageSystem msys) {
-
+    public DataBaseManagerImpl(MessageSystem msys, String baseName, String userName, String userPasswd)
+            throws SQLException
+    {
         this.msys = msys;
         msys.register(this, DBMAN_ADDRESS);
+
+        String baseUrl = "jdbc:mysql://localhost/" + baseName;
+        String baseUserName = userName;
+        String baseUserPasswd = userPasswd;
 
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             this.conn = DriverManager.getConnection(baseUrl, baseUserName, baseUserPasswd);
             System.out.println("DB connected");
         }
-        catch (Exception e) {
+        catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             System.err.println ("Cannot connect to DB");
         }
     }
@@ -78,7 +79,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     }
 
     @Override
-    public boolean getUsers(){
+    public void getUsers(){
         String query = "SELECT * FROM User;";
         try {
             PreparedStatement statement = this.conn.prepareStatement(query);
@@ -94,16 +95,14 @@ public class DataBaseManagerImpl implements DataBaseManager {
                 rows--;
             }
             this.msys.sendMessage(new GetUsersAnswer(map), "servlet");
-            return true;
         }
         catch (Exception e) {
             System.out.println("Sql exception during getUsers()");
-            return false;
         }
     }
 
     @Override
-    public boolean checkAuth(UserSession userSession, String passw) {
+    public void checkAuth(UserSession userSession, String passw) {
         String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
 
         try {
@@ -119,50 +118,45 @@ public class DataBaseManagerImpl implements DataBaseManager {
                 userSession.setSuccessAuth(true);
                 userSession.setUserId(userId);
                 this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
-                return true;
             }
             else {
-                return false;
+                userSession.setSuccessAuth(false);
+                this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
             }
         }
         catch (Exception e) {
             System.out.println("Sql exception during checkAuth()");
             userSession.setSuccessAuth(false);
             this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
-            return false;
         }
     }
 
-    public boolean deleteUser(String login) {
+    public void deleteUser(String login) {
         if (this.userExists(login)) {
             String query = "DELETE FROM User WHERE login = ?;";
             try {
                 PreparedStatement statement = this.conn.prepareStatement(query);
                 statement.setString(1, login);
                 int rowsUpdated = statement.executeUpdate();
+
                 if (rowsUpdated != 1) {
                     System.out.print("Delete in SQL affected more/less than one row");
-                    return false;
                 }
-                return true;
             } catch (SQLException exc) {
                 exc.printStackTrace();
                 System.out.print("SQL exception during delete");
             }
-            return true;
         }
         else {
             System.out.print("User does not exist");
-            return false;
         }
     }
 
     @Override
-    public boolean registerUser(String login, String passw) {
+    public void registerUser(String login, String passw) {
         if (this.userExists(login)) {
             this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already Exists"), "servlet");
             System.out.println("User with this login already Exists");
-            return false;
         }
 
         String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
@@ -177,17 +171,15 @@ public class DataBaseManagerImpl implements DataBaseManager {
                 this.msys.sendMessage(new RegistrationAnswer(false, "", "SQL Insert error"), "servlet");
             }
             this.msys.sendMessage(new RegistrationAnswer(true, login, ""), "servlet");
-            return true;
         }
         catch (Exception e){
             e.printStackTrace();
             System.out.println("Exception during DB insert  in registration");
-            return false;
         }
     }
 
     @Override
-    public boolean bestScores() {
+    public void bestScores() {
         String query = "SELECT login, score FROM User ORDER BY score DESC LIMIT 10;";
 
         try {
@@ -204,15 +196,14 @@ public class DataBaseManagerImpl implements DataBaseManager {
                 scores.add(new Score(login, score));
             }
             this.msys.sendMessage(new BestScoresAnswer(scores), "servlet");
-            return true;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.out.println("Exception during DB select in bestScores");
-            return false;
         }
     }
 
     @Override
-    public boolean changePassword(String login, String curPassw, String newPassw) {
+    public void changePassword(String login, String curPassw, String newPassw) {
         String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
         try {
             PreparedStatement statement = this.conn.prepareStatement(query);
@@ -230,17 +221,15 @@ public class DataBaseManagerImpl implements DataBaseManager {
                 if(rowsAffected < 1) {
                     System.out.println("Smth bad happened. Update password affected < 1 rows");
                     this.msys.sendMessage(new ChangePasswordAnswer(false, "Failed to change password"), "servlet");
-                    return false;
                 }
                 this.msys.sendMessage(new ChangePasswordAnswer(true, ""), "servlet");
-                return true;
             }
         }
         catch (Exception e) {
             System.out.println("Sql exception during changePassword()");
         }
         this.msys.sendMessage(new ChangePasswordAnswer(false, "Wrong current password"), "servlet");
-        return false;
+
     }
 
     @Override

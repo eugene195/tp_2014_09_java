@@ -1,0 +1,14 @@
+DROP DATABASE IF EXISTS test_java_db;
+
+CREATE DATABASE test_java_db;
+GRANT ALL PRIVILEGES ON test_java_db.* TO test_user IDENTIFIED BY 'drovosek';
+
+USE test_java_db;
+
+CREATE TABLE User(
+	userId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	login VARCHAR(50) NOT NULL,
+    passw VARCHAR(32) NOT NULL,
+    score INT NOT NULL DEFAULT 0,
+	created TIMESTAMP DEFAULT NOW()
+);

@@ -10,6 +10,7 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,8 +36,10 @@ public class Main
         return new ServletImpl(msys);
     }
 
-    private static DataBaseManager createDbMan(MessageSystem msys) {
-        return new DataBaseManagerImpl(msys);
+    private static DataBaseManager createDbMan(MessageSystem msys)
+        throws SQLException
+    {
+        return new DataBaseManagerImpl(msys, "g01_java_db", "g01_user", "drovosek");
     }
 
     private static int getServerPort(String[] args) {
@@ -73,19 +76,24 @@ public class Main
 
 
     public static void main(String[] args) throws Exception {
-        MessageSystem msys = new MessageSystem();
-        ServletImpl servletImpl = createServlet(msys);
-        DataBaseManager dbman = createDbMan(msys);
+        try {
+            MessageSystem msys = new MessageSystem();
+            ServletImpl servletImpl = createServlet(msys);
+            DataBaseManager dbman = createDbMan(msys);
 
-        configureThreads(servletImpl, dbman);
+            configureThreads(servletImpl, dbman);
 
-        ServletContextHandler context = createContext(servletImpl);
-        HandlerList handlers = makeServerHandlers();
-        handlers.addHandler(context);
+            ServletContextHandler context = createContext(servletImpl);
+            HandlerList handlers = makeServerHandlers();
+            handlers.addHandler(context);
 
-        int serverPort = getServerPort(args);
-        Server server = createAndConfigureServer(serverPort, handlers);
-        server.start();
-        server.join();
+            int serverPort = getServerPort(args);
+            Server server = createAndConfigureServer(serverPort, handlers);
+            server.start();
+            server.join();
+        }
+        catch (SQLException e) {
+            System.out.println("Cannot connect to DB");
+        }
     }
 }

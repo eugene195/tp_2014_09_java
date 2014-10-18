@@ -56,8 +56,8 @@ public abstract class WebPage {
      * It is a final handler of the async query, from the Concrete Page.
      * @param msg message to page
      */
-    public void finalize(AbstractMsg msg) {
-        System.out.println("Warning! WebPage.finalize was invoked");
+    public void finalizeAsync(AbstractMsg msg) {
+        System.out.println("Warning! WebPage.finalizeAsync was invoked");
     }
 
     /**

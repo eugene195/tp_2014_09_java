@@ -52,7 +52,7 @@ public class ScorePage extends WebPage {
     }
 
     @Override
-    public void finalize(AbstractMsg a_msg) {
+    public void finalizeAsync(AbstractMsg a_msg) {
         if (a_msg instanceof BestScoresAnswer) {
             BestScoresAnswer msg = (BestScoresAnswer) a_msg;
             this.scores = msg.getScores();

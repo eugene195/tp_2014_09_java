@@ -70,7 +70,7 @@ public class RegisterPage extends WebPage {
 
 
     @Override
-    public void finalize(AbstractMsg abs_msg) {
+    public void finalizeAsync(AbstractMsg abs_msg) {
         if (abs_msg instanceof RegistrationAnswer) {
             RegistrationAnswer msg = (RegistrationAnswer) abs_msg;
 
