@@ -1,6 +1,7 @@
 import global.implementations.DataBaseManagerImpl;
 import global.MessageSystem;
 import global.messages.*;
+import global.models.Score;
 import global.models.User;
 import global.models.UserSession;
 import org.junit.*;
@@ -8,11 +9,6 @@ import org.junit.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import static org.mockito.Mockito.mock;
-
 
 
 
@@ -141,9 +137,16 @@ public class DataBaseManagerTest {
         Assert.assertEquals("Get users testing", map.keySet(), msg.getMap().keySet());
     }
 
-    @Test
+    //@Test
     public void testBestScores() throws Exception {
-//        Assert.assertTrue(dbMan.bestScores());
+        dbMan.bestScores();
+        BestScoresAnswer msg = msys.getMsg();
+        ArrayList<Score> scores = new ArrayList<Score>();
+        scores.add(new Score("firstUser", 190));
+        scores.add(new Score("max", 75));
+        scores.add(new Score("secondUser", 70));
+        BestScoresAnswer rightTest = new BestScoresAnswer(scores);
+        Assert.assertEquals("Best scores failed", rightTest, msg);
     }
 
 }
