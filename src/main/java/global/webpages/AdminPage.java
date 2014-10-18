@@ -4,6 +4,7 @@ import global.messages.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 /**
  * Created by eugene on 9/20/14.
@@ -38,10 +39,13 @@ public class AdminPage extends WebPage {
         response.setStatus(HttpServletResponse.SC_OK);
 
         String timeString = request.getParameter("shutdown");
+        String localParam = request.getParameter("locally");
 
+        PrintWriter printout = response.getWriter();
         if (timeString != null) {
 
             System.out.print("Server will be down after: "+ timeString + " ms");
+
             int timeMS = Integer.valueOf(timeString);
             try {
                 Thread.sleep(timeMS);
@@ -49,9 +53,17 @@ public class AdminPage extends WebPage {
             catch (Exception e) {
                 System.out.println("Zombie was interrupted");
             }
+
             System.out.print("\nShutdown");
-            System.exit(0);
+            printout.print("Shutdown");
+
+            if (localParam == null)
+                System.exit(0);
         }
+        else {
+            printout.print("No time parameter");
+        }
+
         context.put("status", "run");
         context.put("registered", this.registered);
         context.put("loggedIn", this.loggedIn);
@@ -59,8 +71,9 @@ public class AdminPage extends WebPage {
         context.put("logCount", this.loggedIn.size());
 
         String page = this.generateHTML(TML_PATH, context);
-        response.getWriter().print(page);
+        printout.print(page);
     }
+
     public void finalizeAsync(AbstractMsg abs_msg) {
 
         if (abs_msg instanceof GetUsersAnswer) {

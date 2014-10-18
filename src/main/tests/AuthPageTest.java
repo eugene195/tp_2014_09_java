@@ -82,14 +82,16 @@ public class AuthPageTest {
 
         (new Thread(new TestTask(testPage, false))).start();
         testPage.handlePost(request, response);
-        json = helper.getJSON();
+        json = helper.getPrintOut();
 
         testJson = "{\"message\":\"Incorrect login or password\",\"status\":\"-1\"}";
         Assert.assertEquals("JSON is invalid (1) " + json, testJson, json);
 
+        helper.flush();
+
         (new Thread(new TestTask(testPage, true))).start();
         testPage.handlePost(request, response);
-        json = helper.getJSON();
+        json = helper.getPrintOut();
 
         testJson = "{\"status\":\"1\"}";
         Assert.assertEquals("JSON is invalid (2) " + json, testJson, json);
