@@ -1,56 +1,97 @@
 import global.MessageSystem;
+import global.messages.AuthAnswer;
 import global.models.UserSession;
 import global.webpages.AuthPage;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import utils.MinMessageHelper;
+import utils.PrintHelper;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Thread.sleep;
 import static org.mockito.Mockito.*;
 
-public class AuthPageTest extends TestCase {
+public class AuthPageTest {
 
-    private Map<String, UserSession> userSessions;
-    private MessageSystem msys;
-    private HttpServletRequest request;
-    private HttpSession session;
-    private AuthPage testPage;
-    private UserSession userSession;
+    private static AuthPage testPage;
+    private static MessageSystem msys;
+
+    private static HttpServletRequest request;
+    private static HttpServletResponse response;
+    private static HttpSession session;
 
 
-    public void setUp() throws Exception {
-        super.setUp();
-        this.userSessions = new HashMap<>();
+    static class TestTask implements Runnable {
+        private final AuthPage testPage;
+        private final boolean isSuccess;
 
-        this.msys = new MessageSystem();
-        this.request = mock(HttpServletRequest.class);
-        this.session = mock(HttpSession.class);
+        public TestTask(AuthPage testPage, boolean isSuccess) {
+            this.testPage = testPage;
+            this.isSuccess = isSuccess;
+        }
 
-        this.userSession = mock(UserSession.class);
-        when(this.request.getSession()).thenReturn(this.session);
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    sleep(10);
 
-        try {
-            this.testPage = new AuthPage(this.msys, this.userSessions);
-        } catch (Exception exc) {
-            exc.printStackTrace();
+                    if (this.testPage.isZombie()) {
+                        UserSession us = new UserSession("max");
+                        us.setSuccessAuth(this.isSuccess);
+
+                        this.testPage.finalizeAsync(new AuthAnswer(us));
+                        break;
+                    }
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
-    public void tearDown() throws Exception {
 
+    @BeforeClass
+    public static void setUp() throws Exception {
+        msys = new MinMessageHelper();
+        Map<String, UserSession> userSessions = new HashMap<>();
+
+        request = mock(HttpServletRequest.class);
+        response = mock(HttpServletResponse.class);
+        session = mock(HttpSession.class);
+        when(request.getSession()).thenReturn(session);
+
+        testPage = new AuthPage(msys, userSessions);
     }
 
+    @Test
     public void testHandlePost() throws Exception {
-        final String login = "max";
-        final String passw = "11";
+        PrintHelper helper = new PrintHelper();
+        when(response.getWriter()).thenReturn(helper);
+        String json, testJson;
 
-        when(this.request.getParameter("login")).thenReturn(login);
-        when(this.request.getParameter("passw")).thenReturn(passw);
-    }
+        when(request.getParameter("login")).thenReturn("max");
+        when(request.getParameter("passw")).thenReturn("11");
 
-    public void testFinalize() throws Exception {
+        (new Thread(new TestTask(testPage, false))).start();
+        testPage.handlePost(request, response);
+        json = helper.getJSON();
 
+        testJson = "{\"message\":\"Incorrect login or password\",\"status\":\"-1\"}";
+        Assert.assertEquals("JSON is invalid (1) " + json, testJson, json);
+
+        (new Thread(new TestTask(testPage, true))).start();
+        testPage.handlePost(request, response);
+        json = helper.getJSON();
+
+        testJson = "{\"status\":\"1\"}";
+        Assert.assertEquals("JSON is invalid (2) " + json, testJson, json);
     }
 }

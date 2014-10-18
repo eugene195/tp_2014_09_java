@@ -76,6 +76,10 @@ public abstract class WebPage {
         }
     }
 
+    public boolean isZombie() {
+        return this.zombie;
+    }
+
     public void resume() {
         this.zombie = false;
     }
