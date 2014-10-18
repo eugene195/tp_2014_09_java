@@ -5,6 +5,7 @@ import global.models.Score;
 import global.models.User;
 import global.models.UserSession;
 import org.junit.*;
+import utils.MessageHelper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,21 +15,6 @@ import java.util.HashMap;
 
 
 public class DataBaseManagerTest {
-
-
-    static class MessageHelper extends MessageSystem {
-        private AbstractMsg msg;
-
-        @Override
-        public boolean sendMessage(AbstractMsg msg, String unused) {
-            this.msg = msg;
-            return true;
-        }
-
-        public <MsgType extends AbstractMsg> MsgType getMsg () {
-            return (MsgType) this.msg;
-        }
-    }
 
     private static MessageHelper msys = new MessageHelper();
     private static ArrayList<User> registeredUsersList = new ArrayList<>();
