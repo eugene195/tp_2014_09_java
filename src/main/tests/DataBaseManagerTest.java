@@ -1,7 +1,9 @@
 import global.implementations.DataBaseManagerImpl;
 import global.MessageSystem;
 import global.messages.AbstractMsg;
+import global.messages.BestScoresAnswer;
 import global.messages.ChangePasswordAnswer;
+import global.models.Score;
 import global.models.User;
 import global.models.UserSession;
 import org.junit.*;
@@ -43,7 +45,7 @@ public class DataBaseManagerTest {
             dbMan = new DataBaseManagerImpl(msys, "test_java_db", "test_user", "drovosek");
             userList.add(new User("firstPass", "firstUser"));
             userList.add(new User("secondPass", "secondUser"));
-            userList.add(new User("max", "11"));
+            userList.add(new User("11", "max"));
         }
         catch (SQLException xc) {
             System.out.println("Cannot connect to DataBase");
@@ -89,9 +91,16 @@ public class DataBaseManagerTest {
 //        Assert.assertFalse(dbMan.registerUser(username, userpass));
     }
 
-    @Test
+    //@Test
     public void testBestScores() throws Exception {
-//        Assert.assertTrue(dbMan.bestScores());
+        dbMan.bestScores();
+        BestScoresAnswer msg = msys.getMsg();
+        ArrayList<Score> scores = new ArrayList<Score>();
+        scores.add(new Score("firstUser", 190));
+        scores.add(new Score("max", 75));
+        scores.add(new Score("secondUser", 70));
+        BestScoresAnswer rightTest = new BestScoresAnswer(scores);
+        Assert.assertEquals("Best scores failed", rightTest, msg);
     }
 
 }
