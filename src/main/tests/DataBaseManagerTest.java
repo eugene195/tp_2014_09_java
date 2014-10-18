@@ -137,18 +137,25 @@ public class DataBaseManagerTest {
         Assert.assertEquals("Get users testing", map.keySet(), msg.getMap().keySet());
     }
 
-    //@Test
+    @Test
     public void testBestScores() throws Exception {
+        final int ZERO = 0;
         dbMan.bestScores();
         BestScoresAnswer msg = msys.getMsg();
-        ArrayList<Score> scores = new ArrayList<Score>();
-        scores.add(new Score("firstUser", 190));
-        scores.add(new Score("max", 75));
-        scores.add(new Score("secondUser", 70));
-        BestScoresAnswer rightTest = new BestScoresAnswer(scores);
-        Assert.assertEquals("Best scores failed", rightTest, msg);
+
+        ArrayList<Score> scores = new ArrayList<>();
+        ArrayList<Score> answerScores = msg.getScores();
+
+        scores.add(new Score("firstUser", ZERO));
+        scores.add(new Score("secondUser", ZERO));
+        scores.add(new Score("max", ZERO));
+
+        Assert.assertEquals("Best scores compare size", scores.size(), answerScores.size());
+
+        for (int i = 0; i < scores.size(); ++i) {
+            Assert.assertEquals("Best scores compare login", scores.get(i).getLogin(), answerScores.get(i).getLogin());
+            Assert.assertEquals("Best scores compare login", scores.get(i).getScore(), answerScores.get(i).getScore());
+        }
     }
 
 }
-
-//TODO Place a function to compare Abstract Messages
