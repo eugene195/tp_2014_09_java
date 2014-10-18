@@ -158,23 +158,24 @@ public class DataBaseManagerImpl implements DataBaseManager {
             this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already Exists"), "servlet");
             System.out.println("User with this login already Exists");
         }
+        else {
+            String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
+            try {
+                PreparedStatement statement = this.conn.prepareStatement(query);
+                statement.setString(1, login);
+                statement.setString(2, passw);
 
-        String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
-        try {
-            PreparedStatement statement = this.conn.prepareStatement(query);
-            statement.setString(1, login);
-            statement.setString(2, passw);
-
-            int rowsAffected = statement.executeUpdate();
-            if(rowsAffected < 1) {
-                System.out.println("Smth bad happened. Insert affected < 1 rows");
-                this.msys.sendMessage(new RegistrationAnswer(false, "", "SQL Insert error"), "servlet");
+                int rowsAffected = statement.executeUpdate();
+                if(rowsAffected < 1) {
+                    System.out.println("Smth bad happened. Insert affected < 1 rows");
+                    this.msys.sendMessage(new RegistrationAnswer(false, "", "SQL Insert error"), "servlet");
+                }
+                this.msys.sendMessage(new RegistrationAnswer(true, login, ""), "servlet");
             }
-            this.msys.sendMessage(new RegistrationAnswer(true, login, ""), "servlet");
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            System.out.println("Exception during DB insert  in registration");
+            catch (SQLException e){
+                e.printStackTrace();
+                System.out.println("Exception during DB insert  in registration");
+            }
         }
     }
 
@@ -220,16 +221,17 @@ public class DataBaseManagerImpl implements DataBaseManager {
                 int rowsAffected = statement.executeUpdate();
                 if(rowsAffected < 1) {
                     System.out.println("Smth bad happened. Update password affected < 1 rows");
-                    this.msys.sendMessage(new ChangePasswordAnswer(false, "Failed to change password"), "servlet");
+                    this.msys.sendMessage(new ChangePasswordAnswer(false, "DB Error"), "servlet");
                 }
                 this.msys.sendMessage(new ChangePasswordAnswer(true, ""), "servlet");
             }
+            else {
+                this.msys.sendMessage(new ChangePasswordAnswer(false, "Failed to change password"), "servlet");
+            }
         }
-        catch (Exception e) {
+        catch (SQLException e) {
             System.out.println("Sql exception during changePassword()");
         }
-        this.msys.sendMessage(new ChangePasswordAnswer(false, "Wrong current password"), "servlet");
-
     }
 
     @Override
