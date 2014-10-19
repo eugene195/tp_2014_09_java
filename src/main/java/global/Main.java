@@ -3,7 +3,10 @@ package global;
 import global.implementations.DataBaseManagerImpl;
 import global.implementations.ResourceFactoryImpl;
 import global.implementations.ServletImpl;
+import global.implementations.GameMechanicsImpl;
 import global.resources.ServerResource;
+import global.sockets.WebSocketGameServlet;
+import global.sockets.WebSocketServiceImpl;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 
@@ -45,8 +48,12 @@ public class Main
         return new DataBaseManagerImpl(msys, "g01_java_db", "g01_user", "drovosek");
     }
 
-    private static ServletContextHandler createContext(ServletImpl servletImpl) {
+    private static ServletContextHandler createContext( ServletImpl servletImpl,
+                                                       WebSocketService webSocketService,
+                                                       GameMechanics gameMechanics )
+    {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.addServlet(new ServletHolder(new WebSocketGameServlet(gameMechanics, webSocketService)), "/gameplay");
         context.addServlet(new ServletHolder(servletImpl), "/");
         return context;
     }
@@ -73,10 +80,14 @@ public class Main
             MessageSystem msys = new MessageSystem();
             ServletImpl servletImpl = createServlet(msys);
             DataBaseManager dbman = createDbMan(msys);
-
+            WebSocketService webSocketService = new WebSocketServiceImpl();
+            GameMechanics gameMechanics = new GameMechanicsImpl(webSocketService);
             configureThreads(servletImpl, dbman);
+            ServletContextHandler context = createContext(servletImpl, webSocketService, gameMechanics);
 
-            ServletContextHandler context = createContext(servletImpl);
+
+
+
             HandlerList handlers = makeServerHandlers();
             handlers.addHandler(context);
 
@@ -87,7 +98,10 @@ public class Main
 
             Server server = createAndConfigureServer(serverPort, handlers);
             server.start();
-            server.join();
+
+
+
+            gameMechanics.run();
         }
         catch (SQLException e) {
             System.out.println("Cannot connect to DB");

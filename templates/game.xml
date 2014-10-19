@@ -12,6 +12,7 @@
     <div class="gamepage__body">
         <input type="button" id="gmscr" value="Play" name="gamebtn" />
         Game Screen
+        <a href="/game">Let's do it</a>
     </div>
 
     <div class="gamepage__footer">
