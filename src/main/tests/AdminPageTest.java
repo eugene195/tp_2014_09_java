@@ -1,9 +1,9 @@
-import global.MessageSystem;
+import global.implementations.MessageSystemImpl;
 import global.messages.GetOnlineUsersAnswer;
 import global.messages.GetUsersAnswer;
 import global.webpages.AdminPage;
 import org.junit.*;
-import utils.MinMessageHelper;
+import utils.MinMessageHelperImpl;
 import utils.PrintHelper;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,14 +45,14 @@ public class AdminPageTest {
         }
     }
 
-    private static MessageSystem msys;
+    private static MessageSystemImpl msys;
     private static HttpServletRequest request;
     private static HttpServletResponse response;
     private static AdminPage testPage;
 
     @BeforeClass
     public static void setUp() throws Exception {
-        msys = new MinMessageHelper();
+        msys = new MinMessageHelperImpl();
 
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);

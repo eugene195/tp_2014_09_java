@@ -1,9 +1,6 @@
 package global;
 
-import global.implementations.DataBaseManagerImpl;
-import global.implementations.ResourceFactoryImpl;
-import global.implementations.ServletImpl;
-import global.implementations.GameMechanicsImpl;
+import global.implementations.*;
 import global.resources.ServerResource;
 import global.sockets.WebSocketGameServlet;
 import global.sockets.WebSocketServiceImpl;
@@ -77,7 +74,7 @@ public class Main
 
     public static void main(String[] args) throws Exception {
         try {
-            MessageSystem msys = new MessageSystem();
+            MessageSystem msys = new MessageSystemImpl();
             ServletImpl servletImpl = createServlet(msys);
             DataBaseManager dbman = createDbMan(msys);
             WebSocketService webSocketService = new WebSocketServiceImpl();

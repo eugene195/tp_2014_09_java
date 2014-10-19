@@ -1,11 +1,10 @@
 import global.implementations.DataBaseManagerImpl;
-import global.MessageSystem;
 import global.messages.*;
 import global.models.Score;
 import global.models.User;
 import global.models.UserSession;
 import org.junit.*;
-import utils.MessageHelper;
+import utils.MessageHelperImpl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.HashMap;
 
 public class DataBaseManagerTest {
 
-    private static MessageHelper msys = new MessageHelper();
+    private static MessageHelperImpl msys = new MessageHelperImpl();
     private static ArrayList<User> registeredUsersList = new ArrayList<>();
     private static ArrayList<User> unRegisteredUsersList = new ArrayList<>();
     private static DataBaseManagerImpl dbMan;

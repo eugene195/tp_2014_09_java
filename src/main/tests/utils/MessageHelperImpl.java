@@ -1,12 +1,12 @@
 package utils;
 
-import global.MessageSystem;
+import global.implementations.MessageSystemImpl;
 import global.messages.AbstractMsg;
 
 /**
  * Created by max on 18.10.14.
  */
-public class MessageHelper extends MessageSystem {
+public class MessageHelperImpl extends MessageSystemImpl {
     private AbstractMsg msg;
 
     @Override

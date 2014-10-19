@@ -1,11 +1,11 @@
-import global.MessageSystem;
+import global.implementations.MessageSystemImpl;
 import global.messages.AuthAnswer;
 import global.models.UserSession;
 import global.webpages.AuthPage;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import utils.MinMessageHelper;
+import utils.MinMessageHelperImpl;
 import utils.PrintHelper;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class AuthPageTest {
 
     private static AuthPage testPage;
-    private static MessageSystem msys;
+    private static MessageSystemImpl msys;
 
     private static HttpServletRequest request;
     private static HttpServletResponse response;
@@ -60,7 +60,7 @@ public class AuthPageTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        msys = new MinMessageHelper();
+        msys = new MinMessageHelperImpl();
         Map<String, UserSession> userSessions = new HashMap<>();
 
         request = mock(HttpServletRequest.class);

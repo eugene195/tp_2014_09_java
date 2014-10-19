@@ -2,7 +2,6 @@ package global.webpages;
 
 import global.MessageSystem;
 import global.messages.*;
-import javafx.collections.ListChangeListener;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,8 +10,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import java.io.PrintWriter;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Created by Евгений on 28.08.2014.
