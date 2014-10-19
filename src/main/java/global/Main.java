@@ -1,8 +1,8 @@
 package global;
 
 import global.implementations.DataBaseManagerImpl;
+import global.implementations.ResourceFactoryImpl;
 import global.implementations.ServletImpl;
-import global.resources.ResourceFactory;
 import global.resources.ServerResource;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -80,7 +80,9 @@ public class Main
             HandlerList handlers = makeServerHandlers();
             handlers.addHandler(context);
 
-            ServerResource serverResource = (ServerResource) ResourceFactory.getInstance().get(SERVER_CONFIG);
+            ResourceFactoryImpl resourceFactory = ResourceFactoryImpl.getInstance();
+            resourceFactory.loadAllResources();
+            ServerResource serverResource = resourceFactory.get(SERVER_CONFIG);
             int serverPort = serverResource.getServerPort();
 
             Server server = createAndConfigureServer(serverPort, handlers);

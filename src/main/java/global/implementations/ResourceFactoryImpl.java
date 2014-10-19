@@ -1,5 +1,6 @@
-package global.resources;
+package global.implementations;
 
+import global.ResourceFactory;
 import global.resources.sax.ReadXMLFileSAX;
 import global.resources.vfs.VFS;
 import global.resources.vfs.VFSImpl;
@@ -11,49 +12,49 @@ import java.util.Map;
 /**
  * Created by Moiseev Maxim on 18.10.14.
  */
-public class ResourceFactory {
+public class ResourceFactoryImpl implements ResourceFactory {
     public static final String RESOURCE_ROOT = "data";
-    private static ResourceFactory instance;
+    private static ResourceFactoryImpl instance;
     private static Map<String, Object> resources = new HashMap<>();
     private static VFS vfs;
 
-    private ResourceFactory() {
+    private ResourceFactoryImpl() {
 
     }
 
-    public static ResourceFactory getInstance() {
+    public static ResourceFactoryImpl getInstance() {
         if (instance == null) {
-            instance =  new ResourceFactory();
-            loadResources();
+            instance =  new ResourceFactoryImpl();
         }
         return instance;
     }
 
-    public Object get(String resourceName){
-        return resources.get(resourceName);
+    @Override
+    public <T extends Object> T get(String resourceName) {
+        return (T) resources.get(resourceName);
     }
 
-    private static void loadResources() {
+    @Override
+    public void loadAllResources() {
         vfs = new VFSImpl(RESOURCE_ROOT);
         String absoluteResourceRoot = vfs.getAbsolutePath("") + "/";
-        System.out.println("Absolute resource path: " + absoluteResourceRoot);
         Iterator<String> iter = vfs.getIterator("");
 
-        System.out.println("Resources:");
         while (iter.hasNext()) {
             String absoluteFilePath = iter.next();
             String relativeFilePath = absoluteFilePath.replace(absoluteResourceRoot, "");
 
             if (vfs.isFile(absoluteFilePath)) {
-                System.out.println(relativeFilePath);
-                resources.put(relativeFilePath, ReadXMLFileSAX.readXML(absoluteFilePath));
+                try {
+                    resources.put(relativeFilePath, ReadXMLFileSAX.readXML(absoluteFilePath));
+                } catch (Exception e) {
+                    System.out.println("Resources were not loaded");
+                }
             }
         }
+        System.out.println("Resources were loaded");
 
     }
 
-
-
-
-
 }
+

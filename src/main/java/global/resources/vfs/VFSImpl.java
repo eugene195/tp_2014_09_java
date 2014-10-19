@@ -13,15 +13,17 @@ public class VFSImpl implements VFS {
         this.root = root;
     }
 
-
+    @Override
     public boolean isDirectory(String path) {
         return new File(root + path).isDirectory();
     }
 
+    @Override
     public boolean isFile(String path) {
         return new File(path).isFile();
     }
 
+    @Override
     public Iterator<String> getIterator(String startDir) {
         return new FileIterator(startDir);
     }
@@ -34,10 +36,12 @@ public class VFSImpl implements VFS {
             files.add(new File(root + path));
         }
 
+        @Override
         public boolean hasNext() {
             return !files.isEmpty();
         }
 
+        @Override
         public String next() {
             File file = files.peek();
             if (file.isDirectory()) {
@@ -49,8 +53,8 @@ public class VFSImpl implements VFS {
             return files.poll().getAbsolutePath();
         }
 
+        @Override
         public void remove() {
-
         }
 
     }
