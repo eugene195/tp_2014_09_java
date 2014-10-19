@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Moiseev Maxim on 18.10.14.
  */
-public class ServerResource implements Resource, Serializable {
+public class ServerResource implements Resource {
     int port;
 
     public ServerResource() {

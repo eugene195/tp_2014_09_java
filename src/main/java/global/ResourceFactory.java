@@ -5,7 +5,7 @@ package global;
  */
 public interface ResourceFactory {
 
-    public <T extends Object> T get(String resourceName);
+    public <ResourceType extends Object> ResourceType get(String resourceName);
 
     public void loadAllResources();
 }

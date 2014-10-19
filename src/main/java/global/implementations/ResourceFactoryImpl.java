@@ -30,8 +30,8 @@ public class ResourceFactoryImpl implements ResourceFactory {
     }
 
     @Override
-    public <T extends Object> T get(String resourceName) {
-        return (T) resources.get(resourceName);
+    public <ResourceType extends Object> ResourceType get(String resourceName) {
+        return (ResourceType) resources.get(resourceName);
     }
 
     @Override
