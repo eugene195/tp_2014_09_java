@@ -34,7 +34,7 @@ public class ResourceFactory {
     }
 
     private static void loadResources() {
-        VFS vfs = new VFSImpl(RESOURCE_ROOT);
+        vfs = new VFSImpl(RESOURCE_ROOT);
         String absoluteResourceRoot = vfs.getAbsolutePath("") + "/";
         System.out.println("Absolute resource path: " + absoluteResourceRoot);
         Iterator<String> iter = vfs.getIterator("");
