@@ -2,6 +2,7 @@ package global;
 
 import global.implementations.DataBaseManagerImpl;
 import global.implementations.ServletImpl;
+import global.resources.ResourceFactory;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 
@@ -77,6 +78,8 @@ public class Main
 
     public static void main(String[] args) throws Exception {
         try {
+            ResourceFactory.getInstance();
+
             MessageSystem msys = new MessageSystem();
             ServletImpl servletImpl = createServlet(msys);
             DataBaseManager dbman = createDbMan(msys);

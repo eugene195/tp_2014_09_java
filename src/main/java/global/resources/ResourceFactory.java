@@ -1,0 +1,53 @@
+package global.resources;
+
+import global.resources.sax.ReadXMLFileSAX;
+import global.resources.vfs.VFS;
+import global.resources.vfs.VFSImpl;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+/**
+ * Created by Moiseev Maxim on 18.10.14.
+ */
+public class ResourceFactory {
+    public static final String RESOURCE_ROOT = "data";
+    private static ResourceFactory instance;
+    private static Map<String, Object> resources = new HashMap<>();
+    private static VFS vfs;
+
+    private ResourceFactory() {
+
+    }
+
+    public static ResourceFactory getInstance() {
+        if (instance == null) {
+            instance =  new ResourceFactory();
+            loadResources();
+        }
+        return instance;
+    }
+
+    private static void loadResources() {
+        VFS vfs = new VFSImpl(RESOURCE_ROOT);
+        String absoluteResourceRoot = vfs.getAbsolutePath("") + "/";
+        System.out.append("Absolute resource path: " + absoluteResourceRoot + "\n");
+        Iterator<String> iter = vfs.getIterator("");
+
+        while (iter.hasNext()) {
+            String absoluteFilePath = iter.next();
+            String relativeFilePath = absoluteFilePath.replace(absoluteResourceRoot, "");
+            System.out.append(relativeFilePath + "\n");
+            if (vfs.isFile(absoluteFilePath)) {
+                resources.put(relativeFilePath, ReadXMLFileSAX.readXML(absoluteFilePath));
+            }
+        }
+
+    }
+
+
+
+
+
+}
