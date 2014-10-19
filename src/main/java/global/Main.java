@@ -3,6 +3,7 @@ package global;
 import global.implementations.DataBaseManagerImpl;
 import global.implementations.ServletImpl;
 import global.resources.ResourceFactory;
+import global.resources.ServerResource;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 
@@ -19,6 +20,7 @@ public class Main
 {
 
     private static final String STATIC_DIR = "public_html";
+    private static final String SERVER_CONFIG = "ServerConfig.xml";
 
     private static void configureThreads(Runnable ... tasks) {
         ExecutorService threadPool = Executors.newFixedThreadPool(tasks.length);
@@ -41,16 +43,6 @@ public class Main
         throws SQLException
     {
         return new DataBaseManagerImpl(msys, "g01_java_db", "g01_user", "drovosek");
-    }
-
-    private static int getServerPort(String[] args) {
-        int SERVER_PORT = 8081;
-
-        if (args.length == 1) {
-            String portString = args[0];
-            SERVER_PORT = Integer.valueOf(portString);
-        }
-        return SERVER_PORT;
     }
 
     private static ServletContextHandler createContext(ServletImpl servletImpl) {
@@ -78,8 +70,6 @@ public class Main
 
     public static void main(String[] args) throws Exception {
         try {
-            ResourceFactory.getInstance();
-
             MessageSystem msys = new MessageSystem();
             ServletImpl servletImpl = createServlet(msys);
             DataBaseManager dbman = createDbMan(msys);
@@ -90,13 +80,18 @@ public class Main
             HandlerList handlers = makeServerHandlers();
             handlers.addHandler(context);
 
-            int serverPort = getServerPort(args);
+            ServerResource serverResource = (ServerResource) ResourceFactory.getInstance().get(SERVER_CONFIG);
+            int serverPort = serverResource.getServerPort();
+
             Server server = createAndConfigureServer(serverPort, handlers);
             server.start();
             server.join();
         }
         catch (SQLException e) {
             System.out.println("Cannot connect to DB");
+        }
+        catch (NullPointerException e) {
+            System.out.println(SERVER_CONFIG + " not found");
         }
     }
 }

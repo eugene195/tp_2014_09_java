@@ -15,7 +15,7 @@ public class SaxHandler extends DefaultHandler {
     }
 
     public void endDocument() throws SAXException {
-        System.out.println("End document ");
+        System.out.println("End document\n");
     }
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {

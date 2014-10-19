@@ -19,7 +19,7 @@ public class VFSImpl implements VFS {
     }
 
     public boolean isFile(String path) {
-        return new File(root + path).isFile();
+        return new File(path).isFile();
     }
 
     public Iterator<String> getIterator(String startDir) {

@@ -29,17 +29,23 @@ public class ResourceFactory {
         return instance;
     }
 
+    public Object get(String resourceName){
+        return resources.get(resourceName);
+    }
+
     private static void loadResources() {
         VFS vfs = new VFSImpl(RESOURCE_ROOT);
         String absoluteResourceRoot = vfs.getAbsolutePath("") + "/";
-        System.out.append("Absolute resource path: " + absoluteResourceRoot + "\n");
+        System.out.println("Absolute resource path: " + absoluteResourceRoot);
         Iterator<String> iter = vfs.getIterator("");
 
+        System.out.println("Resources:");
         while (iter.hasNext()) {
             String absoluteFilePath = iter.next();
             String relativeFilePath = absoluteFilePath.replace(absoluteResourceRoot, "");
-            System.out.append(relativeFilePath + "\n");
+
             if (vfs.isFile(absoluteFilePath)) {
+                System.out.println(relativeFilePath);
                 resources.put(relativeFilePath, ReadXMLFileSAX.readXML(absoluteFilePath));
             }
         }

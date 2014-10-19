@@ -1,20 +1,25 @@
 package global.resources;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Moiseev Maxim on 18.10.14.
  */
-public class ServerResource implements Resource {
-    private final Map<String, Integer> serverConfiguration = new HashMap<>();
+public class ServerResource implements Resource, Serializable {
+    int port;
 
-    public Integer getServerPort() {
-        Integer serverPort = serverConfiguration.get("serverPort");
-        if (serverPort == null) {
-            throw new RuntimeException("Server port not found in ServerResource");
-        }
-        return serverPort;
+    public ServerResource() {
+        this.port = 8080;
+    }
+
+    public ServerResource(int serverPort) {
+        this.port = serverPort;
+    }
+
+    public int getServerPort() {
+        return port;
     }
 
 }
