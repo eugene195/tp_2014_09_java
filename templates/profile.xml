@@ -1,50 +1,41 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
 
-<div id="wrapper">
+<div class="wrapper">
 
 <form name="register-form" class="form" data-action="/profile" method="POST">
  
   <div class="form__header">
-    <h1>Profile</h1>
-    <span>Change your password</span>
+    <h1 class="form__header__h1">Profile</h1>
+    <span class="form__header__span">Change your password</span>
   </div>
 
   <div class="form__content">
     <!--Current PASSWORD-->
-    <div id="cur-passw-error" class="alert-error">
-      <p id="cur-passw-error-message"></p>
-    </div>
-
-    <div id="success" class="alert-success">
-      <p id="success-message"></p>
-    </div>
+    <div class="alert-error cur-passw-error"></div>
+    <div class="alert-success"></div>
     
     <label for="cur-passw" class="form__content__label">Current password:</label>
-    <input id="cur-passw" name="cur-passw" type="password" class="form__content__input"/>
+    <input name="cur_passw" type="password" class="form__content__input"/>
 
     <!--NEW PASSWORD-->
-    <div id="passw-error" class="alert-error">
-      <p id="passw-error-message"></p>
-    </div>
+    <div class="alert-error passw-error"></div>
     
     <label for="passw" class="form__content__label">New password:</label>
-    <input id="passw" name="passw" type="password" class="form__content__input"/>
+    <input name="passw" type="password" class="form__content__input"/>
 
     <!--CONFIRM PASSWORD-->
-    <label for="passw" class="form__content__label">Confirm password:</label>
-    <div id="passw2-error" class="alert-error">
-      <p id="passw2-error-message"></p>
-    </div>
+    <div class="alert-error confirm-passw-error"></div>
     
-    <input id="passw2" name="passw2" type="password" class="form__content__input" />
+    <label for="passw" class="form__content__label">Confirm password:</label>
+    <input name="confirm_passw" type="password" class="form__content__input" />
   
   </div>
 
   <div class="form__footer">
     <!--LOGIN-->
-    <input id="save_profile" type="submit" name="submit" class="form__footer__button" value="Save"/>
+    <input type="submit" name="submit" class="form__footer__button" value="Save"/>
     <!--BACK-->
-    <a href="#" class="form__footer__button form__footer__button--orange">Back</a>
+    <a href="#" class="form__footer__button form__footer__button_orange">Back</a>
   </div>
   
     </form>

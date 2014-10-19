@@ -1,78 +1,63 @@
 define([
     'backbone',
-    'tmpl/main'
+    'tmpl/main',
+    'models/session'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    sessionModel
 ){
 
     var View = Backbone.View.extend({
-
         template: tmpl,
-        el: $('#page'),
-
+        session: sessionModel,
         events: {
-            "click #logout": "logout",
+            "click .logout": "logout"
         },
         initialize: function () {
-            // TODO
+            this.listenTo(this.session, 'main:anonymous', this.userNotIdentified);
+            this.listenTo(this.session, 'main:known', this.userIdentified);
+            this.listenTo(this.session, 'successLogout', this.logoutSuccess);
+            this.listenTo(this.session, 'errorLogout', this.logoutError);
+            this.render();
         },
+
         render: function () {
             this.$el.html(this.template());
+            return this.$el;
+        },
 
-            $.ajax({
-                url: "/identifyuser",
-                method: "POST",
-                data:  {
-                    data: 'data'
-                },
-            dataType: "json"
-            }).done(function(data){
-                // if user is identified
-                if (data.status == 1) {
-                    $("#profile").show();
-                    $("#exit").show();
-                    $("#auth").hide();
-                    $("#reg").hide();
-                } else {
-                    $("#profile").hide();
-                    $("#exit").hide();
-                    $("#auth").show();
-                    $("#reg").show();
-                }
-            }).fail(function(data) {
-                alert("Error, please try again later");
-            }) 
-        },
         show: function () {
-            
-        },
-        hide: function () {
-            // TODO
+            this.session.postIdentifyUser('main');
         },
         logout: function (event) {
+            debugger;
             event.preventDefault();
+            this.session.postLogout();
+        },
+        
+        userIdentified: function(data) {
+            this.trigger('show', this);
+            this.$(".auth, .reg, .profile, .exit").hide();
+            this.$(".profile, .exit").show();
+        },
+        userNotIdentified: function() {
+            this.trigger('show', this);
+            this.$(".auth, .reg, .profile, .exit").hide();
+            this.$(".auth, .reg").show();
+        },
 
-            $.ajax({
-                url: "/logout",
-                method: "POST",
-                data: {
-                    data: 'data'
-                },
-                dataType: "json"
-            }).done(function(data){
-                if (data.status == 1) {
-                    window.location.replace('#login');
-                }
-                else {
-                    $("#logout-error").slideDown().delay(3000).slideUp();
-                    $("#logout-error-message").html(data.message);
-                }
-            }).fail (function(data) {
-                alert("Error, please try again later");
-            });
+        logoutSuccess: function (data) {
+            debugger;
+            this.trigger('success');
+            this.show();
+        },
+
+        logoutError: function (message) {
+            debugger;
+            var elem = this.$(".alert-error").slideDown().delay(3000).slideUp();
+            elem.html("<p>" + message + "</p>");
         }
-
     });
 
     return new View();

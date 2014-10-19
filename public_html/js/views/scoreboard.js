@@ -11,24 +11,23 @@ define([
 var View = Backbone.View.extend({
 
         template: tmpl,
-        el: $('#page'),
         events: {
 
         },
 
         initialize: function () {
             this.collection.on("reset", this.render, this);
+            this.render();
         },
         render: function () {
             var scores = this.collection.toJSON();
             this.$el.html(this.template(scores));
+            return this.$el;
         },
         show: function () {
             this.collection.fetch();
-        },
-        hide: function () {
-            // TODO
-        },
+            this.trigger('show', this);
+        }
     });
 
 

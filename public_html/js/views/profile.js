@@ -1,113 +1,105 @@
 define([
     'backbone',
-    'tmpl/profile'
+    'tmpl/profile',
+    'models/session'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    sessionModel
 ){
 
     var View = Backbone.View.extend({
-
         template: tmpl,
-        el: $('#page'),
+        session: sessionModel,
         events: {
-            "click #save_profile": "saveProfileClick",
+            "click input[name=submit]": "saveProfileClick"
         },
 
         initialize: function () {
-            // TODo
+            this.listenTo(this.session, 'successChangePassword', this.passwSuccess);
+            this.listenTo(this.session, 'errorChangePassword', this.passwError);
+            this.listenTo(this.session, 'profile:anonymous', this.userNotIdentified);
+            this.listenTo(this.session, 'profile:known', this.userIdentified);
         },
+
         render: function () {
             this.$el.html(this.template());
+            return this.$el;
+        },
 
-            $.ajax({
-                url: "/identifyuser",
-                method: "POST",
-                data:  {
-                    data: 'data'
-                },
-            dataType: "json"
-            }).done(function(data){
-                // if user is identified
-                if (data.status == 1) {
-                    $('h1').html("Profile " + data.login)
-                } else {
-                    window.location.replace('#login');
-                }
-            }).fail(function(data) {
-                alert("Error, please try again later");
-            }) 
-        },
         show: function () {
-            //TODo
+            this.session.postIdentifyUser('profile');
         },
-        hide: function () {
-            // TODO
-        },
+
         saveProfileClick: function(event) {
             event.preventDefault();
-            var curPassword = $("#cur-passw").val();
-            var password = $("#passw").val();
-            var password2 = $("#passw2").val();
-            var wasError = false;
-            
-            $("#register").prop('disabled', true).delay(1700).queue(
-                function(next) { $(this).attr('disabled', false);
-                next();
-                });
-            $("#register").addClass("form__footer__button--disabled").delay(1700).queue(
-                function(next) { $(this).removeClass("form__footer__button--disabled");
-                next();
-                });
+            var curPassw = this.$("input[name=cur_passw]").val(),
+                newPassw = this.$("input[name=passw]").val(),
+                confirmPassw = this.$("input[name=confirm_passw]").val();
 
-            if (curPassword == '') {
-                wasError = true;
-                $("#cur-passw-error").slideDown().delay(3000).slideUp();
-                $("#cur-passw-error-message").html('Missing current password');
-            } 
-            else if (password == '') {
-                wasError = true;
-                $("#passw-error").slideDown().delay(3000).slideUp();
-                $("#passw-error-message").html('Missing new password');
-            }   
-            else if (password2 == '') {
-                wasError = true;
-                $("#passw2-error").slideDown().delay(3000).slideUp();
-                $("#passw2-error-message").html('Missing confirm password');
-            }   
-            else if (password != password2) {
-                wasError = true;
-                $("#passw2-error").slideDown().delay(3000).slideUp();
-                $("#passw2-error-message").html('Passwords does not match');
-            }
-            if (wasError) {
-                return;
-            }
-            
-            $.ajax({
-                method: "POST",
-                url: $('.form').data('action'),
-                data:  {
-                    curPassw: curPassword,
-                    newPassw: password,
-                    confirmPassw: password2,
-                },
-            dataType: "json"
-            }).done(function(data){
-                if (data.status == 1) {
-                    $("#success").slideDown().delay(3000).slideUp();
-                    $("#success-message").html("Password successfully changed");
-                } else {
-                    $("#cur-passw-error").slideDown().delay(3000).slideUp();
-                    $("#cur-passw-error-message").html(data.message);
+            var btnSubmit = this.$el.find("input[name=submit]");
+            btnSubmit.addClass("form__footer__button_disabled").prop('disabled', true).delay(1700).queue(
+                function(next) {
+                    $(this).attr('disabled', false);
+                    $(this).removeClass("form__footer__button_disabled");
+                    next();
                 }
-            }).fail(function(data) {
-                alert("Error, please try again later");
-            })           
-        }
-        
+            );
 
+            if (this.validate(curPassw, newPassw, confirmPassw)) {
+                var url = this.$('.form').data('action');
+                this.session.postChangePassword(url, {
+                    curPassw: curPassw,
+                    newPassw: newPassw,
+                    confirmPassw: confirmPassw
+                });
+            }
+        },
+
+        validate: function (curPassw, newPassw, confirmPassw) {
+            if (curPassw == '') {
+                this.showError("Missing current password", ".cur-passw-error");
+                return false;
+            }
+            if (newPassw == '') {
+                this.showError("Missing new password", ".passw-error");
+                return false;
+            }
+            if (confirmPassw == '') {
+                this.showError("Missing confirm password", ".confirm-passw-error");
+                return false;
+            }
+            if (newPassw != confirmPassw) {
+                this.showError("Passwords does not match", ".confirm-passw-error");
+                return false;
+            }
+            return true;
+        },
+
+        passwError: function (message) {
+            this.showError(message, ".confirm-passw-error");
+        },
+
+        passwSuccess: function(data) {
+            this.showError("Password successfully changed", ".alert-success");
+        },
+
+        showError: function(message, div_error) {
+            var elem = this.$(div_error).slideDown().delay(3000).slideUp();
+            elem.html("<p>" + message + "</p>");
+        },
+
+        userIdentified: function(data) {
+            if (window.location.hash.substring(1) == 'profile') { // TODO delete
+                this.$('h1').html("Profile " + data.login)
+            }
+
+            this.trigger('show', this);
+        },
+
+        userNotIdentified: function() {
+            this.trigger('anonymous');
+        }
     });
-    
     return new View();
 });

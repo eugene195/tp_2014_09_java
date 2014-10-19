@@ -43,7 +43,8 @@ public class RegisterPage extends WebPage {
         String passw = request.getParameter("passw");
         String repeatPassw = request.getParameter("passw2");
 
-        if (!passw.equals(repeatPassw)) {
+        if (!passw.equals(repeatPassw) || login == null
+                || passw == null || repeatPassw == null) {
             response.setContentType(WebPage.CONTENT_TYPE);
             response.setStatus(HttpServletResponse.SC_OK);
             return;
@@ -58,7 +59,6 @@ public class RegisterPage extends WebPage {
 
         if (this.successReg) {
             JObject.put("status", "1");
-
         }
         else {
             JObject.put("status", "-1");

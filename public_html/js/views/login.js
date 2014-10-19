@@ -1,106 +1,102 @@
 define([
     'backbone',
-    'tmpl/login'
+    'tmpl/login',
+    'models/session'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    sessionModel
 ){
 
     var View = Backbone.View.extend({
-
         template: tmpl,
-        el: $('#page'),
+        session: sessionModel,
+
         events: {
-            "click #login": "authClick",
-            "click #username": "loginClick",
-            "click #passw": "passwordClick",
-            "blur #username": "loginBlur",
-            "blur #passw": "passwordBlur",
-            "focus #passw": "passwFocus",
-            "focus #username": "usernameFocus"
+            "submit form[name=login-form]": "authClick",
+            "click input[name=login]": "loginClick",
+            "click input[name=passw]": "passwordClick",
+            "blur input[name=login]": "loginBlur",
+            "blur input[name=passw]": "passwordBlur"
         },
 
         initialize: function () {
-            // TODO
+            this.listenTo(this.session, 'successAuth', this.loginSuccess);
+            this.listenTo(this.session, 'errorAuth', this.loginError);
+            this.render();
         },
+
         render: function () {
             this.$el.html(this.template());
+            return this.$el;
         },
+
         show: function () {
-            
+            this.trigger('show', this);
         },
-        hide: function () {
-            // TODO
-        },
+
         authClick: function(event) {
             event.preventDefault();
-            var username = $("#username").val(),
-                password = $("#passw").val(),
-                wasError = false;
+            var username = this.$("input[name=login]").val(),
+                password = this.$("input[name=passw]").val();
 
-            $("#login").prop('disabled', true).delay(1700).queue(
-                function(next) { $(this).attr('disabled', false);
-                next();
-                });
-            $("#login").addClass("form__footer__button--disabled").delay(1700).queue(
-                function(next) { $(this).removeClass("form__footer__button--disabled");
-                next();
-                });
+            var btnSubmit = this.$("input[name=submit]");
+            btnSubmit.prop('disabled', true).addClass("form__footer__button_disabled").delay(1700).queue(
+                function(next) {
+                    $(this).attr('disabled', false);
+                    $(this).removeClass("form__footer__button_disabled");
+                    next();
+                }
+            );
 
+            if (this.validate(username, password)) {
+                var url = this.$('.form').data('action');
+
+                this.session.postAuth(url, {
+                    login: username,
+                    passw: password
+                });
+            }
+        },
+
+        loginSuccess: function(data) {
+            this.trigger('success');
+        },
+
+        loginError: function(message) {
+            this.showError(message, ".login-error");
+        },
+
+        showError: function(message, div_error) {
+            var elem = this.$(div_error).slideDown().delay(3000).slideUp();
+            elem.html("<p>" + message + "</p>");
+        },
+
+        validate: function(username, password) {
+            var status= true;
             if (username == '') {
-                wasError = true;
-                $("#login-error").slideDown().delay(3000).slideUp();
-                $("#login-error-message").html('Missing username');
+                status = false;
+                this.showError("Missing username", ".login-error");
             }
             if (password == '') {
-                wasError = true;
-                $("#passw-error").slideDown().delay(3000).slideUp();
-                $("#passw-error-message").html('Missing password');
+                status = false;
+                this.showError("Missing password", ".passw-error");
             }
-            
-            if (wasError) {
-                return;
-            }
-            
-            $.ajax({
-                url: $('.form').data('action'),
-                method: "POST",
-                data:  {
-                    login: username,
-                    passw: password,
-                },
-            dataType: "json"
-            }).done(function(data){
-                if (data.status == 1) {
-                    window.location.replace('#');
-                } else {
-                    $("#login-error").slideDown().delay(3000).slideUp();
-                    $("#login-error-message").html(data.message);
-                }
-            }).fail(function(data) {
-                alert("Error, please try again later");
-            })           
+            return status;
         },
+
         loginClick: function() {
-            $(".form__content__user-icon").css("left","-48px");
+            this.$(".form__content__user-icon").css("left","-48px");
         },
         passwordClick: function() {
-            $(".form__content__pass-icon").css("left","-48px");
+            this.$(".form__content__pass-icon").css("left","-48px");
         },
         loginBlur: function() {
-            $(".form__content__user-icon").css("left","0px");
+            this.$(".form__content__user-icon").css("left","0px");
         },
         passwordBlur: function() {
-            $(".form__content__pass-icon").css("left","0px");
-        },
-        passwFocus: function() {
-            $("#passw").val("");
-        },
-        usernameFocus: function() {
-            $("#username").val("");
+            this.$(".form__content__pass-icon").css("left","0px");
         }
-
-
     });
 
     return new View();

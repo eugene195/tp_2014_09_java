@@ -9,22 +9,19 @@ define([
 var View = Backbone.View.extend({
 
         template: tmpl,
-        el: $('#page'),
         events: {
             "click #gmscr": "gameClick"
         },
 
-        initialize: function () {
-            // TODO
+        initialize: function() {
+            this.render();
         },
         render: function () {
             this.$el.html(this.template());
+            return this.$el;
         },
         show: function () {
-
-        },
-        hide: function () {
-            // TODO
+            this.trigger('show', this);
         },
         gameClick: function(event) {
             alert("Great shot");

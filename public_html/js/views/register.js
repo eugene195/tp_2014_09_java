@@ -1,128 +1,119 @@
 define([
     'backbone',
-    'tmpl/register'
+    'tmpl/register',
+    'models/session'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    sessionModel
 ){
 
     var View = Backbone.View.extend({
-
         template: tmpl,
-        el: $('#page'),
+        session: sessionModel,
+
         events: {
-            "click #register": "buttonClick",
-            "click #username": "loginClick",
-            "click #passw": "passwordClick",
-            "click #passw2": "password2Click",
-            "blur #username": "loginBlur",
-            "blur #passw": "passwordBlur",
-            "blur #passw2": "password2Blur",
-            "focus #passw": "passwFocus",
-            "focus #passw2": "passw2Focus",
-            "focus #username": "usernameFocus"
+            "submit form[name=register-form]": "registerClick",
+            "click input[name=login]": "loginClick",
+            "click input[name=passw]": "passwClick",
+            "click input[name=confirm_passw]": "confirmPasswClick",
+            "blur input[name=login]": "loginBlur",
+            "blur input[name=passw]": "passwBlur",
+            "blur input[name=confirm_passw]": "confirmPasswBlur"
         },
 
         initialize: function () {
-            // TODO
+            this.listenTo(this.session, 'successReg', this.registerSuccess);
+            this.listenTo(this.session, 'errorReg', this.registerError);
+            this.render();
         },
+
         render: function () {
             this.$el.html(this.template());
+            return this.$el;
         },
-        show: function () {
-            //TODO
-        },
-        hide: function () {
-            // TODO
-        },
-        buttonClick: function(event) {
-            event.preventDefault();
-            var username = $("#username").val();
-            var password = $("#passw").val();
-            var password2 = $("#passw2").val();
-            var wasError = false;
-            $("#register").prop('disabled', true).delay(1700).queue(
-                function(next) { $(this).attr('disabled', false);
-                next();
-                });
-            $("#register").addClass("form__footer__button--disabled").delay(1700).queue(
-                function(next) { $(this).removeClass("form__footer__button--disabled");
-                next();
-                });
 
-            if (username == '') {
-                wasError = true;
-                $("#register-error").slideDown().delay(3000).slideUp();
-                $("#register-error-message").html('Missing username');
-            }
-            if (password == '') {
-                wasError = true;
-                $("#passw-error").slideDown().delay(3000).slideUp();
-                $("#passw-error-message").html('Missing password');
-            }   
-            else if (password2 == '') {
-                wasError = true;
-                $("#passw2-error").slideDown().delay(3000).slideUp();
-                $("#passw2-error-message").html('Missing confirm password');
-            }   
-            else if (password != password2) {
-                wasError = true;
-                $("#passw2-error").slideDown().delay(3000).slideUp();
-                $("#passw2-error-message").html('Passwords does not match');
-            }
-            if (wasError) {
-                return;
-            }
-            
-            $.ajax({
-                method: "POST",
-                url: $('.form').data('action'),
-                data:  {
-                    login: username,
-                    passw: password,
-                    passw2: password2,
-                },
-            dataType: "json"
-            }).done(function(data){
-                if (data.status == 1) {
-                    window.location.replace('#login');
-                } else {
-                    $("#register-error").slideDown().delay(3000).slideUp();
-                    $("#register-error-message").html(data.message);
+        show: function () {
+            this.trigger('show', this);
+        },
+
+        registerClick: function(event) {
+            event.preventDefault();
+            var username = this.$("input[name=login]").val(),
+                newPassw = this.$("input[name=passw]").val(),
+                confirmPassw = this.$("input[name=confirm_passw]").val();
+
+            var btnSubmit = this.$("input[name=submit]");
+            btnSubmit.addClass("form__footer__button_disabled").prop('disabled', true).delay(1700).queue(
+                function(next) {
+                    $(this).attr('disabled', false);
+                    $(this).removeClass("form__footer__button_disabled");
+                    next();
                 }
-            }).fail(function(data) {
-                alert("Error, please try again later");
-            })           
+            );
+       
+            if (this.validate(username, newPassw, confirmPassw)) {
+                var url = this.$('.form').data('action');
+
+                this.session.postReg(url, {
+                    login: username,
+                    passw: newPassw,
+                    passw2: confirmPassw
+                });
+            }
         },
+
+        registerSuccess: function(data) {
+            this.trigger('success');
+        },
+
+        registerError: function(message) {
+            this.showError(message, ".register-error")
+        },
+
+        showError: function(message, div_error) {
+            var elem = this.$(div_error).slideDown().delay(3000).slideUp();
+            elem.html("<p>" + message + "</p>");
+        },
+
+        validate: function(username, newPassw, confirmPassw) {
+            if (username == '') {
+                this.showError("Missing username", ".register-error");
+                return false;
+            }
+            if (newPassw == '') {
+                this.showError("Missing password", ".passw-error");
+                return false;
+            }
+            if (confirmPassw == '') {
+                this.showError("Missing confirm password", ".confirm-passw-error");
+                return false;
+            }
+            if (newPassw != confirmPassw) {
+                this.showError("Passwords does not match", ".confirm-passw-error");
+                return false;
+            }
+            return true;
+        },
+
         loginClick: function() {
-            $(".form__content__user-icon").css("left","-48px");
+            this.$(".form__content__user-icon").css("left","-48px");
         },
-        passwordClick: function() {
-            $(".form__content__pass-icon").css("left","-48px");
+        passwClick: function() {
+            this.$(".form__content__pass-icon").css("left","-48px");
         },
-        password2Click: function() {
-            $(".form__content__pass-icon2").css("left","-48px");
+        confirmPasswClick: function() {
+            this.$(".form__content__pass-icon2").css("left","-48px");
         },
         loginBlur: function() {
-            $(".form__content__user-icon").css("left","0px");
+            this.$(".form__content__user-icon").css("left","0px");
         },
-        passwordBlur: function() {
-            $(".form__content__pass-icon").css("left","0px");
+        passwBlur: function() {
+            this.$(".form__content__pass-icon").css("left","0px");
         },
-        password2Blur: function() {
-            $(".form__content__pass-icon2").css("left","0px");
-        },
-        passwFocus: function() {
-            $("#passw").val("");
-        },
-        passw2Focus: function() {
-            $("#passw2").val("");
-        },
-        usernameFocus: function() {
-            $("#username").val("");
+        confirmPasswBlur: function() {
+            this.$(".form__content__pass-icon2").css("left","0px");
         }
-
     });
-
     return new View();
 });

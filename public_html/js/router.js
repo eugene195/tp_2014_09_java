@@ -5,7 +5,8 @@ define([
     'views/login',
     'views/scoreboard',
     'views/register',
-    'views/profile'
+    'views/profile',
+    'views/viewman'
 ], function(
     Backbone,
     main,
@@ -13,12 +14,22 @@ define([
     login,
     scoreboard,
     register,
-    profile
+    profile,
+    viewman
     
 ){
+    viewman.subscribe([main, game, login, scoreboard, register, profile])
 
     var Router = Backbone.Router.extend({
+        initialize: function () {
+            this.listenTo(login, 'success', this.toIndex);
+            this.listenTo(main, 'success', this.toIndex);
+            this.listenTo(profile, 'anonymous', this.toLogin);
+            this.listenTo(register, 'success', this.toLogin);
+        },
+
         routes: {
+            '': 'index',
             'scoreboard': 'scoreboardAction',
             'game': 'gameAction',
             'login': 'loginAction',
@@ -26,23 +37,33 @@ define([
             'profile': 'profileAction',
             '*default': 'defaultActions'
         },
+
+        index: function () {
+            main.show();
+        },
         defaultActions: function () {
-            main.render();
+            alert('404');
         },
         scoreboardAction: function () {
             scoreboard.show();
         },
         gameAction: function () {
-            game.render();
+            game.show();
         },
         loginAction: function () {
-            login.render();
+            login.show();
         },
         registerAction: function () {
-            register.render();
+            register.show();
         },
         profileAction: function () {
-            profile.render();
+            profile.show();
+        },
+        toIndex: function () {
+            this.navigate('', {trigger: true});
+        },
+        toLogin: function () {
+            this.navigate('login', {trigger: true});
         }
     });
 

@@ -39,6 +39,12 @@ public class AuthPage extends WebPage {
         String login = request.getParameter("login");
         String passw = request.getParameter("passw");
 
+        if (login == null || passw == null) {
+            response.setContentType(WebPage.CONTENT_TYPE);
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
         if (this.userSessions.containsKey(login)) {
             this.userSessions.remove(login);
         }
