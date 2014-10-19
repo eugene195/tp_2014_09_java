@@ -11,7 +11,8 @@ define([
 
         subscribe: function (views) {
             for (var I in views) {
-                this.listenTo(views[I], 'show', this.add);
+                this.listenTo(views[I], 'rerender', this.rerender);
+                this.listenTo(views[I], 'reshow', this.reshow);
             }
         },
 
@@ -19,8 +20,12 @@ define([
             this.stopListening(view);
         },
 
-        add: function (view) {
+        rerender: function (view) {
             this.$el.html(view.render());
+        },
+
+        reshow: function (view) {
+            this.$el.html(view.$el);
         }
 
     });

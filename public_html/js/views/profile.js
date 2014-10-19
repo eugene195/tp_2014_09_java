@@ -94,7 +94,7 @@ define([
                 this.$('h1').html("Profile " + data.login)
             }
 
-            this.trigger('show', this);
+            this.trigger('reshow', this);
         },
 
         userNotIdentified: function() {

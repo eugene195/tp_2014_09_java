@@ -26,7 +26,7 @@ var View = Backbone.View.extend({
         },
         show: function () {
             this.collection.fetch();
-            this.trigger('show', this);
+            this.trigger('rerender', this);
         }
     });
 

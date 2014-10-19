@@ -21,7 +21,7 @@ var View = Backbone.View.extend({
             return this.$el;
         },
         show: function () {
-            this.trigger('show', this);
+            this.trigger('reshow', this);
         },
         gameClick: function(event) {
             alert("Great shot");

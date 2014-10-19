@@ -37,13 +37,13 @@ define([
         },
         
         userIdentified: function(data) {
-            this.trigger('show', this);
-            this.$(".auth, .reg, .profile, .exit").hide();
+            this.trigger('reshow', this);
+            this.$(".auth, .reg").hide();
             this.$(".profile, .exit").show();
         },
         userNotIdentified: function() {
-            this.trigger('show', this);
-            this.$(".auth, .reg, .profile, .exit").hide();
+            this.trigger('reshow', this);
+            this.$(".profile, .exit").hide();
             this.$(".auth, .reg").show();
         },
 

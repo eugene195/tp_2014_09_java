@@ -34,7 +34,7 @@ define([
         },
 
         show: function () {
-            this.trigger('show', this);
+            this.trigger('reshow', this);
         },
 
         registerClick: function(event) {
