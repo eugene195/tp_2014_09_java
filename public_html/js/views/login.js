@@ -9,6 +9,7 @@ define([
 ){
 
     var View = Backbone.View.extend({
+        el: $('.login'),
         template: tmpl,
         session: sessionModel,
 
@@ -24,11 +25,11 @@ define([
             this.listenTo(this.session, 'successAuth', this.loginSuccess);
             this.listenTo(this.session, 'errorAuth', this.loginError);
             this.render();
+            this.$el.hide();
         },
 
         render: function () {
             this.$el.html(this.template());
-            return this.$el;
         },
 
         show: function () {

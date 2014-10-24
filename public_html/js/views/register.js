@@ -9,6 +9,7 @@ define([
 ){
 
     var View = Backbone.View.extend({
+        el: $('.register'),
         template: tmpl,
         session: sessionModel,
 
@@ -26,11 +27,11 @@ define([
             this.listenTo(this.session, 'successReg', this.registerSuccess);
             this.listenTo(this.session, 'errorReg', this.registerError);
             this.render();
+            this.$el.hide();
         },
 
         render: function () {
             this.$el.html(this.template());
-            return this.$el;
         },
 
         show: function () {
