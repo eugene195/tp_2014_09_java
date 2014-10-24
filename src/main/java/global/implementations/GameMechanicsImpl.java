@@ -5,10 +5,8 @@ import global.models.GameSession;
 import global.models.Player;
 import global.WebSocketService;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Array;
+import java.util.*;
 
 import static java.lang.Thread.sleep;
 
@@ -26,6 +24,7 @@ public class GameMechanicsImpl implements GameMechanics {
 
     private Set<GameSession> allSessions = new HashSet<>();
 
+    private ArrayList<String> pendingUsers;
 
     private String waiter;
 
@@ -53,10 +52,14 @@ public class GameMechanicsImpl implements GameMechanics {
     }
 
     @Override
-    public void run() throws InterruptedException{
+    public void run() {
         while (true) {
+            try {
+                sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             gmStep();
-            sleep(STEP_TIME);
 //            TimeHelper.sleep(STEP_TIME);
         }
     }

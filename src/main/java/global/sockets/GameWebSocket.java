@@ -80,6 +80,7 @@ public class GameWebSocket {
         JSONObject jsonStart = new JSONObject();
         jsonStart.put("status", "increment");
         jsonStart.put("name", user.getEnemyName());
+//        jsonStart.put("name", user.getEnemyNames());
         jsonStart.put("score", user.getEnemyScore());
         try {
             session.getRemote().sendString(jsonStart.toJSONString());

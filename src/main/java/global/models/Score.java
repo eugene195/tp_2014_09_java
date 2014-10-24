@@ -14,6 +14,10 @@ public class Score implements Serializable {
         this.score = score;
     }
 
+    public void increment(int value) {
+        this.score += value;
+    }
+
     public String getLogin() {
         return this.login;
     }

@@ -77,9 +77,11 @@ public class Main
             MessageSystem msys = new MessageSystemImpl();
             ServletImpl servletImpl = createServlet(msys);
             DataBaseManager dbman = createDbMan(msys);
+
             WebSocketService webSocketService = new WebSocketServiceImpl();
             GameMechanics gameMechanics = new GameMechanicsImpl(webSocketService);
-            configureThreads(servletImpl, dbman);
+
+            configureThreads(servletImpl, dbman, gameMechanics);
             ServletContextHandler context = createContext(servletImpl, webSocketService, gameMechanics);
 
 
@@ -95,16 +97,10 @@ public class Main
 
             Server server = createAndConfigureServer(serverPort, handlers);
             server.start();
-
-
-
-            gameMechanics.run();
+            server.join();
         }
         catch (SQLException e) {
             System.out.println("Cannot connect to DB");
-        }
-        catch (NullPointerException e) {
-            System.out.println(SERVER_CONFIG + " not found");
         }
     }
 }

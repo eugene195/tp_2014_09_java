@@ -2,6 +2,7 @@ package global.models;
 
 import global.models.Player;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,9 @@ public class GameSession {
     private final long startTime;
     private Player first;
     private Player second;
+
+    private ArrayList<String> players;
+
     private Map<String, Player> users = new HashMap<>();
 
     public GameSession(String user1, String user2) {
