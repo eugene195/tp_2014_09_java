@@ -7,17 +7,18 @@ import java.io.Serializable;
  */
 public class ServerResource implements Resource {
     int port;
+    String database;
 
     public ServerResource() {
         this.port = 8080;
     }
 
-    public ServerResource(int serverPort) {
-        this.port = serverPort;
-    }
-
     public int getServerPort() {
         return port;
+    }
+
+    public String getDatabase() {
+        return database;
     }
 
 }

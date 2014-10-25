@@ -1,10 +1,9 @@
 package global;
 
-import global.database.DataBaseManager;
 import global.database.DataBaseManagerImpl;
-import global.messagesystem.MessageSystem;
+import global.msgsystem.MessageSystem;
 import global.resources.ResourceFactoryImpl;
-import global.implementations.ServletImpl;
+import global.servlet.ServletImpl;
 import global.resources.ServerResource;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -36,7 +35,7 @@ public class Main
             HandlerList handlers = makeServerHandlers();
             handlers.addHandler(context);
 
-            ResourceFactoryImpl resourceFactory = ResourceFactoryImpl.getInstance();
+            ResourceFactory resourceFactory = ResourceFactoryImpl.getInstance();
             resourceFactory.loadAllResources();
             ServerResource serverResource = resourceFactory.get(SERVER_CONFIG);
             int serverPort = serverResource.getServerPort();
@@ -48,14 +47,11 @@ public class Main
         catch (SQLException e) {
             System.out.println("Cannot connect to DB");
         }
-        catch (NullPointerException e) {
-            System.out.println(SERVER_CONFIG + " not found");
-        }
     }
 
     private static void configureThreads(Runnable ... tasks) {
         ExecutorService threadPool = Executors.newFixedThreadPool(tasks.length);
-        for(Runnable task : tasks)
+        for (Runnable task : tasks)
             threadPool.submit(task);
     }
 

@@ -1,7 +1,8 @@
 package global.database;
 
-import global.messagesystem.MessageSystem;
-import global.messagesystem.messages.*;
+import global.DataBaseManager;
+import global.msgsystem.MessageSystem;
+import global.msgsystem.messages.*;
 import global.models.Score;
 import global.models.UserSession;
 
