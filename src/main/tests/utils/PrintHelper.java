@@ -26,8 +26,7 @@ public class PrintHelper extends PrintWriter {
         this.outs.add(obj);
     }
 
-    @Override
-    public void flush() {
+    public void fflush() {
         this.I = 0;
         this.outs.clear();
     }

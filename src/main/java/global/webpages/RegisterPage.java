@@ -41,14 +41,6 @@ public class RegisterPage extends WebPage {
     {
         String login = request.getParameter("login");
         String passw = request.getParameter("passw");
-        String repeatPassw = request.getParameter("passw2");
-
-        if (!passw.equals(repeatPassw) || login == null
-                || passw == null || repeatPassw == null) {
-            response.setContentType(WebPage.CONTENT_TYPE);
-            response.setStatus(HttpServletResponse.SC_OK);
-            return;
-        }
 
         this.msys.sendMessage(new RegistrationQuery(login, passw), "dbman");
         this.setZombie();
@@ -65,7 +57,6 @@ public class RegisterPage extends WebPage {
             JObject.put("message", "Username already exists");
         }
         printout.print(JObject);
-        printout.flush();
     }
 
 

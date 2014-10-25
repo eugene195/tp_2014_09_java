@@ -77,7 +77,7 @@ public class AdminPageTest {
         assertEquals("Incorrect answer (1)" + answer, testAnswer, answer);
 
         when(request.getParameter("shutdown")).thenReturn("100");
-        helper.flush();
+        helper.fflush();
 
         (new Thread(new TestTask(testPage))).start();
         testPage.handleGet(request, response);

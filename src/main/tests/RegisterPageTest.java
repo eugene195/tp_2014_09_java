@@ -1,37 +1,36 @@
 import global.messagesystem.MessageSystem;
-import global.messagesystem.messages.AuthAnswer;
+import global.messagesystem.messages.RegistrationAnswer;
 import global.models.UserSession;
-import global.webpages.AuthPage;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import global.webpages.RegisterPage;
+import org.junit.*;
 import utils.MinMessageHelper;
 import utils.PrintHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Thread.sleep;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class AuthPageTest {
-
-    private static AuthPage testPage;
+public class RegisterPageTest {
+    private static RegisterPage testPage;
     private static MessageSystem msys;
 
     private static HttpServletRequest request;
     private static HttpServletResponse response;
     private static HttpSession session;
 
-
     static class TestTask implements Runnable {
-        private final AuthPage testPage;
+        private final RegisterPage testPage;
         private final boolean isSuccess;
 
-        public TestTask(AuthPage testPage, boolean isSuccess) {
+        public TestTask(RegisterPage testPage, boolean isSuccess) {
             this.testPage = testPage;
             this.isSuccess = isSuccess;
         }
@@ -43,10 +42,11 @@ public class AuthPageTest {
                     sleep(10);
 
                     if (this.testPage.isZombie()) {
-                        UserSession us = new UserSession("max");
-                        us.setSuccessAuth(this.isSuccess);
+                        String login = "max";
+                        String error = "";
+                        boolean success = this.isSuccess;
 
-                        this.testPage.finalizeAsync(new AuthAnswer(us));
+                        this.testPage.finalizeAsync(new RegistrationAnswer(success, login, error));
                         break;
                     }
 
@@ -57,18 +57,21 @@ public class AuthPageTest {
         }
     }
 
-
     @BeforeClass
     public static void setUp() throws Exception {
         msys = new MinMessageHelper();
-        Map<String, UserSession> userSessions = new HashMap<>();
 
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
         session = mock(HttpSession.class);
         when(request.getSession()).thenReturn(session);
 
-        testPage = new AuthPage(msys, userSessions);
+        testPage = new RegisterPage(msys);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+
     }
 
     @Test
@@ -84,7 +87,7 @@ public class AuthPageTest {
         testPage.handlePost(request, response);
         json = helper.getPrintOut();
 
-        testJson = "{\"message\":\"Incorrect login or password\",\"status\":\"-1\"}";
+        testJson = "{\"message\":\"Username already exists\",\"status\":\"-1\"}";
         Assert.assertEquals("JSON is invalid (1) " + json, testJson, json);
 
         helper.fflush();
