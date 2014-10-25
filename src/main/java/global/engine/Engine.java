@@ -9,8 +9,8 @@ public class Engine {
     private int width, height;
     private int speed;
 
-    private ArrayList<Cell> cells;
-    private ArrayList<Snake> snakes;
+    private final ArrayList<Cell> cells = new ArrayList<>();
+    private final ArrayList<Snake> snakes = new ArrayList<>();
 
     public Engine(int width, int height, int speed, int snakesCnt) {
         this.width = width;
@@ -57,7 +57,7 @@ public class Engine {
         Location aliveLoc = snakes.get(J).getLocation();
 
         for (int I = 0; I < snakes.size(); I++)
-            if (I != J && snakes.get(I).getLocation() == aliveLoc) {
+            if (I != J && snakes.get(I).getLocation().equals(aliveLoc)) {
                 snakes.get(J).setAlive(false);
 
                 // TODO: COLLISION
