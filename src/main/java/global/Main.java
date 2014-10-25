@@ -35,7 +35,7 @@ public class Main
             HandlerList handlers = makeServerHandlers();
             handlers.addHandler(context);
 
-            ResourceFactoryImpl resourceFactory = ResourceFactoryImpl.getInstance();
+            ResourceFactory resourceFactory = ResourceFactoryImpl.getInstance();
             resourceFactory.loadAllResources();
             ServerResource serverResource = resourceFactory.get(SERVER_CONFIG);
             int serverPort = serverResource.getServerPort();
