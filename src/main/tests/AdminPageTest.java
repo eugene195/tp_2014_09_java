@@ -1,7 +1,7 @@
-import global.messagesystem.MessageSystem;
-import global.messagesystem.messages.GetOnlineUsersAnswer;
-import global.messagesystem.messages.GetUsersAnswer;
-import global.webpages.AdminPage;
+import global.msgsystem.MessageSystem;
+import global.msgsystem.messages.GetOnlineUsersAnswer;
+import global.msgsystem.messages.GetUsersAnswer;
+import global.servlet.webpages.AdminPage;
 import org.junit.*;
 import utils.MinMessageHelper;
 import utils.PrintHelper;

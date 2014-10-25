@@ -1,6 +1,6 @@
 package global;
 
-import global.messagesystem.messages.AbstractMsg;
+import global.msgsystem.messages.AbstractMsg;
 
 /**
  * Created by eugene on 10/16/14.
