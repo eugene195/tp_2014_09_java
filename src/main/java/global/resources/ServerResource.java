@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class ServerResource implements Resource {
     int port;
     String database;
+    String dbuser;
 
     public ServerResource() {
         this.port = 8080;
@@ -19,6 +20,10 @@ public class ServerResource implements Resource {
 
     public String getDatabase() {
         return database;
+    }
+
+    public String getDbuser() {
+        return dbuser;
     }
 
 }
