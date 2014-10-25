@@ -53,7 +53,6 @@ public class ResourceFactoryImpl implements ResourceFactory {
             }
         }
         System.out.println("Resources were loaded");
-
     }
 
 }

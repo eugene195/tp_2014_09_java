@@ -2,6 +2,7 @@
  * Created by max on 25.10.14.
  */
 import global.ResourceFactory;
+import global.resources.Admin;
 import global.resources.ResourceFactoryImpl;
 import global.resources.Resource;
 import org.junit.Test;
@@ -11,19 +12,6 @@ public class ResourcesTest {
     private final ResourceFactory testInstance = ResourceFactoryImpl.getInstance();
 
     private static final String TEST_XML = "test.xml";
-
-    public static class Admin implements Resource {
-        private String fullname;
-        private int respect;
-
-        public String getFullName() {
-            return this.fullname;
-        }
-
-        public int getRespect() {
-            return this.respect;
-        }
-    }
 
     public ResourcesTest() {
         super();
