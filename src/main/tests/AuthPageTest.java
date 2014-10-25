@@ -1,5 +1,5 @@
-import global.MessageSystem;
-import global.messages.AuthAnswer;
+import global.messagesystem.MessageSystem;
+import global.messagesystem.messages.AuthAnswer;
 import global.models.UserSession;
 import global.webpages.AuthPage;
 import org.junit.Assert;

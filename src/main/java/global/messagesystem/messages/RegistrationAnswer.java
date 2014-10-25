@@ -1,22 +1,34 @@
-package global.messages;
-
-import global.Servlet;
-import global.webpages.ProfilePage;
+package global.messagesystem.messages;
 
 /**
- * Created by Moiseev Maxim on 02.10.14.
+ * Created by Евгений on 06.09.2014.
  */
-public class ChangePasswordAnswer  extends AbstractMsg {
+
+import global.Servlet;
+import global.webpages.RegisterPage;
+
+/**
+ * Created by Евгений on 28.08.2014.
+ */
+
+public class RegistrationAnswer extends AbstractMsg {
     private final boolean success;
+    private final String login;
     private final String errorMessage;
 
-    public ChangePasswordAnswer(boolean success, String errMsg) {
+    public RegistrationAnswer(boolean success, String login, String errMsg) {
         this.success = success;
+        this.login = login;
         this.errorMessage = errMsg;
     }
 
-    public boolean isChangePasswordSuccess() {
+
+    public boolean isRegistrationSuccess() {
         return this.success;
+    }
+
+    public String getLogin() {
+        return this.login;
     }
 
     public String getErrMsg() { return this.errorMessage; }
@@ -25,10 +37,12 @@ public class ChangePasswordAnswer  extends AbstractMsg {
     public void exec(Runnable abonent) {
         if(abonent instanceof Servlet) {
             Servlet srv = (Servlet) abonent;
-            srv.transmitToPage(ProfilePage.URL, this);
+            srv.transmitToPage(RegisterPage.URL, this);
         }
         else{
             System.out.println("RegistrationAnswer exception during execution");
         }
     }
 }
+
+

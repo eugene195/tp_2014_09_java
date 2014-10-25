@@ -1,6 +1,6 @@
-import global.MessageSystem;
-import global.messages.GetOnlineUsersAnswer;
-import global.messages.GetUsersAnswer;
+import global.messagesystem.MessageSystem;
+import global.messagesystem.messages.GetOnlineUsersAnswer;
+import global.messagesystem.messages.GetUsersAnswer;
 import global.webpages.AdminPage;
 import org.junit.*;
 import utils.MinMessageHelper;

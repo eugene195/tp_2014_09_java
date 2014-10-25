@@ -1,6 +1,6 @@
 package global.webpages;
 
-import global.MessageSystem;
+import global.messagesystem.MessageSystem;
 import global.models.UserSession;
 import org.json.JSONObject;
 

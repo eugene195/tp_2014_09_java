@@ -1,7 +1,7 @@
 package global.webpages;
 
-import global.MessageSystem;
-import global.messages.*;
+import global.messagesystem.MessageSystem;
+import global.messagesystem.messages.*;
 import global.models.UserSession;
 
 import javax.servlet.http.HttpServletRequest;

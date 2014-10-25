@@ -1,7 +1,7 @@
 package utils;
 
-import global.MessageSystem;
-import global.messages.AbstractMsg;
+import global.messagesystem.MessageSystem;
+import global.messagesystem.messages.AbstractMsg;
 
 /**
  * Created by max on 18.10.14.

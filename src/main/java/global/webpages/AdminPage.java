@@ -1,6 +1,6 @@
 package global.webpages;
-import global.MessageSystem;
-import global.messages.*;
+import global.messagesystem.MessageSystem;
+import global.messagesystem.messages.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

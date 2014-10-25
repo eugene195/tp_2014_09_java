@@ -1,7 +1,9 @@
 package global;
 
-import global.implementations.DataBaseManagerImpl;
-import global.implementations.ResourceFactoryImpl;
+import global.database.DataBaseManager;
+import global.database.DataBaseManagerImpl;
+import global.messagesystem.MessageSystem;
+import global.resources.ResourceFactoryImpl;
 import global.implementations.ServletImpl;
 import global.resources.ServerResource;
 import org.eclipse.jetty.server.Handler;
@@ -21,6 +23,35 @@ public class Main
 
     private static final String STATIC_DIR = "public_html";
     private static final String SERVER_CONFIG = "ServerConfig.xml";
+
+    public static void main(String[] args) throws Exception {
+        try {
+            MessageSystem msys = new MessageSystem();
+            ServletImpl servletImpl = createServlet(msys);
+            DataBaseManager dbman = createDbMan(msys);
+
+            configureThreads(servletImpl, dbman);
+
+            ServletContextHandler context = createContext(servletImpl);
+            HandlerList handlers = makeServerHandlers();
+            handlers.addHandler(context);
+
+            ResourceFactoryImpl resourceFactory = ResourceFactoryImpl.getInstance();
+            resourceFactory.loadAllResources();
+            ServerResource serverResource = resourceFactory.get(SERVER_CONFIG);
+            int serverPort = serverResource.getServerPort();
+
+            Server server = createAndConfigureServer(serverPort, handlers);
+            server.start();
+            server.join();
+        }
+        catch (SQLException e) {
+            System.out.println("Cannot connect to DB");
+        }
+        catch (NullPointerException e) {
+            System.out.println(SERVER_CONFIG + " not found");
+        }
+    }
 
     private static void configureThreads(Runnable ... tasks) {
         ExecutorService threadPool = Executors.newFixedThreadPool(tasks.length);
@@ -67,33 +98,4 @@ public class Main
         return handlers;
     }
 
-
-    public static void main(String[] args) throws Exception {
-        try {
-            MessageSystem msys = new MessageSystem();
-            ServletImpl servletImpl = createServlet(msys);
-            DataBaseManager dbman = createDbMan(msys);
-
-            configureThreads(servletImpl, dbman);
-
-            ServletContextHandler context = createContext(servletImpl);
-            HandlerList handlers = makeServerHandlers();
-            handlers.addHandler(context);
-
-            ResourceFactoryImpl resourceFactory = ResourceFactoryImpl.getInstance();
-            resourceFactory.loadAllResources();
-            ServerResource serverResource = resourceFactory.get(SERVER_CONFIG);
-            int serverPort = serverResource.getServerPort();
-
-            Server server = createAndConfigureServer(serverPort, handlers);
-            server.start();
-            server.join();
-        }
-        catch (SQLException e) {
-            System.out.println("Cannot connect to DB");
-        }
-        catch (NullPointerException e) {
-            System.out.println(SERVER_CONFIG + " not found");
-        }
-    }
 }

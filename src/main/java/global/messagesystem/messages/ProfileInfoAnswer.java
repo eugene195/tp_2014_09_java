@@ -1,4 +1,4 @@
-package global.messages;
+package global.messagesystem.messages;
 
 import global.Servlet;
 import global.webpages.ProfilePage;

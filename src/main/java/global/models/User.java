@@ -1,7 +1,5 @@
 package global.models;
 
-import global.messages.AuthQuery;
-
 /**
  * Created by eugene on 10/18/14.
  */

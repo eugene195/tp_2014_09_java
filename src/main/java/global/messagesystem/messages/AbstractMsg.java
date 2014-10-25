@@ -1,4 +1,4 @@
-package global.messages;
+package global.messagesystem.messages;
 
 /**
  * Created by max on 26.08.14.

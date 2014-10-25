@@ -1,4 +1,4 @@
-package global.implementations;
+package global.resources;
 
 import global.ResourceFactory;
 import global.resources.sax.ReadXMLFileSAX;

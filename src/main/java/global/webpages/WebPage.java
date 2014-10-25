@@ -1,6 +1,6 @@
 package global.webpages;
 
-import global.messages.AbstractMsg;
+import global.messagesystem.messages.AbstractMsg;
 import global.Templater;
 import org.apache.velocity.exception.ResourceNotFoundException;
 

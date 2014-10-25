@@ -1,7 +1,7 @@
-package global.messages;
+package global.messagesystem.messages;
 
-import global.implementations.DataBaseManagerImpl;
-import global.DataBaseManager;
+import global.database.DataBaseManagerImpl;
+import global.database.DataBaseManager;
 import global.models.UserSession;
 
 /**

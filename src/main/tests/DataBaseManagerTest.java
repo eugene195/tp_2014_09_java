@@ -1,6 +1,5 @@
-import global.implementations.DataBaseManagerImpl;
-import global.MessageSystem;
-import global.messages.*;
+import global.database.DataBaseManagerImpl;
+import global.messagesystem.messages.*;
 import global.models.Score;
 import global.models.User;
 import global.models.UserSession;

@@ -1,9 +1,9 @@
 package global.webpages;
 
-import global.MessageSystem;
-import global.messages.AbstractMsg;
-import global.messages.BestScoresAnswer;
-import global.messages.BestScoresQuery;
+import global.messagesystem.MessageSystem;
+import global.messagesystem.messages.AbstractMsg;
+import global.messagesystem.messages.BestScoresAnswer;
+import global.messagesystem.messages.BestScoresQuery;
 import global.models.Score;
 import org.json.JSONObject;
 

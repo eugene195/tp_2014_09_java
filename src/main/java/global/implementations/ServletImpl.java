@@ -1,8 +1,8 @@
 package global.implementations;
 
-import global.MessageSystem;
+import global.messagesystem.MessageSystem;
 import global.Servlet;
-import global.messages.AbstractMsg;
+import global.messagesystem.messages.AbstractMsg;
 import global.models.UserSession;
 import global.webpages.*;
 
