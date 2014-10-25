@@ -1,0 +1,38 @@
+Клиент - Сервер.
+
+1) handleKey()
+{
+    direct: Direct
+}
+
+Сервер - Клиент.
+
+1) startGame()
+{
+    height: int,
+    width: int,
+    speed: int,
+    snakes: [{
+        snakeID: int,
+        color: Color
+    }, ...]
+}
+
+2) endGame()
+[{
+    snakeID: int,
+    isWinner: bool
+}, ...]
+
+3) collision()
+{
+    snakeID: int
+    with: int
+}
+
+4) tick()
+[{
+    snakeID:
+    newX: int
+    newY: int
+}, ...]
