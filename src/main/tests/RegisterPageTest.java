@@ -1,7 +1,6 @@
-import global.messagesystem.MessageSystem;
-import global.messagesystem.messages.RegistrationAnswer;
-import global.models.UserSession;
-import global.webpages.RegisterPage;
+import global.msgsystem.MessageSystem;
+import global.msgsystem.messages.RegistrationAnswer;
+import global.servlet.webpages.RegisterPage;
 import org.junit.*;
 import utils.MinMessageHelper;
 import utils.PrintHelper;
@@ -10,11 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static java.lang.Thread.sleep;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
