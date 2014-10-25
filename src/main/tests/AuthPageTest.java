@@ -1,7 +1,7 @@
-import global.MessageSystem;
-import global.messages.AuthAnswer;
+import global.msgsystem.MessageSystem;
+import global.msgsystem.messages.AuthAnswer;
 import global.models.UserSession;
-import global.webpages.AuthPage;
+import global.servlet.webpages.AuthPage;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

@@ -19,7 +19,7 @@
 	<div class="form__content__menu-item">
 		<a href="#scoreboard" class="form__content__menu-item__link">Scoreboard</a>
 	</div>
-	<div class="form__content__menu-item profile">
+	<div class="form__content__menu-item to_profile">
 		<a href="#profile" class="form__content__menu-item__link">Profile</a>
 	</div>
 	<div class="form__content__menu-item exit">
