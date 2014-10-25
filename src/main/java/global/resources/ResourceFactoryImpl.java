@@ -13,7 +13,6 @@ import java.util.Map;
  * Created by Moiseev Maxim on 18.10.14.
  */
 public class ResourceFactoryImpl implements ResourceFactory {
-    public static final String RESOURCE_ROOT = "data";
     private static ResourceFactoryImpl instance;
     private static Map<String, Object> resources = new HashMap<>();
     private static VFS vfs;
@@ -35,8 +34,8 @@ public class ResourceFactoryImpl implements ResourceFactory {
     }
 
     @Override
-    public void loadAllResources() {
-        vfs = new VFSImpl(RESOURCE_ROOT);
+    public void loadAllResources(String root) {
+        vfs = new VFSImpl(root);
         String absoluteResourceRoot = vfs.getAbsolutePath("") + "/";
         Iterator<String> iter = vfs.getIterator("");
 

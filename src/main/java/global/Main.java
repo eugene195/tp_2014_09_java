@@ -36,7 +36,7 @@ public class Main
             handlers.addHandler(context);
 
             ResourceFactory resourceFactory = ResourceFactoryImpl.getInstance();
-            resourceFactory.loadAllResources();
+            resourceFactory.loadAllResources(ResourceFactory.RESOURCE_ROOT);
             ServerResource serverResource = resourceFactory.get(SERVER_CONFIG);
             int serverPort = serverResource.getServerPort();
 

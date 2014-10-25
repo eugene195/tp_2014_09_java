@@ -12,23 +12,17 @@ public class ResourcesTest {
     private final ResourceFactory testInstance = ResourceFactoryImpl.getInstance();
 
     private static final String TEST_XML = "test.xml";
+    private static final String errText = "Файл xml прочитан неправильно: ";
 
     public ResourcesTest() {
         super();
-        this.testInstance.loadAllResources();
+        this.testInstance.loadAllResources(ResourceFactory.RESOURCE_ROOT + "/tests");
     }
 
     @Test
     public void testAdmin_1() throws Exception {
-        final String ErrText = "Файл xml прочитан неправильно: ";
         Admin testRecord = this.testInstance.get(TEST_XML);
-        Assert.assertEquals(ErrText, "Kislenko Maksim", testRecord.getFullName());
-    }
-
-    @Test
-    public void testAdmin_2() throws Exception {
-        final String ErrText = "Файл xml прочитан неправильно: ";
-        Admin testRecord = this.testInstance.get(TEST_XML);
-        Assert.assertEquals(ErrText, 22, testRecord.getRespect());
+        Assert.assertEquals(errText, "Kislenko Maksim", testRecord.getFullName());
+        Assert.assertEquals(errText, 22, testRecord.getRespect());
     }
 }

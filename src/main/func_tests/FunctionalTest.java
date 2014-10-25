@@ -1,4 +1,3 @@
-package functional;
 
 import com.sun.istack.internal.NotNull;
 import global.Main;
