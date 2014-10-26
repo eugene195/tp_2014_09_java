@@ -39,7 +39,7 @@ var View = Backbone.View.extend({
         };
       
         function sinePoint(base, time, amp, freq) {
-            return base + (amp * Math.sin(freq*time*Math.PI));
+            return base + (amp * Math.sin(freq * time * Math.PI));
         }
 
         function drawCircle(Circle, context) {
@@ -60,9 +60,9 @@ var View = Backbone.View.extend({
             // pixels / second
             var newX = linearSpeed * time / 1000;
 
-            if(newX < canvas.width - Circle.radius*2) {
+            if(newX < canvas.width - Circle.radius * 2) {
                 Circle.x = newX;
-                Circle.y = sinePoint(base,time/10000,amp,freq);
+                Circle.y = sinePoint(base, time/10000, amp, freq);
             }
 
             // clear
@@ -84,7 +84,6 @@ var View = Backbone.View.extend({
             var startTime = (new Date()).getTime();
             animate(Circle, canvas, context, startTime);
             }, 1000);
-
         }
     });
 
