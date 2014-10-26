@@ -28,8 +28,8 @@ var View = Backbone.View.extend({
         })();
       
         var amp = 100;
-        var freq = 1;
-        var tick = 0;
+        var freq = 10;
+        var base = 200;
 
         var Circle = {
             x: 0,
@@ -38,8 +38,8 @@ var View = Backbone.View.extend({
             borderWidth: 2
         };
       
-        function sinePoint(base, tick, amp, freq) {
-            return base + (amp * Math.sin(freq*tick*Math.PI));
+        function sinePoint(base, time, amp, freq) {
+            return base + (amp * Math.sin(freq*time*Math.PI));
         }
 
         function drawCircle(Circle, context) {
@@ -60,11 +60,9 @@ var View = Backbone.View.extend({
             // pixels / second
             var newX = linearSpeed * time / 1000;
 
-            tick += 0.01;
-
             if(newX < canvas.width - Circle.radius*2) {
                 Circle.x = newX;
-                Circle.y = sinePoint(200,tick,amp,freq);
+                Circle.y = sinePoint(base,time/10000,amp,freq);
             }
 
             // clear
