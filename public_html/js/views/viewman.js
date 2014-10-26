@@ -25,7 +25,6 @@ define([
         },
 
         reshow: function (view) {
-            debugger;
             if (this.currentView)
                 this.currentView.$el.hide();
             this.currentView = view;

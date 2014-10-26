@@ -29,11 +29,9 @@ define([
         },
 
         show: function () {
-            debugger;
             this.session.postIdentifyUser('main');
         },
         logout: function (event) {
-            debugger;
             event.preventDefault();
             this.session.postLogout();
         },
@@ -46,18 +44,15 @@ define([
         userNotIdentified: function() {
             this.$(".to_profile, .exit").hide();
             this.$(".auth, .reg").show();
-            debugger;
             this.trigger('reshow', this);
         },
 
         logoutSuccess: function (data) {
-            debugger;
             this.trigger('success');
             this.show();
         },
 
         logoutError: function (message) {
-            debugger;
             var elem = this.$(".alert-error").slideDown().delay(3000).slideUp();
             elem.html("<p>" + message + "</p>");
         }
