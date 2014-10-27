@@ -1,11 +1,5 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
 
-    Amplitude
-<input type="button" id="amplitudeUp" value="Up" name="amplitudeUpBtn" />
-<input type="button" id="amplitudeDown" value="Down" name="amplitudeDownBtn" />
-    Frequency
-<input type="button" id="frequencyUp" value="Up" name="frequencyUpBtn" />
-<input type="button" id="frequencyDown" value="Down" name="frequencyDownBtn" />
 <canvas id="myCanvas" width="1200" height="400"></canvas>
 
 </fest:template>

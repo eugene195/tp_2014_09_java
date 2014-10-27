@@ -17,10 +17,6 @@ var View = Backbone.View.extend({
             this.$el.html(this.template());
         },
 
-        amplUpClick: function(event) {
-            this.amp += 100;
-        },
-
         show: function () {
             this.trigger('reshow', this);
 
@@ -32,6 +28,42 @@ var View = Backbone.View.extend({
                   window.setTimeout(callback, 1000 / 60);
                 };
             })();
+
+            function Button(start, length, text, height, btnName) {
+                this.start = start;
+                this.length = length;
+                this.text = text;
+                this.height = height;
+                this.btnName = btnName;
+            };
+
+            function isInBounds(button, x, y) {
+                if ((x >  button.start) && (x < button.finish) && (y > 0) && (y < button.height)) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+            };
+
+            function buttonPress(btnName) {
+                if (btnName == "freqUp") {
+                    freq = freq - 100;
+                } else if (btnName == "freqDown") {
+                    freq = freq + 100;
+                } else if (btnName == "ampUp") {
+                    amp = amp + 100;
+                } else {
+                    amp = amp - 100;
+                }
+            };
+
+            var btnArray = [
+                new Button(0, 150, "Frequency Up", 50, "freqUp"),
+                new Button(160, 150, "Frequency Down", 50, "freqDown"),
+                new Button(320, 150, "Amplitude Up", 50, "ampUp"),
+                new Button(480, 150, "Amplitude Down", 50, "ampDown")
+            ]
 
             var amp = 100;
             var freq = 10;
@@ -47,6 +79,29 @@ var View = Backbone.View.extend({
             function sinePoint(base, time, amp, freq) {
                 return base + (amp * Math.sin(freq * time * Math.PI));
             }
+
+            function getMousePos(canvas, evt) {
+                var rect = canvas.getBoundingClientRect();
+                return {
+                    x: evt.clientX - rect.left,
+                    y: evt.clientY - rect.top
+                };
+            }
+
+            function drawButton(Button, context) {
+                context.beginPath();
+                context.rect(Button.start, 0, Button.length, Button.height);
+                context.fillStyle = 'yellow';
+                context.fill();
+                context.font = '12pt Calibri';
+                context.lineWidth = 1;
+                context.strokeStyle = 'blue';
+                context.strokeText(Button.text, Button.start + 5, Button.height / 2);
+                context.lineWidth = 2;
+                context.strokeStyle = 'black';
+                context.stroke();
+            }
+
 
             function drawCircle(Circle, context) {
                 context.beginPath();
@@ -86,25 +141,26 @@ var View = Backbone.View.extend({
                 });
             }
 
-//          Event Listeners
-            document.getElementById('amplitudeUp').addEventListener('click', function() {
-                amp = amp + 100;
-            });
-
-            document.getElementById('amplitudeDown').addEventListener('click', function() {
-                amp = amp - 100;
-            });
-
-            document.getElementById('frequencyUp').addEventListener('click', function() {
-                freq = freq - 100;
-            });
-
-            document.getElementById('frequencyDown').addEventListener('click', function() {
-                freq = freq + 100;
-            });
-
             var canvas = document.getElementById('myCanvas');
             var context = canvas.getContext('2d');
+
+            btnArray.forEach(function(entry) {
+//                debugger;
+                drawButton(entry, context);
+            });
+
+            canvas.addEventListener('click', function(evt) {
+                var mousePos = getMousePos(canvas, evt);
+                btnArray.forEach(function(entry) {
+//                    debugger;
+                    if ((mousePos.x >  entry.start) && (mousePos.x < entry.start + entry.length)
+                    && (mousePos.y > 0) && (mousePos.y < entry.height)) {
+                        buttonPress(entry.btnName);
+                    }
+                });
+
+            }, false);
+//            What is that false?
 
             // wait one second before starting animation
             setTimeout(function() {
