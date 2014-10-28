@@ -24,7 +24,7 @@ var View = Backbone.View.extend({
                 return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
                     window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
                     window.msRequestAnimationFrame ||
-                function(callback) {
+                function (callback) {
                   window.setTimeout(callback, 1000 / 60);
                 };
             })();
@@ -35,6 +35,20 @@ var View = Backbone.View.extend({
                 this.text = text;
                 this.height = height;
                 this.btnName = btnName;
+
+                this.drawButton = function(context) {
+                    context.beginPath();
+                    context.rect(this.start, 0, this.length, this.height);
+                    context.fillStyle = 'yellow';
+                    context.fill();
+                    context.font = '12pt Calibri';
+                    context.lineWidth = 1;
+                    context.strokeStyle = 'blue';
+                    context.strokeText(this.text, this.start + 5, this.height / 2);
+                    context.lineWidth = 2;
+                    context.strokeStyle = 'black';
+                    context.stroke();
+                }
             };
 
             function isInBounds(button, x, y) {
@@ -43,18 +57,17 @@ var View = Backbone.View.extend({
                 } else {
                     return false;
                 }
-
             };
 
             function buttonPress(btnName) {
                 if (btnName == "freqUp") {
-                    freq = freq - 100;
+                    freq = freq + 10;
                 } else if (btnName == "freqDown") {
-                    freq = freq + 100;
+                    freq = freq - 10;
                 } else if (btnName == "ampUp") {
-                    amp = amp + 100;
+                    amp = amp + 10;
                 } else {
-                    amp = amp - 100;
+                    amp = amp - 10;
                 }
             };
 
@@ -66,7 +79,7 @@ var View = Backbone.View.extend({
             ]
 
             var amp = 100;
-            var freq = 10;
+            var freq = 40;
             var base = 200;
 
             var Circle = {
@@ -86,20 +99,6 @@ var View = Backbone.View.extend({
                     x: evt.clientX - rect.left,
                     y: evt.clientY - rect.top
                 };
-            }
-
-            function drawButton(Button, context) {
-                context.beginPath();
-                context.rect(Button.start, 0, Button.length, Button.height);
-                context.fillStyle = 'yellow';
-                context.fill();
-                context.font = '12pt Calibri';
-                context.lineWidth = 1;
-                context.strokeStyle = 'blue';
-                context.strokeText(Button.text, Button.start + 5, Button.height / 2);
-                context.lineWidth = 2;
-                context.strokeStyle = 'black';
-                context.stroke();
             }
 
 
@@ -157,7 +156,7 @@ var View = Backbone.View.extend({
                         tail.shift();
                     }
                 }
-
+                console.log(time);
                 // clear
 //                context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -173,15 +172,17 @@ var View = Backbone.View.extend({
             var canvas = document.getElementById('myCanvas');
             var context = canvas.getContext('2d');
 
+            var btnCanvas = document.getElementById('btnCanvas');
+            var btnContext = btnCanvas.getContext('2d');
+
             btnArray.forEach(function(entry) {
-//                debugger;
-                drawButton(entry, context);
+                entry.drawButton(btnContext);
             });
 
-            canvas.addEventListener('click', function(evt) {
-                var mousePos = getMousePos(canvas, evt);
+            btnCanvas.addEventListener('click', function(evt) {
+//                debugger;
+                var mousePos = getMousePos(btnCanvas, evt);
                 btnArray.forEach(function(entry) {
-//                    debugger;
                     if ((mousePos.x >  entry.start) && (mousePos.x < entry.start + entry.length)
                     && (mousePos.y > 0) && (mousePos.y < entry.height)) {
                         buttonPress(entry.btnName);

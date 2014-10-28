@@ -98,22 +98,22 @@ define([
         },
 
         loginClick: function() {
-            this.$(".form__content__user-icon").css("left","-48px");
+            this.$(".user-icon").css("left","-48px");
         },
         passwClick: function() {
-            this.$(".form__content__pass-icon").css("left","-48px");
+            this.$(".pass-icon").css("left","-48px");
         },
         confirmPasswClick: function() {
-            this.$(".form__content__pass-icon2").css("left","-48px");
+            this.$(".pass-icon2").css("left","-48px");
         },
         loginBlur: function() {
-            this.$(".form__content__user-icon").css("left","0px");
+            this.$(".user-icon").css("left","0px");
         },
         passwBlur: function() {
-            this.$(".form__content__pass-icon").css("left","0px");
+            this.$(".pass-icon").css("left","0px");
         },
         confirmPasswBlur: function() {
-            this.$(".form__content__pass-icon2").css("left","0px");
+            this.$(".pass-icon2").css("left","0px");
         }
     });
     return new View();

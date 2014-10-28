@@ -87,16 +87,16 @@ define([
         },
 
         loginClick: function() {
-            this.$(".form__content__user-icon").css("left","-48px");
+            this.$(".user-icon").css("left","-48px");
         },
         passwordClick: function() {
-            this.$(".form__content__pass-icon").css("left","-48px");
+            this.$(".pass-icon").css("left","-48px");
         },
         loginBlur: function() {
-            this.$(".form__content__user-icon").css("left","0px");
+            this.$(".user-icon").css("left","0px");
         },
         passwordBlur: function() {
-            this.$(".form__content__pass-icon").css("left","0px");
+            this.$(".pass-icon").css("left","0px");
         }
     });
 

@@ -31,7 +31,7 @@ Game Page CSS
 	background: #2EB82E;
 	border-radius: 25px;
 }
-.gamepage__footer__controlbar-status {
+.gamepage__footer__controlbar {
 	margin-left: 10px;
 	margin-top: 10px;
 	display:inline-block;
