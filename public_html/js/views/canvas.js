@@ -179,6 +179,7 @@ define([
                 if (!this.pause) {
                     var newX = linearSpeed * time;
                     time += interval;
+                    console.log(time);
 
                     var R2 = circle.radius * 2;
                     context.clearRect(circle.x - R2, circle.y - R2, circle.x + R2, circle.y + R2);
