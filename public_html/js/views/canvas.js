@@ -172,7 +172,7 @@ define([
                 interval = 1;
 
             var animate = function(circle, canvas, context) {
-                if (!this.pause) {
+                if (!self.pause) {
                     var newX = 4*linearSpeed * time;
                     time += interval;
                     console.log(time);
