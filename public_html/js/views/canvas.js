@@ -7,11 +7,12 @@ define([
     tmpl,
     Manager
 ){
-var View = Backbone.View.extend({
+    var View = Backbone.View.extend({
         el: $('.canvas'),
         template: tmpl,
         animation: true,
         viewman: Manager,
+
         initialize: function () {
             this.render();
             this.$el.hide();
@@ -21,7 +22,7 @@ var View = Backbone.View.extend({
             this.$el.html(this.template());
         },
 
-        hide: function () {
+        hideHandler: function () {
             this.animation = false;
             var canvas = document.getElementById('myCanvas');
             var context = canvas.getContext('2d');
@@ -29,7 +30,7 @@ var View = Backbone.View.extend({
         },
 
         show: function () {
-            this.listenTo(this.viewman, 'hide', this.hide);
+            this.listenTo(this.viewman, 'hide', this.hideHandler);
             this.trigger('reshow', this);
             this.animation = true;
 
@@ -60,7 +61,7 @@ var View = Backbone.View.extend({
                 new Button(160, 150, "Frequency Down", 50, "freqDown"),
                 new Button(320, 150, "Amplitude Up", 50, "ampUp"),
                 new Button(480, 150, "Amplitude Down", 50, "ampDown")
-            ]
+            ];
 
             var amp = 100;
             var freq = 40;
@@ -106,12 +107,12 @@ var View = Backbone.View.extend({
                             tail.shift();
                         }
                     }
-                    
+
                     this.drawCircle(context);
 
                     // request new frame
                     var circle = this;
-                   
+
                     if (self.animation) {
                         requestAnimFrame(function() {
                             circle.animate(canvas, context, startTime);
@@ -126,16 +127,9 @@ var View = Backbone.View.extend({
 
             function getMousePos(canvas, evt) {
                 var rect = canvas.getBoundingClientRect();
-                return {
-                    x: evt.clientX - rect.left,
-                    y: evt.clientY - rect.top
-                };
+                return new Point(evt.clientX - rect.left, evt.clientY - rect.top);
             }
 
-            function Point (x, y) {
-                this.x = x;
-                this.y = y;
-            }
             var tail = [];
 
             function drawTail(context, tail) {
@@ -166,7 +160,6 @@ var View = Backbone.View.extend({
             btnCanvas.addEventListener('click', function(evt) {
                 var mousePos = getMousePos(btnCanvas, evt);
                 btnArray.forEach(function(entry) {
-                    debugger;
                     if (entry.isInBounds(mousePos.x, mousePos.y)) {
                         buttonPress(entry.btnName);
                     }
@@ -175,14 +168,12 @@ var View = Backbone.View.extend({
             }, false);
 //            What is that false?
 
-            // wait one second before starting animation
-            var self = this;
             setTimeout(function() {
-            
+
                 var startTime = (new Date()).getTime();
                 var circle = new Circle(0, 75, 20, 2);
                 circle.animate(canvas, context, startTime);
-            
+
             }, 1000);
         }
 
@@ -190,6 +181,12 @@ var View = Backbone.View.extend({
 
     return new View();
 });
+
+
+function Point (x, y) {
+    this.x = x;
+    this.y = y;
+}
 
 
 function Button(start, length, text, height, btnName) {
