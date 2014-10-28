@@ -25,8 +25,10 @@ define([
         },
 
         reshow: function (view) {
-            if (this.currentView)
+            if (this.currentView) {
                 this.currentView.$el.hide();
+                this.trigger('hide', 1);
+            }
             this.currentView = view;
             view.$el.show();
         }

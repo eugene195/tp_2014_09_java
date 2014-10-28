@@ -1,34 +1,35 @@
 define([
     'backbone',
-    'tmpl/canvas'
+    'tmpl/canvas',
+    'views/viewman'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    Manager
 ){
 var View = Backbone.View.extend({
         el: $('.canvas'),
         template: tmpl,
-        animation: false,
-
+        animation: true,
+        viewman: Manager,
         initialize: function () {
             this.render();
             this.$el.hide();
-
-            var self = this;
-            var canvas = document.getElementById('myCanvas');
-
-            this.listenTo(this.$el, 'hide', function () {
-                var context = canvas.getContext('2d');
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                self.animation = false;
-            });
         },
 
         render: function () {
             this.$el.html(this.template());
         },
 
+        hide: function () {
+            this.animation = false;
+            var canvas = document.getElementById('myCanvas');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        },
+
         show: function () {
+            this.listenTo(this.viewman, 'hide', this.hide);
             this.trigger('reshow', this);
             this.animation = true;
 
@@ -37,7 +38,7 @@ var View = Backbone.View.extend({
                     window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
                     window.msRequestAnimationFrame ||
                 function (callback) {
-                  window.setTimeout(callback, 1000 / 60);
+                  window.setTimeout(callback, param);
                 };
             })();
 
@@ -64,6 +65,8 @@ var View = Backbone.View.extend({
             var amp = 100;
             var freq = 40;
             var base = 200;
+
+            var self = this;
 
             function Circle(x, y, radius, borderWidth) {
                 this.x = x;
@@ -103,15 +106,17 @@ var View = Backbone.View.extend({
                             tail.shift();
                         }
                     }
-                    console.log(time);
-
+                    
                     this.drawCircle(context);
 
                     // request new frame
-                    var self = this;
-                    requestAnimFrame(function() {
-                        self.animate(canvas, context, startTime);
-                    });
+                    var circle = this;
+                   
+                    if (self.animation) {
+                        requestAnimFrame(function() {
+                            circle.animate(canvas, context, startTime);
+                        });
+                    }
                 }
             }
 
@@ -173,11 +178,11 @@ var View = Backbone.View.extend({
             // wait one second before starting animation
             var self = this;
             setTimeout(function() {
-            if (self.animation) {
+            
                 var startTime = (new Date()).getTime();
                 var circle = new Circle(0, 75, 20, 2);
                 circle.animate(canvas, context, startTime);
-            }
+            
             }, 1000);
         }
 
