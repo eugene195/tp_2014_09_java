@@ -96,7 +96,6 @@ define([
     var View = Backbone.View.extend({
         el: $('.canvas'),
         template: tmpl,
-        animation: true,
         pause: false,
         viewman: Manager,
 
@@ -110,7 +109,7 @@ define([
         },
 
         hideHandler: function () {
-            this.animation = false;
+            this.pause = true;
             var canvas = document.getElementById('myCanvas');
             var context = canvas.getContext('2d');
             context.clearRect(0, 0, canvas.width, canvas.height);
@@ -119,16 +118,6 @@ define([
         show: function () {
             this.listenTo(this.viewman, 'hide', this.hideHandler);
             this.trigger('reshow', this);
-            this.animation = true;
-
-            window.requestAnimFrame = (function (callback) {
-                return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
-                    window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
-                    window.msRequestAnimationFrame ||
-                    function (callback) {
-                        window.setTimeout(callback, param);
-                    };
-            })();
 
             var amp = 100;
             var freq = 40;
@@ -142,6 +131,8 @@ define([
 
             var btnCanvas = document.getElementById('btnCanvas');
             var btnContext = btnCanvas.getContext('2d');
+
+            var circle = new Circle(0, 75, 20, 2);
 
             var btnArray = [
                 new Button(0, 150, "Frequency Up", 50, "freqUp"),
@@ -180,16 +171,15 @@ define([
                 }
             }
 
+            var linearSpeed = 1;
+            var time = 0;
+            var interval = 1;
 
-            this.animate = function(circle, canvas, context, startTime) {
+            this.animate = function(circle, canvas, context) {
                 if (!this.pause) {
-                    // update
-                    var time = (new Date()).getTime() - startTime;
-                    var linearSpeed = 100;
-                    // pixels / second
-                    
+                    var newX = linearSpeed * time;
+                    time += interval;
 
-                    var newX = linearSpeed * time / 1000;
                     var R2 = circle.radius * 2;
                     context.clearRect(circle.x - R2, circle.y - R2, circle.x + R2, circle.y + R2);
 
@@ -197,26 +187,17 @@ define([
 
                     if (newX < canvas.width - circle.radius * 2) {
                         circle.x = newX;
-                        circle.y = sinePoint(base, time/10000, amp, freq);
+                        circle.y = sinePoint(base, newX/1000, amp, freq);
                         tail.append(circle.x, circle.y);
                     }
 
                     circle.drawCircle(context);
-                } else {
-                    
-                }
-                if (self.animation) {
-                    requestAnimFrame(function() {
-                        self.animate(circle, canvas, context, startTime);
-                    });
                 }
             };
 
-            setTimeout(function () {
-                var startTime = (new Date()).getTime();
-                var circle = new Circle(0, 75, 20, 2);
-                self.animate(circle, canvas, context, startTime);
-            }, 1000);
+            setInterval(function () {
+                self.animate(circle, canvas, context);
+            }, interval);
         }
     });
 
