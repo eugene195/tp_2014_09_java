@@ -113,6 +113,27 @@ var View = Backbone.View.extend({
                 context.stroke();
             }
 
+            function Point (x, y) {
+                this.x = x;
+                this.y = y;
+            }
+            var tail = [];
+            debugger;
+
+            function drawTail(context, tail) {
+                context.beginPath();
+                context.lineWidth = 4;
+                context.strokeStyle = 'black';
+
+                if (tail.length == 0) return;
+
+                context.moveTo(tail[0].x, tail[0].y);
+                for (var I in tail) {
+                    context.lineTo(tail[I].x, tail[I].y);
+                }
+                context.stroke();
+            }
+
             function animate(Circle, canvas, context, startTime) {
                 // update
                 var time = (new Date()).getTime() - startTime;
@@ -124,9 +145,17 @@ var View = Backbone.View.extend({
                 context.clearRect(Circle.x - Circle.radius * 2, Circle.y - Circle.radius * 2,
                                   Circle.x + Circle.radius * 2, Circle.y + Circle.radius * 2);
 
-                if(newX < canvas.width - Circle.radius * 2) {
+
+                drawTail(context, tail);
+
+                if (newX < canvas.width - Circle.radius * 2) {
                     Circle.x = newX;
                     Circle.y = sinePoint(base, time/10000, amp, freq);
+
+                    tail.push(new Point(Circle.x, Circle.y));
+                    if (tail.length == 100) {
+                        tail.shift();
+                    }
                 }
 
                 // clear
@@ -166,7 +195,7 @@ var View = Backbone.View.extend({
             setTimeout(function() {
                 var startTime = (new Date()).getTime();
                 animate(Circle, canvas, context, startTime);
-                }, 1000);
+            }, 1000);
         }
 
     });
