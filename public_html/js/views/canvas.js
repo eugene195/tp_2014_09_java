@@ -48,13 +48,13 @@ var View = Backbone.View.extend({
 
             function buttonPress(btnName) {
                 if (btnName == "freqUp") {
-                    freq = freq - 100;
+                    freq = freq + 10;
                 } else if (btnName == "freqDown") {
-                    freq = freq + 100;
+                    freq = freq - 10;
                 } else if (btnName == "ampUp") {
-                    amp = amp + 100;
+                    amp = amp + 10;
                 } else {
-                    amp = amp - 100;
+                    amp = amp - 10;
                 }
             };
 
@@ -66,7 +66,7 @@ var View = Backbone.View.extend({
             ]
 
             var amp = 100;
-            var freq = 10;
+            var freq = 40;
             var base = 200;
 
             var Circle = {
