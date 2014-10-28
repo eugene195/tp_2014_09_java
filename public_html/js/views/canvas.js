@@ -97,6 +97,7 @@ define([
         el: $('.canvas'),
         template: tmpl,
         animation: true,
+        pause: false,
         viewman: Manager,
 
         initialize: function () {
@@ -132,7 +133,6 @@ define([
             var amp = 100;
             var freq = 40;
             var base = 200;
-            var pause = false;
 
             var self = this;
 
@@ -176,31 +176,36 @@ define([
                     amp = amp - 10;
                 }
                 else {
-                    pause = !pause;
+                    self.pause = !self.pause;
                 }
             }
 
 
             this.animate = function(circle, canvas, context, startTime) {
-                // update
-                var time = (new Date()).getTime() - startTime;
-                var linearSpeed = 100;
-                // pixels / second
-                var newX = linearSpeed * time / 1000;
-                var R2 = circle.radius * 2;
-                context.clearRect(circle.x - R2, circle.y - R2, circle.x + R2, circle.y + R2);
+                if (!this.pause) {
+                    // update
+                    var time = (new Date()).getTime() - startTime;
+                    var linearSpeed = 100;
+                    // pixels / second
+                    
 
-                tail.drawTail(context);
+                    var newX = linearSpeed * time / 1000;
+                    var R2 = circle.radius * 2;
+                    context.clearRect(circle.x - R2, circle.y - R2, circle.x + R2, circle.y + R2);
 
-                if (newX < canvas.width - circle.radius * 2) {
-                    circle.x = newX;
-                    circle.y = sinePoint(base, time/10000, amp, freq);
-                    tail.append(circle.x, circle.y);
+                    tail.drawTail(context);
+
+                    if (newX < canvas.width - circle.radius * 2) {
+                        circle.x = newX;
+                        circle.y = sinePoint(base, time/10000, amp, freq);
+                        tail.append(circle.x, circle.y);
+                    }
+
+                    circle.drawCircle(context);
+                } else {
+                    
                 }
-
-                circle.drawCircle(context);
-
-                if (self.animation && !self.pause) {
+                if (self.animation) {
                     requestAnimFrame(function() {
                         self.animate(circle, canvas, context, startTime);
                     });
