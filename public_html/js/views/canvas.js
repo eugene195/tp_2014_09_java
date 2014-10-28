@@ -132,6 +132,7 @@ define([
             var amp = 100;
             var freq = 40;
             var base = 200;
+            var pause = false;
 
             var self = this;
 
@@ -146,7 +147,9 @@ define([
                 new Button(0, 150, "Frequency Up", 50, "freqUp"),
                 new Button(160, 150, "Frequency Down", 50, "freqDown"),
                 new Button(320, 150, "Amplitude Up", 50, "ampUp"),
-                new Button(480, 150, "Amplitude Down", 50, "ampDown")
+                new Button(480, 150, "Amplitude Down", 50, "ampDown"),
+                new Button(640, 150, "Pause", 50, "pause")
+
             ];
 
             btnArray.forEach(function (entry) {
@@ -169,8 +172,11 @@ define([
                     freq = freq - 10;
                 } else if (btnName == "ampUp") {
                     amp = amp + 10;
-                } else {
+                } else if (btnName == "ampDown"){
                     amp = amp - 10;
+                }
+                else {
+                    pause = !pause;
                 }
             }
 
@@ -194,7 +200,7 @@ define([
 
                 circle.drawCircle(context);
 
-                if (self.animation) {
+                if (self.animation && !self.pause) {
                     requestAnimFrame(function() {
                         self.animate(circle, canvas, context, startTime);
                     });
