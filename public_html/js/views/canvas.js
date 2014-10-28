@@ -127,7 +127,7 @@ var View = Backbone.View.extend({
                     Circle.x = newX;
                     Circle.y = sinePoint(base, time/10000, amp, freq);
                 }
-
+                console.log(time);
                 // clear
 //                context.clearRect(0, 0, canvas.width, canvas.height);
 

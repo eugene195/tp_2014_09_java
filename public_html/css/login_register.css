@@ -165,7 +165,7 @@ CONTENT
 	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
 }
 
-.form__content__user-icon, .form__content__pass-icon, .form__content__pass-icon2 {
+.user-icon, .pass-icon, .pass-icon2 {
 	width: 46px;
 	height: 47px;
 	display: block;
@@ -180,17 +180,17 @@ CONTENT
 	-webkit-border-bottom-left-radius: 5px;
 }
 
-.form__content__user-icon {
+.user-icon {
 	top:137px; /* Positioning fix for slide-in, got lazy to think up of simpler method. */
 	background: rgba(65,72,72,0.75) url(../images/user-icon.png) no-repeat center;	
 }
 
-.form__content__pass-icon {
+.pass-icon {
 	top:211px;
 	background: rgba(65,72,72,0.75) url(../images/pass-icon.png) no-repeat center;
 }
 
-.form__content__pass-icon2 {
+.pass-icon2 {
 	top:285px;
 	background: rgba(65,72,72,0.75) url(../images/pass-icon.png) no-repeat center;
 }
@@ -235,8 +235,8 @@ CONTENT
 
 
 /* Animation */
-.form__content__input, .form__content__user-icon, .form__content__pass-icon,
-.form__content__pass-icon2, .form__footer__button {
+.form__content__input, .user-icon, .pass-icon,
+.pass-icon2, .form__footer__button {
 	transition: all 0.5s;
 	-moz-transition: all 0.5s;
 	-webkit-transition: all 0.5s;

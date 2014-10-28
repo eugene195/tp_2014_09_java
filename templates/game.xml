@@ -1,7 +1,7 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
 
     <div class="gamepage__header">
-        <div class="gamepage__header__infobar--status">
+        <div class="gamepage__header__infobar">
             Score: Over 9000
             Lives left: 3
         </div>
