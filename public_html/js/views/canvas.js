@@ -1,11 +1,9 @@
 define([
     'backbone',
-    'tmpl/canvas',
-    'views/viewman'
+    'tmpl/canvas'
 ], function(
     Backbone,
-    tmpl,
-    Manager
+    tmpl
 ){
 
     function Point (x, y) {
@@ -64,6 +62,10 @@ define([
             if (this.tail.length == 100) {
                 this.tail.shift();
             }
+        };
+
+        this.clearAll = function () {
+            this.tail = [];
         }
     }
 
@@ -84,8 +86,8 @@ define([
         }
     }
 
-    function sinePoint(base, time, amp, freq) {
-        return base + (amp * Math.sin(freq * time * Math.PI));
+    function sinePoint(base, X, amp, freq) {
+        return base + (amp * Math.sin(freq * X * Math.PI));
     }
 
     function getMousePos(canvas, evt) {
@@ -97,7 +99,7 @@ define([
         el: $('.canvas'),
         template: tmpl,
         pause: false,
-        viewman: Manager,
+        timerID: 0,
 
         initialize: function () {
             this.render();
@@ -108,31 +110,25 @@ define([
             this.$el.html(this.template());
         },
 
-        hideHandler: function () {
-            this.pause = true;
-            var canvas = document.getElementById('myCanvas');
-            var context = canvas.getContext('2d');
-            context.clearRect(0, 0, canvas.width, canvas.height);
+        show: function () {
+            this.trigger('reshow', this);
+            this.launch();
         },
 
-        show: function () {
-            this.listenTo(this.viewman, 'hide', this.hideHandler);
-            this.trigger('reshow', this);
-
-            var amp = 100;
-            var freq = 40;
-            var base = 200;
-
+        launch: function () {
             var self = this;
 
-            var canvas = document.getElementById('myCanvas');
-            var context = canvas.getContext('2d');
-            var tail = new Tail();
+            var amp = 100,
+                freq = 40,
+                base = 200;
 
-            var btnCanvas = document.getElementById('btnCanvas');
-            var btnContext = btnCanvas.getContext('2d');
+            var canvas = document.getElementById('myCanvas'),
+                context = canvas.getContext('2d'),
+                btnCanvas = document.getElementById('btnCanvas'),
+                btnContext = btnCanvas.getContext('2d');
 
             var circle = new Circle(0, 75, 20, 2);
+            var tail = new Tail();
 
             var btnArray = [
                 new Button(0, 150, "Frequency Up", 50, "freqUp"),
@@ -158,47 +154,56 @@ define([
 
             function buttonPress(btnName) {
                 if (btnName == "freqUp") {
-                    freq = freq + 10;
+                    freq += 10;
                 } else if (btnName == "freqDown") {
-                    freq = freq - 10;
+                    freq -= 10;
                 } else if (btnName == "ampUp") {
-                    amp = amp + 10;
+                    amp += 10;
                 } else if (btnName == "ampDown"){
-                    amp = amp - 10;
+                    amp -= 10;
                 }
                 else {
                     self.pause = !self.pause;
                 }
             }
 
-            var linearSpeed = 1;
-            var time = 0;
-            var interval = 1;
+            var linearSpeed = 0.5,
+                time = 0,
+                interval = 1;
 
-            this.animate = function(circle, canvas, context) {
+            var animate = function(circle, canvas, context) {
                 if (!this.pause) {
-                    var newX = linearSpeed * time;
+                    var newX = 4*linearSpeed * time;
                     time += interval;
                     console.log(time);
 
-                    var R2 = circle.radius * 2;
-                    context.clearRect(circle.x - R2, circle.y - R2, circle.x + R2, circle.y + R2);
+                    var D = circle.radius * 2;
+                    var R = circle.radius;
+                    context.clearRect(circle.x - R - 3, circle.y - R - 3, D + 6, D + 6);
 
                     tail.drawTail(context);
 
-                    if (newX < canvas.width - circle.radius * 2) {
+                    if (newX < canvas.width - D) {
                         circle.x = newX;
                         circle.y = sinePoint(base, newX/1000, amp, freq);
                         tail.append(circle.x, circle.y);
+                    } else {
+                        time = 0;
+                        tail.clearAll();
+                        context.clearRect(0, 0, canvas.width, canvas.height);
                     }
 
                     circle.drawCircle(context);
                 }
             };
 
-            setInterval(function () {
-                self.animate(circle, canvas, context);
+            this.timerID = setInterval(function () {
+                animate(circle, canvas, context);
             }, interval);
+        },
+
+        unlaunch: function () {
+            clearInterval(this.timerID);
         }
     });
 

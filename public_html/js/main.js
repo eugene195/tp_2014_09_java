@@ -19,10 +19,12 @@ require.config({
 
 define([
     'backbone',
-    'router'
+    'router',
+    'jquery'
 ], function(
     Backbone,
-    router
+    router,
+    jQuery
 ){
     Backbone.history.start();
 });
