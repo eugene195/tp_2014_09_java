@@ -45,7 +45,7 @@ define([
     function Tail() {
         this.tail = [];
 
-        this.drawTail = function(context) {
+        this.drawTail = function (context) {
             context.beginPath();
             context.lineWidth = 4;
             context.strokeStyle = 'black';
@@ -64,6 +64,23 @@ define([
             if (this.tail.length == 100) {
                 this.tail.shift();
             }
+        }
+    }
+
+    function Circle(x, y, radius, borderWidth) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.borderWidth = borderWidth;
+
+        this.drawCircle = function(context) {
+            context.beginPath();
+            context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+            context.fillStyle = '#00FFFF';
+            context.fill();
+            context.lineWidth = this.borderWidth;
+            context.strokeStyle = '#003300';
+            context.stroke();
         }
     }
 
@@ -157,58 +174,37 @@ define([
                 }
             }
 
-            function Circle(x, y, radius, borderWidth) {
-                this.x = x;
-                this.y = y;
-                this.radius = radius;
-                this.borderWidth = borderWidth;
 
-                this.drawCircle = function (context) {
-                    context.beginPath();
-                    context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
-                    context.fillStyle = '#00FFFF';
-                    context.fill();
-                    context.lineWidth = this.borderWidth;
-                    context.strokeStyle = '#003300';
-                    context.stroke();
-                };
+            this.animate = function(circle, canvas, context, startTime) {
+                // update
+                var time = (new Date()).getTime() - startTime;
+                var linearSpeed = 100;
+                // pixels / second
+                var newX = linearSpeed * time / 1000;
+                var R2 = circle.radius * 2;
+                context.clearRect(circle.x - R2, circle.y - R2, circle.x + R2, circle.y + R2);
 
-                this.animate = function (canvas, context, startTime) {
-                    // update
-                    var time = (new Date()).getTime() - startTime;
-                    var linearSpeed = 100;
-                    // pixels / second
-                    var newX = linearSpeed * time / 1000;
+                tail.drawTail(context);
 
-                    context.clearRect(this.x - this.radius * 2, this.y - this.radius * 2,
-                            this.x + this.radius * 2, this.y + this.radius * 2);
-
-
-                    tail.drawTail(context);
-
-                    if (newX < canvas.width - this.radius * 2) {
-                        this.x = newX;
-                        this.y = sinePoint(base, time / 10000, amp, freq);
-                        tail.append(this.x, this.y);
-                    }
-
-                    this.drawCircle(context);
-
-                    // request new frame
-                    var circle = this;
-
-                    if (self.animation) {
-                        requestAnimFrame(function () {
-                            circle.animate(canvas, context, startTime);
-                        });
-                    }
+                if (newX < canvas.width - circle.radius * 2) {
+                    circle.x = newX;
+                    circle.y = sinePoint(base, time/10000, amp, freq);
+                    tail.append(circle.x, circle.y);
                 }
-            }
+
+                circle.drawCircle(context);
+
+                if (self.animation) {
+                    requestAnimFrame(function() {
+                        self.animate(circle, canvas, context, startTime);
+                    });
+                }
+            };
 
             setTimeout(function () {
                 var startTime = (new Date()).getTime();
                 var circle = new Circle(0, 75, 20, 2);
-                circle.animate(canvas, context, startTime);
+                self.animate(circle, canvas, context, startTime);
             }, 1000);
         }
     });
