@@ -24,7 +24,7 @@ var View = Backbone.View.extend({
                 return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
                     window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
                     window.msRequestAnimationFrame ||
-                function(callback) {
+                function (callback) {
                   window.setTimeout(callback, 1000 / 60);
                 };
             })();
@@ -35,6 +35,20 @@ var View = Backbone.View.extend({
                 this.text = text;
                 this.height = height;
                 this.btnName = btnName;
+
+                this.drawButton = function(context) {
+                    context.beginPath();
+                    context.rect(this.start, 0, this.length, this.height);
+                    context.fillStyle = 'yellow';
+                    context.fill();
+                    context.font = '12pt Calibri';
+                    context.lineWidth = 1;
+                    context.strokeStyle = 'blue';
+                    context.strokeText(this.text, this.start + 5, this.height / 2);
+                    context.lineWidth = 2;
+                    context.strokeStyle = 'black';
+                    context.stroke();
+                }
             };
 
             function isInBounds(button, x, y) {
@@ -43,7 +57,6 @@ var View = Backbone.View.extend({
                 } else {
                     return false;
                 }
-
             };
 
             function buttonPress(btnName) {
@@ -88,20 +101,6 @@ var View = Backbone.View.extend({
                 };
             }
 
-            function drawButton(Button, context) {
-                context.beginPath();
-                context.rect(Button.start, 0, Button.length, Button.height);
-                context.fillStyle = 'yellow';
-                context.fill();
-                context.font = '12pt Calibri';
-                context.lineWidth = 1;
-                context.strokeStyle = 'blue';
-                context.strokeText(Button.text, Button.start + 5, Button.height / 2);
-                context.lineWidth = 2;
-                context.strokeStyle = 'black';
-                context.stroke();
-            }
-
 
             function drawCircle(Circle, context) {
                 context.beginPath();
@@ -144,15 +143,17 @@ var View = Backbone.View.extend({
             var canvas = document.getElementById('myCanvas');
             var context = canvas.getContext('2d');
 
+            var btnCanvas = document.getElementById('btnCanvas');
+            var btnContext = btnCanvas.getContext('2d');
+
             btnArray.forEach(function(entry) {
-//                debugger;
-                drawButton(entry, context);
+                entry.drawButton(btnContext);
             });
 
-            canvas.addEventListener('click', function(evt) {
-                var mousePos = getMousePos(canvas, evt);
+            btnCanvas.addEventListener('click', function(evt) {
+//                debugger;
+                var mousePos = getMousePos(btnCanvas, evt);
                 btnArray.forEach(function(entry) {
-//                    debugger;
                     if ((mousePos.x >  entry.start) && (mousePos.x < entry.start + entry.length)
                     && (mousePos.y > 0) && (mousePos.y < entry.height)) {
                         buttonPress(entry.btnName);
@@ -166,7 +167,7 @@ var View = Backbone.View.extend({
             setTimeout(function() {
                 var startTime = (new Date()).getTime();
                 animate(Circle, canvas, context, startTime);
-                }, 1000);
+            }, 1000);
         }
 
     });
