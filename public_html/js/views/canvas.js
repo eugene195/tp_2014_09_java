@@ -8,17 +8,29 @@ define([
 var View = Backbone.View.extend({
         el: $('.canvas'),
         template: tmpl,
+        animation: false,
 
         initialize: function () {
             this.render();
             this.$el.hide();
+
+            var self = this;
+            var canvas = document.getElementById('myCanvas');
+
+            this.listenTo(this.$el, 'hide', function () {
+                var context = canvas.getContext('2d');
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                self.animation = false;
+            });
         },
+
         render: function () {
             this.$el.html(this.template());
         },
 
         show: function () {
             this.trigger('reshow', this);
+            this.animation = true;
 
             window.requestAnimFrame = (function(callback) {
                 return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
@@ -117,7 +129,6 @@ var View = Backbone.View.extend({
                 this.y = y;
             }
             var tail = [];
-            debugger;
 
             function drawTail(context, tail) {
                 context.beginPath();
@@ -157,16 +168,16 @@ var View = Backbone.View.extend({
                     }
                 }
                 console.log(time);
-                // clear
-//                context.clearRect(0, 0, canvas.width, canvas.height);
 
 
                 drawCircle(Circle, context);
 
                 // request new frame
-                requestAnimFrame(function() {
-                    animate(Circle, canvas, context, startTime);
-                });
+//                if (this.animation) {
+                    requestAnimFrame(function () {
+                        animate(Circle, canvas, context, startTime);
+                    });
+//                }
             }
 
             var canvas = document.getElementById('myCanvas');
@@ -193,9 +204,12 @@ var View = Backbone.View.extend({
 //            What is that false?
 
             // wait one second before starting animation
+            var self = this;
             setTimeout(function() {
-                var startTime = (new Date()).getTime();
-                animate(Circle, canvas, context, startTime);
+                if (self.animation) {
+                    var startTime = (new Date()).getTime();
+                    animate(Circle, canvas, context, startTime);
+                }
             }, 1000);
         }
 
