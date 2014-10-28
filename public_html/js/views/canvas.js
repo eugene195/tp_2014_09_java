@@ -41,35 +41,6 @@ var View = Backbone.View.extend({
                 };
             })();
 
-            function Button(start, length, text, height, btnName) {
-                this.start = start;
-                this.length = length;
-                this.text = text;
-                this.height = height;
-                this.btnName = btnName;
-
-                this.drawButton = function(context) {
-                    context.beginPath();
-                    context.rect(this.start, 0, this.length, this.height);
-                    context.fillStyle = 'yellow';
-                    context.fill();
-                    context.font = '12pt Calibri';
-                    context.lineWidth = 1;
-                    context.strokeStyle = 'blue';
-                    context.strokeText(this.text, this.start + 5, this.height / 2);
-                    context.lineWidth = 2;
-                    context.strokeStyle = 'black';
-                    context.stroke();
-                }
-            };
-
-            function isInBounds(button, x, y) {
-                if ((x >  button.start) && (x < button.finish) && (y > 0) && (y < button.height)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            };
 
             function buttonPress(btnName) {
                 if (btnName == "freqUp") {
@@ -94,12 +65,55 @@ var View = Backbone.View.extend({
             var freq = 40;
             var base = 200;
 
-            var Circle = {
-                x: 0,
-                y: 75,
-                radius: 20,
-                borderWidth: 2
-            };
+            function Circle(x, y, radius, borderWidth) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.borderWidth = borderWidth;
+
+                this.drawCircle = function(context) {
+                    context.beginPath();
+                    context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+                    context.fillStyle = '#00FFFF';
+                    context.fill();
+                    context.lineWidth = this.borderWidth;
+                    context.strokeStyle = '#003300';
+                    context.stroke();
+                }
+
+                this.animate = function(canvas, context, startTime) {
+                    // update
+                    var time = (new Date()).getTime() - startTime;
+                    var linearSpeed = 100;
+                    // pixels / second
+                    var newX = linearSpeed * time / 1000;
+
+                    context.clearRect(this.x - this.radius * 2, this.y - this.radius * 2,
+                                      this.x + this.radius * 2, this.y + this.radius * 2);
+
+
+                    drawTail(context, tail);
+
+                    if (newX < canvas.width - this.radius * 2) {
+                        this.x = newX;
+                        this.y = sinePoint(base, time/10000, amp, freq);
+
+                        tail.push(new Point(this.x, this.y));
+                        if (tail.length == 100) {
+                            tail.shift();
+                        }
+                    }
+                    console.log(time);
+
+                    this.drawCircle(context);
+
+                    // request new frame
+                    var self = this;
+                    requestAnimFrame(function() {
+                        self.animate(canvas, context, startTime);
+                    });
+                }
+            }
 
             function sinePoint(base, time, amp, freq) {
                 return base + (amp * Math.sin(freq * time * Math.PI));
@@ -111,17 +125,6 @@ var View = Backbone.View.extend({
                     x: evt.clientX - rect.left,
                     y: evt.clientY - rect.top
                 };
-            }
-
-
-            function drawCircle(Circle, context) {
-                context.beginPath();
-                context.arc(Circle.x, Circle.y, Circle.radius, 0, 2 * Math.PI, false);
-                context.fillStyle = '#00FFFF';
-                context.fill();
-                context.lineWidth = Circle.borderWidth;
-                context.strokeStyle = '#003300';
-                context.stroke();
             }
 
             function Point (x, y) {
@@ -144,41 +147,6 @@ var View = Backbone.View.extend({
                 context.stroke();
             }
 
-            function animate(Circle, canvas, context, startTime) {
-                // update
-                var time = (new Date()).getTime() - startTime;
-
-                var linearSpeed = 100;
-                // pixels / second
-                var newX = linearSpeed * time / 1000;
-
-                context.clearRect(Circle.x - Circle.radius * 2, Circle.y - Circle.radius * 2,
-                                  Circle.x + Circle.radius * 2, Circle.y + Circle.radius * 2);
-
-
-                drawTail(context, tail);
-
-                if (newX < canvas.width - Circle.radius * 2) {
-                    Circle.x = newX;
-                    Circle.y = sinePoint(base, time/10000, amp, freq);
-
-                    tail.push(new Point(Circle.x, Circle.y));
-                    if (tail.length == 100) {
-                        tail.shift();
-                    }
-                }
-                console.log(time);
-
-
-                drawCircle(Circle, context);
-
-                // request new frame
-//                if (this.animation) {
-                    requestAnimFrame(function () {
-                        animate(Circle, canvas, context, startTime);
-                    });
-//                }
-            }
 
             var canvas = document.getElementById('myCanvas');
             var context = canvas.getContext('2d');
@@ -191,11 +159,10 @@ var View = Backbone.View.extend({
             });
 
             btnCanvas.addEventListener('click', function(evt) {
-//                debugger;
                 var mousePos = getMousePos(btnCanvas, evt);
                 btnArray.forEach(function(entry) {
-                    if ((mousePos.x >  entry.start) && (mousePos.x < entry.start + entry.length)
-                    && (mousePos.y > 0) && (mousePos.y < entry.height)) {
+                    debugger;
+                    if (entry.isInBounds(mousePos.x, mousePos.y)) {
                         buttonPress(entry.btnName);
                     }
                 });
@@ -206,10 +173,11 @@ var View = Backbone.View.extend({
             // wait one second before starting animation
             var self = this;
             setTimeout(function() {
-                if (self.animation) {
-                    var startTime = (new Date()).getTime();
-                    animate(Circle, canvas, context, startTime);
-                }
+            if (self.animation) {
+                var startTime = (new Date()).getTime();
+                var circle = new Circle(0, 75, 20, 2);
+                circle.animate(canvas, context, startTime);
+            }
             }, 1000);
         }
 
@@ -217,3 +185,33 @@ var View = Backbone.View.extend({
 
     return new View();
 });
+
+
+function Button(start, length, text, height, btnName) {
+    this.start = start;
+    this.length = length;
+    this.text = text;
+    this.height = height;
+    this.btnName = btnName;
+
+    this.drawButton = function(context) {
+        context.beginPath();
+        context.rect(this.start, 0, this.length, this.height);
+        context.fillStyle = 'yellow';
+        context.fill();
+        context.font = '12pt Calibri';
+        context.lineWidth = 1;
+        context.strokeStyle = 'blue';
+        context.strokeText(this.text, this.start + 5, this.height / 2);
+        context.lineWidth = 2;
+        context.strokeStyle = 'black';
+        context.stroke();
+    }
+
+    this.isInBounds = function(x, y) {
+        if ((x >  this.start) && (x < this.start + this.length) && (y > 0) && (y < this.height)) {
+            return true;
+        }
+        return false;
+    }
+};
