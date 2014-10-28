@@ -42,6 +42,31 @@ define([
         };
     }
 
+    function Tail() {
+        this.tail = [];
+
+        this.drawTail = function(context) {
+            context.beginPath();
+            context.lineWidth = 4;
+            context.strokeStyle = 'black';
+
+            if (this.tail.length == 0) return;
+
+            context.moveTo(this.tail[0].x, this.tail[0].y);
+            for (var I in this.tail) {
+                context.lineTo(this.tail[I].x, this.tail[I].y);
+            }
+            context.stroke();
+        };
+
+        this.append = function (x, y) {
+            this.tail.push(new Point(x, y));
+            if (this.tail.length == 100) {
+                this.tail.shift();
+            }
+        }
+    }
+
     function sinePoint(base, time, amp, freq) {
         return base + (amp * Math.sin(freq * time * Math.PI));
     }
@@ -78,13 +103,13 @@ define([
             this.trigger('reshow', this);
             this.animation = true;
 
-            window.requestAnimFrame = (function(callback) {
+            window.requestAnimFrame = (function (callback) {
                 return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
                     window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
                     window.msRequestAnimationFrame ||
-                function (callback) {
-                  window.setTimeout(callback, param);
-                };
+                    function (callback) {
+                        window.setTimeout(callback, param);
+                    };
             })();
 
             var amp = 100;
@@ -95,6 +120,7 @@ define([
 
             var canvas = document.getElementById('myCanvas');
             var context = canvas.getContext('2d');
+            var tail = new Tail();
 
             var btnCanvas = document.getElementById('btnCanvas');
             var btnContext = btnCanvas.getContext('2d');
@@ -106,13 +132,13 @@ define([
                 new Button(480, 150, "Amplitude Down", 50, "ampDown")
             ];
 
-            btnArray.forEach(function(entry) {
+            btnArray.forEach(function (entry) {
                 entry.drawButton(btnContext);
             });
 
-            btnCanvas.addEventListener('click', function(evt) {
+            btnCanvas.addEventListener('click', function (evt) {
                 var mousePos = getMousePos(btnCanvas, evt);
-                btnArray.forEach(function(entry) {
+                btnArray.forEach(function (entry) {
                     if (entry.isInBounds(mousePos.x, mousePos.y)) {
                         buttonPress(entry.btnName);
                     }
@@ -129,7 +155,7 @@ define([
                 } else {
                     amp = amp - 10;
                 }
-            };
+            }
 
             function Circle(x, y, radius, borderWidth) {
                 this.x = x;
@@ -137,7 +163,7 @@ define([
                 this.radius = radius;
                 this.borderWidth = borderWidth;
 
-                this.drawCircle = function(context) {
+                this.drawCircle = function (context) {
                     context.beginPath();
                     context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
                     context.fillStyle = '#00FFFF';
@@ -145,9 +171,9 @@ define([
                     context.lineWidth = this.borderWidth;
                     context.strokeStyle = '#003300';
                     context.stroke();
-                }
+                };
 
-                this.animate = function(canvas, context, startTime) {
+                this.animate = function (canvas, context, startTime) {
                     // update
                     var time = (new Date()).getTime() - startTime;
                     var linearSpeed = 100;
@@ -155,19 +181,15 @@ define([
                     var newX = linearSpeed * time / 1000;
 
                     context.clearRect(this.x - this.radius * 2, this.y - this.radius * 2,
-                                      this.x + this.radius * 2, this.y + this.radius * 2);
+                            this.x + this.radius * 2, this.y + this.radius * 2);
 
 
-                    drawTail(context, tail);
+                    tail.drawTail(context);
 
                     if (newX < canvas.width - this.radius * 2) {
                         this.x = newX;
-                        this.y = sinePoint(base, time/10000, amp, freq);
-
-                        tail.push(new Point(this.x, this.y));
-                        if (tail.length == 100) {
-                            tail.shift();
-                        }
+                        this.y = sinePoint(base, time / 10000, amp, freq);
+                        tail.append(this.x, this.y);
                     }
 
                     this.drawCircle(context);
@@ -176,36 +198,19 @@ define([
                     var circle = this;
 
                     if (self.animation) {
-                        requestAnimFrame(function() {
+                        requestAnimFrame(function () {
                             circle.animate(canvas, context, startTime);
                         });
                     }
                 }
             }
 
-            setTimeout(function() {
+            setTimeout(function () {
                 var startTime = (new Date()).getTime();
                 var circle = new Circle(0, 75, 20, 2);
                 circle.animate(canvas, context, startTime);
             }, 1000);
-
-            var tail = [];
-
-            function drawTail(context, tail) {
-                context.beginPath();
-                context.lineWidth = 4;
-                context.strokeStyle = 'black';
-
-                if (tail.length == 0) return;
-
-                context.moveTo(tail[0].x, tail[0].y);
-                for (var I in tail) {
-                    context.lineTo(tail[I].x, tail[I].y);
-                }
-                context.stroke();
-            }
         }
-
     });
 
     return new View();
