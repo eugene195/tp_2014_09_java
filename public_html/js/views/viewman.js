@@ -7,7 +7,6 @@ define([
 ], function (Backbone) {
 
     var Manager = Backbone.View.extend({
-        el: $('#page'),
 
         subscribe: function (views) {
             for (var I in views) {
@@ -21,11 +20,16 @@ define([
         },
 
         rerender: function (view) {
-            this.$el.html(view.render());
+            view.render();
+            this.reshow(view);
         },
 
         reshow: function (view) {
-            this.$el.html(view.$el);
+            if (this.currentView) {
+                this.currentView.$el.hide();
+            }
+            this.currentView = view;
+            view.$el.show();
         }
 
     });

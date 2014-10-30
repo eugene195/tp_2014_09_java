@@ -1,6 +1,12 @@
 package global;
 
-import global.implementations.*;
+
+import global.database.DataBaseManagerImpl;
+import global.implementations.GameMechanicsImpl;
+import global.msgsystem.MessageSystem;
+import global.msgsystem.MessageSystemImpl;
+import global.resources.ResourceFactoryImpl;
+import global.servlet.ServletImpl;
 import global.resources.ServerResource;
 import global.sockets.WebSocketGameServlet;
 import global.sockets.WebSocketServiceImpl;
@@ -22,9 +28,37 @@ public class Main
     private static final String STATIC_DIR = "public_html";
     private static final String SERVER_CONFIG = "ServerConfig.xml";
 
+    public static void main(String[] args) throws Exception {
+        try {
+            MessageSystem msys = new MessageSystemImpl();
+            ServletImpl servletImpl = createServlet(msys);
+            DataBaseManager dbman = createDbMan(msys);
+            WebSocketService webSocketService = new WebSocketServiceImpl();
+            GameMechanics gameMechanics = new GameMechanicsImpl(webSocketService);
+
+            configureThreads(servletImpl, dbman, gameMechanics);
+            ServletContextHandler context = createContext(servletImpl, webSocketService, gameMechanics);
+
+            HandlerList handlers = makeServerHandlers();
+            handlers.addHandler(context);
+
+            ResourceFactory resourceFactory = ResourceFactoryImpl.getInstance();
+            resourceFactory.loadAllResources(ResourceFactory.RESOURCE_ROOT);
+            ServerResource serverResource = resourceFactory.get(SERVER_CONFIG);
+            int serverPort = serverResource.getServerPort();
+
+            Server server = createAndConfigureServer(serverPort, handlers);
+            server.start();
+            server.join();
+        }
+        catch (SQLException e) {
+            System.out.println("Cannot connect to DB");
+        }
+    }
+
     private static void configureThreads(Runnable ... tasks) {
         ExecutorService threadPool = Executors.newFixedThreadPool(tasks.length);
-        for(Runnable task : tasks)
+        for (Runnable task : tasks)
             threadPool.submit(task);
     }
 
@@ -69,38 +103,5 @@ public class Main
         handlers.setHandlers(new Handler[]{resourceHandler});
 
         return handlers;
-    }
-
-
-    public static void main(String[] args) throws Exception {
-        try {
-            MessageSystem msys = new MessageSystemImpl();
-            ServletImpl servletImpl = createServlet(msys);
-            DataBaseManager dbman = createDbMan(msys);
-
-            WebSocketService webSocketService = new WebSocketServiceImpl();
-            GameMechanics gameMechanics = new GameMechanicsImpl(webSocketService);
-
-            configureThreads(servletImpl, dbman, gameMechanics);
-            ServletContextHandler context = createContext(servletImpl, webSocketService, gameMechanics);
-
-
-
-
-            HandlerList handlers = makeServerHandlers();
-            handlers.addHandler(context);
-
-            ResourceFactoryImpl resourceFactory = ResourceFactoryImpl.getInstance();
-            resourceFactory.loadAllResources();
-            ServerResource serverResource = resourceFactory.get(SERVER_CONFIG);
-            int serverPort = serverResource.getServerPort();
-
-            Server server = createAndConfigureServer(serverPort, handlers);
-            server.start();
-            server.join();
-        }
-        catch (SQLException e) {
-            System.out.println("Cannot connect to DB");
-        }
     }
 }

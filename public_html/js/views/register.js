@@ -9,6 +9,7 @@ define([
 ){
 
     var View = Backbone.View.extend({
+        el: $('.register'),
         template: tmpl,
         session: sessionModel,
 
@@ -26,11 +27,11 @@ define([
             this.listenTo(this.session, 'successReg', this.registerSuccess);
             this.listenTo(this.session, 'errorReg', this.registerError);
             this.render();
+            this.$el.hide();
         },
 
         render: function () {
             this.$el.html(this.template());
-            return this.$el;
         },
 
         show: function () {
@@ -97,22 +98,22 @@ define([
         },
 
         loginClick: function() {
-            this.$(".form__content__user-icon").css("left","-48px");
+            this.$(".user-icon").css("left","-48px");
         },
         passwClick: function() {
-            this.$(".form__content__pass-icon").css("left","-48px");
+            this.$(".pass-icon").css("left","-48px");
         },
         confirmPasswClick: function() {
-            this.$(".form__content__pass-icon2").css("left","-48px");
+            this.$(".pass-icon2").css("left","-48px");
         },
         loginBlur: function() {
-            this.$(".form__content__user-icon").css("left","0px");
+            this.$(".user-icon").css("left","0px");
         },
         passwBlur: function() {
-            this.$(".form__content__pass-icon").css("left","0px");
+            this.$(".pass-icon").css("left","0px");
         },
         confirmPasswBlur: function() {
-            this.$(".form__content__pass-icon2").css("left","0px");
+            this.$(".pass-icon2").css("left","0px");
         }
     });
     return new View();

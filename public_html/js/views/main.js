@@ -9,6 +9,7 @@ define([
 ){
 
     var View = Backbone.View.extend({
+        el: $('.main'),
         template: tmpl,
         session: sessionModel,
         events: {
@@ -20,41 +21,38 @@ define([
             this.listenTo(this.session, 'successLogout', this.logoutSuccess);
             this.listenTo(this.session, 'errorLogout', this.logoutError);
             this.render();
+            this.$el.hide();
         },
 
         render: function () {
             this.$el.html(this.template());
-            return this.$el;
         },
 
         show: function () {
             this.session.postIdentifyUser('main');
         },
         logout: function (event) {
-            debugger;
             event.preventDefault();
             this.session.postLogout();
         },
         
         userIdentified: function(data) {
-            this.trigger('reshow', this);
             this.$(".auth, .reg").hide();
-            this.$(".profile, .exit").show();
+            this.$(".to_profile, .exit").show();
+            this.trigger('reshow', this);
         },
         userNotIdentified: function() {
-            this.trigger('reshow', this);
-            this.$(".profile, .exit").hide();
+            this.$(".to_profile, .exit").hide();
             this.$(".auth, .reg").show();
+            this.trigger('reshow', this);
         },
 
         logoutSuccess: function (data) {
-            debugger;
             this.trigger('success');
             this.show();
         },
 
         logoutError: function (message) {
-            debugger;
             var elem = this.$(".alert-error").slideDown().delay(3000).slideUp();
             elem.html("<p>" + message + "</p>");
         }

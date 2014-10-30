@@ -1,42 +1,40 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
 <div class="wrapper">
 
-<div class="user-icon"></div>
-<div class="pass-icon"></div>
+	<div class="user-icon"></div>
+	<div class="pass-icon"></div>
   
-<form name="login-form" class="form" action="/auth" method="POST">
- 
-  <div class="form__header">
-     <h1 class="form__header__h1">Tentacle Wars</h1>
-   </div>
+	<form name="login-form" class="form" action="/auth" method="POST">
+	 
+	  <div class="form__header">
+	     <h1 class="form__header__h1">Tentacle Wars</h1>
+	   </div>
 
-  <div class="form__content">
-  	<div class="alert-error"></div>
+	  <div class="form__content">
+	  	<div class="alert-error"></div>
 
-  	<div class="form__content__menu-item">
-		<a href="#game" class="form__content__menu-item__link">Start Game</a>
-	</div>
-	<div class="form__content__menu-item">
-		<a href="#scoreboard" class="form__content__menu-item__link">Scoreboard</a>
-	</div>
-	<div class="form__content__menu-item profile">
-		<a href="#profile" class="form__content__menu-item__link">Profile</a>
-	</div>
-	<div class="form__content__menu-item exit">
-		<a href="#" class="form__content__menu-item__link logout">Exit</a>
-	</div>
+	  	<div class="form__content__menu-item">
+			<a href="#game" class="form__content__menu-item__link">Start Game</a>
+		</div>
+		<div class="form__content__menu-item">
+			<a href="#scoreboard" class="form__content__menu-item__link">Scoreboard</a>
+		</div>
+		<div class="form__content__menu-item to_profile">
+			<a href="#profile" class="form__content__menu-item__link">Profile</a>
+		</div>
+		<div class="form__content__menu-item exit">
+			<a href="#" class="form__content__menu-item__link logout">Exit</a>
+		</div>
 
-  </div>
-
-  <div class="form__footer">
-	  <!--LOGIN-->
-	  <a href="#login" class="form__footer__button auth">Sign in</a>
-	  <!--REGISTER-->
-	  <a href="#register" class="form__footer__button form__footer__button_orange reg">Sign up</a>
-  </div>
-  
-    </form>
-
+	  </div>
+	  <div class="form__footer">
+		  <!--LOGIN-->
+		  <a href="#login" class="form__footer__button auth">Sign in</a>
+		  <!--REGISTER-->
+		  <a href="#register" class="form__footer__button form__footer__button_orange reg">Sign up</a>
+	  </div>
+	  
+	</form>
 </div>
 
 <div class="gradient"></div>
