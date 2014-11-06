@@ -7,7 +7,8 @@ define([
     'views/register',
     'views/profile',
     'views/viewman',
-    'views/canvas'
+    'views/canvas',
+    'views/snakeGame'
 ], function(
     Backbone,
     main,
@@ -17,10 +18,11 @@ define([
     register,
     profile,
     viewman,
-    canvas
+    canvas,
+    snakeGame
     
 ){
-    viewman.subscribe([main, game, login, scoreboard, register, profile, canvas])
+    viewman.subscribe([main, game, login, scoreboard, register, profile, canvas, snakeGame])
 
     var Router = Backbone.Router.extend({
         initialize: function () {
@@ -38,6 +40,7 @@ define([
             'register': 'registerAction',
             'profile': 'profileAction',
             'canvas': 'canvasAction',
+            'snakeGame': 'snakeGameAction',
             '*default': 'defaultActions'
         },
 
@@ -64,6 +67,9 @@ define([
         },
         canvasAction: function () {
             canvas.show();
+        },
+        snakeGameAction: function () {
+            snakeGame.show();
         },
         toIndex: function () {
             this.navigate('', {trigger: true});
