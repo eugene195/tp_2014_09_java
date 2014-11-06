@@ -6,7 +6,9 @@ define([
     tmpl
 ){
 
-// KeyPressed is a global event. We need to access current player globally. One way of doing it is setting a holder
+// KeyPressed is a global event. We need to access current player globally to turn his snake.
+// One way of doing it is setting a holder for a snake. A holder can also be used to check, whether
+// we need to send some info to server or not (see setDirection)
 function CurrentSnakeHolder () {
     this.snake = null;
 
@@ -20,8 +22,11 @@ function CurrentSnakeHolder () {
     }
 
     this.setDirection = function(direction) {
-        if ( !((this.snake.direction.x == direction.x) || (this.snake.direction.y == direction.y)) )
+        if ( !((this.snake.direction.x == direction.x) || (this.snake.direction.y == direction.y)) ) {
             this.snake.direction = direction;
+            return true;
+        }
+        return false;
     }
 }
 
@@ -199,6 +204,7 @@ var View = Backbone.View.extend({
                     break;
             }
 //            TODO
+//              if direction changed then
 //            SocketMan.ChangeDirection(direction)
         }
 
