@@ -17,13 +17,12 @@ function CurrentSnakeHolder () {
     }
 
     this.setCoordinates = function(x, y) {
-        this.snake.x = x;
-        this.snake.y = y;
+        this.snake.setCoordinates(x, y);
     }
 
     this.setDirection = function(direction) {
         if ( !((this.snake.direction.x == direction.x) || (this.snake.direction.y == direction.y)) ) {
-            this.snake.direction = direction;
+            this.snake.changeDirection(direction);
             return true;
         }
         return false;
@@ -59,17 +58,24 @@ function Tail() {
 // -->
 
 // Main snake class. Maybe we will need a snake model, but I dunno how to make it.
-function Snake(x, y, direction, color, linearSpeed, tail) {
+function Snake(x, y, direction, color, linearSpeed, tail, name) {
     this.x = x;
     this.y = y;
     this.color = color;
     this.direction = direction;
     this.linearSpeed = linearSpeed;
     this.tail = tail;
+    this.name = name;           // Name of current user to connect with server TODO
 
     this.getTail = function() {
         return tail.tail;
     }
+
+    this.setCoordinates = function(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
     this.move = function() {
         this.x += this.direction.x * this.linearSpeed;
         this.y += this.direction.y * this.linearSpeed;
@@ -125,6 +131,7 @@ function SnakeDrawer() {
 // Current player class
 var snakeHolder = new CurrentSnakeHolder();
 var drawer = new SnakeDrawer();
+//var socketManager = new SocketMan();
 // TODO we need a hide function to unbind keypress event from $document
 var View = Backbone.View.extend({
         el: $('.game'),
@@ -145,6 +152,8 @@ var View = Backbone.View.extend({
         },
         show: function () {
             this.trigger('reshow', this);
+//            socketManager.init();
+
 //            TODO Get Enemies list here
             var enemies = [];
             this.play(enemies);
@@ -158,7 +167,7 @@ var View = Backbone.View.extend({
 
 //            Snake constructor, will be called somewhere else
             var defaultSpeed = 0.35;
-            var first = new Snake(200, 100, new Direction(1, 0), "#FF0000", defaultSpeed, new Tail());
+            var first = new Snake(200, 100, new Direction(1, 0), "#FF0000", defaultSpeed, new Tail(), "max");
             snakeHolder.setSnake(first);
 
             var interval = 1;
@@ -167,6 +176,7 @@ var View = Backbone.View.extend({
                 drawer.draw(snake, context);
                 snake.move();
 
+//                socketManager.sendMessage(new Message(snake.name, "ASK", "move", "engine"))
 //              SocketMan.moveSnake(snake.currentDirection);
                 if (snake.x < canvas.width - drawer.D) {
                     snake.tail.append(snake.x, snake.y);
@@ -189,20 +199,14 @@ var View = Backbone.View.extend({
         keyPressed: function(e) {
             var code = e.keyCode || e.which;
 
-            switch(code) {
-                case 37:
-                    snakeHolder.setDirection(new Direction(-1, 0));
-                    break;
-                case 38:
-                    snakeHolder.setDirection(new Direction(0, -1));
-                    break;
-                case 39:
-                    snakeHolder.setDirection(new Direction(1, 0));
-                    break;
-                case 40:
-                    snakeHolder.setDirection(new Direction(0, 1));
-                    break;
-            }
+            var dirs = {
+                37: new Direction(-1, 0),
+                38: new Direction(0, -1),
+                39: new Direction(1, 0),
+                40: new Direction(0, 1)
+            };
+
+            snakeHolder.setDirection(dirs[code]);
 //            TODO
 //              if direction changed then
 //            SocketMan.ChangeDirection(direction)
