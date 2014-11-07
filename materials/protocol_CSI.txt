@@ -27,7 +27,7 @@
 3) collision()
 {
     snakeID: int
-    with: int
+    withID: int
 }
 
 4) tick()
@@ -36,3 +36,7 @@
     newX: int
     newY: int
 }, ...]
+
+confirm {
+    action: loaded | handled;
+}

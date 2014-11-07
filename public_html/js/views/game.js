@@ -1,139 +1,24 @@
 define([
     'backbone',
-    'tmpl/game'
+    'tmpl/game',
+    'api/primitives',
+    'api/drawer',
+    'controllers/socketman'
 ], function(
     Backbone,
     tmpl
 ){
 
-// KeyPressed is a global event. We need to access current player globally to turn his snake.
-// One way of doing it is setting a holder for a snake. A holder can also be used to check, whether
-// we need to send some info to server or not (see setDirection)
-function CurrentSnakeHolder () {
-    this.snake = null;
-
-    this.setSnake = function(snake) {
-        this.snake = snake;
-    }
-
-    this.setCoordinates = function(x, y) {
-        this.snake.setCoordinates(x, y);
-    }
-
-    this.setDirection = function(direction) {
-        if ( !((this.snake.direction.x == direction.x) || (this.snake.direction.y == direction.y)) ) {
-            this.snake.changeDirection(direction);
-            return true;
-        }
-        return false;
-    }
-}
-
-// These classes better be replaced somewhere
-// <--
-function Point (x, y) {
-    this.x = x;
-    this.y = y;
-}
-
-function Direction (x, y) {
-    this.x = x;
-    this.y = y;
-}
-
-function Tail() {
-    this.tail = [];
-
-    this.append = function (x, y) {
-        this.tail.push(new Point(x, y));
-        if (this.tail.length == 100) {
-            this.tail.shift();
-        }
-    };
-
-    this.clearAll = function () {
-        this.tail = [];
-    }
-}
-// -->
-
-// Main snake class. Maybe we will need a snake model, but I dunno how to make it.
-function Snake(x, y, direction, color, linearSpeed, tail, name) {
-    this.x = x;
-    this.y = y;
-    this.color = color;
-    this.direction = direction;
-    this.linearSpeed = linearSpeed;
-    this.tail = tail;
-    this.name = name;           // Name of current user to connect with server TODO
-
-    this.getTail = function() {
-        return tail.tail;
-    }
-
-    this.setCoordinates = function(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    this.move = function() {
-        this.x += this.direction.x * this.linearSpeed;
-        this.y += this.direction.y * this.linearSpeed;
-    }
-
-    this.changeDirection = function(newDirection) {
-        this.direction = newDirection;
-    }
-}
-
-function SnakeDrawer() {
-//  Current Drawer Parameters
-    this.D = 10;
-    this.R = this.D / 2;
-    this.headColor = '#00FF00';
-//  Current Context
-    this.context = null;
-//    Main draw function called in animate()
-    this.draw = function(snake, context) {
-        var tail = snake.getTail();
-        this.context = context;
-        this.context.clearRect(snake.x - this.R - 3, snake.y - this.R - 3, this.D + 6, this.D + 6);
-        if (tail.length > 0)
-            this.drawTail(tail);
-        this.drawHead(snake);
-    }
-
-    this.drawHead = function(snake) {
-        this.context.beginPath();
-        this.context.arc(snake.x, snake.y, this.R, 0, 2 * Math.PI, false);
-        this.context.fillStyle = this.headColor;
-        this.context.fill();
-        this.context.lineWidth = 1;
-        this.context.strokeStyle = '#003300';
-        this.context.stroke();
-    }
-
-    this.drawTail = function(tail) {
-        this.context.beginPath();
-        this.context.lineWidth = 4;
-        this.context.strokeStyle = 'white';
-
-        if (tail.length == 0) return;
-
-        this.context.moveTo(tail[0].x, tail[0].y);
-        for (var I in tail) {
-            this.context.lineTo(tail[I].x, tail[I].y);
-        }
-        this.context.stroke();
-    }
-}
-
-// Current player class
-var snakeHolder = new CurrentSnakeHolder();
-var drawer = new SnakeDrawer();
-//var socketManager = new SocketMan();
 // TODO we need a hide function to unbind keypress event from $document
-var View = Backbone.View.extend({
+var GameView = Backbone.View.extend({
+        controller: SocketMan,
+        drawer : new SnakeDrawer(),
+
+        snakeHolder : new CurrentSnakeHolder(),
+        snakes : [],
+        started : false,
+        snakeId : 0,
+
         el: $('.game'),
         template: tmpl,
 
@@ -144,50 +29,47 @@ var View = Backbone.View.extend({
         initialize: function() {
             this.render();
             this.$el.hide();
+            //            TODO NEED TO UNBIND EVENT ON HIDE()
 
-//            TODO NEED TO UNBIND EVENT ON HIDE()
+            this.started = false;
+            this.listenTo(controller, 'startLoad', showWait);
+            this.listenTo(controller, 'startGame', startGame);
         },
+
+        showWait: function () {
+            // set wait window
+        },
+
         render: function () {
             this.$el.html(this.template());
         },
-        show: function () {
-            this.trigger('reshow', this);
-//            socketManager.init();
 
-//            TODO Get Enemies list here
-            var enemies = [];
-            this.play(enemies);
+        startGame: function(data) {
+            this.snakeId = data.snakeId;
+            for (var I in data.snakes) {
+                this.snakes.append(new Snake(I));
+            }
+            this.started = true;
         },
 
-        play: function (enemies) {
-//        Here we bind a keyPress Event to $document. If we do a $game, we will have to setFocus
+        show: function () {
+            this.trigger('reshow');
+            this.update();
+        },
+
+        update: function () {
+            if (! this.started) {
+                this.showNoGame();
+                return;
+            }
+
             $(document).bind('keydown', this.keyPressed);
             var canvas = document.getElementById('snakeGame'),
             context = canvas.getContext('2d');
 
-//            Snake constructor, will be called somewhere else
-            var defaultSpeed = 0.35;
-            var first = new Snake(200, 100, new Direction(1, 0), "#FF0000", defaultSpeed, new Tail(), "max");
-            snakeHolder.setSnake(first);
-
-            var interval = 1;
-
-            var animate = function(snake, canvas, context) {
-                drawer.draw(snake, context);
-                snake.move();
-
-//                socketManager.sendMessage(new Message(snake.name, "ASK", "move", "engine"))
-//              SocketMan.moveSnake(snake.currentDirection);
-                if (snake.x < canvas.width - drawer.D) {
-                    snake.tail.append(snake.x, snake.y);
-                } else {
-                    snake.tail.clearAll();
-                    context.clearRect(0, 0, canvas.width, canvas.height);
-                }
-            };
-            this.timerID = setInterval(function () {
-                animate(first, canvas, context);
-            }, interval);
+            for (var snake in this.snakes) {
+                drawer.draw(snake);
+            }
         },
 
 //---------------------
@@ -205,13 +87,12 @@ var View = Backbone.View.extend({
                 39: new Direction(1, 0),
                 40: new Direction(0, 1)
             };
-
-            snakeHolder.setDirection(dirs[code]);
-//            TODO
-//              if direction changed then
-//            SocketMan.ChangeDirection(direction)
+            var mySnake = snakes[this.snakeId];
+            if (mySnake.changeDirection(dirs[code])) {
+                this.socketManager.changeDirection(dirs[code]);
+            }
         }
 
     });
-    return new View();
+    return new GameView();
 });
