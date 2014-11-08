@@ -1,7 +1,7 @@
 package global;
 
 import global.models.Player;
-import global.sockets.GameWebSocket;
+import global.mechanic.sockets.GameWebSocket;
 
 /**
  * Created by eugene on 10/19/14.

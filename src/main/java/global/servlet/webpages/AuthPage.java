@@ -1,6 +1,6 @@
 package global.servlet.webpages;
 
-import global.msgsystem.MessageSystem;
+import global.MessageSystem;
 import global.msgsystem.messages.*;
 import global.models.UserSession;
 

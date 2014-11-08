@@ -1,6 +1,9 @@
 package utils;
 
+<<<<<<< HEAD
 import global.msgsystem.MessageSystem;
+=======
+>>>>>>> master
 import global.msgsystem.MessageSystemImpl;
 import global.msgsystem.messages.AbstractMsg;
 
@@ -9,7 +12,10 @@ import global.msgsystem.messages.AbstractMsg;
  */
 
 public class MinMessageHelper extends MessageSystemImpl {
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
     @Override
     public boolean sendMessage(AbstractMsg msg, String unused) {
         return true;
