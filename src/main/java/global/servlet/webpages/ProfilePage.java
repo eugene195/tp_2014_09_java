@@ -38,13 +38,6 @@ public class ProfilePage extends WebPage {
 
         HttpSession session = request.getSession(false);
 
-        if (session == null || passw == null || repeatPassw == null || curPassw == null
-            || curPassw == "" || passw == "" || !passw.equals(repeatPassw)) {
-            response.setContentType(WebPage.CONTENT_TYPE);
-            response.setStatus(HttpServletResponse.SC_OK);
-            return;
-        }
-
         String login = session.getAttribute("login").toString();
 
         this.msys.sendMessage(new ChangePasswordQuery(login, curPassw, passw), "dbman");

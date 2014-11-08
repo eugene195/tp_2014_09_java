@@ -22,7 +22,7 @@ public class GamePage extends WebPage {
 
         HttpSession session = request.getSession(false);
         if (session != null) {
-            context.put("login", session.getAttribute("login").toString());
+            context.put("myName", session.getAttribute("login").toString());
         }
         else {
             //TODO: Send error to AuthPage

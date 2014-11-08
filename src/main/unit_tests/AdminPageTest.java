@@ -1,7 +1,13 @@
+<<<<<<< HEAD
+
+import global.msgsystem.MessageSystem;
+=======
 import global.MessageSystem;
+>>>>>>> master
 import global.msgsystem.messages.GetOnlineUsersAnswer;
 import global.msgsystem.messages.GetUsersAnswer;
 import global.servlet.webpages.AdminPage;
+
 import org.junit.*;
 import utils.MinMessageHelper;
 import utils.PrintHelper;
@@ -45,7 +51,7 @@ public class AdminPageTest {
         }
     }
 
-    private static MessageSystem msys;
+    private static MinMessageHelper msys;
     private static HttpServletRequest request;
     private static HttpServletResponse response;
     private static AdminPage testPage;

@@ -5,11 +5,16 @@ import global.msgsystem.MessageSystemImpl;
 import global.resources.ResourceFactoryImpl;
 import global.servlet.ServletImpl;
 import global.resources.ServerResource;
+
+import global.mechanic.GameMechanicsImpl;
+import global.mechanic.sockets.WebSocketGameServlet;
+import global.mechanic.sockets.WebSocketServiceImpl;
+
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -32,9 +37,12 @@ public class Main
             ServletImpl servletImpl = createServlet(msys);
             DataBaseManager dbman = createDbMan(msys, conf);
 
-            configureThreads(servletImpl, dbman);
+            WebSocketService webSocketService = new WebSocketServiceImpl();
+            GameMechanics gameMechanics = new GameMechanicsImpl(webSocketService);
 
-            ServletContextHandler context = createContext(servletImpl);
+            configureThreads(servletImpl, dbman, gameMechanics);
+
+            ServletContextHandler context = createContext(servletImpl, webSocketService, gameMechanics);
             HandlerList handlers = createServerHandlers();
             handlers.addHandler(context);
 
@@ -80,8 +88,12 @@ public class Main
         return new DataBaseManagerImpl(msys, database, dbuser, "drovosek");
     }
 
-    private static ServletContextHandler createContext(ServletImpl servletImpl) {
+    private static ServletContextHandler createContext( ServletImpl servletImpl,
+                                                       WebSocketService webSocketService,
+                                                       GameMechanics gameMechanics )
+    {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.addServlet(new ServletHolder(new WebSocketGameServlet(gameMechanics, webSocketService)), "/gameplay");
         context.addServlet(new ServletHolder(servletImpl), "/");
         return context;
     }
@@ -100,5 +112,4 @@ public class Main
 
         return handlers;
     }
-
 }

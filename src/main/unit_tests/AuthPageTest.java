@@ -1,5 +1,12 @@
+<<<<<<< HEAD
+
+import global.msgsystem.MessageSystem;
+import global.msgsystem.MessageSystemImpl;
+=======
 import global.MessageSystem;
+>>>>>>> master
 import global.msgsystem.messages.AuthAnswer;
+
 import global.models.UserSession;
 import global.servlet.webpages.AuthPage;
 import org.junit.Assert;
@@ -20,7 +27,7 @@ import static org.mockito.Mockito.*;
 public class AuthPageTest {
 
     private static AuthPage testPage;
-    private static MessageSystem msys;
+    private static MessageSystemImpl msys;
 
     private static HttpServletRequest request;
     private static HttpServletResponse response;
