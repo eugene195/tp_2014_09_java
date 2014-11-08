@@ -1,4 +1,4 @@
-package global.sockets;
+package global.mechanic.sockets;
 
 import global.models.Player;
 import global.WebSocketService;

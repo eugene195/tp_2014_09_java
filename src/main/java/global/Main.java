@@ -1,19 +1,20 @@
 package global;
 
-
 import global.database.DataBaseManagerImpl;
-import global.mechanic.GameMechanicsImpl;
 import global.msgsystem.MessageSystemImpl;
 import global.resources.ResourceFactoryImpl;
 import global.servlet.ServletImpl;
 import global.resources.ServerResource;
+
+import global.mechanic.GameMechanicsImpl;
 import global.mechanic.sockets.WebSocketGameServlet;
 import global.mechanic.sockets.WebSocketServiceImpl;
+
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -29,17 +30,19 @@ public class Main
 
     public static void main(String[] args) throws Exception {
         try {
-            WebSocketService webSocketService = new WebSocketServiceImpl();
-            GameMechanics gameMechanics = new GameMechanicsImpl(webSocketService);
             ResourceFactory resourceFactory = createRFactory();
             ServerResource conf = resourceFactory.get(SERVER_CONFIG);
 
             MessageSystem msys = new MessageSystemImpl();
             ServletImpl servletImpl = createServlet(msys);
             DataBaseManager dbman = createDbMan(msys, conf);
+
+            WebSocketService webSocketService = new WebSocketServiceImpl();
+            GameMechanics gameMechanics = new GameMechanicsImpl(webSocketService);
+
             configureThreads(servletImpl, dbman, gameMechanics);
 
-            ServletContextHandler context = createContext(servletImpl);
+            ServletContextHandler context = createContext(servletImpl, webSocketService, gameMechanics);
             HandlerList handlers = createServerHandlers();
             handlers.addHandler(context);
 

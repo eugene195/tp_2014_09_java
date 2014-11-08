@@ -1,11 +1,6 @@
 package global.servlet.webpages;
 
-<<<<<<< HEAD
-
-import global.msgsystem.MessageSystem;
-=======
 import global.MessageSystem;
->>>>>>> master
 import global.msgsystem.messages.*;
 import org.json.JSONObject;
 
