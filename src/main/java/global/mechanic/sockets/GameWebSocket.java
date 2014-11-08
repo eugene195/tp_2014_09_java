@@ -32,63 +32,19 @@ public class GameWebSocket {
         return myName;
     }
 
-    public void startGame(Player user) {
-        try {
-            JSONObject jsonStart = new JSONObject();
-            jsonStart.put("status", "start");
-            jsonStart.put("enemyName", user.getEnemyName());
-            session.getRemote().sendString(jsonStart.toJSONString());
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
-    }
-
-    public void gameOver(Player user, boolean win) {
-        try {
-            JSONObject jsonStart = new JSONObject();
-            jsonStart.put("status", "finish");
-            jsonStart.put("win", win);
-            session.getRemote().sendString(jsonStart.toJSONString());
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
-    }
-
     @OnWebSocketMessage
     public void onMessage(String data) {
-        gameMechanics.incrementScore(myName);
+        if (data.equals("addUser"))
+            this.addUser();
+        else {
+             // BY PROTOCOL
+        }
     }
 
-    @OnWebSocketConnect
-    public void onOpen(Session session) {
+    public void addUser() {
         setSession(session);
         webSocketService.addUser(this);
         gameMechanics.addUser(myName);
-    }
-
-    public void setMyScore(Player user) {
-        JSONObject jsonStart = new JSONObject();
-        jsonStart.put("status", "increment");
-        jsonStart.put("name", myName);
-        jsonStart.put("score", user.getMyScore());
-        try {
-            session.getRemote().sendString(jsonStart.toJSONString());
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
-    }
-
-    public void setEnemyScore(Player user) {
-        JSONObject jsonStart = new JSONObject();
-        jsonStart.put("status", "increment");
-        jsonStart.put("name", user.getEnemyName());
-//        jsonStart.put("name", user.getEnemyNames());
-        jsonStart.put("score", user.getEnemyScore());
-        try {
-            session.getRemote().sendString(jsonStart.toJSONString());
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
     }
 
     public void sendToClient(String action, Map<String, Object> data) {
@@ -97,7 +53,20 @@ public class GameWebSocket {
 
         JSONObject json = new JSONObject();
         json.put("action", action);
+        json.put("status", "OK");
         json.put("data", jsonData);
+
+        try {
+            session.getRemote().sendString(json.toJSONString());
+        } catch (Exception e) {
+            System.out.print(e.toString());
+        }
+    }
+
+    public void sendToClient(String action) {
+        JSONObject json = new JSONObject();
+        json.put("action", action);
+        json.put("status", "OK");
 
         try {
             session.getRemote().sendString(json.toJSONString());

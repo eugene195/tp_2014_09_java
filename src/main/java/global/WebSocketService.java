@@ -11,13 +11,7 @@ import java.util.Map;
 public interface WebSocketService {
     public void addUser(GameWebSocket user);
 
-    public void notifyMyNewScore(Player user);
-
-    public void notifyEnemyNewScore(Player user);
-
-    public void notifyStartGame(Player user);
-
-    public void notifyGameOver(Player user, boolean win);
-
     void sendToClients(String action, Map<String, Object> data, GameSession session);
+
+    void notifyGame(GameSession session);
 }

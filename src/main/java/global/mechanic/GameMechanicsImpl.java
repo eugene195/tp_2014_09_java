@@ -43,16 +43,6 @@ public class GameMechanicsImpl implements GameMechanics {
         }
     }
 
-    public void incrementScore(String userName) {
-        GameSession myGameSession = nameToGame.get(userName);
-        Player myUser = myGameSession.getSelf(userName);
-        myUser.incrementMyScore();
-        Player enemyUser = myGameSession.getEnemy(userName);
-        enemyUser.incrementEnemyScore();
-        webSocketService.notifyMyNewScore(myUser);
-        webSocketService.notifyEnemyNewScore(enemyUser);
-    }
-
     @Override
     public void run() {
         while (true) {
@@ -68,16 +58,8 @@ public class GameMechanicsImpl implements GameMechanics {
     private void gmStep() {
         int I = 0;
         for (GameSession session : allSessions) {
-
             Engine engine = engines.get(I++);
             engine.timerEvent();
-
-            if (session.getSessionTime() > gameTime) {
-                boolean firstWin = session.isFirstWin();
-                webSocketService.notifyGameOver(session.getFirst(), firstWin);
-                webSocketService.notifyGameOver(session.getSecond(), !firstWin);
-
-            }
         }
     }
 
@@ -92,8 +74,7 @@ public class GameMechanicsImpl implements GameMechanics {
         nameToGame.put(first, gameSession);
         nameToGame.put(second, gameSession);
 
-        webSocketService.notifyStartGame(gameSession.getSelf(first));
-        webSocketService.notifyStartGame(gameSession.getSelf(second));
+        webSocketService.notifyGame(gameSession);
     }
 
     @Override
