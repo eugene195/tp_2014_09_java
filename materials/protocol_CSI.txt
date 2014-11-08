@@ -1,41 +1,51 @@
 Клиент - Сервер.
 
-1) handleKey()
 {
-    direct: Direct
+    action: handleKey,
+    data: {
+        direct: Direct
+    }
 }
 
 Сервер - Клиент.
 
-1) startGame()
-{
+1)
+action: startGame,
+data: {
     height: int,
     width: int,
     speed: int,
     snakes: [{
         snakeID: int,
         color: Color
+        position: (int, int)
     }, ...]
 }
 
 2) endGame()
-[{
+action: endGame,
+data: {
     snakeID: int,
     isWinner: bool
-}, ...]
+}
+
 
 3) collision()
-{
+action: collision,
+data: {
     snakeID: int
     withID: int
 }
 
 4) tick()
-[{
-    snakeID:
-    newX: int
-    newY: int
-}, ...]
+action: collision,
+data: {
+    [{
+        snakeID:
+        newX: int
+        newY: int
+    }, ...]
+}
 
 confirm {
     action: loaded | handled;

@@ -1,23 +1,22 @@
 define([
     'backbone',
     'tmpl/game',
+    'controllers/socketman',
     'api/primitives',
-    'api/drawer',
-    'controllers/socketman'
+    'api/drawer'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    SocketMan
 ){
 
 // TODO we need a hide function to unbind keypress event from $document
 var GameView = Backbone.View.extend({
     controller: SocketMan,
     drawer : new SnakeDrawer(),
-
     snakeHolder : new CurrentSnakeHolder(),
     snakes : [],
     started : false,
-    snakeId : 0,
 
     el: $('.game'),
     template: tmpl,
@@ -26,40 +25,47 @@ var GameView = Backbone.View.extend({
         "click #gmscr": "gameClick"
     },
 
+    showWait: function () {
+//    To Test
+        alert("Please wait for data to load");
+    },
+
+    startGame: function(data) {
+        var myID = data.snakeId;
+        for (var I in data.snakes) {
+            var snake = new Snake(I);
+            if (I.snakeId == myID)
+                snakeHolder.setSnake(snake);
+                
+            this.snakes.append(snake);
+        }
+        this.started = true;
+    },
+
     initialize: function() {
         this.render();
         this.$el.hide();
-        // TODO NEED TO UNBIND EVENT ON HIDE()
 
         this.started = false;
-        this.listenTo(controller, 'startLoad', showWait);
-        this.listenTo(controller, 'startGame', startGame);
-    },
 
-    showWait: function () {
-        // set wait window
+        this.listenTo(this.controller, 'startLoad', this.showWait);
+        this.listenTo(this.controller, 'startGame', this.startGame);
     },
 
     render: function () {
         this.$el.html(this.template());
     },
 
-    startGame: function(data) {
-        this.snakeId = data.snakeId;
-        for (var I in data.snakes) {
-            this.snakes.append(new Snake(I));
-        }
-        this.started = true;
-    },
-
     show: function () {
-        this.trigger('reshow');
+        this.trigger('reshow', this);
+        this.controller.setSocket();
         this.update();
+
     },
 
     update: function () {
         if (! this.started) {
-            this.showNoGame();
+//            this.showNoGame();
             return;
         }
 
