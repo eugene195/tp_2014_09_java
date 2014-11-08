@@ -1,11 +1,13 @@
 define([
     'backbone',
     'tmpl/scoreboard',
-    'collections/scores'
+    'collections/scores',
+    'models/score'
 ], function(
     Backbone,
     tmpl,
-    scoreCollection
+    scoreCollection,
+    scoreModel
 ){
 
 var View = Backbone.View.extend({

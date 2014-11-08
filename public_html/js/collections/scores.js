@@ -1,14 +1,17 @@
 define([
     'backbone',
-    'models/score'
+    'models/score',
+    'api/sync'
 ], function(
     Backbone,
-    ScoreModel
+    ScoreModel,
+    ApiSync
 ){
 
     var ScoreCollection = Backbone.Collection.extend({
         model: ScoreModel,
         url: "/scores",
+        sync: ApiSync,
 
         parse: function (response) {
             if (response.status == 1) {
