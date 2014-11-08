@@ -1,4 +1,4 @@
-import global.msgsystem.MessageSystem;
+import global.MessageSystem;
 import global.msgsystem.messages.RegistrationAnswer;
 import global.servlet.webpages.RegisterPage;
 import org.junit.*;

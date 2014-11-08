@@ -1,6 +1,6 @@
 package global.servlet.webpages;
 
-import global.msgsystem.MessageSystem;
+import global.MessageSystem;
 import global.models.UserSession;
 import org.json.JSONObject;
 

@@ -1,4 +1,4 @@
-import global.msgsystem.MessageSystem;
+import global.MessageSystem;
 import global.msgsystem.messages.AuthAnswer;
 import global.models.UserSession;
 import global.servlet.webpages.AuthPage;
