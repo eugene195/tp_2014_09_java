@@ -1,0 +1,12 @@
+<fest:template xmlns:fest="http://fest.mail.ru">
+
+
+<div class="header">
+    <div class="header__infobar">
+        Games list
+        Choose Yours
+    </div>
+    <input type="button" id="gmjoin" value="Start a game" name="joinGameBtn" />
+</div>
+
+</fest:template>

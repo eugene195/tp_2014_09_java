@@ -36,7 +36,7 @@ var GameView = Backbone.View.extend({
             var snake = new Snake(I);
             if (I.snakeId == myID)
                 snakeHolder.setSnake(snake);
-                
+
             this.snakes.append(snake);
         }
         this.started = true;
@@ -58,7 +58,7 @@ var GameView = Backbone.View.extend({
 
     show: function () {
         this.trigger('reshow', this);
-        this.controller.setSocket();
+        this.controller.setGameSocket();
         this.update();
 
     },

@@ -6,7 +6,7 @@ define([
     var SocketMan = {
         SOCKET_URL : "ws://localhost:8081/gameplay",
 
-        setSocket : function() {
+        setGameSocket : function() {
             if (this.ws) return;
 
             this.ws = new WebSocket(this.SOCKET_URL);
@@ -44,7 +44,8 @@ define([
         },
 
         sendMessage : function(message) {
-            this.ws.send(message);
+//            this.
+//            this.ws.send(message);
         }
     };
     return _.extend(SocketMan, Backbone.Events);

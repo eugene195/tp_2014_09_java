@@ -47,6 +47,19 @@ data: {
     }, ...]
 }
 
+5)
+action: playerAdded
+status:
+data: {
+
+    snakeID
+}
+
+//---------------------------------------
+addPlayer{
+
+}
+
 confirm {
     action: loaded | handled;
 }
