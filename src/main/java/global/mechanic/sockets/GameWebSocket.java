@@ -1,4 +1,4 @@
-package global.sockets;
+package global.mechanic.sockets;
 
 import global.GameMechanics;
 import global.models.Player;

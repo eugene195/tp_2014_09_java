@@ -1,5 +1,6 @@
 package global.msgsystem;
 
+import global.MessageSystem;
 import global.msgsystem.messages.AbstractMsg;
 
 import java.util.HashMap;
@@ -18,7 +19,8 @@ public class MessageSystemImpl implements MessageSystem {
     private final Map<Runnable, ConcurrentLinkedQueue<AbstractMsg>> messages = new HashMap<>();
     private final Map<String, Runnable> addresses = new HashMap<>();
 
-    //TODO: append params validation
+
+    @Override
     public void register(Runnable abonent, String address) {
         this.addresses.put(address, abonent);
         this.messages.put(abonent, new ConcurrentLinkedQueue<>());
@@ -26,6 +28,7 @@ public class MessageSystemImpl implements MessageSystem {
 
     //TODO: append unregister method
 
+    @Override
     public boolean sendMessage(AbstractMsg message, String addressTo) {
         boolean result;
         Runnable reciever = this.addresses.get(addressTo);
@@ -40,6 +43,7 @@ public class MessageSystemImpl implements MessageSystem {
         return result;
     }
 
+    @Override
     public void executeFor(Runnable abonent) {
         Queue<AbstractMsg> messageQueue = this.messages.get(abonent);
 
@@ -52,6 +56,7 @@ public class MessageSystemImpl implements MessageSystem {
     /**
      * The helpful tool for a programmer.
      */
+    @Override
     public void printAddresses() {
         System.out.println("Current content of address set: ");
         this.addresses.forEach((address, obj) -> System.out.println(address));

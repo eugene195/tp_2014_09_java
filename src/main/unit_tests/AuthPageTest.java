@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 
 import global.msgsystem.MessageSystem;
 import global.msgsystem.MessageSystemImpl;
+=======
+import global.MessageSystem;
+>>>>>>> master
 import global.msgsystem.messages.AuthAnswer;
 
 import global.models.UserSession;

@@ -1,4 +1,4 @@
-package global.implementations;
+package global.mechanic;
 
 import global.GameMechanics;
 import global.models.GameSession;
