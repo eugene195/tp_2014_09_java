@@ -1,6 +1,6 @@
 package global.servlet;
 
-import global.msgsystem.MessageSystem;
+import global.MessageSystem;
 import global.Servlet;
 import global.msgsystem.messages.AbstractMsg;
 import global.models.UserSession;

@@ -1,6 +1,6 @@
 package global.servlet.webpages;
 
-import global.msgsystem.MessageSystem;
+import global.MessageSystem;
 import global.msgsystem.messages.*;
 import org.json.JSONObject;
 
@@ -37,13 +37,6 @@ public class ProfilePage extends WebPage {
         String curPassw = request.getParameter("curPassw");
 
         HttpSession session = request.getSession(false);
-
-        if (session == null || passw == null || repeatPassw == null || curPassw == null
-            || curPassw == "" || passw == "" || !passw.equals(repeatPassw)) {
-            response.setContentType(WebPage.CONTENT_TYPE);
-            response.setStatus(HttpServletResponse.SC_OK);
-            return;
-        }
 
         String login = session.getAttribute("login").toString();
 
