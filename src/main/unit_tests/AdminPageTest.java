@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-
-import global.msgsystem.MessageSystem;
-=======
-import global.MessageSystem;
->>>>>>> master
 import global.msgsystem.messages.GetOnlineUsersAnswer;
 import global.msgsystem.messages.GetUsersAnswer;
 import global.servlet.webpages.AdminPage;

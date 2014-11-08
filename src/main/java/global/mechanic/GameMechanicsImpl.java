@@ -1,9 +1,11 @@
 package global.mechanic;
 
 import global.GameMechanics;
+import global.engine.Engine;
 import global.models.GameSession;
 import global.models.Player;
 import global.WebSocketService;
+import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -18,11 +20,11 @@ public class GameMechanicsImpl implements GameMechanics {
 
     private static final int gameTime = 15 * 1000;
 
-    private WebSocketService webSocketService;
+    private final WebSocketService webSocketService;
+    private final Map<String, GameSession> nameToGame = new HashMap<>();
 
-    private Map<String, GameSession> nameToGame = new HashMap<>();
-
-    private Set<GameSession> allSessions = new HashSet<>();
+    private final ArrayList<GameSession> allSessions = new ArrayList<>();
+    private final ArrayList<Engine> engines = new ArrayList<>();
 
     private ArrayList<String> pendingUsers;
 
@@ -55,17 +57,21 @@ public class GameMechanicsImpl implements GameMechanics {
     public void run() {
         while (true) {
             try {
-                sleep(10);
+                sleep(STEP_TIME);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            gmStep();
-//            TimeHelper.sleep(STEP_TIME);
+            this.gmStep();
         }
     }
 
     private void gmStep() {
+        int I = 0;
         for (GameSession session : allSessions) {
+
+            Engine engine = engines.get(I++);
+            engine.timerEvent();
+
             if (session.getSessionTime() > gameTime) {
                 boolean firstWin = session.isFirstWin();
                 webSocketService.notifyGameOver(session.getFirst(), firstWin);
@@ -79,10 +85,23 @@ public class GameMechanicsImpl implements GameMechanics {
         String second = waiter;
         GameSession gameSession = new GameSession(first, second);
         allSessions.add(gameSession);
+
+        Engine newEngine = new Engine(this, 100, 100, 1, 2);
+        engines.add(newEngine);
+
         nameToGame.put(first, gameSession);
         nameToGame.put(second, gameSession);
 
         webSocketService.notifyStartGame(gameSession.getSelf(first));
         webSocketService.notifyStartGame(gameSession.getSelf(second));
+    }
+
+    @Override
+    public void sendToClients(String action, Map<String, Object> data, Engine from) {
+        int index = this.engines.indexOf(from);
+        GameSession session = this.allSessions.get(index);
+
+        data.put("snakeId", index);
+        this.webSocketService.sendToClients(action, data, session);
     }
 }

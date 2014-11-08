@@ -10,6 +10,8 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.json.simple.JSONObject;
 
+import java.util.Map;
+
 /**
  * Created by eugene on 10/19/14.
  */
@@ -84,6 +86,21 @@ public class GameWebSocket {
         jsonStart.put("score", user.getEnemyScore());
         try {
             session.getRemote().sendString(jsonStart.toJSONString());
+        } catch (Exception e) {
+            System.out.print(e.toString());
+        }
+    }
+
+    public void sendToClient(String action, Map<String, Object> data) {
+        JSONObject jsonData = new JSONObject();
+        jsonData.putAll(data);
+
+        JSONObject json = new JSONObject();
+        json.put("action", action);
+        json.put("data", jsonData);
+
+        try {
+            session.getRemote().sendString(json.toJSONString());
         } catch (Exception e) {
             System.out.print(e.toString());
         }

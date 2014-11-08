@@ -1,5 +1,6 @@
 package global.mechanic.sockets;
 
+import global.models.GameSession;
 import global.models.Player;
 import global.WebSocketService;
 
@@ -32,5 +33,13 @@ public class WebSocketServiceImpl implements WebSocketService {
     @Override
     public void notifyGameOver(Player user, boolean win) {
         userSockets.get(user.getMyName()).gameOver(user, win);
+    }
+
+    @Override
+    public void sendToClients(String action, Map<String, Object> data, GameSession session) {
+        for (String user : session.getPlayers()) {
+            GameWebSocket socket = userSockets.get(user);
+            socket.sendToClient(action, data);
+        }
     }
 }
