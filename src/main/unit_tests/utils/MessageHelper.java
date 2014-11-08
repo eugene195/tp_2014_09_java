@@ -1,9 +1,5 @@
 package utils;
 
-<<<<<<< HEAD
-import global.msgsystem.MessageSystem;
-=======
->>>>>>> master
 import global.msgsystem.MessageSystemImpl;
 import global.msgsystem.messages.AbstractMsg;
 
