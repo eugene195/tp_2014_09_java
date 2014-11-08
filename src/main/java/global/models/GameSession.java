@@ -2,10 +2,7 @@ package global.models;
 
 import global.models.Player;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by eugene on 10/19/14.
@@ -14,8 +11,6 @@ public class GameSession {
     private final long startTime;
     private Player first;
     private Player second;
-
-    private ArrayList<String> players;
 
     private Map<String, Player> users = new HashMap<>();
 
@@ -39,6 +34,10 @@ public class GameSession {
         return users.get(enemyName);
     }
 
+    public Set<String> getPlayers() {
+        return users.keySet();
+    }
+
     public Player getSelf(String user) {
         return users.get(user);
     }
@@ -53,10 +52,6 @@ public class GameSession {
 
     public Player getSecond() {
         return second;
-    }
-
-    public  boolean isFirstWin(){
-        return first.getMyScore() > second.getMyScore();
     }
 }
 

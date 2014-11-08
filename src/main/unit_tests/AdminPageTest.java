@@ -1,5 +1,3 @@
-
-import global.MessageSystem;
 import global.msgsystem.messages.GetOnlineUsersAnswer;
 import global.msgsystem.messages.GetUsersAnswer;
 import global.servlet.webpages.AdminPage;

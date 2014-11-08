@@ -46,7 +46,7 @@ var GameList = Backbone.View.extend({
 
     gameClick: function(event) {
         alert("Socket message sending");
-        controller.sendMessage("addUser");
+        this.controller.sendMessage("addUser");
     },
 });
     return new GameList();

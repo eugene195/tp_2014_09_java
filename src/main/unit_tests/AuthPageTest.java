@@ -1,4 +1,3 @@
-import global.MessageSystem;
 import global.msgsystem.MessageSystemImpl;
 import global.msgsystem.messages.AuthAnswer;
 

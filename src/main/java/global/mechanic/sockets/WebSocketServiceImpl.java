@@ -1,5 +1,6 @@
 package global.mechanic.sockets;
 
+import global.models.GameSession;
 import global.models.Player;
 import global.WebSocketService;
 
@@ -16,21 +17,19 @@ public class WebSocketServiceImpl implements WebSocketService {
         userSockets.put(user.getMyName(), user);
     }
 
-    public void notifyMyNewScore(Player user) {
-        userSockets.get(user.getMyName()).setMyScore(user);
-    }
-
-    public void notifyEnemyNewScore(Player user) {
-        userSockets.get(user.getMyName()).setEnemyScore(user);
-    }
-
-    public void notifyStartGame(Player user) {
-        GameWebSocket gameWebSocket = userSockets.get(user.getMyName());
-        gameWebSocket.startGame(user);
+    @Override
+    public void sendToClients(String action, Map<String, Object> data, GameSession session) {
+        for (String user : session.getPlayers()) {
+            GameWebSocket socket = userSockets.get(user);
+            socket.sendToClient(action, data);
+        }
     }
 
     @Override
-    public void notifyGameOver(Player user, boolean win) {
-        userSockets.get(user.getMyName()).gameOver(user, win);
+    public void notifyGame(GameSession session) {
+        for (String user : session.getPlayers()) {
+            GameWebSocket socket = userSockets.get(user);
+            socket.sendToClient("notifyGame");
+        }
     }
 }

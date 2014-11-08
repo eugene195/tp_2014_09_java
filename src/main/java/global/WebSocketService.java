@@ -1,7 +1,9 @@
 package global;
 
+import global.models.GameSession;
 import global.models.Player;
 import global.mechanic.sockets.GameWebSocket;
+import java.util.Map;
 
 /**
  * Created by eugene on 10/19/14.
@@ -9,11 +11,7 @@ import global.mechanic.sockets.GameWebSocket;
 public interface WebSocketService {
     public void addUser(GameWebSocket user);
 
-    public void notifyMyNewScore(Player user);
+    void sendToClients(String action, Map<String, Object> data, GameSession session);
 
-    public void notifyEnemyNewScore(Player user);
-
-    public void notifyStartGame(Player user);
-
-    public void notifyGameOver(Player user, boolean win);
+    void notifyGame(GameSession session);
 }
