@@ -82,18 +82,6 @@ public class DataBaseManagerImpl implements DataBaseManager {
     public void getUsers(){
         String query = "SELECT * FROM User;";
         try {
-            /*PreparedStatement statement = this.conn.prepareStatement(query);
-            ResultSet result = statement.executeQuery();
-
-            int rows = getResultCount(result);
-            HashMap<String, Long> map = new HashMap<>();
-            while(rows > 0) {
-                result.next();
-                Long userId = result.getLong("userId");
-                String username = result.getString("login");
-                map.put(username, userId);
-                rows--;
-            }*/
             UsersDAO userDAO = new UsersDAO(conn);
             ArrayList<UsersDataSet> users = userDAO.getAll();
             this.msys.sendMessage(new GetUsersAnswer(users), "servlet");
@@ -105,20 +93,13 @@ public class DataBaseManagerImpl implements DataBaseManager {
 
     @Override
     public void checkAuth(UserSession userSession, String passw) {
-        String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
-
         try {
-            PreparedStatement statement = this.conn.prepareStatement(query);
-            statement.setString(1, userSession.getLogin());
-            statement.setString(2, passw);
-            ResultSet result = statement.executeQuery();
+            UsersDAO userDAO = new UsersDAO(conn);
+            UsersDataSet user = userDAO.get(userSession.getLogin(), passw);
 
-            if (getResultCount(result) == 1) {
-                result.next();
-                long userId = result.getLong("userId");
-
+            if (user != null) {
                 userSession.setSuccessAuth(true);
-                userSession.setUserId(userId);
+                userSession.setUserId(user.getId());
                 this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
             }
             else {
@@ -133,49 +114,20 @@ public class DataBaseManagerImpl implements DataBaseManager {
         }
     }
 
-/*    public void deleteUser(String login) {
-        if (this.userExists(login)) {
-            String query = "DELETE FROM User WHERE login = ?;";
-            try {
-                PreparedStatement statement = this.conn.prepareStatement(query);
-                statement.setString(1, login);
-                int rowsUpdated = statement.executeUpdate();
-
-                if (rowsUpdated != 1) {
-                    System.out.print("Delete in SQL affected more/less than one row");
-                }
-            } catch (SQLException exc) {
-                exc.printStackTrace();
-                System.out.print("SQL exception during delete");
-            }
-        }
-        else {
-            System.out.print("User does not exist");
-        }
-    }
-*/
     @Override
     public void registerUser(String login, String passw) {
         if (this.userExists(login)) {
             this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already Exists"), "servlet");
         }
         else {
-            String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
             try {
-                PreparedStatement statement = this.conn.prepareStatement(query);
-                statement.setString(1, login);
-                statement.setString(2, passw);
-
-                int rowsAffected = statement.executeUpdate();
-                if(rowsAffected < 1) {
-                    System.out.println("Smth bad happened. Insert affected < 1 rows");
-                    this.msys.sendMessage(new RegistrationAnswer(false, "", "SQL Insert error"), "servlet");
-                }
+                UsersDAO userDAO = new UsersDAO(conn);
+                userDAO.add(login, passw);
                 this.msys.sendMessage(new RegistrationAnswer(true, login, ""), "servlet");
             }
             catch (SQLException e){
                 e.printStackTrace();
-                System.out.println("Exception during DB insert  in registration");
+                System.out.println("Exception during DB insert in registration");
             }
         }
     }
@@ -206,38 +158,21 @@ public class DataBaseManagerImpl implements DataBaseManager {
 
     @Override
     public void changePassword(String login, String curPassw, String newPassw) {
-        String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
         try {
-            PreparedStatement statement = this.conn.prepareStatement(query);
-            statement.setString(1, login);
-            statement.setString(2, curPassw);
-            ResultSet result = statement.executeQuery();
+            UsersDAO userDAO = new UsersDAO(conn);
+            UsersDataSet user = userDAO.get(login, curPassw);
 
-            if (getResultCount(result) == 1) {
-                query = "UPDATE User Set passw = md5(?) WHERE login = ?;";
-                statement = this.conn.prepareStatement(query);
-                statement.setString(1, newPassw);
-                statement.setString(2, login);
-
-                int rowsAffected = statement.executeUpdate();
-                if(rowsAffected < 1) {
-                    System.out.println("Smth bad happened. Update password affected < 1 rows");
-                    this.msys.sendMessage(new ChangePasswordAnswer(false, "DB Error"), "servlet");
-                }
+            if (user != null) {
+                userDAO.changePassw(login, newPassw);
                 this.msys.sendMessage(new ChangePasswordAnswer(true, ""), "servlet");
             }
             else {
-                this.msys.sendMessage(new ChangePasswordAnswer(false, "Failed to change password"), "servlet");
+                this.msys.sendMessage(new ChangePasswordAnswer(false, "Wrong current password"), "servlet");
             }
         }
         catch (SQLException e) {
             System.out.println("Sql exception during changePassword()");
         }
-    }
-
-    @Override
-    public void getProfileInfo(long userId) {
-        this.msys.sendMessage(new ProfileInfoAnswer(), "servlet");
     }
 
     @Override

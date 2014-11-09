@@ -42,27 +42,36 @@ public class Executor {
     }
 
     public void execUpdate(Connection connection,
-            String[] updates,
+            String query,
             ArrayList<String> params) {
         try {
             connection.setAutoCommit(false);
-            for(String update: updates){
-                PreparedStatement stmt = connection.prepareStatement(update);
 
-                for (int i=0; i < params.size(); ++i) {
-                    stmt.setString(i, params.get(i));
-                }
+            PreparedStatement stmt = connection.prepareStatement(query);
 
-                stmt.executeUpdate(update);
-                stmt.close();
+            for (int i=0; i < params.size(); ++i) {
+                stmt.setString(i + 1, params.get(i));
             }
+
+            int rowsAffected = stmt.executeUpdate();
+            stmt.close();
+
+            if (rowsAffected < 1) {
+                System.out.println("Smth bad happened. Update row affected < 1 rows");
+                throw new SQLException();
+            }
+
             connection.commit();
             connection.setAutoCommit(true);
+
         } catch (SQLException e) {
             try {
                 connection.rollback();
                 connection.setAutoCommit(true);
-            } catch (SQLException ignore) {}
+                System.out.println("Exception during DB execUpdate");
+            } catch (SQLException ignore) {
+                System.out.println("Exception during DB execUpdate rollback");
+            }
         }
     }
 }

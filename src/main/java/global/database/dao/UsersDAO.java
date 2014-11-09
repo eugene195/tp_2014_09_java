@@ -4,6 +4,7 @@ import global.database.Executor;
 import global.database.handlers.ResultHandler;
 import global.database.dataSets.UsersDataSet;
 
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,47 +17,70 @@ public class UsersDAO {
         this.con = con;
     }
 
-    private UsersDataSet getUsersDataSet(ResultSet result) throws SQLException {
-        return new UsersDataSet(result.getLong(1),
-                result.getString(2),
-                result.getString(3),
-                result.getString(4));
+    public UsersDataSet get(String login) throws SQLException {
+        String query = "SELECT * FROM User WHERE login=?;";
+        ArrayList<UsersDataSet> users = getUsers(query, createParams(login));
+
+        return (users == null) ? null : users.get(0);
     }
 
-    public UsersDataSet get(String login) throws SQLException {
-        Executor exec = new Executor();
-        ArrayList<String> params = new ArrayList<String>();
-        params.add(login);
-        ArrayList<UsersDataSet> users = exec.execQuery(con, "SELECT * FROM User WHERE login=?;",
-            params,
-            new ResultHandler<UsersDataSet>() {
+    public UsersDataSet get(String login, String passw) throws SQLException {
+        String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
+        ArrayList<UsersDataSet> users = getUsers(query, createParams(login, passw));
 
-            public ArrayList<UsersDataSet> handle(ResultSet result) throws SQLException {
-                ArrayList<UsersDataSet> users = new ArrayList<UsersDataSet>();
-                result.next();
-                users.add(getUsersDataSet(result));
-
-                return users;
-            }
-
-        });
         return (users == null) ? null : users.get(0);
     }
 
     public ArrayList<UsersDataSet> getAll() throws SQLException {
-        Executor exec = new Executor();
-        return exec.execQuery(con, "SELECT * FROM User",
-            null,
-            new ResultHandler<UsersDataSet>() {
-
-                public ArrayList<UsersDataSet> handle(ResultSet result) throws SQLException {
-                    ArrayList<UsersDataSet> users = new ArrayList<UsersDataSet>();
-                    while(result.next()) {
-                        users.add(getUsersDataSet(result));
-                    }
-
-                    return users;
-                }
-            });
+        return getUsers("SELECT * FROM User", null);
     }
+
+    public void add(String login, String passw) throws SQLException {
+        Executor exec = new Executor();
+        String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
+        exec.execUpdate(con, query, createParams(login, passw));
+    }
+
+    public void changePassw(String login, String passw) throws SQLException {
+        Executor exec = new Executor();
+        String query = "UPDATE User Set passw = md5(?) WHERE login = ?;";
+
+        exec.execUpdate(con, query, createParams(login, passw));
+    }
+
+    private ArrayList<String> createParams(String login, String passw) {
+        ArrayList<String> params = new ArrayList();
+        params.add(login);
+        if (passw != null) {
+            params.add(passw);
+        }
+        return params;
+    }
+
+    private ArrayList<String> createParams(String login) {
+        return createParams(login, null);
+    }
+
+    private ArrayList<UsersDataSet> getUsers(String query,
+            ArrayList<String> params) throws SQLException {
+
+        Executor exec = new Executor();
+        return exec.execQuery(con, query,
+                params,
+                new ResultHandler<UsersDataSet>() {
+
+                    public ArrayList<UsersDataSet> handle(ResultSet result) throws SQLException {
+                        ArrayList<UsersDataSet> users = new ArrayList<UsersDataSet>();
+                        while(result.next()) {
+                            users.add(new UsersDataSet(result.getLong(1),
+                                    result.getString(2),
+                                    result.getString(3),
+                                    result.getString(4)));
+                        }
+
+                        return users;
+                    }
+                });
+    }
+
 }
