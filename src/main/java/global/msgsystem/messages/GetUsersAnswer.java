@@ -1,22 +1,23 @@
 package global.msgsystem.messages;
 
 import global.Servlet;
+import global.database.dataSets.UsersDataSet;
 import global.servlet.webpages.AdminPage;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * Created by eugene on 9/27/14.
  */
 public class GetUsersAnswer extends AbstractMsg {
 
-    private HashMap<String, Long> map;
-    public GetUsersAnswer(HashMap<String, Long> newMap){
-        this.map = newMap;
+    private ArrayList<UsersDataSet> users;
+    public GetUsersAnswer(ArrayList<UsersDataSet> users){
+        this.users = users;
     }
 
-    public HashMap<String, Long> getMap(){
-        return this.map;
+    public ArrayList<UsersDataSet> getUsers() {
+        return this.users;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package global.servlet.webpages;
 import global.MessageSystem;
+import global.database.dataSets.UsersDataSet;
 import global.msgsystem.messages.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +15,7 @@ public class AdminPage extends WebPage {
     public static final String URL = "/admin";
     public static final String TML_PATH = "AdminPage.html";
 
-    private HashMap<String, Long> registered;
+    private ArrayList<UsersDataSet> registered;
     private Set<String> loggedIn;
 
     private int fullInfo;
@@ -22,8 +23,8 @@ public class AdminPage extends WebPage {
 
     public AdminPage(MessageSystem msys) {
         this.msys = msys;
-        this.registered = new HashMap<>();
-        this.loggedIn = new HashSet<>();
+        this.registered = new ArrayList<UsersDataSet>();
+        this.loggedIn = new HashSet();
     }
     @Override
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
@@ -78,7 +79,7 @@ public class AdminPage extends WebPage {
 
         if (abs_msg instanceof GetUsersAnswer) {
             GetUsersAnswer msg = (GetUsersAnswer) abs_msg;
-            this.registered = msg.getMap();
+            this.registered = msg.getUsers();
             fullInfo++;
         }
         else if (abs_msg instanceof GetOnlineUsersAnswer) {

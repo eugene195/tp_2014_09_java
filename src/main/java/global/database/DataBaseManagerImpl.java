@@ -2,6 +2,8 @@ package global.database;
 
 import global.DataBaseManager;
 import global.MessageSystem;
+import global.database.dao.UsersDAO;
+import global.database.dataSets.UsersDataSet;
 import global.msgsystem.messages.*;
 import global.models.Score;
 import global.models.UserSession;
@@ -62,18 +64,16 @@ public class DataBaseManagerImpl implements DataBaseManager {
     }
 
     public boolean userExists(String login){
-        String query = "SELECT * FROM User WHERE login=?;";
         try {
-            PreparedStatement statement = this.conn.prepareStatement(query);
-            statement.setString(1, login);
-
-            ResultSet result = statement.executeQuery();
-            if (getResultCount(result) >= 1) {
+            UsersDAO userDAO = new UsersDAO(conn);
+            UsersDataSet user = userDAO.get(login);
+            if (user != null) {
                 return true;
             }
         }
         catch (Exception e){
-            System.out.println("Exception during DB Select in registration");
+            System.out.println(e.getMessage());
+            System.out.println("Exception during DB Select in userExists");
         }
         return false;
     }
@@ -82,7 +82,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     public void getUsers(){
         String query = "SELECT * FROM User;";
         try {
-            PreparedStatement statement = this.conn.prepareStatement(query);
+            /*PreparedStatement statement = this.conn.prepareStatement(query);
             ResultSet result = statement.executeQuery();
 
             int rows = getResultCount(result);
@@ -93,8 +93,10 @@ public class DataBaseManagerImpl implements DataBaseManager {
                 String username = result.getString("login");
                 map.put(username, userId);
                 rows--;
-            }
-            this.msys.sendMessage(new GetUsersAnswer(map), "servlet");
+            }*/
+            UsersDAO userDAO = new UsersDAO(conn);
+            ArrayList<UsersDataSet> users = userDAO.getAll();
+            this.msys.sendMessage(new GetUsersAnswer(users), "servlet");
         }
         catch (Exception e) {
             System.out.println("Sql exception during getUsers()");
@@ -131,7 +133,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
         }
     }
 
-    public void deleteUser(String login) {
+/*    public void deleteUser(String login) {
         if (this.userExists(login)) {
             String query = "DELETE FROM User WHERE login = ?;";
             try {
@@ -151,12 +153,11 @@ public class DataBaseManagerImpl implements DataBaseManager {
             System.out.print("User does not exist");
         }
     }
-
+*/
     @Override
     public void registerUser(String login, String passw) {
         if (this.userExists(login)) {
             this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already Exists"), "servlet");
-            System.out.println("User with this login already Exists");
         }
         else {
             String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
