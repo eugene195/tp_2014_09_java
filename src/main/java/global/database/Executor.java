@@ -43,7 +43,7 @@ public class Executor {
 
     public void execUpdate(Connection connection,
             String query,
-            ArrayList<String> params) {
+            ArrayList<String> params) throws SQLException {
         try {
             connection.setAutoCommit(false);
 
@@ -57,21 +57,17 @@ public class Executor {
             stmt.close();
 
             if (rowsAffected < 1) {
-                System.out.println("Smth bad happened. Update row affected < 1 rows");
-                throw new SQLException();
+                throw new SQLException("Update row affected < 1 rows");
             }
 
             connection.commit();
             connection.setAutoCommit(true);
 
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-                connection.setAutoCommit(true);
-                System.out.println("Exception during DB execUpdate");
-            } catch (SQLException ignore) {
-                System.out.println("Exception during DB execUpdate rollback");
-            }
+            connection.rollback();
+            connection.setAutoCommit(true);
+            System.out.println("Exception during DB execUpdate");
+            throw e;
         }
     }
 }

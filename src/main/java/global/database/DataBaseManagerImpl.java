@@ -10,7 +10,6 @@ import global.models.UserSession;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static java.lang.Thread.sleep;
 
@@ -128,6 +127,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
             catch (SQLException e){
                 e.printStackTrace();
                 System.out.println("Exception during DB insert in registration");
+                this.msys.sendMessage(new RegistrationAnswer(false, "", "Cannot add User "), "servlet");
             }
         }
     }
@@ -140,7 +140,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
             PreparedStatement statement = this.conn.prepareStatement(query);
             ResultSet result = statement.executeQuery();
 
-            ArrayList<Score> scores = new ArrayList<>();
+            ArrayList<Score> scores = new ArrayList();
 
             String login;
             int score;
@@ -172,6 +172,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
         }
         catch (SQLException e) {
             System.out.println("Sql exception during changePassword()");
+            this.msys.sendMessage(new ChangePasswordAnswer(false, "Cannot change password"), "servlet");
         }
     }
 
