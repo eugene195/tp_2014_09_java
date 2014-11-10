@@ -25,4 +25,9 @@ public class UsersDataSet {
     public long getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "score: "+ this.score;
+    }
 }

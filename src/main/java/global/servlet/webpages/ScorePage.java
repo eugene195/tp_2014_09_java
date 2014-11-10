@@ -1,10 +1,10 @@
 package global.servlet.webpages;
 
 import global.MessageSystem;
+import global.database.dataSets.UsersDataSet;
 import global.msgsystem.messages.AbstractMsg;
 import global.msgsystem.messages.BestScoresAnswer;
 import global.msgsystem.messages.BestScoresQuery;
-import global.models.Score;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ public class ScorePage extends WebPage {
     public static final String URL = "/scores";
     private final MessageSystem msys;
 
-    private ArrayList<Score> scores;
+    private ArrayList<UsersDataSet> users;
 
     public ScorePage(MessageSystem msys) {
         this.msys = msys;
@@ -33,13 +33,13 @@ public class ScorePage extends WebPage {
         PrintWriter printout = response.getWriter();
         JSONObject JObject = new JSONObject();
 
-        this.scores = null;
+        this.users = null;
         this.msys.sendMessage(new BestScoresQuery(), "dbman");
         this.setZombie();
 
-        if (this.scores != null) {
+        if (this.users != null) {
             JObject.put("status", "1");
-            JObject.put("bestScores", this.scores);
+            JObject.put("bestScores", this.users);
         }
         else {
             JObject.put("status", "-1");
@@ -55,7 +55,7 @@ public class ScorePage extends WebPage {
     public void finalizeAsync(AbstractMsg a_msg) {
         if (a_msg instanceof BestScoresAnswer) {
             BestScoresAnswer msg = (BestScoresAnswer) a_msg;
-            this.scores = msg.getScores();
+            this.users = msg.getScores();
             this.resume();
         }
     }

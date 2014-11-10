@@ -1,7 +1,7 @@
 package global.msgsystem.messages;
 
 import global.Servlet;
-import global.models.Score;
+import global.database.dataSets.UsersDataSet;
 import global.servlet.webpages.ScorePage;
 
 import java.util.ArrayList;
@@ -11,14 +11,14 @@ import java.util.ArrayList;
  */
 public class BestScoresAnswer extends AbstractMsg {
 
-    private final ArrayList<Score> scores;
+    private final ArrayList<UsersDataSet> users;
 
-    public BestScoresAnswer(ArrayList<Score> scores) {
-        this.scores = scores;
+    public BestScoresAnswer(ArrayList<UsersDataSet> users) {
+        this.users = users;
     }
 
-    public ArrayList<Score> getScores() {
-        return this.scores;
+    public ArrayList<UsersDataSet> getScores() {
+        return this.users;
     }
 
     @Override

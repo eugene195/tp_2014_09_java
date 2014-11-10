@@ -79,7 +79,6 @@ public class DataBaseManagerImpl implements DataBaseManager {
 
     @Override
     public void getUsers(){
-        String query = "SELECT * FROM User;";
         try {
             UsersDAO userDAO = new UsersDAO(conn);
             ArrayList<UsersDataSet> users = userDAO.getAll();
@@ -134,22 +133,11 @@ public class DataBaseManagerImpl implements DataBaseManager {
 
     @Override
     public void bestScores() {
-        String query = "SELECT login, score FROM User ORDER BY score DESC LIMIT 10;";
-
         try {
-            PreparedStatement statement = this.conn.prepareStatement(query);
-            ResultSet result = statement.executeQuery();
-
-            ArrayList<Score> scores = new ArrayList();
-
-            String login;
-            int score;
-            while (result.next()) {
-                login = result.getString("login");
-                score = result.getInt("score");
-                scores.add(new Score(login, score));
-            }
-            this.msys.sendMessage(new BestScoresAnswer(scores), "servlet");
+            UsersDAO userDAO = new UsersDAO(conn);
+            ArrayList<UsersDataSet> users = userDAO.getTop();
+            System.out.println(users.get(0).toString());
+            this.msys.sendMessage(new BestScoresAnswer(users), "servlet");
         }
         catch (Exception e) {
             System.out.println("Exception during DB select in bestScores");

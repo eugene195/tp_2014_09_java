@@ -35,6 +35,10 @@ public class UsersDAO {
         return getUsers("SELECT * FROM User", null);
     }
 
+    public ArrayList<UsersDataSet> getTop() throws SQLException {
+        return getUsers("SELECT * FROM User ORDER BY score DESC LIMIT 10;", null);
+    }
+
     public void add(String login, String passw) throws SQLException {
         Executor exec = new Executor();
         String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
@@ -45,20 +49,20 @@ public class UsersDAO {
         Executor exec = new Executor();
         String query = "UPDATE User Set passw = md5(?) WHERE login = ?;";
 
-        exec.execUpdate(con, query, createParams(login, passw));
+        exec.execUpdate(con, query, createParams(passw, login));
     }
 
-    private ArrayList<String> createParams(String login, String passw) {
+    private ArrayList<String> createParams(String arg1, String arg2) {
         ArrayList<String> params = new ArrayList();
-        params.add(login);
-        if (passw != null) {
-            params.add(passw);
+        params.add(arg1);
+        if (arg2 != null) {
+            params.add(arg2);
         }
         return params;
     }
 
-    private ArrayList<String> createParams(String login) {
-        return createParams(login, null);
+    private ArrayList<String> createParams(String arg1) {
+        return createParams(arg1, null);
     }
 
     private ArrayList<UsersDataSet> getUsers(String query,
