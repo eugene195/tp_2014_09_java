@@ -18,8 +18,6 @@ import static java.lang.Thread.sleep;
 public class GameMechanicsImpl implements GameMechanics {
     private static final int STEP_TIME = 100;
 
-    private static final int gameTime = 15 * 1000;
-
     private final WebSocketService webSocketService;
     private final Map<String, GameSession> nameToGame = new HashMap<>();
 
@@ -56,9 +54,7 @@ public class GameMechanicsImpl implements GameMechanics {
     }
 
     private void gmStep() {
-        int I = 0;
-        for (GameSession session : allSessions) {
-            Engine engine = engines.get(I++);
+        for (Engine engine : this.engines) {
             engine.timerEvent();
         }
     }
@@ -81,8 +77,6 @@ public class GameMechanicsImpl implements GameMechanics {
     public void sendToClients(String action, Map<String, Object> data, Engine from) {
         int index = this.engines.indexOf(from);
         GameSession session = this.allSessions.get(index);
-
-        data.put("snakeId", index);
         this.webSocketService.sendToClients(action, data, session);
     }
 }

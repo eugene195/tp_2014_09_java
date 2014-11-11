@@ -19,9 +19,12 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     @Override
     public void sendToClients(String action, Map<String, Object> data, GameSession session) {
+        int userId = 0;
         for (String user : session.getPlayers()) {
             GameWebSocket socket = userSockets.get(user);
+            data.put("snakeId", userId);
             socket.sendToClient(action, data);
+            userId++;
         }
     }
 
