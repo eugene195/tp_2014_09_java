@@ -58,7 +58,6 @@ var GameView = Backbone.View.extend({
 
     show: function () {
         this.trigger('reshow', this);
-        this.controller.setGameSocket();
         this.update();
 
     },

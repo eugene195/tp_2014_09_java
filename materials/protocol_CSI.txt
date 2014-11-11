@@ -7,7 +7,6 @@
     }
 }
 
-
 confirm {
     action: loaded | handled;
 }
