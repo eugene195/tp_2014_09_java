@@ -3,11 +3,8 @@ package global.mechanic;
 import global.GameMechanics;
 import global.engine.Engine;
 import global.models.GameSession;
-import global.models.Player;
 import global.WebSocketService;
-import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static java.lang.Thread.sleep;
@@ -36,7 +33,7 @@ public class GameMechanicsImpl implements GameMechanics {
 
     public void addUser(String user) {
         if (waiter != null) {
-            starGame(user);
+            startGame(user);
             waiter = null;
         } else {
             waiter = user;
@@ -63,7 +60,7 @@ public class GameMechanicsImpl implements GameMechanics {
         }
     }
 
-    private void starGame(String first) {
+    private void startGame(String first) {
         String second = waiter;
         GameSession gameSession = new GameSession(first, second);
         allSessions.add(gameSession);

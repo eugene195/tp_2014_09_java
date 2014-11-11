@@ -11,7 +11,7 @@ define([
 
             this.ws = new WebSocket(this.SOCKET_URL);
             this.ws.onopen = function (event) {
-                this.trigger('startLoad')
+                
             }.bind(this);
 
             this.ws.onclose = function (event) {
@@ -19,6 +19,7 @@ define([
             };
 
             this.ws.onmessage = function (event) {
+                this.trigger('startLoad');
                 var data = JSON.parse(event.data);
                 var action = JSON.parse(event.action);
                 this.trigger(action, data);
@@ -45,7 +46,7 @@ define([
 
         sendMessage : function(message) {
 //            this.
-//            this.ws.send(message);
+            this.ws.send(message);
         }
     };
     return _.extend(SocketMan, Backbone.Events);

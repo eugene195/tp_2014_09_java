@@ -41,6 +41,12 @@ public class GameWebSocket {
         }
     }
 
+    @OnWebSocketConnect
+    public void onOpen(Session session) {
+        System.out.print("WebSocket connected");
+//        Here we can show user some info about current sessions
+    }
+
     public void addUser() {
         setSession(session);
         webSocketService.addUser(this);
