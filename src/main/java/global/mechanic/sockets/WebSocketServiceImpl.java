@@ -18,6 +18,9 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     private final GameMechanics mechanics;
 
+    // TODO: make it into session
+    private String waiter;
+
     public WebSocketServiceImpl(GameMechanics mechanics) {
         this.mechanics = mechanics;
     }
@@ -25,7 +28,14 @@ public class WebSocketServiceImpl implements WebSocketService {
     public void addUser(GameWebSocket user) {
         String myName = user.getMyName();
         userSockets.put(myName, user);
-        mechanics.addUser(myName);
+
+        // TODO: make it into session
+        if (waiter == null) {
+            waiter = myName;
+        } else {
+            mechanics.startGame(waiter, myName);
+            waiter = null;
+        }
     }
 
     @Override
@@ -42,17 +52,15 @@ public class WebSocketServiceImpl implements WebSocketService {
     @Override
     public void sendToEngine(String action, Map<String, Object> data, String myName) {
         GameSession session = this.nameToGame.get(myName);
-        // TODO: data.put("snakeId", ?);
+        data.put("snakeId", session.getUserId(myName));
         mechanics.sendToEngine(action, data, session);
     }
 
     @Override
     public void notifyStart(GameSession gameSession) {
-        String first = gameSession.getFirst().getMyName(),
-               second = gameSession.getSecond().getMyName();
-
-        nameToGame.put(first, gameSession);
-        nameToGame.put(second, gameSession);
+        for (String user : gameSession.getPlayers()) {
+            nameToGame.put(user, gameSession);
+        }
 
         for (String user : gameSession.getPlayers()) {
             GameWebSocket socket = userSockets.get(user);

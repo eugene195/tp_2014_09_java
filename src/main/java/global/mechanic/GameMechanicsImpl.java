@@ -21,10 +21,6 @@ public class GameMechanicsImpl implements GameMechanics {
     private final ArrayList<GameSession> allSessions = new ArrayList<>();
     private final ArrayList<Engine> engines = new ArrayList<>();
 
-    private ArrayList<String> pendingUsers;
-
-    private String waiter;
-
     public GameMechanicsImpl() {
         this.webSocketService = new WebSocketServiceImpl(this);
     }
@@ -32,15 +28,6 @@ public class GameMechanicsImpl implements GameMechanics {
     @Override
     public WebSocketService getWebSocketService() {
         return webSocketService;
-    }
-
-    public void addUser(String user) {
-        if (waiter != null) {
-            startGame(waiter, user);
-            waiter = null;
-        } else {
-            waiter = user;
-        }
     }
 
     @Override

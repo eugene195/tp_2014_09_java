@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
  * Created by eugene on 10/19/14.
  */
 public class CustomWebSocketCreator implements WebSocketCreator {
-    private WebSocketService webSocketService;
+    private final WebSocketService webSocketService;
 
     public CustomWebSocketCreator(WebSocketService webSocketService) {
         this.webSocketService = webSocketService;
@@ -24,7 +24,6 @@ public class CustomWebSocketCreator implements WebSocketCreator {
             String login = session.getAttribute("login").toString();
             return new GameWebSocket(login, webSocketService);
         }
-        else
-            return null;
+        return null;
     }
 }

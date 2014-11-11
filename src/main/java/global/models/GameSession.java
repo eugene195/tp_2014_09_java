@@ -9,49 +9,44 @@ import java.util.*;
  */
 public class GameSession {
     private final long startTime;
-    private Player first;
-    private Player second;
 
-    private Map<String, Player> users = new HashMap<>();
+    private final TreeMap<String, Player> users = new TreeMap<>();
 
     public GameSession(String user1, String user2) {
         startTime = new Date().getTime();
+
         Player player1 = new Player(user1);
         player1.setEnemyName(user2);
+        users.put(user1, player1);
 
         Player player2 = new Player(user2);
         player2.setEnemyName(user1);
 
-        users.put(user1, player1);
         users.put(user2, player2);
-
-        this.first = player1;
-        this.second = player2;
-    }
-
-    public Player getEnemy(String user) {
-        String enemyName = users.get(user).getEnemyName();
-        return users.get(enemyName);
     }
 
     public Set<String> getPlayers() {
-        return users.keySet();
+        return users.descendingKeySet();
     }
 
-    public Player getSelf(String user) {
+    public int getUserId(String user) {
+        int id = 0, result = -1;
+        for (String key : users.descendingKeySet()) {
+            if (key.equals(user)) {
+                result = id;
+                break;
+            }
+            id++;
+        }
+        return result;
+    }
+
+    public Player getByName(String user) {
         return users.get(user);
     }
 
     public long getSessionTime(){
         return new Date().getTime() - startTime;
-    }
-
-    public Player getFirst() {
-        return first;
-    }
-
-    public Player getSecond() {
-        return second;
     }
 }
 
