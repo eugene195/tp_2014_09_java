@@ -72,6 +72,7 @@ define([
         canvasAction: function () {
             canvas.show();
         },
+
         toIndex: function () {
             this.navigate('', {trigger: true});
         },

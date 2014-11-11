@@ -27,7 +27,9 @@ public class Engine {
 
         this.generateField(width, height);
         this.generateSnakes(snakesCnt);
+    }
 
+    public void launch() {
         this.mechanic.sendToClients("startGame", this.getStartData(), this);
     }
 
