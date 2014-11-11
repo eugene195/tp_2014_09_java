@@ -10,6 +10,7 @@ import java.util.Map;
  * Created by max on 25.10.14.
  */
 public class Engine {
+
     private int width, height;
     private int speed;
 
@@ -18,23 +19,32 @@ public class Engine {
 
     private GameMechanics mechanic;
 
+    //---------------------------------------------------------------------------------------------------
+
     public Engine(GameMechanics mechanic, int width, int height, int speed, int snakesCnt) {
         this.mechanic = mechanic;
+        this.speed = speed;
 
+        this.generateField(width, height);
+        this.generateSnakes(snakesCnt);
+
+        this.mechanic.sendToClients("startGame", this.getStartData(), this);
+    }
+
+    private void generateField(int width, int height) {
         this.width = width;
         this.height = height;
-        this.speed = speed;
 
         for (int I = 0; I < height; I++)
             for (int J = 0; J < width; J++) {
                 cells.add(new Cell(J, I));
             }
+    }
 
+    private void generateSnakes(int snakesCnt) {
         for (int I = 0; I < snakesCnt; I++) {
-            snakes.add(new Snake(Color.BLACK));
+            snakes.add(new Snake(I, Color.getColor(I)));
         }
-
-        this.mechanic.sendToClients("startGame", this.getStartData(), this);
     }
 
     private Map<String, Object> getStartData() {
@@ -43,31 +53,63 @@ public class Engine {
         data.put("width", width);
         data.put("speed", speed);
 
-        // TODO: snakes info
+        ArrayList<Map<String, Object>> snakeInfo = new ArrayList<>();
+        Map<String, Object> block;
+        Location pos;
+
+        for (Snake snake : snakes) {
+            block = new HashMap<>();
+            block.put("snakeId", snake.getId());
+            block.put("color", snake.getColor().name());
+
+            pos = snake.getLocation();
+            block.put("posX", pos.X);
+            block.put("posY", pos.Y);
+            snakeInfo.add(block);
+        }
+
+        data.put("snakes", snakeInfo);
 
         return data;
     }
 
     public void timerEvent() {
-        Location cur;
+        boolean justKilled;
+        Cell cell;
 
         for (Snake snake: snakes) {
             snake.move(width-1, height-1);
-            cur = snake.getLocation();
-            snake.grasp(getCell(cur));
+            cell = getCell(snake.getLocation());
+            justKilled = snake.grasp(cell);
+
+            if (justKilled) {
+                this.sendCollision(snake.getId(), cell.getOwner());
+            }
         }
 
         mechanic.sendToClients("tick", this.getTickData(), this);
 
-        checkGameEnd();
+        this.checkGameEnd();
     }
 
 
     private Map<String, Object> getTickData() {
         Map<String, Object> data = new HashMap<>();
 
-        // TODO: snakes info
+        ArrayList<Map<String, Object>> snakeInfo = new ArrayList<>();
+        Map<String, Object> block;
+        Location pos;
 
+        for (Snake snake : snakes) {
+            block = new HashMap<>();
+            pos = snake.getLocation();
+            block.put("snakeId", snake.getId());
+            block.put("newX", pos.X);
+            block.put("newY", pos.Y);
+            snakeInfo.add(block);
+        }
+
+        data.put("snakes", snakeInfo);
         return data;
     }
 
@@ -81,16 +123,22 @@ public class Engine {
         return this.cells.get(pos);
     }
 
+    private void sendCollision(int snakeId, int withId) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("snakeId", snakeId);
+        data.put("withId", withId);
+        mechanic.sendToClients("endGame", data, this);
+    }
+
     private boolean collisionFor(int J) {
         Snake snakej = snakes.get(J);
         Location aliveLoc = snakej.getLocation();
 
         for (int I = 0; I < snakes.size(); I++)
             if (I != J && snakes.get(I).getLocation().equals(aliveLoc)) {
+
                 snakej.setAlive(false);
-
-                // TODO: COLLISION
-
+                this.sendCollision(J, I);
                 return true;
             }
 
@@ -99,18 +147,28 @@ public class Engine {
 
     private void checkGameEnd() {
         int alives = 0;
-        for (int I = 0; I < snakes.size(); I++)
-            if (snakes.get(I).isAlive() && ! collisionFor(I))
+        for (Snake snake : snakes)
+            if (snake.isAlive() && ! collisionFor(snake.getId()))
                 alives++;
 
         if (alives <= 1)
-            endGame();
+            this.endGame();
+    }
+
+    private int findWinner() {
+        for (Snake snake : snakes) {
+            if (snake.isAlive())
+                return snake.getId();
+        }
+        return -1;
     }
 
     private void endGame() {
         Map<String, Object> data = new HashMap<>();
 
-        // TODO: snakes info
+        int winner = findWinner();
+        data.put("winner", winner);
+        data.put("color", snakes.get(winner).getColor().name());
 
         mechanic.sendToClients("endGame", data, this);
     }

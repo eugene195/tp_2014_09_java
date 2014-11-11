@@ -7,55 +7,61 @@
     }
 }
 
-{
-    action: getAvailableSessions
+confirm {
+    action: loaded | handled;
 }
 
 Сервер - Клиент.
 
-1)
-action: startGame,
-data: {
-    height: int,
-    width: int,
-    speed: int,
-    snakes: [{
+{
+    action: startGame,
+    data: {
+        height: int,
+        width: int,
+        speed: int,
         snakeID: int,
-        color: Color
-        position: (int, int)
-    }, ...]
+
+        snakes: [{
+            snakeID: int,
+            color: Color
+            posX: int,
+            posY: int,
+        }, ...]
+    }
 }
 
-2) endGame()
-action: endGame,
-data: {
-    snakeID: int,
-    isWinner: bool
+{
+    action: endGame,
+    data: {
+        snakeID: int,
+        isWinner: bool
+    }
 }
 
 
-3) collision()
-action: collision,
-data: {
-    snakeID: int
-    withID: int
+{
+    action: collision,
+    data: {
+        snakeID: int
+        withID: int
+    }
 }
 
-4) tick()
-action: collision,
-data: {
-    [{
-        snakeID:
-        newX: int
-        newY: int
-    }, ...]
+{
+    action: tick,
+    data: {
+        snakes: [{
+            snakeID:
+            newX: int
+            newY: int
+        }, ...]
+    }
 }
 
 5)
 action: playerAdded
 status:
 data: {
-
     snakeID
 }
 
@@ -64,6 +70,3 @@ addPlayer{
 
 }
 
-confirm {
-    action: loaded | handled;
-}

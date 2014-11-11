@@ -14,4 +14,8 @@ public enum Color {
     ORANGE,
     CYAN,
     BROWN;
+
+    public static Color getColor(int I) {
+        return Color.values()[I];
+    }
 }
