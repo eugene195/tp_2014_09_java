@@ -1,6 +1,8 @@
 package global;
 
 import global.engine.Engine;
+import global.models.GameSession;
+
 import java.util.Map;
 
 /**
@@ -12,4 +14,5 @@ public interface GameMechanics extends Runnable {
     public void run();
 
     void sendToClients(String action, Map<String, Object> data, Engine from);
+    void sendToEngine(String action, Map<String, Object> data, GameSession session);
 }

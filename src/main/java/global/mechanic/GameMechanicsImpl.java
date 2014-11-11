@@ -79,4 +79,11 @@ public class GameMechanicsImpl implements GameMechanics {
         GameSession session = this.allSessions.get(index);
         this.webSocketService.sendToClients(action, data, session);
     }
+
+    @Override
+    public void sendToEngine(String action, Map<String, Object> data, GameSession session) {
+        int index = this.allSessions.indexOf(session);
+        Engine engine = this.engines.get(index);
+        engine.execAction(action, data);
+    }
 }

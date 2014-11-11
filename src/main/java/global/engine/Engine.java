@@ -172,4 +172,14 @@ public class Engine {
 
         mechanic.sendToClients("endGame", data, this);
     }
+
+    public void execAction(String action, Map<String, Object> data) {
+        if (action.equals("handleKey")) {
+            String dirStr = (String) data.get("direct");
+            Direct dir = Direct.valueOf(dirStr);
+            int snakeId = (Integer) data.get("snakeId");
+
+            this.handleKey(snakeId, dir);
+        }
+    }
 }
