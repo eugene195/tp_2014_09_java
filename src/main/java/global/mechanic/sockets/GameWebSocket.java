@@ -1,7 +1,5 @@
 package global.mechanic.sockets;
 
-import global.GameMechanics;
-import global.models.Player;
 import global.WebSocketService;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -10,6 +8,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -19,12 +18,10 @@ import java.util.Map;
 public class GameWebSocket {
     private String myName;
     private Session session;
-    private GameMechanics gameMechanics;
     private WebSocketService webSocketService;
 
-    public GameWebSocket(String myName, GameMechanics gameMechanics, WebSocketService webSocketService) {
+    public GameWebSocket(String myName, WebSocketService webSocketService) {
         this.myName = myName;
-        this.gameMechanics = gameMechanics;
         this.webSocketService = webSocketService;
     }
 
@@ -33,27 +30,30 @@ public class GameWebSocket {
     }
 
     @OnWebSocketMessage
-    public void onMessage(String data) {
-        JSONObject message = new JSONObject(data);
-        String action = message.getString("action");
+    public void onMessage(String message) {
+        JSONObject json = new JSONObject(message);
+        String action = json.getString("action");
 
         if (action.equals("addUser")) {
-            this.addUser();
+            setSession(session);
+            webSocketService.addUser(this);
         }
         else {
-             // BY PROTOCOL
+            JSONObject dataJson = json.getJSONObject("data");
+
+            Map<String, Object> data = new HashMap<>();
+            for (Object objKey : dataJson.keySet()) {
+                String key = (String) objKey;
+                data.put(key, dataJson.get(key));
+            }
+
+            webSocketService.sendToEngine(action, data, myName);
         }
     }
 
     @OnWebSocketConnect
     public void onOpen(Session session) {
 
-    }
-
-    public void addUser() {
-        setSession(session);
-        webSocketService.addUser(this);
-        gameMechanics.addUser(myName);
     }
 
     public void sendToClient(String action, Map<String, Object> data) {

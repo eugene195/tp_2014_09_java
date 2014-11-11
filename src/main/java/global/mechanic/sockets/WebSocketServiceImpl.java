@@ -1,5 +1,6 @@
 package global.mechanic.sockets;
 
+import global.GameMechanics;
 import global.models.GameSession;
 import global.models.Player;
 import global.WebSocketService;
@@ -11,10 +12,20 @@ import java.util.Map;
  * Created by eugene on 10/19/14.
  */
 public class WebSocketServiceImpl implements WebSocketService {
-    private Map<String, GameWebSocket> userSockets = new HashMap<>();
+
+    private final Map<String, GameWebSocket> userSockets = new HashMap<>();
+    private final Map<String, GameSession> nameToGame = new HashMap<>();
+
+    private final GameMechanics mechanics;
+
+    public WebSocketServiceImpl(GameMechanics mechanics) {
+        this.mechanics = mechanics;
+    }
 
     public void addUser(GameWebSocket user) {
-        userSockets.put(user.getMyName(), user);
+        String myName = user.getMyName();
+        userSockets.put(myName, user);
+        mechanics.addUser(myName);
     }
 
     @Override
@@ -29,10 +40,35 @@ public class WebSocketServiceImpl implements WebSocketService {
     }
 
     @Override
-    public void notifyGame(GameSession session) {
-        for (String user : session.getPlayers()) {
+    public void sendToEngine(String action, Map<String, Object> data, String myName) {
+        GameSession session = this.nameToGame.get(myName);
+        // TODO: data.put("snakeId", ?);
+        mechanics.sendToEngine(action, data, session);
+    }
+
+    @Override
+    public void notifyStart(GameSession gameSession) {
+        String first = gameSession.getFirst().getMyName(),
+               second = gameSession.getSecond().getMyName();
+
+        nameToGame.put(first, gameSession);
+        nameToGame.put(second, gameSession);
+
+        for (String user : gameSession.getPlayers()) {
             GameWebSocket socket = userSockets.get(user);
-            socket.sendToClient("notifyGame");
+            socket.sendToClient("notifyStart");
+        }
+    }
+
+    @Override
+    public void notifyEnd(GameSession gameSession) {
+        for (String user : gameSession.getPlayers()) {
+            this.nameToGame.remove(user);
+        }
+
+        for (String user : gameSession.getPlayers()) {
+            GameWebSocket socket = userSockets.get(user);
+            socket.sendToClient("notifyEnd");
         }
     }
 }

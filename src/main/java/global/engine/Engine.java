@@ -171,6 +171,7 @@ public class Engine {
         data.put("color", snakes.get(winner).getColor().name());
 
         mechanic.sendToClients("endGame", data, this);
+        mechanic.endGame(this);
     }
 
     public void execAction(String action, Map<String, Object> data) {

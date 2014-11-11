@@ -7,11 +7,15 @@
     }
 }
 
-confirm {
-    action: loaded | handled;
+{
+    confirm: loaded | handled;
 }
 
 Сервер - Клиент.
+
+{
+    action: notifyStart | notifyEnd
+}
 
 {
     action: startGame,

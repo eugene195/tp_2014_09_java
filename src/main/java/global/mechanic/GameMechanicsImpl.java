@@ -2,6 +2,7 @@ package global.mechanic;
 
 import global.GameMechanics;
 import global.engine.Engine;
+import global.mechanic.sockets.WebSocketServiceImpl;
 import global.models.GameSession;
 import global.WebSocketService;
 
@@ -16,7 +17,6 @@ public class GameMechanicsImpl implements GameMechanics {
     private static final int STEP_TIME = 100;
 
     private final WebSocketService webSocketService;
-    private final Map<String, GameSession> nameToGame = new HashMap<>();
 
     private final ArrayList<GameSession> allSessions = new ArrayList<>();
     private final ArrayList<Engine> engines = new ArrayList<>();
@@ -25,13 +25,18 @@ public class GameMechanicsImpl implements GameMechanics {
 
     private String waiter;
 
-    public GameMechanicsImpl(WebSocketService webSocketService) {
-        this.webSocketService = webSocketService;
+    public GameMechanicsImpl() {
+        this.webSocketService = new WebSocketServiceImpl(this);
+    }
+
+    @Override
+    public WebSocketService getWebSocketService() {
+        return webSocketService;
     }
 
     public void addUser(String user) {
         if (waiter != null) {
-            startGame(user);
+            startGame(waiter, user);
             waiter = null;
         } else {
             waiter = user;
@@ -56,18 +61,25 @@ public class GameMechanicsImpl implements GameMechanics {
         }
     }
 
-    private void startGame(String first) {
-        String second = waiter;
+    @Override
+    public void startGame(String first, String second) {
         GameSession gameSession = new GameSession(first, second);
         allSessions.add(gameSession);
 
         Engine newEngine = new Engine(this, 100, 100, 1, 2);
         engines.add(newEngine);
 
-        nameToGame.put(first, gameSession);
-        nameToGame.put(second, gameSession);
+        webSocketService.notifyStart(gameSession);
+    }
 
-        webSocketService.notifyGame(gameSession);
+    @Override
+    public void endGame(Engine engine) {
+        int index = this.engines.indexOf(engine);
+        this.engines.remove(index);
+
+        GameSession gameSession = allSessions.get(index);
+        this.webSocketService.notifyEnd(gameSession);
+        this.allSessions.remove(gameSession);
     }
 
     @Override

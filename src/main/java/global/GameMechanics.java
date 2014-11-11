@@ -13,6 +13,11 @@ public interface GameMechanics extends Runnable {
 
     public void run();
 
+    WebSocketService getWebSocketService();
+
     void sendToClients(String action, Map<String, Object> data, Engine from);
     void sendToEngine(String action, Map<String, Object> data, GameSession session);
+
+    void startGame(String first,String second);
+    void endGame(Engine endine);
 }
