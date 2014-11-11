@@ -39,14 +39,22 @@ var GameList = Backbone.View.extend({
     },
 
     show: function () {
-        this.trigger('reshow', this);
+        this.trigger('rerender', this);
         this.listenTo(this.controller, 'notifyGame', this.gameStarted);
         this.controller.setGameSocket();
+        var message = {
+            action: "getAvailableSessions"
+        }
+        debugger;
+        this.controller.sendMessage(message.toJSON());
     },
 
     gameClick: function(event) {
-        alert("Socket message sending");
-        this.controller.sendMessage("addUser");
+        var message = {
+            action: "addUser"
+        }
+        message = JSON.stringify(message);
+        this.controller.sendMessage(message);
     },
 });
     return new GameList();

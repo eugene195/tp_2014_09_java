@@ -45,7 +45,6 @@ define([
         },
 
         sendMessage : function(message) {
-//            this.
             this.ws.send(message);
         }
     };
