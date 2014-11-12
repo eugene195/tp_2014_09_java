@@ -8,17 +8,26 @@
 }
 
 {
-    confirm: loaded | handled;
+    confirm: loaded | handled
+}
+
+{
+    action: startGameSession,
+}
+
+{
+    action: addPlayer,
+    sessionId: int
 }
 
 Сервер - Клиент.
 
 {
-    action: notifyStart | notifyEnd
+    action: notifyStart | startGame
 }
 
 {
-    action: startGame,
+    action: adjustGame,
     data: {
         height: int,
         width: int,
@@ -61,16 +70,3 @@
         }, ...]
     }
 }
-
-5)
-action: playerAdded
-status:
-data: {
-    snakeID
-}
-
-//---------------------------------------
-addPlayer{
-
-}
-

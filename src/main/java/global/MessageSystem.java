@@ -10,7 +10,6 @@ public interface MessageSystem {
     void register(Runnable abonent, String address);
 
     boolean sendMessage(AbstractMsg message, String addressTo);
-
     void executeFor(Runnable abonent);
 
     void printAddresses();

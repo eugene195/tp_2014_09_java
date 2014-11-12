@@ -1,8 +1,7 @@
 package global.mechanic.sockets;
 
 import global.GameMechanics;
-import global.models.GameSession;
-import global.models.Player;
+import global.mechanic.GameSession;
 import global.WebSocketService;
 
 import java.util.HashMap;
@@ -18,24 +17,19 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     private final GameMechanics mechanics;
 
-    // TODO: make it into session
-    private String waiter;
-
     public WebSocketServiceImpl(GameMechanics mechanics) {
         this.mechanics = mechanics;
     }
 
-    public void addUser(GameWebSocket user) {
+    public void startGameSession(int playersCnt) {
+        this.mechanics.startGameSession(playersCnt);
+    }
+
+    @Override
+    public void addUser(int sessionId, GameWebSocket user) {
         String myName = user.getMyName();
         userSockets.put(myName, user);
-
-        // TODO: make it into session
-        if (waiter == null) {
-            waiter = myName;
-        } else {
-            mechanics.startGame(waiter, myName);
-            waiter = null;
-        }
+        mechanics.addToSession(sessionId, myName);
     }
 
     @Override
@@ -52,7 +46,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     @Override
     public void sendToEngine(String action, Map<String, Object> data, String myName) {
         GameSession session = this.nameToGame.get(myName);
-        data.put("snakeId", session.getUserId(myName));
+        data.put("snakeId", session.getSnakeId(myName));
         mechanics.sendToEngine(action, data, session);
     }
 

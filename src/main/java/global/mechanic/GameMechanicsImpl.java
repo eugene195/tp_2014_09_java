@@ -3,10 +3,10 @@ package global.mechanic;
 import global.GameMechanics;
 import global.engine.Engine;
 import global.mechanic.sockets.WebSocketServiceImpl;
-import global.models.GameSession;
 import global.WebSocketService;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.Thread.sleep;
 
@@ -15,10 +15,12 @@ import static java.lang.Thread.sleep;
  */
 public class GameMechanicsImpl implements GameMechanics {
     private static final int STEP_TIME = 100;
+    private static AtomicLong idCounter = new AtomicLong();
 
     private final WebSocketService webSocketService;
 
-    private final ArrayList<GameSession> allSessions = new ArrayList<>();
+    private final Map<Long, GameSession> waitingPlayers = new HashMap<>();
+    private final ArrayList<GameSession> playing = new ArrayList<>();
     private final ArrayList<Engine> engines = new ArrayList<>();
 
     public GameMechanicsImpl() {
@@ -48,16 +50,34 @@ public class GameMechanicsImpl implements GameMechanics {
         }
     }
 
+
     @Override
-    public void startGame(String first, String second) {
-        GameSession gameSession = new GameSession(first, second);
-        this.allSessions.add(gameSession);
+    public void startGameSession(int playersCnt) {
+        GameSession gameSession = new GameSession(playersCnt);
+        long id = idCounter.getAndIncrement();
+        this.waitingPlayers.put(id, gameSession);
+    }
+
+    @Override
+    public void addToSession(long sessionId, String player) {
+        GameSession gameSession = this.waitingPlayers.get(sessionId);
+        boolean filled = gameSession.add(player);
+
+        if (filled) {
+            this.waitingPlayers.remove(sessionId);
+            this.startGame(gameSession);
+        }
+    }
+
+    @Override
+    public void startGame(GameSession gameSession) {
+        this.playing.add(gameSession);
+        this.webSocketService.notifyStart(gameSession);
 
         Engine newEngine = new Engine(this, 100, 100, 1, 2);
         this.engines.add(newEngine);
-
-        this.webSocketService.notifyStart(gameSession);
-//        newEngine.launch();
+        // TODO: after all confirms
+        newEngine.launch();
     }
 
     @Override
@@ -66,9 +86,9 @@ public class GameMechanicsImpl implements GameMechanics {
 
         if (index != -1) {
             this.engines.remove(index);
-            GameSession gameSession = allSessions.get(index);
+            GameSession gameSession = playing.get(index);
             this.webSocketService.notifyEnd(gameSession);
-            this.allSessions.remove(gameSession);
+            this.playing.remove(gameSession);
         } else {
             System.out.println("endGame index error");
         }
@@ -79,7 +99,7 @@ public class GameMechanicsImpl implements GameMechanics {
         int index = this.engines.indexOf(from);
 
         if (index != -1) {
-            GameSession session = this.allSessions.get(index);
+            GameSession session = this.playing.get(index);
             this.webSocketService.sendToClients(action, data, session);
         } else {
             System.out.println("sendToClients index error");
@@ -88,7 +108,7 @@ public class GameMechanicsImpl implements GameMechanics {
 
     @Override
     public void sendToEngine(String action, Map<String, Object> data, GameSession session) {
-        int index = this.allSessions.indexOf(session);
+        int index = this.playing.indexOf(session);
 
         if (index != -1) {
             Engine engine = this.engines.get(index);

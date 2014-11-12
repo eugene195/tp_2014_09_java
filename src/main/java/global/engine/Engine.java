@@ -11,6 +11,8 @@ import java.util.Map;
  */
 public class Engine {
 
+    private boolean launched;
+
     private int width, height;
     private int speed;
 
@@ -22,6 +24,7 @@ public class Engine {
     //---------------------------------------------------------------------------------------------------
 
     public Engine(GameMechanics mechanic, int width, int height, int speed, int snakesCnt) {
+        this.launched = false;
         this.mechanic = mechanic;
         this.speed = speed;
 
@@ -30,6 +33,7 @@ public class Engine {
     }
 
     public void launch() {
+        this.launched = true;
         this.mechanic.sendToClients("startGame", this.getStartData(), this);
     }
 
@@ -76,6 +80,8 @@ public class Engine {
     }
 
     public void timerEvent() {
+        if (! launched) return;
+
         boolean justKilled;
         Cell cell;
 
