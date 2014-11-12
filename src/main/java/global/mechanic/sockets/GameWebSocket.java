@@ -35,8 +35,10 @@ public class GameWebSocket {
         String action = json.getString("action");
 
         if (action.equals("addUser")) {
-            setSession(session);
             webSocketService.addUser(this);
+        }
+        else if (action.equals("loaded")) {
+//        Engine.launch
         }
         else {
             JSONObject dataJson = json.getJSONObject("data");
@@ -53,7 +55,7 @@ public class GameWebSocket {
 
     @OnWebSocketConnect
     public void onOpen(Session session) {
-
+        setSession(session);
     }
 
     public void sendToClient(String action, Map<String, Object> data) {

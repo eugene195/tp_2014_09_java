@@ -11,7 +11,7 @@ import javax.servlet.annotation.WebServlet;
  */
 @WebServlet(name = "WebSocketGameServlet", urlPatterns = {"/gameplay"})
 public class WebSocketGameServlet extends WebSocketServlet {
-    private static final int IDLE_TIME = 60 * 1000;
+    private static final int IDLE_TIME = 120 * 1000;
     private final WebSocketService webSocketService;
 
     public WebSocketGameServlet(WebSocketService webSocketService) {

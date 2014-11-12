@@ -33,20 +33,14 @@ var GameList = Backbone.View.extend({
     },
 
     gameStarted: function(data) {
-        if (data[status] == "OK")
-            alert("Your game starts");
+        alert("Your game starts");
         this.trigger('start');
     },
 
     show: function () {
         this.trigger('rerender', this);
-        this.listenTo(this.controller, 'notifyGame', this.gameStarted);
+        this.listenTo(this.controller, 'notifyStart', this.gameStarted);
         this.controller.setGameSocket();
-        var message = {
-            action: "getAvailableSessions"
-        }
-        debugger;
-        this.controller.sendMessage(message.toJSON());
     },
 
     gameClick: function(event) {

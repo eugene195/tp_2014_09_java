@@ -19,12 +19,11 @@ define([
             };
 
             this.ws.onmessage = function (event) {
-                this.trigger('startLoad');
-                var data = JSON.parse(event.data);
-                var action = JSON.parse(event.action);
+//            Data needs to be loaded afterwards. Will fix it after we use confirm
+                var inData = JSON.parse(event.data);
+                var action = inData.action;
+                var data = inData.data;
                 this.trigger(action, data);
-                if (action == 'startGame')
-                    this.confirm();
             }.bind(this);
         },
 
@@ -41,7 +40,10 @@ define([
         },
 
         confirm : function () {
-            // send confirm
+            var message = {
+                action: "loaded"
+            }
+            this.sendMessage(message);
         },
 
         sendMessage : function(message) {

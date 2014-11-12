@@ -38,7 +38,7 @@ public class GameMechanicsImpl implements GameMechanics {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            this.gmStep();
+//            this.gmStep();
         }
     }
 
@@ -57,7 +57,7 @@ public class GameMechanicsImpl implements GameMechanics {
         this.engines.add(newEngine);
 
         this.webSocketService.notifyStart(gameSession);
-        newEngine.launch();
+//        newEngine.launch();
     }
 
     @Override
