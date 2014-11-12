@@ -40,7 +40,7 @@ public class GameMechanicsImpl implements GameMechanics {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            this.gmStep();
+//            this.gmStep();
         }
     }
 
@@ -76,7 +76,6 @@ public class GameMechanicsImpl implements GameMechanics {
 
         Engine newEngine = new Engine(this, 100, 100, 1, 2);
         this.engines.add(newEngine);
-
         // TODO: after all confirms
         newEngine.launch();
     }

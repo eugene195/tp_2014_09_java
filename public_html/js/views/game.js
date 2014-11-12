@@ -49,7 +49,7 @@ var GameView = Backbone.View.extend({
         this.started = false;
 
         this.listenTo(this.controller, 'startLoad', this.showWait);
-        this.listenTo(this.controller, 'startGame', this.startGame);
+        this.listenTo(this.controller, 'adjustGame', this.startGame);
     },
 
     render: function () {
@@ -58,6 +58,10 @@ var GameView = Backbone.View.extend({
 
     show: function () {
         this.trigger('reshow', this);
+        // After resources were loaded
+        this.controller.confirm();
+
+
         this.update();
 
     },

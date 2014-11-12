@@ -73,7 +73,7 @@ public class GameWebSocket {
 
     @OnWebSocketConnect
     public void onOpen(Session session) {
-
+        setSession(session);
     }
 
     public void sendToClient(String action, Map<String, Object> data) {
