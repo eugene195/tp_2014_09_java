@@ -34,7 +34,7 @@ public class Engine {
 
     public void launch() {
         this.launched = true;
-        this.mechanic.sendToClients("startGame", this.getStartData(), this);
+        this.mechanic.sendToClients("adjustGame", this.getStartData(), this);
     }
 
     private void generateField(int width, int height) {
