@@ -39,7 +39,8 @@ public class GameWebSocket {
             webSocketService.startGameSession(json.getInt("playersCnt"));
         }
         else if (action.equals("addUser")) {
-            int sessionId = json.getInt("sessionId");
+//            int sessionId = json.getInt("sessionId");
+            int sessionId = 0;
             webSocketService.addUser(sessionId, this);
         }
         else {
