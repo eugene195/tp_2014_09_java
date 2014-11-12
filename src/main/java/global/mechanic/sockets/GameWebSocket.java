@@ -34,9 +34,13 @@ public class GameWebSocket {
         JSONObject json = new JSONObject(message);
         String action = json.getString("action");
 
-        if (action.equals("addUser")) {
+        if (action.equals("startGameSession")) {
             setSession(session);
-            webSocketService.addUser(this);
+            webSocketService.startGameSession(json.getInt("playersCnt"));
+        }
+        else if (action.equals("addUser")) {
+            int sessionId = json.getInt("sessionId");
+            webSocketService.addUser(sessionId, this);
         }
         else {
             JSONObject dataJson = json.getJSONObject("data");

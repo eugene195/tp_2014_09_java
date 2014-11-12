@@ -1,7 +1,7 @@
 package global;
 
 import global.engine.Engine;
-import global.models.GameSession;
+import global.mechanic.GameSession;
 
 import java.util.Map;
 
@@ -10,13 +10,16 @@ import java.util.Map;
  */
 public interface GameMechanics extends Runnable {
 
-    public void run();
+    void run();
 
     WebSocketService getWebSocketService();
 
     void sendToClients(String action, Map<String, Object> data, Engine from);
     void sendToEngine(String action, Map<String, Object> data, GameSession session);
 
-    void startGame(String first,String second);
+    void startGameSession(int playersCnt);
+    void addToSession(long sessionId, String player);
+
+    void startGame(GameSession gameSession);
     void endGame(Engine endine);
 }
