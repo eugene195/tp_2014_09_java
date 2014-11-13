@@ -36,9 +36,10 @@
 
         snakes: [{
             snakeID: int,
-            color: Color
+            color: Color (small letters)
             posX: int,
             posY: int,
+            direction: string
         }, ...]
     }
 }

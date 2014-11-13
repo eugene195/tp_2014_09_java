@@ -31,16 +31,17 @@ var GameView = Backbone.View.extend({
     },
 
     startGame: function(data) {
-        debugger;
         var myID = data.snakeId;
-        for (var I in data.snakes) {
-            var snake = new Snake(I);
-            if (I.snakeId == myID)
-                snakeHolder.setSnake(snake);
-
-            this.snakes.append(snake);
+        var length = data.snakes.length;
+        for (var i = 0; i < length; i++) {
+            var current = data.snakes[i];
+            var snake = new Snake(current);
+            if (current.snakeId == myID)
+                this.snakeHolder.setSnake(snake);
+            this.snakes.push(snake);
         }
         this.started = true;
+        this.update();
     },
 
     initialize: function() {
@@ -75,9 +76,11 @@ var GameView = Backbone.View.extend({
 //        $(document).bind('keydown', this.keyPressed);
         var canvas = document.getElementById('snakeGame'),
         context = canvas.getContext('2d');
-
-        for (var snake in this.snakes) {
-            drawer.draw(snake);
+        debugger;
+        var length = this.snakes.length;
+        for(var i = 0; i < length; i++) {
+            var current = this.snakes[i];
+            this.drawer.draw(current, context);
         }
     },
 

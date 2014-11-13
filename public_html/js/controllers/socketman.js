@@ -15,11 +15,9 @@ define([
             }.bind(this);
 
             this.ws.onclose = function (event) {
-                debugger;
             };
 
             this.ws.onerror = function (event) {
-                debugger;
             };
 
             this.ws.onmessage = function (event) {
