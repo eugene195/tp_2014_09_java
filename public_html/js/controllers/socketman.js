@@ -15,17 +15,19 @@ define([
             }.bind(this);
 
             this.ws.onclose = function (event) {
+                debugger;
+            };
 
+            this.ws.onerror = function (event) {
+                debugger;
             };
 
             this.ws.onmessage = function (event) {
 //            Data needs to be loaded afterwards. Will fix it after we use confirm
-                debugger;
                 var inData = JSON.parse(event.data);
                 var action = inData.action;
                 var data = inData.data;
                 this.trigger(action, data);
-//                this
             }.bind(this);
         },
 

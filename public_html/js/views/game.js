@@ -31,6 +31,7 @@ var GameView = Backbone.View.extend({
     },
 
     startGame: function(data) {
+        debugger;
         var myID = data.snakeId;
         for (var I in data.snakes) {
             var snake = new Snake(I);
@@ -47,7 +48,6 @@ var GameView = Backbone.View.extend({
         this.$el.hide();
 
         this.started = false;
-
         this.listenTo(this.controller, 'startLoad', this.showWait);
         this.listenTo(this.controller, 'adjustGame', this.startGame);
     },
@@ -60,7 +60,7 @@ var GameView = Backbone.View.extend({
         this.trigger('reshow', this);
         // After resources were loaded
 //        this.controller.confirm();
-
+        this.started = true;
 
         this.update();
 
@@ -71,8 +71,8 @@ var GameView = Backbone.View.extend({
 //            this.showNoGame();
             return;
         }
-
-        $(document).bind('keydown', this.keyPressed);
+        $(document).on('keydown', {object : this}, this.keyPressed);
+//        $(document).bind('keydown', this.keyPressed);
         var canvas = document.getElementById('snakeGame'),
         context = canvas.getContext('2d');
 
@@ -94,18 +94,29 @@ var GameView = Backbone.View.extend({
     },
 
     keyPressed: function(e) {
+        var that = e.data.object;
         var code = e.keyCode || e.which;
-
+        debugger;
         var dirs = {
             37: new Direction(-1, 0),
             38: new Direction(0, -1),
             39: new Direction(1, 0),
             40: new Direction(0, 1)
         };
-        var mySnake = snakes[this.snakeId];
-        if (mySnake.changeDirection(dirs[code])) {
-            this.socketManager.changeDirection(dirs[code]);
+
+        var message = {
+            action: "handleKey",
+            data : {
+                direct: dirs[code]
+            }
         }
+        debugger;
+        that.controller.sendMessage(message);
+
+//        var mySnake = snakes[this.snakeId];
+//        if (mySnake.changeDirection(dirs[code])) {
+//            this.socketManager.changeDirection(dirs[code]);
+//        }
     }
 
     });
