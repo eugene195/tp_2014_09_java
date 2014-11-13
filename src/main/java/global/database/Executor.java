@@ -16,14 +16,14 @@ public class Executor {
 
     public <T> ArrayList<T> execQuery(Connection connection,
            String query,
-           ArrayList<String> params,
+           String[] params,
            ResultHandler<T> handler)
            throws SQLException {
         PreparedStatement stmt = connection.prepareStatement(query);
 
         if (params != null) {
-            for (int i=0; i < params.size(); ++i) {
-                stmt.setString(i + 1, params.get(i));
+            for (int i=0; i < params.length; ++i) {
+                stmt.setString(i + 1, params[i]);
             }
         }
 
@@ -43,14 +43,14 @@ public class Executor {
 
     public void execUpdate(Connection connection,
             String query,
-            ArrayList<String> params) throws SQLException {
+            String... params) throws SQLException {
         try {
             connection.setAutoCommit(false);
 
             PreparedStatement stmt = connection.prepareStatement(query);
 
-            for (int i=0; i < params.size(); ++i) {
-                stmt.setString(i + 1, params.get(i));
+            for (int i=0; i < params.length; ++i) {
+                stmt.setString(i + 1, params[i]);
             }
 
             int rowsAffected = stmt.executeUpdate();

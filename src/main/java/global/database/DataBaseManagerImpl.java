@@ -55,13 +55,6 @@ public class DataBaseManagerImpl implements DataBaseManager {
         }
     }
 
-    private static int getResultCount(ResultSet resultSet) throws SQLException {
-        resultSet.last();
-        int count = resultSet.getRow();
-        resultSet.beforeFirst();
-        return count;
-    }
-
     public boolean userExists(String login){
         try {
             UsersDAO userDAO = new UsersDAO(conn);

@@ -2,6 +2,7 @@ package global.servlet.webpages;
 
 import global.MessageSystem;
 import global.database.dataSets.UsersDataSet;
+import global.models.Score;
 import global.msgsystem.messages.AbstractMsg;
 import global.msgsystem.messages.BestScoresAnswer;
 import global.msgsystem.messages.BestScoresQuery;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by max on 02.10.14.
@@ -37,9 +39,15 @@ public class ScorePage extends WebPage {
         this.msys.sendMessage(new BestScoresQuery(), "dbman");
         this.setZombie();
 
+        ArrayList<Score> data = new ArrayList();
+
+        for (UsersDataSet user: users) {
+                data.add(new Score(user.getLogin(), user.getScore()));
+        }
+
         if (this.users != null) {
             JObject.put("status", "1");
-            JObject.put("bestScores", this.users);
+            JObject.put("bestScores", data);
         }
         else {
             JObject.put("status", "-1");
