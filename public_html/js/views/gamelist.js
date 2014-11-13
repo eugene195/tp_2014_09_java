@@ -33,8 +33,8 @@ var GameList = Backbone.View.extend({
         this.collection.on('reset', this.render, this);
         this.controller.on('notifyStart', this.gameStarted, this);
 
-        this.session.on('gamelist:anonymous', this.userNotIdentified);
-        this.session.on('gamelist:known', this.userIdentified);
+        this.session.on('gamelist:anonymous', this.userNotIdentified, this);
+        this.session.on('gamelist:known', this.userIdentified, this);
     },
 
     render: function () {
@@ -43,7 +43,7 @@ var GameList = Backbone.View.extend({
     },
 
     show: function () {
-        this.session.postIdentifyUser('profile');
+        this.session.postIdentifyUser('gamelist');
     },
 
     userIdentified: function () {

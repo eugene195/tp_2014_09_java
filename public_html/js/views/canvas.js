@@ -1,9 +1,11 @@
 define([
     'backbone',
-    'tmpl/canvas'
+    'tmpl/canvas',
+    'controllers/viewman'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    viewManager
 ){
 
     function Point (x, y) {
@@ -98,12 +100,15 @@ define([
     var View = Backbone.View.extend({
         el: $('.canvas'),
         template: tmpl,
+
         pause: false,
         timerID: 0,
+        viewman: viewManager,
 
         initialize: function () {
             this.render();
             this.$el.hide();
+            this.listenTo(this.viewman, 'view-hide', this.unlaunch);
         },
 
         render: function () {
@@ -202,8 +207,10 @@ define([
             }, interval);
         },
 
-        unlaunch: function () {
-            clearInterval(this.timerID);
+        unlaunch: function (view) {
+            if (this === view) {
+                clearInterval(this.timerID);
+            }
         }
     });
 

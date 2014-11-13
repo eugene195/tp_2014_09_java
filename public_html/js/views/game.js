@@ -2,17 +2,20 @@ define([
     'backbone',
     'tmpl/game',
     'controllers/socketman',
+    'controllers/viewman',
     'api/primitives',
     'api/drawer'
 ], function(
     Backbone,
     tmpl,
-    SocketMan
+    SocketMan,
+    viewMan
 ){
 
-// TODO we need a hide function to unbind keypress event from $document
 var GameView = Backbone.View.extend({
     controller: SocketMan,
+    viewman: viewMan,
+
     drawer : new SnakeDrawer(),
     snakeHolder : new CurrentSnakeHolder(),
     snakes : [],
@@ -50,6 +53,7 @@ var GameView = Backbone.View.extend({
 
         this.listenTo(this.controller, 'startLoad', this.showWait);
         this.listenTo(this.controller, 'adjustGame', this.startGame);
+        this.listenTo(this.viewman, 'view-hide', this.onhide);
     },
 
     render: function () {
@@ -81,10 +85,12 @@ var GameView = Backbone.View.extend({
         }
     },
 
-    onhide: function () {
-        $(document).unbind('keydown');
-        this.started = false;
-        this.controller.dropSocket();
+    onhide: function (view) {
+        if (this === view) {
+            $(document).unbind('keydown');
+            this.started = false;
+            this.controller.dropSocket();
+        }
     },
 
 //---------------------

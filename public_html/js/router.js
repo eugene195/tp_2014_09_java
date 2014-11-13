@@ -6,7 +6,7 @@ define([
     'views/scoreboard',
     'views/register',
     'views/profile',
-    'views/viewman',
+    'controllers/viewman',
     'views/canvas',
     'views/gamelist'
 ], function(
