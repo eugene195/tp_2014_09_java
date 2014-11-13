@@ -17,7 +17,7 @@ public interface GameMechanics extends Runnable {
     void sendToClients(String action, Map<String, Object> data, Engine from);
     void sendToEngine(String action, Map<String, Object> data, GameSession session);
 
-    void startGameSession(int playersCnt);
+    void startGameSession(int playersCnt, String player);
     void addToSession(long sessionId, String player);
 
     void startGame(GameSession gameSession);

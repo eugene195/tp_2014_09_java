@@ -11,7 +11,8 @@ define([
     var GameSession = Backbone.Model.extend({
         defaults: {
             "playersCnt":  0,
-            "players": []
+            "players": [],
+            "sessioId": 0
         },
 
         initialize: function() {

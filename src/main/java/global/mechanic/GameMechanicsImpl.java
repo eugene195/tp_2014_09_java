@@ -43,6 +43,7 @@ public class GameMechanicsImpl implements GameMechanics {
     @Override
     public void run() {
         while (true) {
+            this.msys.executeFor(this);
             try {
                 sleep(STEP_TIME);
             } catch (InterruptedException e) {
@@ -60,8 +61,8 @@ public class GameMechanicsImpl implements GameMechanics {
 
 
     @Override
-    public void startGameSession(int playersCnt) {
-        GameSession gameSession = new GameSession(playersCnt);
+    public void startGameSession(int playersCnt, String player) {
+        GameSession gameSession = new GameSession(playersCnt, player);
         long id = idCounter.getAndIncrement();
         this.waitingPlayers.put(id, gameSession);
     }
@@ -69,16 +70,7 @@ public class GameMechanicsImpl implements GameMechanics {
     @Override
     public void addToSession(long sessionId, String player) {
 
-        // TODO delete ifs
-
         GameSession gameSession = this.waitingPlayers.get(sessionId);
-
-//        <--
-        if (gameSession == null)
-            startGameSession(2);
-        gameSession = this.waitingPlayers.get(sessionId);
-//        -->
-
         boolean filled = gameSession.add(player);
 
         if (filled) {
@@ -138,7 +130,7 @@ public class GameMechanicsImpl implements GameMechanics {
 
     @Override
     public void getGameSessions() {
-        GameSessionsAnswer msg = new GameSessionsAnswer(this.waitingPlayers.values());
+        GameSessionsAnswer msg = new GameSessionsAnswer(this.waitingPlayers);
         this.msys.sendMessage(msg, "servlet");
     }
 }

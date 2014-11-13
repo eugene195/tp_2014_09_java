@@ -21,8 +21,8 @@ public class WebSocketServiceImpl implements WebSocketService {
         this.mechanics = mechanics;
     }
 
-    public void startGameSession(int playersCnt) {
-        this.mechanics.startGameSession(playersCnt);
+    public void startGameSession(int playersCnt, String myName) {
+        this.mechanics.startGameSession(playersCnt, myName);
     }
 
     @Override

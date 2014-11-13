@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by max on 13.11.14.
@@ -21,7 +21,7 @@ public class GameListPage extends WebPage {
     public static final String URL = "/gameList";
     private final MessageSystem msys;
 
-    private Collection<GameSession> sessions;
+    private Map<Long, GameSession> sessions;
 
     public GameListPage(MessageSystem msys) {
         this.sessions = null;
@@ -29,7 +29,7 @@ public class GameListPage extends WebPage {
     }
 
     @Override
-    public void handlePost(HttpServletRequest request, HttpServletResponse response)
+    public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
         this.msys.sendMessage(new GameSessionsQuery(), "gamemech");
@@ -68,10 +68,14 @@ public class GameListPage extends WebPage {
     private JSONArray getData() {
         JSONArray data = new JSONArray();
 
-        for (GameSession session : this.sessions) {
+        for (Map.Entry<Long, GameSession> entry : this.sessions.entrySet()) {
             JSONObject item = new JSONObject();
+            Long sessionId = entry.getKey();
+            GameSession session = entry.getValue();
+
             item.put("playersCnt", session.getPlayersCnt());
-            item.put("players", session.getPlayers());
+            item.put("players", session.getPlayers().toArray());
+            item.put("sessionId", (long) sessionId);
             data.put(item);
         }
         return data;

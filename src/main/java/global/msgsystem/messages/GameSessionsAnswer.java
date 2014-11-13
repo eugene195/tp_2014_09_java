@@ -4,15 +4,15 @@ import global.Servlet;
 import global.mechanic.GameSession;
 import global.servlet.webpages.GameListPage;
 
-import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by max on 13.11.14.
  */
 public class GameSessionsAnswer extends AbstractMsg {
-    private final Collection<GameSession> sessions;
+    private final Map<Long, GameSession> sessions;
 
-    public GameSessionsAnswer(Collection<GameSession> sessions) {
+    public GameSessionsAnswer(Map<Long, GameSession> sessions) {
         this.sessions = sessions;
     }
 
@@ -26,7 +26,7 @@ public class GameSessionsAnswer extends AbstractMsg {
         }
     }
 
-    public Collection<GameSession> getSessions() {
+    public Map<Long, GameSession> getSessions() {
         return this.sessions;
     }
 }

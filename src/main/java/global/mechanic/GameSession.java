@@ -13,14 +13,14 @@ public class GameSession {
 
     private final Map<String, Player> players = new HashMap<>();
 
-    public GameSession(int playersCnt) {
+    public GameSession(int playersCnt, String name) {
         startTime = new Date().getTime();
         this.playersCnt = playersCnt;
+        players.put(name, new Player(name, 0));
     }
 
     public GameSession(String user1, String user2) {
-        this(2);
-        players.put(user1, new Player(user1, 0));
+        this(2, user1);
         players.put(user2, new Player(user2, 1));
     }
 

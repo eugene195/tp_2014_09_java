@@ -38,11 +38,17 @@ var GameList = Backbone.View.extend({
 
     show: function () {
         this.controller.setGameSocket();
+        this.update();
+    },
+
+    update: function() {
         this.collection.fetch();
         this.trigger('rerender', this);
     },
 
     createGame: function(event) {
+        event.preventDefault();
+
         var target = event.target,
             playersCnt = target[0].value,
             launchTime = target[1].value;
@@ -54,6 +60,7 @@ var GameList = Backbone.View.extend({
             playersCnt: playersCnt,
             launchTime: launchTime
         });
+        this.update();
     },
 
     addUser: function() {
