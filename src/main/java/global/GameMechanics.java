@@ -22,4 +22,6 @@ public interface GameMechanics extends Runnable {
 
     void startGame(GameSession gameSession);
     void endGame(Engine endine);
+
+    void getGameSessions();
 }

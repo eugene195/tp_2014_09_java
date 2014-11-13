@@ -1,9 +1,12 @@
 package global.mechanic;
 
 import global.GameMechanics;
+import global.MessageSystem;
 import global.engine.Engine;
 import global.mechanic.sockets.WebSocketServiceImpl;
 import global.WebSocketService;
+import global.msgsystem.messages.GameSessionsAnswer;
+import sun.plugin2.message.Message;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -14,16 +17,21 @@ import static java.lang.Thread.sleep;
  * Created by eugene on 10/19/14.
  */
 public class GameMechanicsImpl implements GameMechanics {
+    private static final String MECHANIC_ADDRESS = "gamemech";
     private static final int STEP_TIME = 100;
     private static AtomicLong idCounter = new AtomicLong();
 
+    private final MessageSystem msys;
     private final WebSocketService webSocketService;
 
     private final Map<Long, GameSession> waitingPlayers = new HashMap<>();
     private final ArrayList<GameSession> playing = new ArrayList<>();
     private final ArrayList<Engine> engines = new ArrayList<>();
 
-    public GameMechanicsImpl() {
+    public GameMechanicsImpl(MessageSystem msys) {
+        this.msys = msys;
+        this.msys.register(this, MECHANIC_ADDRESS);
+
         this.webSocketService = new WebSocketServiceImpl(this);
     }
 
@@ -116,5 +124,11 @@ public class GameMechanicsImpl implements GameMechanics {
         } else {
             System.out.println("sendToEngine index error");
         }
+    }
+
+    @Override
+    public void getGameSessions() {
+        GameSessionsAnswer msg = new GameSessionsAnswer(this.waitingPlayers.values());
+        this.msys.sendMessage(msg, "servlet");
     }
 }

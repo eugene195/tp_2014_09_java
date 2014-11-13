@@ -1,30 +1,45 @@
 define([
     'backbone',
     'tmpl/gamelist',
-    'controllers/socketman'
+    'controllers/socketman',
+    'collections/gameSessions'
 ], function(
     Backbone,
     tmpl,
-    SocketMan
+    SocketMan,
+    GamesCollection
 ){
 
 
 var GameList = Backbone.View.extend({
     controller: SocketMan,
+    collection: GamesCollection,
+
     el: $('.gamelist'),
     template: tmpl,
 
     events: {
-        "click #gmjoin": "gameClick"
+        "submit .new-game__form": "createGame",
+        "click .sessions__entry": "addUser"
     },
 
     initialize: function() {
         this.render();
         this.$el.hide();
+
+        this.collection.on('reset', this.render, this);
+        this.controller.on('notifyStart', this.gameStarted, this);
     },
 
     render: function () {
-        this.$el.html(this.template());
+        var sessions = this.collection.toJSON();
+        this.$el.html(this.template(sessions));
+    },
+
+    show: function () {
+        this.controller.setGameSocket();
+        this.collection.fetch();
+        this.trigger('rerender', this);
     },
 
     playerAdded: function(data) {
@@ -37,16 +52,10 @@ var GameList = Backbone.View.extend({
         this.trigger('start');
     },
 
-    show: function () {
-        this.trigger('rerender', this);
-        this.listenTo(this.controller, 'notifyStart', this.gameStarted);
-        this.controller.setGameSocket();
-    },
-
     gameClick: function(event) {
         var message = {
             action: "addUser"
-        }
+        };
         message = JSON.stringify(message);
         this.controller.sendMessage(message);
     },

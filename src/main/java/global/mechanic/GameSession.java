@@ -40,6 +40,10 @@ public class GameSession {
         return false;
     }
 
+    public int getPlayersCnt() {
+        return this.playersCnt;
+    }
+
     public Set<String> getPlayers() {
         return players.keySet();
     }
