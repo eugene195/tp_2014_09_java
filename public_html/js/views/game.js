@@ -59,7 +59,7 @@ var GameView = Backbone.View.extend({
     show: function () {
         this.trigger('reshow', this);
         // After resources were loaded
-        this.controller.confirm();
+//        this.controller.confirm();
 
 
         this.update();

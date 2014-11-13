@@ -68,7 +68,17 @@ public class GameMechanicsImpl implements GameMechanics {
 
     @Override
     public void addToSession(long sessionId, String player) {
+
+        // TODO delete ifs
+
         GameSession gameSession = this.waitingPlayers.get(sessionId);
+
+//        <--
+        if (gameSession == null)
+            startGameSession(2);
+        gameSession = this.waitingPlayers.get(sessionId);
+//        -->
+
         boolean filled = gameSession.add(player);
 
         if (filled) {
