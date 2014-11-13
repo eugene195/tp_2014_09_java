@@ -16,6 +16,7 @@ define([
 
         parse: function (response) {
             if (response.status == 1) {
+                debugger;
                 this.reset(response.sessions);
             }
         }

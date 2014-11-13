@@ -28,8 +28,11 @@ define([
         initialize: function () {
             this.listenTo(login, 'success', this.toIndex);
             this.listenTo(main, 'success', this.toIndex);
-            this.listenTo(profile, 'anonymous', this.toLogin);
             this.listenTo(register, 'success', this.toLogin);
+
+            this.listenTo(profile, 'anonymous', this.toLogin);
+            this.listenTo(gamelist, 'anonymous', this.toLogin);
+
             this.listenTo(gamelist, 'start', this.toGame);
         },
 

@@ -2,18 +2,21 @@ define([
     'backbone',
     'tmpl/gamelist',
     'controllers/socketman',
-    'collections/gameSessions'
+    'collections/gameSessions',
+    'models/session'
 ], function(
     Backbone,
     tmpl,
     SocketMan,
-    GamesCollection
+    GamesCollection,
+    sessionModel
 ){
 
 
 var GameList = Backbone.View.extend({
     controller: SocketMan,
     collection: GamesCollection,
+    session: sessionModel,
 
     el: $('.gamelist'),
     template: tmpl,
@@ -29,6 +32,9 @@ var GameList = Backbone.View.extend({
 
         this.collection.on('reset', this.render, this);
         this.controller.on('notifyStart', this.gameStarted, this);
+
+        this.session.on('gamelist:anonymous', this.userNotIdentified);
+        this.session.on('gamelist:known', this.userIdentified);
     },
 
     render: function () {
@@ -37,8 +43,16 @@ var GameList = Backbone.View.extend({
     },
 
     show: function () {
+        this.session.postIdentifyUser('profile');
+    },
+
+    userIdentified: function () {
         this.controller.setGameSocket();
         this.update();
+    },
+
+    userNotIdentified: function () {
+        this.trigger('anonymous');
     },
 
     update: function() {
