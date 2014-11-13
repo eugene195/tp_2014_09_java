@@ -47,7 +47,8 @@ var GameList = Backbone.View.extend({
             playersCnt = target[0].value,
             launchTime = target[1].value;
 
-        debugger;
+        playersCnt = parseInt(playersCnt);
+
         this.controller.sendMessage({
             action: "startGameSession",
             playersCnt: playersCnt,
