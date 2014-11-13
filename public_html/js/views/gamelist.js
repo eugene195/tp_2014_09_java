@@ -42,23 +42,31 @@ var GameList = Backbone.View.extend({
         this.trigger('rerender', this);
     },
 
-    playerAdded: function(data) {
-        if (data[status] == "OK")
-            alert("Please wait for enemies, your snake is #" + data[snakeId]);
+    createGame: function(event) {
+        var target = event.target,
+            playersCnt = target[0].value,
+            launchTime = target[1].value;
+
+        debugger;
+        this.controller.sendMessage({
+            action: "startGameSession",
+            playersCnt: playersCnt,
+            launchTime: launchTime
+        });
+    },
+
+    addUser: function() {
+        var sessionId = 0;
+        this.controller.sendMessage({
+            action: "addUser",
+            sessionId: sessionId
+        });
     },
 
     gameStarted: function(data) {
         alert("Your game starts");
         this.trigger('start');
-    },
-
-    gameClick: function(event) {
-        var message = {
-            action: "addUser"
-        };
-        message = JSON.stringify(message);
-        this.controller.sendMessage(message);
-    },
+    }
 });
     return new GameList();
 });

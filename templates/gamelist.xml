@@ -9,8 +9,6 @@
   </div>
 
   <div class="new-game">
-    <button>Новая игра</button>
-    <br/>
     <form class="new-game__form" data-action="/startGame" method="POST">
       <label for="players-cnt">Количество игроков:</label>
       <input name="players-cnt" type="number" value="2"/>
@@ -33,7 +31,7 @@
         </fest:each>
       </div>
       <button class="sessions__entry">Вступить</button>
-      <input type="hidden" value="<fest:value>game.sessionId</fest:value>"/>
+      <input class="sessions__id" type="hidden" value="<fest:value>game.sessionId</fest:value>"/>
       <fest:value>game.playersCnt</fest:value>
       <fest:value>game.time</fest:value>
     </fest:each>
