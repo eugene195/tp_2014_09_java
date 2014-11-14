@@ -21,8 +21,12 @@ public class WebSocketServiceImpl implements WebSocketService {
         this.mechanics = mechanics;
     }
 
-    public void startGameSession(int playersCnt, String myName) {
+    @Override
+    public void startGameSession(int playersCnt, GameWebSocket user) {
+        String myName = user.getMyName();
+
         if (! nameToGame.containsKey(myName)) {
+            userSockets.put(myName, user);
             this.mechanics.startGameSession(playersCnt, myName);
         }
         else {
@@ -36,7 +40,7 @@ public class WebSocketServiceImpl implements WebSocketService {
 
         if (! nameToGame.containsKey(myName)) {
             userSockets.put(myName, user);
-            mechanics.addToSession(sessionId, myName);
+            this.mechanics.addToSession(sessionId, myName);
         }
         else {
             System.out.println("Repeated attempt to add to game from user: " + myName);

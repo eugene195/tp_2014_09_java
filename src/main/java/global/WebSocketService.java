@@ -8,7 +8,7 @@ import java.util.Map;
  * Created by eugene on 10/19/14.
  */
 public interface WebSocketService {
-    void startGameSession(int playersCnt, String myName);
+    void startGameSession(int playersCnt, GameWebSocket user);
     void addUser(int sessionId, GameWebSocket user);
 
     void sendToClients(String action, Map<String, Object> data, GameSession session);
