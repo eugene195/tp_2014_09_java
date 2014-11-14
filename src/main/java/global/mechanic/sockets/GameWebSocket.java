@@ -32,11 +32,29 @@ public class GameWebSocket {
     @OnWebSocketMessage
     public void onMessage(String message) {
         JSONObject json = new JSONObject(message);
-        String action = json.getString("action");
 
+        if (json.has("confirm")) {
+            String confirm = json.getString("confirm");
+            this.handleConfirm(confirm, json);
+        }
+        else if (json.has("action")) {
+            String action = json.getString("action");
+            this.handleAction(action, json);
+        }
+    }
+
+    private void handleConfirm(String confirm, JSONObject json) {
+        if (confirm.equals("loaded")) {
+
+        }
+    }
+
+    private void handleAction(String action, JSONObject json) {
         if (action.equals("startGameSession")) {
             setSession(session);
-            webSocketService.startGameSession(json.getInt("playersCnt"));
+
+            int playersCnt = json.getInt("playersCnt");
+            webSocketService.startGameSession(playersCnt, myName);
         }
         else if (action.equals("addUser")) {
 //            int sessionId = json.getInt("sessionId");

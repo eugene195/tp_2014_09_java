@@ -21,15 +21,26 @@ public class WebSocketServiceImpl implements WebSocketService {
         this.mechanics = mechanics;
     }
 
-    public void startGameSession(int playersCnt) {
-        this.mechanics.startGameSession(playersCnt);
+    public void startGameSession(int playersCnt, String myName) {
+        if (! nameToGame.containsKey(myName)) {
+            this.mechanics.startGameSession(playersCnt, myName);
+        }
+        else {
+            System.out.println("Repeated attempt to start game from user: " + myName);
+        }
     }
 
     @Override
     public void addUser(int sessionId, GameWebSocket user) {
         String myName = user.getMyName();
-        userSockets.put(myName, user);
-        mechanics.addToSession(sessionId, myName);
+
+        if (! nameToGame.containsKey(myName)) {
+            userSockets.put(myName, user);
+            mechanics.addToSession(sessionId, myName);
+        }
+        else {
+            System.out.println("Repeated attempt to add to game from user: " + myName);
+        }
     }
 
     @Override

@@ -44,11 +44,12 @@ define([
         confirm : function () {
             var message = {
                 action: "loaded"
-            }
+            };
             this.sendMessage(message);
         },
 
         sendMessage : function(message) {
+            message = JSON.stringify(message);
             this.ws.send(message);
         }
     };

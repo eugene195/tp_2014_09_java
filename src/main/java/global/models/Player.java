@@ -10,9 +10,9 @@ public class Player {
 
     private final String name;
     private long score;
-    private int snakeId;
+    private long snakeId;
 
-    public Player(String name, int snakeId) {
+    public Player(String name, long snakeId) {
         this.snakeId = snakeId;
         this.score = DEFAULT_SCORE;
         this.name = name;
@@ -28,7 +28,7 @@ public class Player {
         return this.score;
     }
 
-    public int getSnake() {
+    public long getSnake() {
         return this.snakeId;
     }
 

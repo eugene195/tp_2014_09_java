@@ -37,7 +37,7 @@ public class Main
             ServletImpl servletImpl = createServlet(msys);
             DataBaseManager dbman = createDbMan(msys, conf);
 
-            GameMechanics gameMechanics = new GameMechanicsImpl();
+            GameMechanics gameMechanics = new GameMechanicsImpl(msys);
             WebSocketService webSocketService = gameMechanics.getWebSocketService();
 
             configureThreads(servletImpl, dbman, gameMechanics);

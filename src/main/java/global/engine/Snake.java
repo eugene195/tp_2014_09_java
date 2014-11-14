@@ -4,7 +4,7 @@ package global.engine;
  * Created by max on 25.10.14.
  */
 public class Snake {
-    private int snakeId;
+    private long snakeId;
     private Location loc;
     private Color color;
     private Direct curDirect;
@@ -14,13 +14,17 @@ public class Snake {
         this(-1, 0, 0, Direct.RIGHT, Color.BLACK);
     }
 
-    public Snake(int snakeId, Color color) {
+    public Snake(long snakeId, Color color) {
         this(snakeId, 0, 0, Direct.RIGHT, color);
     }
 
-    public Snake(int snakeId, int X, int Y, Direct direct, Color color) {
+    public Snake(long snakeId, int X, int Y, Direct direct, Color color) {
+        this(snakeId, new Location(X, Y), direct, color);
+    }
+
+    public Snake(long snakeId, Location loc, Direct direct, Color color) {
         this.snakeId = snakeId;
-        this.loc = new Location(X, Y);
+        this.loc = loc;
         this.color = color;
         this.curDirect = direct;
         this._isAlive = true;
@@ -68,7 +72,7 @@ public class Snake {
         return false;
     }
 
-    public int getId() { return snakeId; }
+    public long getId() { return snakeId; }
 
     public Location getLocation() {
         return loc;
@@ -90,5 +94,9 @@ public class Snake {
 
     public Color getColor() {
         return color;
+    }
+
+    public Direct getDirect() {
+        return this.curDirect;
     }
 }

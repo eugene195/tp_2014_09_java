@@ -42,6 +42,7 @@ public class ServletImpl extends HttpServlet implements Servlet {
         this.pageMap.put(IdentifyUserPage.URL, new IdentifyUserPage());
         this.pageMap.put(AdminPage.URL, new AdminPage(this.msys));
         this.pageMap.put(ScorePage.URL, new ScorePage(this.msys));
+        this.pageMap.put(GameListPage.URL, new GameListPage(this.msys));
     }
 
     @Override

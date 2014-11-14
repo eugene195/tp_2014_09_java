@@ -1,12 +1,49 @@
-<fest:template xmlns:fest="http://fest.mail.ru">
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="sessions">
 
-
-<div class="header">
+<div>
+  <div class="header">
     <div class="header__infobar">
-        Games list
-        Choose Yours
+      <h2>Games list</h2>
+      <h3>Choose Yours</h3>
     </div>
-    <input type="button" id="gmjoin" value="Start a game" name="joinGameBtn" />
+  </div>
+
+  <br/>
+  <div class="new-game">
+    <form class="new-game__form" data-action="/startGame" method="POST">
+      <label for="players-cnt">Количество игроков:</label>
+      <input name="players-cnt" type="number" value="2"/>
+      <br/>
+      <label for="launch-time">Время до начала игры:</label>
+      <select name="launch-time">
+        <option>1 мин</option>
+        <option>5 мин</option>
+        <option>10 мин</option>
+      </select>
+      <br/>
+      <button type="submit">Создать заявку</button>
+    </form>
+  </div>
+
+  <br/>
+  <div class="sessions">
+    <fest:each iterate="sessions" index="i" value="game">
+      <hr/>
+      <div class="sessions__players">
+        <fest:each iterate="players" index="j" value="player">
+          <strong>
+            <fest:value>player</fest:value>
+          </strong>
+        </fest:each>
+      </div>
+      <br/>
+      <button class="sessions__entry">Вступить</button>
+      <br/>
+      <input class="sessions__id" type="hidden" value="<fest:value>game.sessionId</fest:value>"/>
+      <fest:value>game.playersCnt</fest:value>
+      <fest:value>game.time</fest:value>
+    </fest:each>
+  </div>
 </div>
 
 </fest:template>
