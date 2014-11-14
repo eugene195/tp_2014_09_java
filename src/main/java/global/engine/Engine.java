@@ -48,10 +48,24 @@ public class Engine {
     }
 
     public void generateSnakes(GameSession session) {
+        int playersCnt = session.getPlayersCnt();
+        int distX = width * 6 / 10,
+            distY = height * 6 / 10;
+        double angle = 2*Math.PI / playersCnt;
+
+        Location center = new Location(width / 2, height / 2);
+
         int I = 0;
         for (String playerName : session.getPlayers()) {
             long id = session.getSnakeId(playerName);
-            snakes.add(new Snake(id, Color.getColor(I)));
+
+            double posX = distX*Math.cos(angle*I),
+                   posY = distY*Math.sin(angle*I);
+
+            Location pos = new Location((int) posX, (int) posY);
+            Direct direct = pos.getDirect(center);
+
+            snakes.add(new Snake(id, pos, direct, Color.getColor(I)));
             I++;
         }
     }

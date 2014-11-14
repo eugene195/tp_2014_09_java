@@ -19,8 +19,12 @@ public class Snake {
     }
 
     public Snake(long snakeId, int X, int Y, Direct direct, Color color) {
+        this(snakeId, new Location(X, Y), direct, color);
+    }
+
+    public Snake(long snakeId, Location loc, Direct direct, Color color) {
         this.snakeId = snakeId;
-        this.loc = new Location(X, Y);
+        this.loc = loc;
         this.color = color;
         this.curDirect = direct;
         this._isAlive = true;
