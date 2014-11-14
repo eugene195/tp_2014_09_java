@@ -61,10 +61,9 @@ function CurrentSnakeHolder () {
     }
 
     this.setDirection = function(direction) {
-        if ( !(this.snake.direction == direction) ) {
-            this.snake.changeDirection(direction);
-            return true;
-        }
-        return false;
+//        Some BS code
+        alert("Changed, direction = " + direction);
+        this.snake.changeDirection(direction);
+        return true;
     }
 }

@@ -45,7 +45,6 @@ var GameView = Backbone.View.extend({
     },
 
     onTick: function(data) {
-        debugger;
         var length = data.snakes.length;
         for (var i = 0; i < length; i++) {
             var current = data.snakes[i];
@@ -90,7 +89,6 @@ var GameView = Backbone.View.extend({
         $(document).on('keydown', {object : this}, this.keyPressed);
         var canvas = document.getElementById('snakeGame'),
         context = canvas.getContext('2d');
-        debugger;
 
         this.redraw(context);
     },
@@ -116,29 +114,28 @@ var GameView = Backbone.View.extend({
     },
 
     keyPressed: function(e) {
+        debugger;
         var that = e.data.object;
         var code = e.keyCode || e.which;
-        debugger;
         var dirs = {
-            37: new Direction(-1, 0),
-            38: new Direction(0, -1),
-            39: new Direction(1, 0),
-            40: new Direction(0, 1)
+            37: "LEFT",
+            38: "UP",
+            39: "RIGHT",
+            40: "DOWN"
         };
-
-        var message = {
-            action: "handleKey",
-            data : {
-                direct: dirs[code]
+        if (code in dirs) {
+            var message = {
+                action: "handleKey",
+                data : {
+                    direct: dirs[code]
+                }
+            }
+            if (that.snakeHolder.setDirection(dirs[code])) {
+                that.controller.sendMessage(message);
             }
         }
-        debugger;
-        that.controller.sendMessage(message);
-
-//        var mySnake = snakes[this.snakeId];
-//        if (mySnake.changeDirection(dirs[code])) {
-//            this.socketManager.changeDirection(dirs[code]);
-//        }
+        else
+            alert("your movement is unknown");
     }
 
     });
