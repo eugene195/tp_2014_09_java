@@ -1,12 +1,12 @@
 package global.database.dataSets;
 
-public class UsersDataSet {
+public class UserDataSet {
     private long id;
     private String login;
     private String passw;
     private int score;
 
-    public UsersDataSet(long id, String login, String passw, int score){
+    public UserDataSet(long id, String login, String passw, int score){
         this.id = id;
         this.login = login;
         this.passw = passw;

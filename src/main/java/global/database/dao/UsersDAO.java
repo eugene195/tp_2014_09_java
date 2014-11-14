@@ -2,7 +2,7 @@ package global.database.dao;
 
 import global.database.Executor;
 import global.database.handlers.ResultHandler;
-import global.database.dataSets.UsersDataSet;
+import global.database.dataSets.UserDataSet;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,26 +16,26 @@ public class UsersDAO {
         this.con = con;
     }
 
-    public UsersDataSet get(String login) throws SQLException {
+    public UserDataSet get(String login) throws SQLException {
         String query = "SELECT * FROM User WHERE login=?;";
-        ArrayList<UsersDataSet> users = getUsers(query, login);
+        ArrayList<UserDataSet> users = getUsers(query, login);
 
         return (users == null) ? null : users.get(0);
     }
 
-    public UsersDataSet get(String login, String passw) throws SQLException {
+    public UserDataSet get(String login, String passw) throws SQLException {
         String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
-        ArrayList<UsersDataSet> users = getUsers(query, login, passw);
+        ArrayList<UserDataSet> users = getUsers(query, login, passw);
 
         return (users == null) ? null : users.get(0);
     }
 
-    public ArrayList<UsersDataSet> getAll() throws SQLException {
-        return getUsers("SELECT * FROM User", null);
+    public ArrayList<UserDataSet> getAll() throws SQLException {
+        return getUsers("SELECT * FROM User");
     }
 
-    public ArrayList<UsersDataSet> getTop() throws SQLException {
-        return getUsers("SELECT * FROM User ORDER BY score DESC LIMIT 10;", null);
+    public ArrayList<UserDataSet> getTop() throws SQLException {
+        return getUsers("SELECT * FROM User ORDER BY score DESC LIMIT 10;");
     }
 
     public void add(String login, String passw) throws SQLException {
@@ -52,18 +52,25 @@ public class UsersDAO {
         exec.execUpdate(con, query, passw, login);
     }
 
-    private ArrayList<UsersDataSet> getUsers(String query,
+    public void delete(String login) throws SQLException {
+        Executor exec = new Executor();
+        String query = "DELETE FROM User WHERE login = ?;";
+
+        exec.execUpdate(con, query, login);
+    }
+
+    private ArrayList<UserDataSet> getUsers(String query,
             String... params) throws SQLException {
 
         Executor exec = new Executor();
         return exec.execQuery(con, query,
             params,
-            new ResultHandler<UsersDataSet>() {
+            new ResultHandler<UserDataSet>() {
 
-                public ArrayList<UsersDataSet> handle(ResultSet result) throws SQLException {
-                    ArrayList<UsersDataSet> users = new ArrayList<UsersDataSet>();
+                public ArrayList<UserDataSet> handle(ResultSet result) throws SQLException {
+                    ArrayList<UserDataSet> users = new ArrayList();
                     while(result.next()) {
-                        users.add(new UsersDataSet(result.getLong("userId"),
+                        users.add(new UserDataSet(result.getLong("userId"),
                                 result.getString("login"),
                                 result.getString("passw"),
                                 result.getInt("score")));

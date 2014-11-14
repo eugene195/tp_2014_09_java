@@ -1,7 +1,7 @@
 package global.msgsystem.messages;
 
 import global.Servlet;
-import global.database.dataSets.UsersDataSet;
+import global.database.dataSets.UserDataSet;
 import global.servlet.webpages.AdminPage;
 
 import java.util.ArrayList;
@@ -11,12 +11,12 @@ import java.util.ArrayList;
  */
 public class GetUsersAnswer extends AbstractMsg {
 
-    private ArrayList<UsersDataSet> users;
-    public GetUsersAnswer(ArrayList<UsersDataSet> users){
+    private ArrayList<UserDataSet> users;
+    public GetUsersAnswer(ArrayList<UserDataSet> users){
         this.users = users;
     }
 
-    public ArrayList<UsersDataSet> getUsers() {
+    public ArrayList<UserDataSet> getUsers() {
         return this.users;
     }
 

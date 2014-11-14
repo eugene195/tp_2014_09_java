@@ -3,7 +3,7 @@ package global.database;
 import global.DataBaseManager;
 import global.MessageSystem;
 import global.database.dao.UsersDAO;
-import global.database.dataSets.UsersDataSet;
+import global.database.dataSets.UserDataSet;
 import global.msgsystem.messages.*;
 import global.models.Score;
 import global.models.UserSession;
@@ -58,7 +58,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     public boolean userExists(String login){
         try {
             UsersDAO userDAO = new UsersDAO(conn);
-            UsersDataSet user = userDAO.get(login);
+            UserDataSet user = userDAO.get(login);
             if (user != null) {
                 return true;
             }
@@ -74,7 +74,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     public void getUsers(){
         try {
             UsersDAO userDAO = new UsersDAO(conn);
-            ArrayList<UsersDataSet> users = userDAO.getAll();
+            ArrayList<UserDataSet> users = userDAO.getAll();
             this.msys.sendMessage(new GetUsersAnswer(users), "servlet");
         }
         catch (Exception e) {
@@ -86,7 +86,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     public void checkAuth(UserSession userSession, String passw) {
         try {
             UsersDAO userDAO = new UsersDAO(conn);
-            UsersDataSet user = userDAO.get(userSession.getLogin(), passw);
+            UserDataSet user = userDAO.get(userSession.getLogin(), passw);
 
             if (user != null) {
                 userSession.setSuccessAuth(true);
@@ -125,12 +125,34 @@ public class DataBaseManagerImpl implements DataBaseManager {
     }
 
     @Override
+    public void deleteUser(String login) {
+        try {
+            UsersDAO userDAO = new UsersDAO(conn);
+            UserDataSet user = userDAO.get(login);
+
+            if (user != null) {
+                userDAO.delete(login);
+            } else {
+                System.out.println("Error in deleteUser; User does not exist");
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("Sql exception during changePassword()");
+        }
+    }
+
+    @Override
     public void bestScores() {
         try {
             UsersDAO userDAO = new UsersDAO(conn);
-            ArrayList<UsersDataSet> users = userDAO.getTop();
-            System.out.println(users.get(0).toString());
-            this.msys.sendMessage(new BestScoresAnswer(users), "servlet");
+            ArrayList<UserDataSet> users = userDAO.getTop();
+
+            ArrayList<Score> scores = new ArrayList();
+            for (UserDataSet user: users) {
+                scores.add(new Score(user.getLogin(), user.getScore()));
+            }
+
+            this.msys.sendMessage(new BestScoresAnswer(scores), "servlet");
         }
         catch (Exception e) {
             System.out.println("Exception during DB select in bestScores");
@@ -141,7 +163,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     public void changePassword(String login, String curPassw, String newPassw) {
         try {
             UsersDAO userDAO = new UsersDAO(conn);
-            UsersDataSet user = userDAO.get(login, curPassw);
+            UserDataSet user = userDAO.get(login, curPassw);
 
             if (user != null) {
                 userDAO.changePassw(login, newPassw);

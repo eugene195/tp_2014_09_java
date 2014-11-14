@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-
-import global.msgsystem.MessageSystem;
-=======
-import global.MessageSystem;
->>>>>>> master
+import global.database.dataSets.UserDataSet;
 import global.msgsystem.messages.GetOnlineUsersAnswer;
 import global.msgsystem.messages.GetUsersAnswer;
 import global.servlet.webpages.AdminPage;
@@ -15,6 +10,7 @@ import utils.PrintHelper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -39,7 +35,7 @@ public class AdminPageTest {
                     sleep(10);
 
                     if (this.testPage.isZombie()) {
-                        this.testPage.finalizeAsync(new GetUsersAnswer(new HashMap<>()));
+                        this.testPage.finalizeAsync(new GetUsersAnswer(new ArrayList<UserDataSet>()));
                         this.testPage.finalizeAsync(new GetOnlineUsersAnswer(new HashSet<>()));
                         break;
                     }

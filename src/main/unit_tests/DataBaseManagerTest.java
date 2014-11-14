@@ -1,4 +1,5 @@
 import global.database.DataBaseManagerImpl;
+import global.database.dataSets.UserDataSet;
 import global.msgsystem.messages.*;
 
 import global.models.Score;
@@ -9,10 +10,6 @@ import utils.MessageHelper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-
-
 
 public class DataBaseManagerTest {
 
@@ -44,8 +41,8 @@ public class DataBaseManagerTest {
 
     @AfterClass
     public static void tearDown() {
-        for (User user : registeredUsersList)
-            dbMan.deleteUser(user.getLogin());
+        //for (User user : registeredUsersList)
+            //dbMan.deleteUser(user.getLogin());
     }
 
     @Test
@@ -94,7 +91,7 @@ public class DataBaseManagerTest {
 
         ChangePasswordAnswer msg = msys.getMsg();
 
-        Assert.assertEquals("Failed change pass", "Failed to change password", msg.getErrMsg());
+        Assert.assertEquals("Failed change pass", "Wrong current password", msg.getErrMsg());
         Assert.assertEquals("Failed change pass", false, msg.isChangePasswordSuccess());
 
         login = registeredUsersList.get(0).getLogin();
@@ -115,12 +112,16 @@ public class DataBaseManagerTest {
         dbMan.getUsers();
         GetUsersAnswer msg = msys.getMsg();
 
-        HashMap<String, Long> map = new HashMap<>();
+        ArrayList<String> userLogins = new ArrayList();
+        userLogins.add("firstUser");
+        userLogins.add("secondUser");
+        userLogins.add("max");
 
-        map.put("firstUser", 1L);
-        map.put("secondUser", 2L);
-        map.put("max", 3L);
-        Assert.assertEquals("Get users testing", map.keySet(), msg.getMap().keySet());
+        ArrayList<UserDataSet> users =  msg.getUsers();
+
+        for (int i = 0; i < users.size(); ++i) {
+            Assert.assertEquals("Get user testing", userLogins.get(i), users.get(i).getLogin());
+        }
     }
 
     @Test
