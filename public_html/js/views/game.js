@@ -44,6 +44,19 @@ var GameView = Backbone.View.extend({
         this.update();
     },
 
+    onTick: function(data) {
+        debugger;
+        var length = data.snakes.length;
+        for (var i = 0; i < length; i++) {
+            var current = data.snakes[i];
+            this.snakes[current.snakeId].setCoordinates(current.newX, current.newY);
+        }
+        var canvas = document.getElementById('snakeGame'),
+        context = canvas.getContext('2d');
+        this.redraw(context);
+    },
+
+
     initialize: function() {
         this.render();
         this.$el.hide();
@@ -51,6 +64,7 @@ var GameView = Backbone.View.extend({
         this.started = false;
         this.listenTo(this.controller, 'startLoad', this.showWait);
         this.listenTo(this.controller, 'adjustGame', this.startGame);
+        this.listenTo(this.controller, 'tick', this.onTick);
     },
 
     render: function () {
@@ -63,8 +77,7 @@ var GameView = Backbone.View.extend({
 //        this.controller.confirm();
         this.started = true;
 
-        this.update();
-
+//        this.update();
     },
 
     update: function () {
@@ -72,11 +85,17 @@ var GameView = Backbone.View.extend({
 //            this.showNoGame();
             return;
         }
+
+//      Need to be somewhere else
         $(document).on('keydown', {object : this}, this.keyPressed);
-//        $(document).bind('keydown', this.keyPressed);
         var canvas = document.getElementById('snakeGame'),
         context = canvas.getContext('2d');
         debugger;
+
+        this.redraw(context);
+    },
+
+    redraw: function (context) {
         var length = this.snakes.length;
         for(var i = 0; i < length; i++) {
             var current = this.snakes[i];

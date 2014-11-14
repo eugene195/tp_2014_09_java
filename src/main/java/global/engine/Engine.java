@@ -33,7 +33,7 @@ public class Engine {
     }
 
     public void launch() {
-        //this.launched = true;
+        this.launched = true;
         this.mechanic.sendToClients("adjustGame", this.getStartData(), this);
     }
 
@@ -96,8 +96,8 @@ public class Engine {
         }
 
         mechanic.sendToClients("tick", this.getTickData(), this);
-
-        this.checkGameEnd();
+//TODO
+//        this.checkGameEnd();
     }
 
 

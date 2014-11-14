@@ -44,7 +44,7 @@ public class GameWebSocket {
             webSocketService.addUser(sessionId, this);
         }
         else if (action.equals("handleKey")) {
-            System.out.print("Key being handled");
+
         }
         else {
             JSONObject dataJson = json.getJSONObject("data");
