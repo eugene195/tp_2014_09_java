@@ -39,6 +39,7 @@
             color: Color
             posX: int,
             posY: int,
+            direct: Direct,
         }, ...]
     }
 }

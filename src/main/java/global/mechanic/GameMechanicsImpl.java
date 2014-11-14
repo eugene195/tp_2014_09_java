@@ -49,7 +49,7 @@ public class GameMechanicsImpl implements GameMechanics {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-//            this.gmStep();
+            this.gmStep();
         }
     }
 
@@ -59,33 +59,62 @@ public class GameMechanicsImpl implements GameMechanics {
         }
     }
 
+    /**
+     * Checking if the player is already in one of the waiting sessions
+     * @param player
+     * @return can user create a new session?
+     */
+    private boolean checkAlready(String player) {
+        for (GameSession gameSession : this.waitingPlayers.values())
+            if (gameSession.getPlayers().contains(player)) {
+                return false;
+            }
+
+        return true;
+    }
 
     @Override
     public void startGameSession(int playersCnt, String player) {
-        GameSession gameSession = new GameSession(playersCnt, player);
-        long id = idCounter.getAndIncrement();
-        this.waitingPlayers.put(id, gameSession);
+        if (this.checkAlready(player)) {
+            GameSession gameSession = new GameSession(playersCnt, player);
+            long id = idCounter.getAndIncrement();
+            this.waitingPlayers.put(id, gameSession);
+        }
+        else {
+            System.out.println("Player already has a waiting session " + player);
+        }
     }
 
     @Override
     public void addToSession(long sessionId, String player) {
-
         GameSession gameSession = this.waitingPlayers.get(sessionId);
-        boolean filled = gameSession.add(player);
 
-        if (filled) {
-            this.waitingPlayers.remove(sessionId);
-            this.startGame(gameSession);
+        if (gameSession == null) {
+            System.out.println("Wrong sessionId during addToSession: " + sessionId);
+            return;
+        }
+
+        if (this.checkAlready(player)) {
+            boolean filled = gameSession.add(player);
+            if (filled) {
+                this.startGame(gameSession);
+            }
+        }
+        else {
+            System.out.println("Player already has a waiting session " + player);
         }
     }
 
     @Override
     public void startGame(GameSession gameSession) {
+        this.waitingPlayers.remove(gameSession);
         this.playing.add(gameSession);
         this.webSocketService.notifyStart(gameSession);
 
-        Engine newEngine = new Engine(this, 100, 100, 1, 2);
+        Engine newEngine = new Engine(this, 100, 100, 1);
+        newEngine.generateSnakes(gameSession);
         this.engines.add(newEngine);
+
         // TODO: after all confirms
         newEngine.launch();
     }

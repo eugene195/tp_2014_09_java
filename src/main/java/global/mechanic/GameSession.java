@@ -3,11 +3,14 @@ package global.mechanic;
 import global.models.Player;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by eugene on 10/19/14.
  */
 public class GameSession {
+    private static AtomicLong idCounter = new AtomicLong();
+
     private final long startTime;
     private final int playersCnt;
 
@@ -16,12 +19,15 @@ public class GameSession {
     public GameSession(int playersCnt, String name) {
         startTime = new Date().getTime();
         this.playersCnt = playersCnt;
-        players.put(name, new Player(name, 0));
+
+        long id = idCounter.getAndIncrement();
+        players.put(name, new Player(name, id));
     }
 
     public GameSession(String user1, String user2) {
         this(2, user1);
-        players.put(user2, new Player(user2, 1));
+        long id = idCounter.getAndIncrement();
+        players.put(user2, new Player(user2, id));
     }
 
     /**
@@ -30,8 +36,8 @@ public class GameSession {
      * @return Is a gameSession fully filled
      */
     public boolean add(String name) {
-        int newId = players.size();
-        Player player = new Player(name, newId);
+        long id = idCounter.getAndIncrement();
+        Player player = new Player(name, id);
         players.put(name, player);
 
         if (players.size() == playersCnt) {
@@ -48,7 +54,7 @@ public class GameSession {
         return players.keySet();
     }
 
-    public int getSnakeId(String name) {
+    public long getSnakeId(String name) {
         return players.get(name).getSnake();
     }
 

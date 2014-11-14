@@ -5,7 +5,7 @@ package global.engine;
  */
 public class Cell {
     private Location loc;
-    private int ownerId;
+    private long ownerId;
     private boolean _isGrasped;
 
     public Cell() {
@@ -23,12 +23,12 @@ public class Cell {
         this.loc.Y = Y;
     }
 
-    public void setOwner(int newOwner) {
+    public void setOwner(long newOwner) {
         this.ownerId = newOwner;
         this._isGrasped = true;
     }
 
-    public int getOwner() {
+    public long getOwner() {
         return this.ownerId;
     }
 
