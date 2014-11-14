@@ -1,12 +1,12 @@
 package global.mechanic;
 
 import global.GameMechanics;
-import global.models.GameSession;
-import global.models.Player;
+import global.engine.Engine;
+import global.mechanic.sockets.WebSocketServiceImpl;
 import global.WebSocketService;
 
-import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.Thread.sleep;
 
@@ -15,74 +15,116 @@ import static java.lang.Thread.sleep;
  */
 public class GameMechanicsImpl implements GameMechanics {
     private static final int STEP_TIME = 100;
+    private static AtomicLong idCounter = new AtomicLong();
 
-    private static final int gameTime = 15 * 1000;
+    private final WebSocketService webSocketService;
 
-    private WebSocketService webSocketService;
+    private final Map<Long, GameSession> waitingPlayers = new HashMap<>();
+    private final ArrayList<GameSession> playing = new ArrayList<>();
+    private final ArrayList<Engine> engines = new ArrayList<>();
 
-    private Map<String, GameSession> nameToGame = new HashMap<>();
-
-    private Set<GameSession> allSessions = new HashSet<>();
-
-    private ArrayList<String> pendingUsers;
-
-    private String waiter;
-
-    public GameMechanicsImpl(WebSocketService webSocketService) {
-        this.webSocketService = webSocketService;
+    public GameMechanicsImpl() {
+        this.webSocketService = new WebSocketServiceImpl(this);
     }
 
-    public void addUser(String user) {
-        if (waiter != null) {
-            starGame(user);
-            waiter = null;
-        } else {
-            waiter = user;
-        }
-    }
-
-    public void incrementScore(String userName) {
-        GameSession myGameSession = nameToGame.get(userName);
-        Player myUser = myGameSession.getSelf(userName);
-        myUser.incrementMyScore();
-        Player enemyUser = myGameSession.getEnemy(userName);
-        enemyUser.incrementEnemyScore();
-        webSocketService.notifyMyNewScore(myUser);
-        webSocketService.notifyEnemyNewScore(enemyUser);
+    @Override
+    public WebSocketService getWebSocketService() {
+        return webSocketService;
     }
 
     @Override
     public void run() {
         while (true) {
             try {
-                sleep(10);
+                sleep(STEP_TIME);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            gmStep();
-//            TimeHelper.sleep(STEP_TIME);
+//            this.gmStep();
         }
     }
 
     private void gmStep() {
-        for (GameSession session : allSessions) {
-            if (session.getSessionTime() > gameTime) {
-                boolean firstWin = session.isFirstWin();
-                webSocketService.notifyGameOver(session.getFirst(), firstWin);
-                webSocketService.notifyGameOver(session.getSecond(), !firstWin);
-
-            }
+        for (Engine engine : this.engines) {
+            engine.timerEvent();
         }
     }
 
-    private void starGame(String first) {
-        String second = waiter;
-        GameSession gameSession = new GameSession(first, second);
-        allSessions.add(gameSession);
-        nameToGame.put(first, gameSession);
-        nameToGame.put(second, gameSession);
 
-        webSocketService.notifyStartGame(gameSession.getSelf(first));
-        webSocketService.notifyStartGame(gameSession.getSelf(second));
+    @Override
+    public void startGameSession(int playersCnt) {
+        GameSession gameSession = new GameSession(playersCnt);
+        long id = idCounter.getAndIncrement();
+        this.waitingPlayers.put(id, gameSession);
+    }
+
+    @Override
+    public void addToSession(long sessionId, String player) {
+
+        // TODO delete ifs
+
+        GameSession gameSession = this.waitingPlayers.get(sessionId);
+
+//        <--
+        if (gameSession == null)
+            startGameSession(2);
+        gameSession = this.waitingPlayers.get(sessionId);
+//        -->
+
+        boolean filled = gameSession.add(player);
+
+        if (filled) {
+            this.waitingPlayers.remove(sessionId);
+            this.startGame(gameSession);
+        }
+    }
+
+    @Override
+    public void startGame(GameSession gameSession) {
+        this.playing.add(gameSession);
+        this.webSocketService.notifyStart(gameSession);
+
+        Engine newEngine = new Engine(this, 100, 100, 1, 2);
+        this.engines.add(newEngine);
+        // TODO: after all confirms
+        newEngine.launch();
+    }
+
+    @Override
+    public void endGame(Engine engine) {
+        int index = this.engines.indexOf(engine);
+
+        if (index != -1) {
+            this.engines.remove(index);
+            GameSession gameSession = playing.get(index);
+            this.webSocketService.notifyEnd(gameSession);
+            this.playing.remove(gameSession);
+        } else {
+            System.out.println("endGame index error");
+        }
+    }
+
+    @Override
+    public void sendToClients(String action, Map<String, Object> data, Engine from) {
+        int index = this.engines.indexOf(from);
+
+        if (index != -1) {
+            GameSession session = this.playing.get(index);
+            this.webSocketService.sendToClients(action, data, session);
+        } else {
+            System.out.println("sendToClients index error");
+        }
+    }
+
+    @Override
+    public void sendToEngine(String action, Map<String, Object> data, GameSession session) {
+        int index = this.playing.indexOf(session);
+
+        if (index != -1) {
+            Engine engine = this.engines.get(index);
+            engine.execAction(action, data);
+        } else {
+            System.out.println("sendToEngine index error");
+        }
     }
 }

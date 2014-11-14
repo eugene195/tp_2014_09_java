@@ -1,38 +1,73 @@
 Клиент - Сервер.
 
-1) handleKey()
 {
-    direct: Direct
+    action: handleKey,
+    data: {
+        direct: Direct
+    }
+}
+
+{
+    confirm: loaded | handled
+}
+
+{
+    action: startGameSession,
+}
+
+{
+    action: addPlayer,
+    sessionId: int
 }
 
 Сервер - Клиент.
 
-1) startGame()
 {
-    height: int,
-    width: int,
-    speed: int,
-    snakes: [{
+    action: notifyStart | startGame
+}
+
+{
+    action: adjustGame,
+    data: {
+        height: int,
+        width: int,
+        speed: int,
         snakeID: int,
-        color: Color
-    }, ...]
+
+        snakes: [{
+            snakeID: int,
+            color: Color (small letters)
+            posX: int,
+            posY: int,
+            direction: string
+        }, ...]
+    }
 }
 
-2) endGame()
-[{
-    snakeID: int,
-    isWinner: bool
-}, ...]
-
-3) collision()
 {
-    snakeID: int
-    with: int
+    action: endGame,
+    data: {
+        snakeID: int,
+        isWinner: bool
+    }
 }
 
-4) tick()
-[{
-    snakeID:
-    newX: int
-    newY: int
-}, ...]
+
+{
+    action: collision,
+    data: {
+        snakeID: int
+        withID: int
+    }
+}
+
+{
+    action: tick,
+    data: {
+        snakes: [{
+            snakeID:
+            newX: int
+            newY: int
+        }, ...]
+    }
+}

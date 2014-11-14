@@ -6,54 +6,31 @@ import java.util.ArrayList;
  * Created by eugene on 10/19/14.
  */
 public class Player {
+    private static final int DEFAULT_SCORE = 0;
 
-    private final int DEFAULT_SCORE = 0;
-    private final String myName;
-    private String enemyName;
+    private final String name;
+    private long score;
+    private int snakeId;
 
-    private Score myScore;
-
-    private int enemyScore = 0;
-
-    private ArrayList<String> enemies;
-
-    public Player(String myName) {
-        this.myName = myName;
-        this.myScore = new Score(myName, DEFAULT_SCORE);
+    public Player(String name, int snakeId) {
+        this.snakeId = snakeId;
+        this.score = DEFAULT_SCORE;
+        this.name = name;
     }
 
-    public String getMyName() {
-        return myName;
+    public void setScore(long newScore) {
+        if (score >= DEFAULT_SCORE) {
+            this.score = newScore;
+        }
     }
 
-    public ArrayList<String> getEnemyNames() {
-        return this.enemies;
+    public long getScore() {
+        return this.score;
     }
 
-    public String getEnemyName() {
-        return enemyName;
+    public int getSnake() {
+        return this.snakeId;
     }
 
-    public int getMyScore() {
-        return myScore.getScore();
-    }
-
-//    TODO
-    public int getEnemyScore() {
-        return enemyScore;
-    }
-
-    public void incrementMyScore() {
-
-        myScore.increment(1);
-    }
-
-//    TODO
-    public void incrementEnemyScore() {
-        enemyScore++;
-    }
-
-    public void setEnemyName(String enemyName) {
-        this.enemyName = enemyName;
-    }
+    public String getName() { return this.name; }
 }

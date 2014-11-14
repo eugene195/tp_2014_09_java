@@ -37,12 +37,12 @@ public class Main
             ServletImpl servletImpl = createServlet(msys);
             DataBaseManager dbman = createDbMan(msys, conf);
 
-            WebSocketService webSocketService = new WebSocketServiceImpl();
-            GameMechanics gameMechanics = new GameMechanicsImpl(webSocketService);
+            GameMechanics gameMechanics = new GameMechanicsImpl();
+            WebSocketService webSocketService = gameMechanics.getWebSocketService();
 
             configureThreads(servletImpl, dbman, gameMechanics);
 
-            ServletContextHandler context = createContext(servletImpl, webSocketService, gameMechanics);
+            ServletContextHandler context = createContext(servletImpl, webSocketService);
             HandlerList handlers = createServerHandlers();
             handlers.addHandler(context);
 
@@ -89,11 +89,10 @@ public class Main
     }
 
     private static ServletContextHandler createContext( ServletImpl servletImpl,
-                                                       WebSocketService webSocketService,
-                                                       GameMechanics gameMechanics )
+                                                       WebSocketService webSocketService)
     {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(new WebSocketGameServlet(gameMechanics, webSocketService)), "/gameplay");
+        context.addServlet(new ServletHolder(new WebSocketGameServlet(webSocketService)), "/gameplay");
         context.addServlet(new ServletHolder(servletImpl), "/");
         return context;
     }
