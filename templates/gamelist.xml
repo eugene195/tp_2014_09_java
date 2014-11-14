@@ -30,7 +30,7 @@
     <fest:each iterate="sessions" index="i" value="game">
       <hr/>
       <div class="sessions__players">
-        <fest:each iterate="players" index="j" value="player">
+        <fest:each iterate="game.players" index="j" value="player">
           <strong>
             <fest:value>player</fest:value>
           </strong>

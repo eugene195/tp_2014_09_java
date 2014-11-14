@@ -1,4 +1,4 @@
-/**
+    /**
  * Created by max on 13.11.14.
  */
 
@@ -16,7 +16,6 @@ define([
 
         parse: function (response) {
             if (response.status == 1) {
-                debugger;
                 this.reset(response.sessions);
             }
         }
