@@ -8,11 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class UsersDAO {
-    private Executor exec;
+public class UsersDAO extends AbstractDAO {
 
     public UsersDAO(Executor exec){
-        this.exec = exec;
+        super(exec);
     }
 
     public UserDataSet get(String login) throws SQLException {
