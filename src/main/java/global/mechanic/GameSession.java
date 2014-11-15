@@ -1,5 +1,6 @@
 package global.mechanic;
 
+import global.engine.Params;
 import global.models.Player;
 
 import java.util.*;
@@ -12,22 +13,16 @@ public class GameSession {
     private static AtomicLong idCounter = new AtomicLong();
 
     private final long startTime;
-    private final int playersCnt;
+    private Params params;
 
     private final Map<String, Player> players = new HashMap<>();
 
-    public GameSession(int playersCnt, String name) {
+    public GameSession(Params params, String name) {
         startTime = new Date().getTime();
-        this.playersCnt = playersCnt;
+        this.params = params;
 
         long id = idCounter.getAndIncrement();
         players.put(name, new Player(name, id));
-    }
-
-    public GameSession(String user1, String user2) {
-        this(2, user1);
-        long id = idCounter.getAndIncrement();
-        players.put(user2, new Player(user2, id));
     }
 
     /**
@@ -40,14 +35,16 @@ public class GameSession {
         Player player = new Player(name, id);
         players.put(name, player);
 
-        if (players.size() == playersCnt) {
+        if (players.size() == params.playersCnt) {
             return true;
         }
         return false;
     }
 
+    public Params getParams() { return this.getParams(); }
+
     public int getPlayersCnt() {
-        return this.playersCnt;
+        return this.params.playersCnt;
     }
 
     public Set<String> getPlayers() {

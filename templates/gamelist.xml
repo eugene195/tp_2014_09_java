@@ -14,6 +14,17 @@
       <label for="players-cnt">Количество игроков:</label>
       <input name="players-cnt" type="number" value="2"/>
       <br/>
+      <p>Размеры игрового поля:</p>
+      <label name="width">W:</label>
+      <input name="width" type="number" value="100"/>
+      <label name="height">H:</label>
+      <input name="height" type="number" value="100"/>
+      <label for="speed">Скорость игры:</label>
+      <select name="speed">
+          <option value="1">Быстро</option>
+          <option value="2">Нормально</option>
+          <option value="3">Медленно</option>
+      </select>
       <label for="launch-time">Время до начала игры:</label>
       <select name="launch-time">
         <option>1 мин</option>

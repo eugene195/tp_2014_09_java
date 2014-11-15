@@ -3,6 +3,7 @@ package global.mechanic;
 import global.GameMechanics;
 import global.MessageSystem;
 import global.engine.Engine;
+import global.engine.Params;
 import global.mechanic.sockets.WebSocketServiceImpl;
 import global.WebSocketService;
 import global.msgsystem.messages.GameSessionsAnswer;
@@ -74,9 +75,9 @@ public class GameMechanicsImpl implements GameMechanics {
     }
 
     @Override
-    public void startGameSession(int playersCnt, String player) {
+    public void startGameSession(Params params, String player) {
         if (this.checkAlready(player)) {
-            GameSession gameSession = new GameSession(playersCnt, player);
+            GameSession gameSession = new GameSession(params, player);
             long id = idCounter.getAndIncrement();
             this.waitingPlayers.put(id, gameSession);
         }
@@ -112,7 +113,8 @@ public class GameMechanicsImpl implements GameMechanics {
         this.webSocketService.notifyStart(gameSession);
 
 
-        Engine newEngine = new Engine(this, 300, 300, 1);
+        Params params = gameSession.getParams();
+        Engine newEngine = new Engine(this, params.width, params.height, params.speed);
         newEngine.generateSnakes(gameSession);
         this.engines.add(newEngine);
 
