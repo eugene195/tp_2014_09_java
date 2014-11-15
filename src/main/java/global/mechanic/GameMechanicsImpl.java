@@ -18,7 +18,7 @@ import static java.lang.Thread.sleep;
  */
 public class GameMechanicsImpl implements GameMechanics {
     private static final String MECHANIC_ADDRESS = "gamemech";
-    private static final int STEP_TIME = 100;
+    private static final int STEP_TIME = 30;
     private static AtomicLong idCounter = new AtomicLong();
 
     private final MessageSystem msys;

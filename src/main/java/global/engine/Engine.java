@@ -165,7 +165,7 @@ public class Engine {
         Map<String, Object> data = new HashMap<>();
         data.put("snakeId", snakeId);
         data.put("withId", withId);
-        mechanic.sendToClients("endGame", data, this);
+        mechanic.sendToClients("collision", data, this);
     }
 
     private boolean collisionFor(Snake snakej) {

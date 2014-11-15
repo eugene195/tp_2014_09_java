@@ -31,7 +31,7 @@ function Tail() {
 function Snake(snakeObj) {
     this.x = snakeObj.posX;
     this.y = snakeObj.posY;
-    this.color = snakeObj.color;
+    this.color = snakeObj.color.toLowerCase();
     this.direction = snakeObj.direction;
     this.snakeId = snakeObj.snakeId;
     this.tail = new Tail();
