@@ -1,5 +1,3 @@
-// These classes better be replaced somewhere
-// <--
 function Point (x, y) {
     this.x = x;
     this.y = y;
@@ -8,6 +6,20 @@ function Point (x, y) {
 function Tail() {
     this.tail = [];
 
+    this.drawTail = function (context, color) {
+        context.beginPath();
+        context.lineWidth = 4;
+        context.strokeStyle = color;
+
+        if (this.tail.length == 0) return;
+
+        context.moveTo(this.tail[0].x, this.tail[0].y);
+        for (var I in this.tail) {
+            context.lineTo(this.tail[I].x, this.tail[I].y);
+        }
+        context.stroke();
+    };
+
     this.append = function (x, y) {
         this.tail.push(new Point(x, y));
         if (this.tail.length == 100) {
@@ -15,72 +27,36 @@ function Tail() {
         }
     };
 
+    this.getPoints = function () {
+        return this.tail;
+    };
+
     this.clearAll = function () {
         this.tail = [];
-    }
-
-    this.getTail = function () {
-        return this.tail;
-    }
-}
-// -->
-
-
-
-// Main snake class. Maybe we will need a snake model, but I dunno how to make it.
-function Snake(snakeObj) {
-    this.x = snakeObj.posX;
-    this.y = snakeObj.posY;
-    this.color = snakeObj.color.toLowerCase();
-    this.direction = snakeObj.direction;
-    this.snakeId = snakeObj.snakeId;
-    this.tail = new Tail();
-
-    this.getTail = function() {
-        return this.tail.getTail();
-    }
-
-    this.grow = function () {
-        this.tail.append(this.x, this.y);
-    }
-
-    this.setCoordinates = function(x, y) {
-        if (this.x && this.y) {
-            this.grow();
-        }
-        this.x = x;
-        this.y = y;
-    }
-
-    this.changeDirection = function(newDirection) {
-        this.direction = newDirection;
-    }
-
-    this.isWinner = function(winnerId) {
-        if (winnerId == this.snakeId)
-            return true;
-        return false;
-    }
+    };
 }
 
-function CurrentSnakeHolder () {
-    this.snake = null;
+function Circle(x, y, radius) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
 
-    this.setSnake = function(snake) {
-        this.snake = snake;
-    }
+    this.drawCircle = function(context, color, borderWidth) {
+        context.beginPath();
+        context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+        context.fillStyle = color;
+        context.fill();
+        context.lineWidth = borderWidth;
+        context.strokeStyle = '#003300';
+        context.stroke();
+    };
 
-    this.setCoordinates = function(x, y) {
-        this.snake.setCoordinates(x, y);
-    }
+    this.clear = function (context) {
+        var R = this.radius, D = this.diameter();
+        context.clearRect(this.x - R - 3, this.y - R - 3, D + 6, D + 6);
+    };
 
-    this.isWinner = function(winnerID) {
-        return this.snake.isWinner(winnerID);
-    }
-
-    this.setDirection = function(direction) {
-//        Some BS code
-        this.snake.changeDirection(direction);
-        return true;
-    }
+    this.diameter = function () {
+        return 2*this.radius;
+    };
 }

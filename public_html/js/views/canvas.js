@@ -1,100 +1,51 @@
 define([
     'backbone',
     'tmpl/canvas',
-    'controllers/viewman'
+    'controllers/viewman',
+    'api/primitives',
+    'api/button'
 ], function(
     Backbone,
     tmpl,
     viewManager
 ){
 
-    function Point (x, y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    function Button(start, length, text, height, btnName) {
-        this.start = start;
-        this.length = length;
-        this.text = text;
-        this.height = height;
-        this.btnName = btnName;
-
-        this.drawButton = function(context) {
-            context.beginPath();
-            context.rect(this.start, 0, this.length, this.height);
-            context.fillStyle = 'yellow';
-            context.fill();
-            context.font = '12pt Calibri';
-            context.lineWidth = 1;
-            context.strokeStyle = 'blue';
-            context.strokeText(this.text, this.start + 5, this.height / 2);
-            context.lineWidth = 2;
-            context.strokeStyle = 'black';
-            context.stroke();
-        };
-
-        this.isInBounds = function(x, y) {
-            if ((x >  this.start) && (x < this.start + this.length) && (y > 0) && (y < this.height)) {
-                return true;
-            }
+    function storageSupport() {
+        try {
+            return 'localStorage' in window && window['localStorage'] !== null;
+        } catch (e) {
             return false;
-        };
-    }
-
-    function Tail() {
-        this.tail = [];
-
-        this.drawTail = function (context) {
-            context.beginPath();
-            context.lineWidth = 4;
-            context.strokeStyle = 'black';
-
-            if (this.tail.length == 0) return;
-
-            context.moveTo(this.tail[0].x, this.tail[0].y);
-            for (var I in this.tail) {
-                context.lineTo(this.tail[I].x, this.tail[I].y);
-            }
-            context.stroke();
-        };
-
-        this.append = function (x, y) {
-            this.tail.push(new Point(x, y));
-            if (this.tail.length == 100) {
-                this.tail.shift();
-            }
-        };
-
-        this.clearAll = function () {
-            this.tail = [];
         }
     }
 
-    function Circle(x, y, radius, borderWidth) {
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
-        this.borderWidth = borderWidth;
+    var Params = {
+        amp: 100,
+        freq: 40,
+        base: 200,
+        time: 0,
 
-        this.drawCircle = function(context) {
-            context.beginPath();
-            context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
-            context.fillStyle = '#00FFFF';
-            context.fill();
-            context.lineWidth = this.borderWidth;
-            context.strokeStyle = '#003300';
-            context.stroke();
+        load: function () {
+            if (storageSupport()) {
+                var localStorage = window.localStorage;
+                this.amp = localStorage['amp'] || 100;
+                this.freq = localStorage['freq'] || 40;
+                this.base = localStorage['base'] || 200;
+                this.time = localStorage['time'] || 0;
+            }
+        },
+        save: function () {
+            if (storageSupport()) {
+                var localStorage = window.localStorage;
+                localStorage['amp'] = this.amp;
+                localStorage['freq'] = this.freq;
+                localStorage['base'] = this.base;
+                localStorage['time'] = this.time;
+            }
         }
-    }
+    };
 
-    function sinePoint(base, X, amp, freq) {
-        return base + (amp * Math.sin(freq * X * Math.PI));
-    }
-
-    function getMousePos(canvas, evt) {
-        var rect = canvas.getBoundingClientRect();
-        return new Point(evt.clientX - rect.left, evt.clientY - rect.top);
+    function sinePoint(X) {
+        return Params.base + (Params.amp * Math.sin(Params.freq * X * Math.PI));
     }
 
     var View = Backbone.View.extend({
@@ -121,27 +72,22 @@ define([
         },
 
         launch: function () {
-            var self = this;
-
-            var amp = 100,
-                freq = 40,
-                base = 200;
+            Params.load();
 
             var canvas = document.getElementById('myCanvas'),
                 context = canvas.getContext('2d'),
                 btnCanvas = document.getElementById('btnCanvas'),
                 btnContext = btnCanvas.getContext('2d');
 
-            var circle = new Circle(0, 75, 20, 2);
+            var circle = new Circle(0, 75, 20);
             var tail = new Tail();
 
             var btnArray = [
-                new Button(0, 150, "Frequency Up", 50, "freqUp"),
-                new Button(160, 150, "Frequency Down", 50, "freqDown"),
-                new Button(320, 150, "Amplitude Up", 50, "ampUp"),
-                new Button(480, 150, "Amplitude Down", 50, "ampDown"),
-                new Button(640, 150, "Pause", 50, "pause")
-
+                new Button(0, "Frequency Up", function () { Params.freq += 10; }),
+                new Button(160, "Frequency Down", function () { Params.freq -= 10; }),
+                new Button(320, "Amplitude Up", function () { Params.amp += 10; }),
+                new Button(480, "Amplitude Down", function () { Params.amp -= 10; }),
+                new Button(640, "Pause", function () { this.pause = !this.pause;}.bind(this))
             ];
 
             btnArray.forEach(function (entry) {
@@ -151,64 +97,44 @@ define([
             btnCanvas.addEventListener('click', function (evt) {
                 var mousePos = getMousePos(btnCanvas, evt);
                 btnArray.forEach(function (entry) {
-                    if (entry.isInBounds(mousePos.x, mousePos.y)) {
-                        buttonPress(entry.btnName);
-                    }
+                    entry.handleClick(mousePos.x, mousePos.y);
                 });
             }, false);
 
-            function buttonPress(btnName) {
-                if (btnName == "freqUp") {
-                    freq += 10;
-                } else if (btnName == "freqDown") {
-                    freq -= 10;
-                } else if (btnName == "ampUp") {
-                    amp += 10;
-                } else if (btnName == "ampDown"){
-                    amp -= 10;
-                }
-                else {
-                    self.pause = !self.pause;
-                }
-            }
-
             var linearSpeed = 0.5,
-                time = 0,
                 interval = 1;
 
-            var animate = function(circle, canvas, context) {
-                if (!self.pause) {
-                    var newX = 4*linearSpeed * time;
-                    time += interval;
-                    console.log(time);
+            var animate = function() {
+                if (! this.pause) {
+                    var newX = 4*linearSpeed * Params.time;
+                    Params.time += interval;
 
-                    var D = circle.radius * 2;
-                    var R = circle.radius;
-                    context.clearRect(circle.x - R - 3, circle.y - R - 3, D + 6, D + 6);
-
+                    circle.clear(context);
                     tail.drawTail(context);
 
-                    if (newX < canvas.width - D) {
+                    if (newX < canvas.width - circle.diameter()) {
                         circle.x = newX;
-                        circle.y = sinePoint(base, newX/1000, amp, freq);
+                        circle.y = sinePoint(newX / 1000);
                         tail.append(circle.x, circle.y);
-                    } else {
-                        time = 0;
+                    }
+                    else {
+                        Params.time = 0;
                         tail.clearAll();
                         context.clearRect(0, 0, canvas.width, canvas.height);
                     }
 
-                    circle.drawCircle(context);
+                    circle.drawCircle(context, '#00FFFF', 2);
                 }
-            };
+            }.bind(this);
 
             this.timerID = setInterval(function () {
-                animate(circle, canvas, context);
+                animate();
             }, interval);
         },
 
         unlaunch: function (view) {
             if (this === view) {
+                Params.save();
                 clearInterval(this.timerID);
             }
         }
