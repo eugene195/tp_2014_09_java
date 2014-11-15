@@ -10,10 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UsersDAO {
-    private Connection con;
+    private Executor exec;
 
-    public UsersDAO(Connection con){
-        this.con = con;
+    public UsersDAO(Executor exec){
+        this.exec = exec;
     }
 
     public UserDataSet get(String login) throws SQLException {
@@ -39,31 +39,27 @@ public class UsersDAO {
     }
 
     public void add(String login, String passw) throws SQLException {
-        Executor exec = new Executor();
         String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
 
-        exec.execUpdate(con, query, login, passw);
+        exec.execUpdate(query, login, passw);
     }
 
     public void changePassw(String login, String passw) throws SQLException {
-        Executor exec = new Executor();
         String query = "UPDATE User Set passw = md5(?) WHERE login = ?;";
 
-        exec.execUpdate(con, query, passw, login);
+        exec.execUpdate(query, passw, login);
     }
 
     public void delete(String login) throws SQLException {
-        Executor exec = new Executor();
         String query = "DELETE FROM User WHERE login = ?;";
 
-        exec.execUpdate(con, query, login);
+        exec.execUpdate(query, login);
     }
 
     private ArrayList<UserDataSet> getUsers(String query,
             String... params) throws SQLException {
 
-        Executor exec = new Executor();
-        return exec.execQuery(con, query,
+        return exec.execQuery(query,
             params,
             new ResultHandler<UserDataSet>() {
 

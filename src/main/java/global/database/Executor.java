@@ -1,12 +1,19 @@
 package global.database;
 
 import global.database.handlers.ResultHandler;
+import snaq.db.ConnectionPool;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 
 public class Executor {
+    private final ConnectionPool conPool;
+
+    Executor(ConnectionPool conPool) {
+        this.conPool = conPool;
+    }
+
     private static int getResultCount(ResultSet resultSet) throws SQLException {
         resultSet.last();
         int count = resultSet.getRow();
@@ -14,11 +21,15 @@ public class Executor {
         return count;
     }
 
-    public <T> ArrayList<T> execQuery(Connection connection,
-           String query,
+    public void releaseConnectionPool() {
+        conPool.release();
+    }
+
+    public <T> ArrayList<T> execQuery(String query,
            String[] params,
            ResultHandler<T> handler)
            throws SQLException {
+        Connection connection = conPool.getConnection();
         PreparedStatement stmt = connection.prepareStatement(query);
 
         if (params != null) {
@@ -37,13 +48,13 @@ public class Executor {
 
         result.close();
         stmt.close();
-
         return value;
     }
 
-    public void execUpdate(Connection connection,
-            String query,
-            String... params) throws SQLException {
+    public void execUpdate(String query, String... params)
+            throws SQLException
+    {
+        Connection connection = conPool.getConnection();
         try {
             connection.setAutoCommit(false);
 

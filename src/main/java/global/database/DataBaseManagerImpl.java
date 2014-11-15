@@ -7,6 +7,8 @@ import global.database.dataSets.UserDataSet;
 import global.msgsystem.messages.*;
 import global.models.Score;
 import global.models.UserSession;
+import snaq.db.ConnectionPool;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import static java.lang.Thread.sleep;
  */
 public class DataBaseManagerImpl implements DataBaseManager {
 
-    private Connection conn;
+    private Executor executor;
     private static final String DBMAN_ADDRESS = "dbman";
     private final MessageSystem msys;
 
@@ -33,31 +35,34 @@ public class DataBaseManagerImpl implements DataBaseManager {
         String baseUserPasswd = userPasswd;
 
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            this.conn = DriverManager.getConnection(baseUrl, baseUserName, baseUserPasswd);
+            Class c = Class.forName("com.mysql.jdbc.Driver");
+            Driver driver = (Driver)c.newInstance();
+            DriverManager.registerDriver(driver);
+            ConnectionPool conPool = new ConnectionPool("local",
+                    5, 10, 30, 180, baseUrl, baseUserName, baseUserPasswd);
+            this.executor = new Executor(conPool);
             System.out.println("DB connected");
         }
         catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            System.err.println ("Cannot connect to DB");
+            throw new SQLException(e.getCause());
         }
+
     }
 
     @Override
     protected void finalize() throws Throwable {
-        if (this.conn != null) {
-            try {
-                this.conn.close();
-                System.out.println("DB connection terminated");
-            }
-            catch (Exception e) {
-                System.out.println("DB cannot be terminated");
-            }
+        try {
+            this.executor.releaseConnectionPool();
+            System.out.println("DB connection terminated");
         }
+        catch (Exception e) {
+            System.out.println("DB cannot be terminated");
+            }
     }
 
     public boolean userExists(String login){
         try {
-            UsersDAO userDAO = new UsersDAO(conn);
+            UsersDAO userDAO = new UsersDAO(executor);
             UserDataSet user = userDAO.get(login);
             if (user != null) {
                 return true;
@@ -73,7 +78,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     @Override
     public void getUsers(){
         try {
-            UsersDAO userDAO = new UsersDAO(conn);
+            UsersDAO userDAO = new UsersDAO(executor);
             ArrayList<UserDataSet> users = userDAO.getAll();
             this.msys.sendMessage(new GetUsersAnswer(users), "servlet");
         }
@@ -85,7 +90,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     @Override
     public void checkAuth(UserSession userSession, String passw) {
         try {
-            UsersDAO userDAO = new UsersDAO(conn);
+            UsersDAO userDAO = new UsersDAO(executor);
             UserDataSet user = userDAO.get(userSession.getLogin(), passw);
 
             if (user != null) {
@@ -99,6 +104,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
             }
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             System.out.println("Sql exception during checkAuth()");
             userSession.setSuccessAuth(false);
             this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
@@ -112,7 +118,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
         }
         else {
             try {
-                UsersDAO userDAO = new UsersDAO(conn);
+                UsersDAO userDAO = new UsersDAO(executor);
                 userDAO.add(login, passw);
                 this.msys.sendMessage(new RegistrationAnswer(true, login, ""), "servlet");
             }
@@ -127,7 +133,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     @Override
     public void deleteUser(String login) {
         try {
-            UsersDAO userDAO = new UsersDAO(conn);
+            UsersDAO userDAO = new UsersDAO(executor);
             UserDataSet user = userDAO.get(login);
 
             if (user != null) {
@@ -144,7 +150,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     @Override
     public void bestScores() {
         try {
-            UsersDAO userDAO = new UsersDAO(conn);
+            UsersDAO userDAO = new UsersDAO(executor);
             ArrayList<UserDataSet> users = userDAO.getTop();
 
             ArrayList<Score> scores = new ArrayList();
@@ -162,7 +168,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     @Override
     public void changePassword(String login, String curPassw, String newPassw) {
         try {
-            UsersDAO userDAO = new UsersDAO(conn);
+            UsersDAO userDAO = new UsersDAO(executor);
             UserDataSet user = userDAO.get(login, curPassw);
 
             if (user != null) {
