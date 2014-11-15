@@ -51,8 +51,8 @@ public class Engine {
 
     public void generateSnakes(GameSession session) {
         int playersCnt = session.getPlayersCnt();
-        int distX = width * 6 / 10,
-            distY = height * 6 / 10;
+        int distX = width * 6 / 2 / 10,
+            distY = height * 6 / 2 / 10;
         double angle = 2*Math.PI / playersCnt;
 
         Location center = new Location(width / 2, height / 2);

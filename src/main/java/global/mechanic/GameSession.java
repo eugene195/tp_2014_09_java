@@ -41,7 +41,7 @@ public class GameSession {
         return false;
     }
 
-    public Params getParams() { return this.getParams(); }
+    public Params getParams() { return this.params; }
 
     public int getPlayersCnt() {
         return this.params.playersCnt;

@@ -1,4 +1,4 @@
-<fest:template xmlns:fest="http://fest.mail.ru">
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="sizes">
 
     <div class="gamepage__header">
         <div class="gamepage__header__infobar">
@@ -16,8 +16,11 @@
 
 
         <!--TODO Remove to snake game-->
-        <canvas id="snakeGame" width="1200" height="400">
-
+        <canvas id="snakeGame" style="border: black solid 2px">
+            <fest:attributes>
+                <fest:attribute name="width"><fest:value>sizes.width</fest:value></fest:attribute>
+                <fest:attribute name="height"><fest:value>sizes.height</fest:value></fest:attribute>
+            </fest:attributes>
         </canvas>
     </div>
 

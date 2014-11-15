@@ -15,7 +15,8 @@ define([
 var GameView = Backbone.View.extend({
     controller: SocketMan,
     viewman: viewMan,
-
+    width: 0,
+    height: 0,
     drawer : new SnakeDrawer(),
     snakeHolder : new CurrentSnakeHolder(),
     snakes : [],
@@ -38,6 +39,8 @@ var GameView = Backbone.View.extend({
     },
 
     startGame: function(data) {
+        this.width = data.width;
+        this.height = data.height;
         var myID = data.snakeId;
         var length = data.snakes.length;
         for (var i = 0; i < length; i++) {
@@ -63,7 +66,6 @@ var GameView = Backbone.View.extend({
     },
 
     endGame: function (data) {
-        debugger;
         var winnerId = data.winner;
         if (this.snakeHolder.isWinner(winnerId))
             alert("You are a winner");
@@ -85,22 +87,27 @@ var GameView = Backbone.View.extend({
     },
 
     render: function () {
-        this.$el.html(this.template());
+        $(document).on('keydown', {object : this}, this.keyPressed);
+        var sizes = { width: this.width,
+                      height: this.height
+                    };
+        this.$el.html(this.template(sizes));
     },
 
     show: function () {
-        this.trigger('reshow', this);
+        this.trigger('rerender', this);
         this.started = true;
     },
 
     update: function () {
+        this.trigger('rerender', this);
         if (! this.started) {
             this.showNoGame();
             return;
         }
 
 //      Need to be somewhere else
-        $(document).on('keydown', {object : this}, this.keyPressed);
+
         var canvas = document.getElementById('snakeGame'),
         context = canvas.getContext('2d');
 

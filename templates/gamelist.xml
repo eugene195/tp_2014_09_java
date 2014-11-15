@@ -16,9 +16,9 @@
       <br/>
       <p>Размеры игрового поля:</p>
       <label name="width">W:</label>
-      <input name="width" type="number" value="100"/>
+      <input name="width" type="number" value="400"/>
       <label name="height">H:</label>
-      <input name="height" type="number" value="100"/>
+      <input name="height" type="number" value="400"/>
       <label for="speed">Скорость игры:</label>
       <select name="speed">
           <option value="1">Быстро</option>
