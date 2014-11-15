@@ -61,7 +61,8 @@ public class GameWebSocket {
             webSocketService.addUser(sessionId, this);
         }
         else if (action.equals("handleKey")) {
-            System.out.print("Wazup");
+            String direction = json.get("direction").toString();
+            webSocketService.handleKey(myName, direction);
         }
         else {
             JSONObject dataJson = json.getJSONObject("data");

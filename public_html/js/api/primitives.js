@@ -39,7 +39,14 @@ function Snake(snakeObj) {
         return this.tail.getTail();
     }
 
+    this.grow = function () {
+        this.tail.append(this.x, this.y);
+    }
+
     this.setCoordinates = function(x, y) {
+        if (this.x && this.y) {
+            this.   grow();
+        }
         this.x = x;
         this.y = y;
     }

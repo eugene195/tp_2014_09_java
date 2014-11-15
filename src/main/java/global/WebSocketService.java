@@ -16,4 +16,5 @@ public interface WebSocketService {
 
     void notifyStart(GameSession session);
     void notifyEnd(GameSession session);
+    void handleKey(String playerName, String direction);
 }

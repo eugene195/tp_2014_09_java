@@ -86,7 +86,6 @@ var GameList = Backbone.View.extend({
     },
 
     gameStarted: function(data) {
-        alert("Your game starts");
         this.trigger('start');
     }
 });

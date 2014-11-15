@@ -11,7 +11,7 @@ define([
 
             this.ws = new WebSocket(this.SOCKET_URL);
             this.ws.onopen = function (event) {
-                
+
             }.bind(this);
 
             this.ws.onclose = function (event) {
@@ -30,13 +30,11 @@ define([
         },
 
         dropSocket : function () {
-    //        ws.onclose();
+            ws,close();
             delete ws;
         },
 
         loadData : function () {
-    //        var kind = 'startGame' || 'tick' || ...;
-
             this.trigger(kind, data);
             this.confirm();
         },

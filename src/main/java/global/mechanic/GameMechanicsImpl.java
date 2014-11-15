@@ -112,7 +112,7 @@ public class GameMechanicsImpl implements GameMechanics {
         this.webSocketService.notifyStart(gameSession);
 
 
-        Engine newEngine = new Engine(this, 500, 500, 1);
+        Engine newEngine = new Engine(this, 300, 300, 1);
         newEngine.generateSnakes(gameSession);
         this.engines.add(newEngine);
 

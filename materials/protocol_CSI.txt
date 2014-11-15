@@ -3,7 +3,7 @@
 {
     action: handleKey,
     data: {
-        direct: Direct
+        direction: string
     }
 }
 

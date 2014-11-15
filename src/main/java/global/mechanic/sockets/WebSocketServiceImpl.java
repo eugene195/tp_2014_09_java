@@ -88,4 +88,9 @@ public class WebSocketServiceImpl implements WebSocketService {
             socket.sendToClient("notifyEnd");
         }
     }
+
+    @Override
+    public void handleKey(String playerName, String direction) {
+
+    }
 }

@@ -91,7 +91,7 @@ public class Engine {
 
             block.put("posX", pos.X);
             block.put("posY", pos.Y);
-            block.put("direct", direct.name());
+            block.put("direction", direct.name());
             snakeInfo.add(block);
         }
 

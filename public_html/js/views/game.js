@@ -33,6 +33,10 @@ var GameView = Backbone.View.extend({
         alert("Please wait for data to load");
     },
 
+    showNoGame: function () {
+        alert("The game hasn't started yet");
+    },
+
     startGame: function(data) {
         var myID = data.snakeId;
         var length = data.snakes.length;
@@ -44,11 +48,13 @@ var GameView = Backbone.View.extend({
             this.snakes.push(snake);
         }
         this.started = true;
+        debugger;
         this.update();
     },
 
     onTick: function(data) {
         var length = data.snakes.length;
+        debugger;
         for (var i = 0; i < length; i++) {
             var current = data.snakes[i];
             this.snakes[current.snakeId].setCoordinates(current.newX, current.newY);
@@ -77,16 +83,12 @@ var GameView = Backbone.View.extend({
 
     show: function () {
         this.trigger('reshow', this);
-        // After resources were loaded
-//        this.controller.confirm();
         this.started = true;
-
-//        this.update();
     },
 
     update: function () {
         if (! this.started) {
-//            this.showNoGame();
+            this.showNoGame();
             return;
         }
 
