@@ -4,7 +4,7 @@ define([
     'controllers/socketman',
     'controllers/viewman',
     'api/primitives',
-    'api/drawer'
+    'api/snake'
 ], function(
     Backbone,
     tmpl,
@@ -17,7 +17,6 @@ var GameView = Backbone.View.extend({
     viewman: viewMan,
     width: 0,
     height: 0,
-    drawer : new SnakeDrawer(),
     snakeHolder : new CurrentSnakeHolder(),
     snakes : [],
     started : false,
@@ -120,7 +119,7 @@ var GameView = Backbone.View.extend({
         var length = this.snakes.length;
         for(var i = 0; i < length; i++) {
             var current = this.snakes[i];
-            this.drawer.draw(current, context);
+            current.drawSnake(context);
         }
     },
 
