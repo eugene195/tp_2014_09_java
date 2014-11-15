@@ -30,12 +30,13 @@ var GameView = Backbone.View.extend({
     },
 
     showWait: function () {
-//    To Test
+//    Todo
         alert("Please wait for data to load");
     },
 
     showNoGame: function () {
-        alert("The game hasn't started yet");
+//    TODO
+//        alert("The game hasn't started yet");
     },
 
     startGame: function(data) {
@@ -84,10 +85,11 @@ var GameView = Backbone.View.extend({
         this.listenTo(this.controller, 'tick', this.onTick);
         this.listenTo(this.viewman, 'view-hide', this.onhide);
 
+        $(document).on('keydown', {object : this}, this.keyPressed);
+
     },
 
     render: function () {
-        $(document).on('keydown', {object : this}, this.keyPressed);
         var sizes = { width: this.width,
                       height: this.height
                     };
@@ -124,9 +126,9 @@ var GameView = Backbone.View.extend({
 
     onhide: function (view) {
         if (this === view) {
-            $(document).unbind('keydown');
+//            $(document).off('keydown');
             this.started = false;
-            this.controller.dropSocket();
+//            this.controller.dropSocket();
         }
     },
 

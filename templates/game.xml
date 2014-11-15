@@ -14,8 +14,8 @@
         Game Screen
         <a href="/game">Let's do it</a>
 
+<br/>
 
-        <!--TODO Remove to snake game-->
         <canvas id="snakeGame" style="border: black solid 2px">
             <fest:attributes>
                 <fest:attribute name="width"><fest:value>sizes.width</fest:value></fest:attribute>
