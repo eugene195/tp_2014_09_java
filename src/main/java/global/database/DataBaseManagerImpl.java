@@ -9,7 +9,6 @@ import global.models.Score;
 import global.models.UserSession;
 import snaq.db.ConnectionPool;
 
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -19,10 +18,9 @@ import static java.lang.Thread.sleep;
  * Created by Евгений on 28.08.2014.
  */
 public class DataBaseManagerImpl implements DataBaseManager {
-
-    private Executor executor;
     private static final String DBMAN_ADDRESS = "dbman";
     private final MessageSystem msys;
+    private Executor executor;
 
     public DataBaseManagerImpl(MessageSystem msys, String baseName, String userName, String userPasswd)
             throws SQLException
@@ -38,8 +36,10 @@ public class DataBaseManagerImpl implements DataBaseManager {
             Class c = Class.forName("com.mysql.jdbc.Driver");
             Driver driver = (Driver)c.newInstance();
             DriverManager.registerDriver(driver);
+
             ConnectionPool conPool = new ConnectionPool("local",
                     5, 10, 30, 180, baseUrl, baseUserName, baseUserPasswd);
+
             this.executor = new Executor(conPool);
             System.out.println("DB connected");
         }

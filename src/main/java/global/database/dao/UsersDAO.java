@@ -4,7 +4,6 @@ import global.database.Executor;
 import global.database.handlers.ResultHandler;
 import global.database.dataSets.UserDataSet;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -56,8 +55,8 @@ public class UsersDAO {
         exec.execUpdate(query, login);
     }
 
-    private ArrayList<UserDataSet> getUsers(String query,
-            String... params) throws SQLException {
+    private ArrayList<UserDataSet> getUsers(String query, String... params)
+            throws SQLException {
 
         return exec.execQuery(query,
             params,

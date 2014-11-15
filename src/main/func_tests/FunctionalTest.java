@@ -57,7 +57,7 @@ public class FunctionalTest {
             element.submit();*/
 
         } catch (WebDriverException e) {
-            System.out.println("fuck");
+            System.out.println(e.getMessage());
             return "";
         }
 

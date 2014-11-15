@@ -6,7 +6,6 @@ import snaq.db.ConnectionPool;
 import java.sql.*;
 import java.util.ArrayList;
 
-
 public class Executor {
     private final ConnectionPool conPool;
 
@@ -26,14 +25,14 @@ public class Executor {
     }
 
     public <T> ArrayList<T> execQuery(String query,
-           String[] params,
-           ResultHandler<T> handler)
-           throws SQLException {
+                String[] params,
+                ResultHandler<T> handler)
+                throws SQLException {
         Connection connection = conPool.getConnection();
         PreparedStatement stmt = connection.prepareStatement(query);
 
         if (params != null) {
-            for (int i=0; i < params.length; ++i) {
+            for (int i = 0; i < params.length; ++i) {
                 stmt.setString(i + 1, params[i]);
             }
         }
@@ -51,8 +50,7 @@ public class Executor {
         return value;
     }
 
-    public void execUpdate(String query, String... params)
-            throws SQLException
+    public void execUpdate(String query, String... params) throws SQLException
     {
         Connection connection = conPool.getConnection();
         try {
@@ -60,10 +58,9 @@ public class Executor {
 
             PreparedStatement stmt = connection.prepareStatement(query);
 
-            for (int i=0; i < params.length; ++i) {
+            for (int i = 0; i < params.length; ++i) {
                 stmt.setString(i + 1, params[i]);
             }
-
 
             int rowsAffected = stmt.executeUpdate();
             stmt.close();
