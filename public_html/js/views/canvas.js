@@ -22,6 +22,7 @@ define([
         amp: 100,
         freq: 40,
         base: 200,
+        time: 0,
 
         load: function () {
             if (storageSupport()) {
@@ -29,6 +30,7 @@ define([
                 this.amp = localStorage['amp'] || 100;
                 this.freq = localStorage['freq'] || 40;
                 this.base = localStorage['base'] || 200;
+                this.time = localStorage['time'] || 0;
             }
         },
         save: function () {
@@ -37,12 +39,13 @@ define([
                 localStorage['amp'] = this.amp;
                 localStorage['freq'] = this.freq;
                 localStorage['base'] = this.base;
+                localStorage['time'] = this.time;
             }
         }
     };
 
-    function sinePoint(base, X, amp, freq) {
-        return base + (amp * Math.sin(freq * X * Math.PI));
+    function sinePoint(X) {
+        return Params.base + (Params.amp * Math.sin(Params.freq * X * Math.PI));
     }
 
     var View = Backbone.View.extend({
@@ -69,6 +72,8 @@ define([
         },
 
         launch: function () {
+            Params.load();
+
             var canvas = document.getElementById('myCanvas'),
                 context = canvas.getContext('2d'),
                 btnCanvas = document.getElementById('btnCanvas'),
@@ -97,25 +102,23 @@ define([
             }, false);
 
             var linearSpeed = 0.5,
-                time = 0,
                 interval = 1;
 
             var animate = function() {
                 if (! this.pause) {
-                    var newX = 4*linearSpeed * time;
-                    time += interval;
-                    console.log(time);
+                    var newX = 4*linearSpeed * Params.time;
+                    Params.time += interval;
 
                     circle.clear(context);
                     tail.drawTail(context);
 
                     if (newX < canvas.width - circle.diameter()) {
                         circle.x = newX;
-                        circle.y = sinePoint(Params.base, newX/1000, Params.amp, Params.freq);
+                        circle.y = sinePoint(newX / 1000);
                         tail.append(circle.x, circle.y);
                     }
                     else {
-                        time = 0;
+                        Params.time = 0;
                         tail.clearAll();
                         context.clearRect(0, 0, canvas.width, canvas.height);
                     }
@@ -131,6 +134,7 @@ define([
 
         unlaunch: function (view) {
             if (this === view) {
+                Params.save();
                 clearInterval(this.timerID);
             }
         }
