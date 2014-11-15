@@ -47,7 +47,8 @@
 {
     action: endGame,
     data: {
-        snakeID: int,
+        snakeId: int,
+        winner: int,
         isWinner: bool
     }
 }

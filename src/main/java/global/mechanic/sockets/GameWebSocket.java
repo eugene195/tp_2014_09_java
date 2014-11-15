@@ -60,10 +60,6 @@ public class GameWebSocket {
             int sessionId = json.getInt("sessionId");
             webSocketService.addUser(sessionId, this);
         }
-        else if (action.equals("handleKey")) {
-            String direction = json.get("direction").toString();
-            webSocketService.handleKey(myName, direction);
-        }
         else {
             JSONObject dataJson = json.getJSONObject("data");
 

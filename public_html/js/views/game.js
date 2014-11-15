@@ -48,13 +48,11 @@ var GameView = Backbone.View.extend({
             this.snakes.push(snake);
         }
         this.started = true;
-        debugger;
         this.update();
     },
 
     onTick: function(data) {
         var length = data.snakes.length;
-        debugger;
         for (var i = 0; i < length; i++) {
             var current = data.snakes[i];
             this.snakes[current.snakeId].setCoordinates(current.newX, current.newY);
@@ -64,6 +62,14 @@ var GameView = Backbone.View.extend({
         this.redraw(context);
     },
 
+    endGame: function (data) {
+        debugger;
+        var winnerId = data.winner;
+        if (this.snakeHolder.isWinner(winnerId))
+            alert("You are a winner");
+        else
+            alert("You are a loser");
+    },
 
     initialize: function() {
         this.render();
@@ -72,6 +78,7 @@ var GameView = Backbone.View.extend({
         this.started = false;
         this.listenTo(this.controller, 'startLoad', this.showWait);
         this.listenTo(this.controller, 'adjustGame', this.startGame);
+        this.listenTo(this.controller, 'endGame', this.endGame);
         this.listenTo(this.controller, 'tick', this.onTick);
         this.listenTo(this.viewman, 'view-hide', this.onhide);
 
@@ -123,14 +130,13 @@ var GameView = Backbone.View.extend({
     },
 
     keyPressed: function(e) {
-        debugger;
         var that = e.data.object;
         var code = e.keyCode || e.which;
         var dirs = {
             37: "LEFT",
-            38: "UP",
+            38: "DOWN",
             39: "RIGHT",
-            40: "DOWN"
+            40: "UP"
         };
         if (code in dirs) {
             var message = {
@@ -144,7 +150,7 @@ var GameView = Backbone.View.extend({
             }
         }
         else
-            alert("your movement is unknown");
+            Console.log("Unknown key");
     }
 
     });

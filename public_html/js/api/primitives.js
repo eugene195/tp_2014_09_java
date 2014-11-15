@@ -33,6 +33,7 @@ function Snake(snakeObj) {
     this.y = snakeObj.posY;
     this.color = snakeObj.color;
     this.direction = snakeObj.direction;
+    this.snakeId = snakeObj.snakeId;
     this.tail = new Tail();
 
     this.getTail = function() {
@@ -45,7 +46,7 @@ function Snake(snakeObj) {
 
     this.setCoordinates = function(x, y) {
         if (this.x && this.y) {
-            this.   grow();
+            this.grow();
         }
         this.x = x;
         this.y = y;
@@ -53,6 +54,12 @@ function Snake(snakeObj) {
 
     this.changeDirection = function(newDirection) {
         this.direction = newDirection;
+    }
+
+    this.isWinner = function(winnerId) {
+        if (winnerId == this.snakeId)
+            return true;
+        return false;
     }
 }
 
@@ -67,9 +74,12 @@ function CurrentSnakeHolder () {
         this.snake.setCoordinates(x, y);
     }
 
+    this.isWinner = function(winnerID) {
+        return this.snake.isWinner(winnerID);
+    }
+
     this.setDirection = function(direction) {
 //        Some BS code
-        alert("Changed, direction = " + direction);
         this.snake.changeDirection(direction);
         return true;
     }

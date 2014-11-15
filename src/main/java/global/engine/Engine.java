@@ -115,10 +115,8 @@ public class Engine {
                 this.sendCollision(snake.getId(), cell.getOwner());
             }
         }
-
         mechanic.sendToClients("tick", this.getTickData(), this);
-//TODO
-//        this.checkGameEnd();
+        this.checkGameEnd();
     }
 
 
@@ -216,7 +214,7 @@ public class Engine {
         if (action.equals("handleKey")) {
             String dirStr = (String) data.get("direct");
             Direct dir = Direct.valueOf(dirStr);
-            long snakeId = (Integer) data.get("snakeId");
+            long snakeId = (Long) data.get("snakeId");
 
             this.handleKey(snakeId, dir);
         }
