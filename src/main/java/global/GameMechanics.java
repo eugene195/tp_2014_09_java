@@ -1,6 +1,7 @@
 package global;
 
 import global.engine.Engine;
+import global.engine.Params;
 import global.mechanic.GameSession;
 
 import java.util.Map;
@@ -17,7 +18,7 @@ public interface GameMechanics extends Runnable {
     void sendToClients(String action, Map<String, Object> data, Engine from);
     void sendToEngine(String action, Map<String, Object> data, GameSession session);
 
-    void startGameSession(int playersCnt, String player);
+    void startGameSession(Params params, String player);
     void addToSession(long sessionId, String player);
 
     void startGame(GameSession gameSession);

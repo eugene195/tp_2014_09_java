@@ -1,6 +1,7 @@
 package global.mechanic.sockets;
 
 import global.WebSocketService;
+import global.engine.Params;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -53,8 +54,10 @@ public class GameWebSocket {
         if (action.equals("startGameSession")) {
             setSession(session);
 
-            int playersCnt = json.getInt("playersCnt");
-            webSocketService.startGameSession(playersCnt, this);
+            Params params = new Params();
+            params.setParams(json);
+
+            webSocketService.startGameSession(params, this);
         }
         else if (action.equals("addUser")) {
             int sessionId = json.getInt("sessionId");

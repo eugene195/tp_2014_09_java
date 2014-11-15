@@ -36,6 +36,10 @@ public class Location {
         return Direct.parse(dx, dy);
     }
 
+    public Location offset(Location shift) {
+        return new Location(X + shift.X, Y + shift.Y);
+    }
+
     public boolean equals(final Location loc) {
         return (X == loc.X && Y == loc.Y);
     }

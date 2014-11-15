@@ -73,7 +73,7 @@ public class GameListPage extends WebPage {
             Long sessionId = entry.getKey();
             GameSession session = entry.getValue();
 
-            item.put("playersCnt", session.getPlayersCnt());
+            session.getParams().toJson(item);
             item.put("players", session.getPlayers().toArray());
             item.put("sessionId", (long) sessionId);
             data.put(item);
