@@ -1,6 +1,7 @@
 package global.engine;
 
 import global.GameMechanics;
+import global.mechanic.GameSession;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,26 +15,27 @@ public class Engine {
     private boolean launched;
 
     private int width, height;
-    private int speed;
+    private final int speed;
+    private int engineTimer;
 
     private final ArrayList<Cell> cells = new ArrayList<>();
     private final ArrayList<Snake> snakes = new ArrayList<>();
 
-    private GameMechanics mechanic;
+    private final GameMechanics mechanic;
 
     //---------------------------------------------------------------------------------------------------
 
-    public Engine(GameMechanics mechanic, int width, int height, int speed, int snakesCnt) {
+    public Engine(GameMechanics mechanic, int width, int height, int speed) {
         this.launched = false;
         this.mechanic = mechanic;
         this.speed = speed;
+        this.engineTimer= speed;
 
         this.generateField(width, height);
-        this.generateSnakes(snakesCnt);
     }
 
     public void launch() {
-        //this.launched = true;
+        this.launched = true;
         this.mechanic.sendToClients("adjustGame", this.getStartData(), this);
     }
 
@@ -47,9 +49,27 @@ public class Engine {
             }
     }
 
-    private void generateSnakes(int snakesCnt) {
-        for (int I = 0; I < snakesCnt; I++) {
-            snakes.add(new Snake(I, Color.getColor(I)));
+    public void generateSnakes(GameSession session) {
+        int playersCnt = session.getPlayersCnt();
+        int distX = width * 6 / 2 / 10,
+            distY = height * 6 / 2 / 10;
+        double angle = 2*Math.PI / playersCnt;
+
+        Location center = new Location(width / 2, height / 2);
+
+        int I = 0;
+        for (String playerName : session.getPlayers()) {
+            long id = session.getSnakeId(playerName);
+
+            double posX = distX*Math.cos(angle*I),
+                   posY = distY*Math.sin(angle*I);
+
+            Location pos = new Location((int) posX, (int) posY);
+            Direct direct = pos.getDirect(center);
+            pos = pos.offset(center);
+
+            snakes.add(new Snake(id, pos, direct, Color.getColor(I)));
+            I++;
         }
     }
 
@@ -62,6 +82,7 @@ public class Engine {
         ArrayList<Map<String, Object>> snakeInfo = new ArrayList<>();
         Map<String, Object> block;
         Location pos;
+        Direct direct;
 
         for (Snake snake : snakes) {
             block = new HashMap<>();
@@ -69,8 +90,11 @@ public class Engine {
             block.put("color", snake.getColor().name());
 
             pos = snake.getLocation();
+            direct = snake.getDirect();
+
             block.put("posX", pos.X);
             block.put("posY", pos.Y);
+            block.put("direction", direct.name());
             snakeInfo.add(block);
         }
 
@@ -82,6 +106,14 @@ public class Engine {
     public void timerEvent() {
         if (! launched) return;
 
+        if (engineTimer == 0) {
+            this.nextWorld();
+            engineTimer = speed;
+        } else
+            engineTimer--;
+    }
+
+    public void nextWorld() {
         boolean justKilled;
         Cell cell;
 
@@ -94,9 +126,7 @@ public class Engine {
                 this.sendCollision(snake.getId(), cell.getOwner());
             }
         }
-
         mechanic.sendToClients("tick", this.getTickData(), this);
-
         this.checkGameEnd();
     }
 
@@ -121,8 +151,19 @@ public class Engine {
         return data;
     }
 
-    public void handleKey(int snakeId, Direct direct) {
-        snakes.get(snakeId).turn(direct);
+    private Snake getSnakeById(long snakeId) {
+        for (Snake snake : snakes) {
+            if (snake.getId() == snakeId)
+                return snake;
+        }
+        return null;
+    }
+
+    public void handleKey(long snakeId, Direct direct) {
+        Snake snake = getSnakeById(snakeId);
+        if (snake != null) {
+            snake.turn(direct);
+        }
     }
 
 
@@ -131,22 +172,21 @@ public class Engine {
         return this.cells.get(pos);
     }
 
-    private void sendCollision(int snakeId, int withId) {
+    private void sendCollision(long snakeId, long withId) {
         Map<String, Object> data = new HashMap<>();
         data.put("snakeId", snakeId);
         data.put("withId", withId);
-        mechanic.sendToClients("endGame", data, this);
+        mechanic.sendToClients("collision", data, this);
     }
 
-    private boolean collisionFor(int J) {
-        Snake snakej = snakes.get(J);
+    private boolean collisionFor(Snake snakej) {
+        int J = snakes.indexOf(snakej);
         Location aliveLoc = snakej.getLocation();
 
-        for (int I = 0; I < snakes.size(); I++)
-            if (I != J && snakes.get(I).getLocation().equals(aliveLoc)) {
-
+        for (Snake snake : snakes)
+            if (snake != snakej && snake.getLocation().equals(aliveLoc)) {
                 snakej.setAlive(false);
-                this.sendCollision(J, I);
+                this.sendCollision(snakej.getId(), snake.getId());
                 return true;
             }
 
@@ -155,28 +195,27 @@ public class Engine {
 
     private void checkGameEnd() {
         int alives = 0;
+        Snake winner = null;
         for (Snake snake : snakes)
-            if (snake.isAlive() && ! collisionFor(snake.getId()))
+            if (snake.isAlive() && ! collisionFor(snake)) {
                 alives++;
+                winner = snake;
+            }
 
         if (alives <= 1)
-            this.endGame();
+            this.endGame(winner);
     }
 
-    private int findWinner() {
-        for (Snake snake : snakes) {
-            if (snake.isAlive())
-                return snake.getId();
-        }
-        return -1;
-    }
-
-    private void endGame() {
+    private void endGame(Snake winner) {
         Map<String, Object> data = new HashMap<>();
 
-        int winner = findWinner();
-        data.put("winner", winner);
-        data.put("color", snakes.get(winner).getColor().name());
+        if (winner != null) {
+            data.put("winner", winner.getId());
+            data.put("color", winner.getColor().name());
+        } else {
+            data.put("winner", -1);
+            data.put("color", "");
+        }
 
         mechanic.sendToClients("endGame", data, this);
         mechanic.endGame(this);
@@ -186,7 +225,7 @@ public class Engine {
         if (action.equals("handleKey")) {
             String dirStr = (String) data.get("direct");
             Direct dir = Direct.valueOf(dirStr);
-            int snakeId = (Integer) data.get("snakeId");
+            long snakeId = (Long) data.get("snakeId");
 
             this.handleKey(snakeId, dir);
         }

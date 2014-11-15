@@ -22,7 +22,10 @@ public class CustomWebSocketCreator implements WebSocketCreator {
         HttpSession session = req.getHttpServletRequest().getSession();
         if (session != null) {
             String login = session.getAttribute("login").toString();
-            return new GameWebSocket(login, webSocketService);
+
+            if (login != null) {
+                return new GameWebSocket(login, webSocketService);
+            }
         }
         return null;
     }

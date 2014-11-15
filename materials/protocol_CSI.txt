@@ -3,16 +3,19 @@
 {
     action: handleKey,
     data: {
-        direct: Direct
+        direction: string
     }
 }
 
 {
-    confirm: loaded | handled
+    confirm: loaded
 }
 
 {
     action: startGameSession,
+    width: int,
+    height: int,
+    speed: int
 }
 
 {
@@ -47,7 +50,8 @@
 {
     action: endGame,
     data: {
-        snakeID: int,
+        snakeId: int,
+        winner: int,
         isWinner: bool
     }
 }

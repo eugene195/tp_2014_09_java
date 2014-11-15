@@ -30,6 +30,16 @@ public class Location {
             Y = left;
     }
 
+    public Direct getDirect(Location where) {
+        int dx = X - where.X,
+            dy = Y - where.Y;
+        return Direct.parse(dx, dy);
+    }
+
+    public Location offset(Location shift) {
+        return new Location(X + shift.X, Y + shift.Y);
+    }
+
     public boolean equals(final Location loc) {
         return (X == loc.X && Y == loc.Y);
     }

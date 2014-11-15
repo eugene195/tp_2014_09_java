@@ -11,7 +11,7 @@ function SnakeDrawer() {
         this.context = context;
         this.context.clearRect(snake.x - this.R - 3, snake.y - this.R - 3, this.D + 6, this.D + 6);
         if (tail.length > 0)
-            this.drawTail(tail);
+            this.drawTail(tail, snake.color);
         this.drawHead(snake);
     }
 
@@ -19,16 +19,16 @@ function SnakeDrawer() {
         this.context.beginPath();
         this.context.arc(snake.x, snake.y, this.R, 0, 2 * Math.PI, false);
         this.context.fillStyle = this.headColor;
-        this.context.fill();
+        this.context.fill();file://localhost/
         this.context.lineWidth = 1;
         this.context.strokeStyle = '#003300';
         this.context.stroke();
     }
 
-    this.drawTail = function(tail) {
+    this.drawTail = function(tail, color) {
         this.context.beginPath();
         this.context.lineWidth = 4;
-        this.context.strokeStyle = 'white';
+        this.context.strokeStyle = color;
 
         if (tail.length == 0) return;
 

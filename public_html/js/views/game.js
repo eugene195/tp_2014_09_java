@@ -2,17 +2,21 @@ define([
     'backbone',
     'tmpl/game',
     'controllers/socketman',
+    'controllers/viewman',
     'api/primitives',
     'api/drawer'
 ], function(
     Backbone,
     tmpl,
-    SocketMan
+    SocketMan,
+    viewMan
 ){
 
-// TODO we need a hide function to unbind keypress event from $document
 var GameView = Backbone.View.extend({
     controller: SocketMan,
+    viewman: viewMan,
+    width: 0,
+    height: 0,
     drawer : new SnakeDrawer(),
     snakeHolder : new CurrentSnakeHolder(),
     snakes : [],
@@ -26,11 +30,18 @@ var GameView = Backbone.View.extend({
     },
 
     showWait: function () {
-//    To Test
+//    Todo
         alert("Please wait for data to load");
     },
 
+    showNoGame: function () {
+//    TODO
+//        alert("The game hasn't started yet");
+    },
+
     startGame: function(data) {
+        this.width = data.width;
+        this.height = data.height;
         var myID = data.snakeId;
         var length = data.snakes.length;
         for (var i = 0; i < length; i++) {
@@ -44,6 +55,25 @@ var GameView = Backbone.View.extend({
         this.update();
     },
 
+    onTick: function(data) {
+        var length = data.snakes.length;
+        for (var i = 0; i < length; i++) {
+            var current = data.snakes[i];
+            this.snakes[current.snakeId].setCoordinates(current.newX, current.newY);
+        }
+        var canvas = document.getElementById('snakeGame'),
+        context = canvas.getContext('2d');
+        this.redraw(context);
+    },
+
+    endGame: function (data) {
+        var winnerId = data.winner;
+        if (this.snakeHolder.isWinner(winnerId))
+            alert("You are a winner");
+        else
+            alert("You are a loser");
+    },
+
     initialize: function() {
         this.render();
         this.$el.hide();
@@ -51,32 +81,42 @@ var GameView = Backbone.View.extend({
         this.started = false;
         this.listenTo(this.controller, 'startLoad', this.showWait);
         this.listenTo(this.controller, 'adjustGame', this.startGame);
+        this.listenTo(this.controller, 'endGame', this.endGame);
+        this.listenTo(this.controller, 'tick', this.onTick);
+        this.listenTo(this.viewman, 'view-hide', this.onhide);
+
+        $(document).on('keydown', {object : this}, this.keyPressed);
+
     },
 
     render: function () {
-        this.$el.html(this.template());
+        var sizes = { width: this.width,
+                      height: this.height
+                    };
+        this.$el.html(this.template(sizes));
     },
 
     show: function () {
-        this.trigger('reshow', this);
-        // After resources were loaded
-//        this.controller.confirm();
+        this.trigger('rerender', this);
         this.started = true;
-
-        this.update();
-
     },
 
     update: function () {
+        this.trigger('rerender', this);
         if (! this.started) {
-//            this.showNoGame();
+            this.showNoGame();
             return;
         }
-        $(document).on('keydown', {object : this}, this.keyPressed);
-//        $(document).bind('keydown', this.keyPressed);
+
+//      Need to be somewhere else
+
         var canvas = document.getElementById('snakeGame'),
         context = canvas.getContext('2d');
-        debugger;
+
+        this.redraw(context);
+    },
+
+    redraw: function (context) {
         var length = this.snakes.length;
         for(var i = 0; i < length; i++) {
             var current = this.snakes[i];
@@ -84,10 +124,12 @@ var GameView = Backbone.View.extend({
         }
     },
 
-    onhide: function () {
-        $(document).unbind('keydown');
-        this.started = false;
-        this.controller.dropSocket();
+    onhide: function (view) {
+        if (this === view) {
+//            $(document).off('keydown');
+            this.started = false;
+//            this.controller.dropSocket();
+        }
     },
 
 //---------------------
@@ -99,27 +141,25 @@ var GameView = Backbone.View.extend({
     keyPressed: function(e) {
         var that = e.data.object;
         var code = e.keyCode || e.which;
-        debugger;
         var dirs = {
-            37: new Direction(-1, 0),
-            38: new Direction(0, -1),
-            39: new Direction(1, 0),
-            40: new Direction(0, 1)
+            37: "LEFT",
+            38: "DOWN",
+            39: "RIGHT",
+            40: "UP"
         };
-
-        var message = {
-            action: "handleKey",
-            data : {
-                direct: dirs[code]
+        if (code in dirs) {
+            var message = {
+                action: "handleKey",
+                data : {
+                    direct: dirs[code]
+                }
+            }
+            if (that.snakeHolder.setDirection(dirs[code])) {
+                that.controller.sendMessage(message);
             }
         }
-        debugger;
-        that.controller.sendMessage(message);
-
-//        var mySnake = snakes[this.snakeId];
-//        if (mySnake.changeDirection(dirs[code])) {
-//            this.socketManager.changeDirection(dirs[code]);
-//        }
+        else
+            Console.log("Unknown key");
     }
 
     });

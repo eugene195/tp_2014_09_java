@@ -1,6 +1,7 @@
 package global.mechanic.sockets;
 
 import global.WebSocketService;
+import global.engine.Params;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -32,19 +33,35 @@ public class GameWebSocket {
     @OnWebSocketMessage
     public void onMessage(String message) {
         JSONObject json = new JSONObject(message);
-        String action = json.getString("action");
 
+        if (json.has("confirm")) {
+            String confirm = json.getString("confirm");
+            this.handleConfirm(confirm, json);
+        }
+        else if (json.has("action")) {
+            String action = json.getString("action");
+            this.handleAction(action, json);
+        }
+    }
+
+    private void handleConfirm(String confirm, JSONObject json) {
+        if (confirm.equals("loaded")) {
+
+        }
+    }
+
+    private void handleAction(String action, JSONObject json) {
         if (action.equals("startGameSession")) {
             setSession(session);
-            webSocketService.startGameSession(json.getInt("playersCnt"));
+
+            Params params = new Params();
+            params.setParams(json);
+
+            webSocketService.startGameSession(params, this);
         }
         else if (action.equals("addUser")) {
-//            int sessionId = json.getInt("sessionId");
-            int sessionId = 0;
+            int sessionId = json.getInt("sessionId");
             webSocketService.addUser(sessionId, this);
-        }
-        else if (action.equals("handleKey")) {
-            System.out.print("Key being handled");
         }
         else {
             JSONObject dataJson = json.getJSONObject("data");

@@ -1,27 +1,28 @@
 package global.mechanic;
 
+import global.engine.Params;
 import global.models.Player;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by eugene on 10/19/14.
  */
 public class GameSession {
+    private static AtomicLong idCounter = new AtomicLong();
+
     private final long startTime;
-    private final int playersCnt;
+    private Params params;
 
     private final Map<String, Player> players = new HashMap<>();
 
-    public GameSession(int playersCnt) {
+    public GameSession(Params params, String name) {
         startTime = new Date().getTime();
-        this.playersCnt = playersCnt;
-    }
+        this.params = params;
 
-    public GameSession(String user1, String user2) {
-        this(2);
-        players.put(user1, new Player(user1, 0));
-        players.put(user2, new Player(user2, 1));
+        long id = idCounter.getAndIncrement();
+        players.put(name, new Player(name, id));
     }
 
     /**
@@ -30,21 +31,27 @@ public class GameSession {
      * @return Is a gameSession fully filled
      */
     public boolean add(String name) {
-        int newId = players.size();
-        Player player = new Player(name, newId);
+        long id = idCounter.getAndIncrement();
+        Player player = new Player(name, id);
         players.put(name, player);
 
-        if (players.size() == playersCnt) {
+        if (players.size() == params.playersCnt) {
             return true;
         }
         return false;
+    }
+
+    public Params getParams() { return this.params; }
+
+    public int getPlayersCnt() {
+        return this.params.playersCnt;
     }
 
     public Set<String> getPlayers() {
         return players.keySet();
     }
 
-    public int getSnakeId(String name) {
+    public long getSnakeId(String name) {
         return players.get(name).getSnake();
     }
 

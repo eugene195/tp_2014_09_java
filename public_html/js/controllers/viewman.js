@@ -6,7 +6,7 @@ define([
     'backbone'
 ], function (Backbone) {
 
-    var Manager = Backbone.View.extend({
+    var Manager = {
 
         subscribe: function (views) {
             for (var I in views) {
@@ -24,15 +24,21 @@ define([
             this.reshow(view);
         },
 
+        triggerView: function (eventName) {
+            this.trigger(eventName, this.currentView);
+        },
+
         reshow: function (view) {
             if (this.currentView) {
+                this.triggerView('view-hide');
                 this.currentView.$el.hide();
             }
             this.currentView = view;
+            this.triggerView('view-show');
             view.$el.show();
         }
 
-    });
+    };
 
-    return new Manager();
+    return _.extend(Manager, Backbone.Events);
 });

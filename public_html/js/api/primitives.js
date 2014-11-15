@@ -31,21 +31,35 @@ function Tail() {
 function Snake(snakeObj) {
     this.x = snakeObj.posX;
     this.y = snakeObj.posY;
-    this.color = snakeObj.color;
+    this.color = snakeObj.color.toLowerCase();
     this.direction = snakeObj.direction;
+    this.snakeId = snakeObj.snakeId;
     this.tail = new Tail();
 
     this.getTail = function() {
         return this.tail.getTail();
     }
 
+    this.grow = function () {
+        this.tail.append(this.x, this.y);
+    }
+
     this.setCoordinates = function(x, y) {
+        if (this.x && this.y) {
+            this.grow();
+        }
         this.x = x;
         this.y = y;
     }
 
     this.changeDirection = function(newDirection) {
         this.direction = newDirection;
+    }
+
+    this.isWinner = function(winnerId) {
+        if (winnerId == this.snakeId)
+            return true;
+        return false;
     }
 }
 
@@ -60,11 +74,13 @@ function CurrentSnakeHolder () {
         this.snake.setCoordinates(x, y);
     }
 
+    this.isWinner = function(winnerID) {
+        return this.snake.isWinner(winnerID);
+    }
+
     this.setDirection = function(direction) {
-        if ( !(this.snake.direction == direction) ) {
-            this.snake.changeDirection(direction);
-            return true;
-        }
-        return false;
+//        Some BS code
+        this.snake.changeDirection(direction);
+        return true;
     }
 }

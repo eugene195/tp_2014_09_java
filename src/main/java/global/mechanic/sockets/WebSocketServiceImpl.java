@@ -1,6 +1,7 @@
 package global.mechanic.sockets;
 
 import global.GameMechanics;
+import global.engine.Params;
 import global.mechanic.GameSession;
 import global.WebSocketService;
 
@@ -21,15 +22,30 @@ public class WebSocketServiceImpl implements WebSocketService {
         this.mechanics = mechanics;
     }
 
-    public void startGameSession(int playersCnt) {
-        this.mechanics.startGameSession(playersCnt);
+    @Override
+    public void startGameSession(Params params, GameWebSocket user) {
+        String myName = user.getMyName();
+
+        if (! nameToGame.containsKey(myName)) {
+            userSockets.put(myName, user);
+            this.mechanics.startGameSession(params, myName);
+        }
+        else {
+            System.out.println("Repeated attempt to start game from user: " + myName);
+        }
     }
 
     @Override
     public void addUser(int sessionId, GameWebSocket user) {
         String myName = user.getMyName();
-        userSockets.put(myName, user);
-        mechanics.addToSession(sessionId, myName);
+
+        if (! nameToGame.containsKey(myName)) {
+            userSockets.put(myName, user);
+            this.mechanics.addToSession(sessionId, myName);
+        }
+        else {
+            System.out.println("Repeated attempt to add to game from user: " + myName);
+        }
     }
 
     @Override
@@ -72,5 +88,10 @@ public class WebSocketServiceImpl implements WebSocketService {
             GameWebSocket socket = userSockets.get(user);
             socket.sendToClient("notifyEnd");
         }
+    }
+
+    @Override
+    public void handleKey(String playerName, String direction) {
+
     }
 }
