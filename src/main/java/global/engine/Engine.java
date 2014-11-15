@@ -15,12 +15,13 @@ public class Engine {
     private boolean launched;
 
     private int width, height;
-    private int speed;
+    private final int speed;
+    private int engineTimer;
 
     private final ArrayList<Cell> cells = new ArrayList<>();
     private final ArrayList<Snake> snakes = new ArrayList<>();
 
-    private GameMechanics mechanic;
+    private final GameMechanics mechanic;
 
     //---------------------------------------------------------------------------------------------------
 
@@ -28,6 +29,7 @@ public class Engine {
         this.launched = false;
         this.mechanic = mechanic;
         this.speed = speed;
+        this.engineTimer= speed;
 
         this.generateField(width, height);
     }
@@ -104,6 +106,14 @@ public class Engine {
     public void timerEvent() {
         if (! launched) return;
 
+        if (engineTimer == 0) {
+            this.nextWorld();
+            engineTimer = speed;
+        } else
+            engineTimer--;
+    }
+
+    public void nextWorld() {
         boolean justKilled;
         Cell cell;
 
@@ -118,8 +128,7 @@ public class Engine {
         }
 
         mechanic.sendToClients("tick", this.getTickData(), this);
-//TODO
-//        this.checkGameEnd();
+        this.checkGameEnd();
     }
 
 
@@ -168,7 +177,7 @@ public class Engine {
         Map<String, Object> data = new HashMap<>();
         data.put("snakeId", snakeId);
         data.put("withId", withId);
-        mechanic.sendToClients("endGame", data, this);
+        mechanic.sendToClients("collision", data, this);
     }
 
     private boolean collisionFor(Snake snakej) {
