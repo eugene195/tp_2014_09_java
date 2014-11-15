@@ -64,6 +64,7 @@ public class Engine {
 
             Location pos = new Location((int) posX, (int) posY);
             Direct direct = pos.getDirect(center);
+            pos = pos.offset(center);
 
             snakes.add(new Snake(id, pos, direct, Color.getColor(I)));
             I++;
