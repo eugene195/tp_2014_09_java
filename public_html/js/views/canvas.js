@@ -2,12 +2,44 @@ define([
     'backbone',
     'tmpl/canvas',
     'controllers/viewman',
-    'api/primitives'
+    'api/primitives',
+    'api/button'
 ], function(
     Backbone,
     tmpl,
     viewManager
 ){
+
+    function storageSupport() {
+        try {
+            return 'localStorage' in window && window['localStorage'] !== null;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    var Params = {
+        amp: 100,
+        freq: 40,
+        base: 200,
+
+        load: function () {
+            if (storageSupport()) {
+                var localStorage = window.localStorage;
+                this.amp = localStorage['amp'] || 100;
+                this.freq = localStorage['freq'] || 40;
+                this.base = localStorage['base'] || 200;
+            }
+        },
+        save: function () {
+            if (storageSupport()) {
+                var localStorage = window.localStorage;
+                localStorage['amp'] = this.amp;
+                localStorage['freq'] = this.freq;
+                localStorage['base'] = this.base;
+            }
+        }
+    };
 
     function sinePoint(base, X, amp, freq) {
         return base + (amp * Math.sin(freq * X * Math.PI));
@@ -37,10 +69,6 @@ define([
         },
 
         launch: function () {
-            var amp = 100,
-                freq = 40,
-                base = 200;
-
             var canvas = document.getElementById('myCanvas'),
                 context = canvas.getContext('2d'),
                 btnCanvas = document.getElementById('btnCanvas'),
@@ -50,10 +78,10 @@ define([
             var tail = new Tail();
 
             var btnArray = [
-                new Button(0, "Frequency Up", function () { freq += 10; }),
-                new Button(160, "Frequency Down", function () { freq -= 10; }),
-                new Button(320, "Amplitude Up", function () { amp += 10; }),
-                new Button(480, "Amplitude Down", function () { amp -= 10; }),
+                new Button(0, "Frequency Up", function () { Params.freq += 10; }),
+                new Button(160, "Frequency Down", function () { Params.freq -= 10; }),
+                new Button(320, "Amplitude Up", function () { Params.amp += 10; }),
+                new Button(480, "Amplitude Down", function () { Params.amp -= 10; }),
                 new Button(640, "Pause", function () { this.pause = !this.pause;}.bind(this))
             ];
 
@@ -83,7 +111,7 @@ define([
 
                     if (newX < canvas.width - circle.diameter()) {
                         circle.x = newX;
-                        circle.y = sinePoint(base, newX/1000, amp, freq);
+                        circle.y = sinePoint(Params.base, newX/1000, Params.amp, Params.freq);
                         tail.append(circle.x, circle.y);
                     }
                     else {

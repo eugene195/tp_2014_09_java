@@ -8,7 +8,7 @@ function Snake(snakeObj) {
     this.snakeId = snakeObj.snakeId;
 
     this.grow = function () {
-        this.tail.append(this.x, this.y);
+        this.tail.append(this.head.x, this.head.y);
     };
 
     this.setCoordinates = function(x, y) {

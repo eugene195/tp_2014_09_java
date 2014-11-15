@@ -34,13 +34,3 @@ function Button(start, text, onclick) {
         }
     };
 }
-
-function Buttons() {
-    this.buttons = [];
-
-    this.draw = function (context) {
-        for (var I in buttons) {
-            buttons[I].drawButton(context);
-        }
-    };
-}
