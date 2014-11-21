@@ -51,10 +51,10 @@ public class ProfilePage extends WebPage {
         JSONObject json = new JSONObject();
 
         if (this.successChangeProfile) {
-            json.put("status", "1");
+            json.put("status", OK);
         }
         else {
-            json.put("status", "-1");
+            json.put("status", FAILED);
             json.put("message", messageError);
         }
         printout.print(json);

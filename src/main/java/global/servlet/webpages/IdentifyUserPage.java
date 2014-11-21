@@ -32,13 +32,13 @@ public class IdentifyUserPage extends WebPage {
         JSONObject json = new JSONObject();
         HttpSession session = request.getSession(false);
         if (session == null) {
-            json.put("status", "-1");
+            json.put("status", FAILED);
         } else {
             long userId = getUserId(session);
             if (userId == -1) {
-                json.put("status", "-1");
+                json.put("status", FAILED);
             } else {
-                json.put("status", "1");
+                json.put("status", OK);
                 json.put("login", session.getAttribute("login").toString());
                 System.out.append("login:").append(session.getAttribute("login").toString());
             }

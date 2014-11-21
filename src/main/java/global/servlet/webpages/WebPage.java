@@ -16,6 +16,8 @@ import java.util.Map;
 public abstract class WebPage {
     protected static final String CONTENT_TYPE = "text/html;charset=utf-8";
     protected boolean zombie;
+    protected static final String OK = "1";
+    protected static final String FAILED = "-1";
 
     public WebPage() {
         this.zombie = false;

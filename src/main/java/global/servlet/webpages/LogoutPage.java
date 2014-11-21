@@ -38,11 +38,10 @@ public class LogoutPage extends WebPage {
             if (this.userSessions.containsKey(login)) {
                 this.userSessions.remove(login);
             }
-
-            json.put("status", "1");
+            json.put("status", OK);
         }
         else {
-            json.put("status", "-1");
+            json.put("status", FAILED);
             json.put("message", "There is no session for you");
         }
 

@@ -33,18 +33,16 @@ public class ScorePage extends WebPage {
     {
         PrintWriter printout = response.getWriter();
         JSONObject json = new JSONObject();
-
         this.scores = null;
-
         this.msys.sendMessage(new BestScoresQuery(), "dbman");
         setZombie();
 
         if (this.scores != null) {
-            json.put("status", "1");
+            json.put("status", OK);
             json.put("bestScores", scores);
         }
         else {
-            json.put("status", "-1");
+            json.put("status", FAILED);
             json.put("message", "There is no session for you");
         }
 

@@ -22,7 +22,6 @@ import org.json.JSONObject;
  */
 public class RegisterPage extends WebPage {
     public static final String URL = "/register";
-
     private final MessageSystem msys;
 
     private boolean successReg;
@@ -36,6 +35,8 @@ public class RegisterPage extends WebPage {
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
+        PrintWriter printout = response.getWriter();
+        msgList.forEach(printout::print);
         this.msgList.clear();
     }
 
@@ -53,11 +54,10 @@ public class RegisterPage extends WebPage {
         PrintWriter printout = response.getWriter();
         JSONObject json = new JSONObject();
 
-        if (this.successReg) {
-            json.put("status", "1");
-        }
+        if (this.successReg)
+            json.put("status", OK);
         else {
-            json.put("status", "-1");
+            json.put("status", FAILED);
             json.put("message", "Username already exists");
         }
         printout.print(json);
