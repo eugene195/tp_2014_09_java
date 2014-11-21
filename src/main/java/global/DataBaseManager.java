@@ -7,15 +7,15 @@ import global.models.UserSession;
  */
 public interface DataBaseManager extends Runnable {
 
-    public void getUsers();
+    void getUsers();
 
-    public void checkAuth(UserSession userSession, String passw);
+    void checkAuth(UserSession userSession, String passw);
 
-    public void registerUser(String login, String passw);
+    void registerUser(String login, String passw);
 
-    public void bestScores();
+    void bestScores();
 
-    public void changePassword(String login, String curPassw, String newPassw);
+    void changePassword(String login, String curPassw, String newPassw);
 
     public void deleteUser(String login);
 

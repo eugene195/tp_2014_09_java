@@ -14,7 +14,7 @@
 	  	<div class="alert-error"></div>
 
 	  	<div class="form__content__menu-item">
-			<a href="#game" class="form__content__menu-item__link">Start Game</a>
+			<a href="#gamelist" class="form__content__menu-item__link">Start Game</a>
 		</div>
 		<div class="form__content__menu-item">
 			<a href="#scoreboard" class="form__content__menu-item__link">Scoreboard</a>

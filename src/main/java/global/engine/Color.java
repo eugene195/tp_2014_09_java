@@ -4,14 +4,18 @@ package global.engine;
  * Created by max on 25.10.14.
  */
 public enum Color {
-    UNKNOWN,
     BLACK,
+    ORANGE,
     WHITE,
     RED,
+    VIOLET,
     GREEN,
     BLUE,
-    VIOLET,
-    ORANGE,
     CYAN,
-    BROWN;
+    BROWN,
+    UNKNOWN;
+
+    public static Color getColor(int I) {
+        return Color.values()[I];
+    }
 }

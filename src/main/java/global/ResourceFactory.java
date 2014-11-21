@@ -6,7 +6,6 @@ package global;
 public interface ResourceFactory {
     String RESOURCE_ROOT = "data";
 
-    public <ResourceType extends Object> ResourceType get(String resourceName);
-
-    public void loadAllResources(String root);
+    <ResourceType extends Object> ResourceType get(String resourceName);
+    void loadAllResources(String root);
 }

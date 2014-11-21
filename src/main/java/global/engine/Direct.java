@@ -10,6 +10,17 @@ public enum Direct {
     UP,
     DOWN;
 
+    public static Direct parse(int dx, int dy) {
+        if (Math.abs(dx) >= Math.abs(dy)) {
+            if (dx >= 0) return RIGHT;
+            else return LEFT;
+        }
+        else {
+            if (dy >= 0) return UP;
+            else return DOWN;
+        }
+    }
+
     public Direct invert() {
         switch (this) {
             case LEFT: return RIGHT;

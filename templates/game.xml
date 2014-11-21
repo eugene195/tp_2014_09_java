@@ -1,4 +1,4 @@
-<fest:template xmlns:fest="http://fest.mail.ru">
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="sizes">
 
     <div class="gamepage__header">
         <div class="gamepage__header__infobar">
@@ -13,6 +13,15 @@
         <input type="button" id="gmscr" value="Play" name="gamebtn" />
         Game Screen
         <a href="/game">Let's do it</a>
+
+<br/>
+
+        <canvas id="snakeGame" style="border: black solid 2px">
+            <fest:attributes>
+                <fest:attribute name="width"><fest:value>sizes.width</fest:value></fest:attribute>
+                <fest:attribute name="height"><fest:value>sizes.height</fest:value></fest:attribute>
+            </fest:attributes>
+        </canvas>
     </div>
 
     <div class="gamepage__footer">

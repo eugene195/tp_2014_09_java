@@ -31,7 +31,7 @@ public class ScorePage extends WebPage {
             throws IOException
     {
         PrintWriter printout = response.getWriter();
-        JSONObject JObject = new JSONObject();
+        JSONObject jObject = new JSONObject();
 
         this.scores = null;
         this.msys.sendMessage(new BestScoresQuery(), "dbman");
@@ -39,16 +39,16 @@ public class ScorePage extends WebPage {
 
 
         if (this.scores != null) {
-            JObject.put("status", "1");
-            JObject.put("bestScores", scores);
+            jObject.put("status", OK);
+            jObject.put("bestScores", scores);
         }
         else {
-            JObject.put("status", "-1");
-            JObject.put("message", "There is no session for you");
+            jObject.put("status", FAILED);
+            jObject.put("message", "There is no session for you");
         }
 
         response.setContentType("application/json; charset=UTF-8");
-        printout.print(JObject);
+        printout.print(jObject);
         printout.flush();
     }
 

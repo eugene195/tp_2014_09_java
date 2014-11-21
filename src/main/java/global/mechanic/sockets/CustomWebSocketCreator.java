@@ -1,6 +1,5 @@
 package global.mechanic.sockets;
 
-import global.GameMechanics;
 import global.WebSocketService;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
@@ -12,12 +11,9 @@ import javax.servlet.http.HttpSession;
  * Created by eugene on 10/19/14.
  */
 public class CustomWebSocketCreator implements WebSocketCreator {
-    private GameMechanics gameMechanics;
-    private WebSocketService webSocketService;
+    private final WebSocketService webSocketService;
 
-    public CustomWebSocketCreator(GameMechanics gameMechanics,
-                                  WebSocketService webSocketService) {
-        this.gameMechanics = gameMechanics;
+    public CustomWebSocketCreator(WebSocketService webSocketService) {
         this.webSocketService = webSocketService;
     }
 
@@ -26,9 +22,11 @@ public class CustomWebSocketCreator implements WebSocketCreator {
         HttpSession session = req.getHttpServletRequest().getSession();
         if (session != null) {
             String login = session.getAttribute("login").toString();
-            return new GameWebSocket(login, gameMechanics, webSocketService);
+
+            if (login != null) {
+                return new GameWebSocket(login, webSocketService);
+            }
         }
-        else
-            return null;
+        return null;
     }
 }

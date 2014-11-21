@@ -5,7 +5,7 @@ package global.engine;
  */
 public class Cell {
     private Location loc;
-    private Color color;
+    private long ownerId;
     private boolean _isGrasped;
 
     public Cell() {
@@ -14,7 +14,7 @@ public class Cell {
 
     public Cell(int X, int Y) {
         this.loc = new Location(X, Y);
-        this.color = Color.WHITE;
+        this.ownerId = -1;
         this._isGrasped = false;
     }
 
@@ -23,9 +23,13 @@ public class Cell {
         this.loc.Y = Y;
     }
 
-    public void setColor(Color new_color) {
-        this.color = new_color;
+    public void setOwner(long newOwner) {
+        this.ownerId = newOwner;
         this._isGrasped = true;
+    }
+
+    public long getOwner() {
+        return this.ownerId;
     }
 
     public boolean isGrasped() {

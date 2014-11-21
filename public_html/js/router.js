@@ -6,8 +6,9 @@ define([
     'views/scoreboard',
     'views/register',
     'views/profile',
-    'views/viewman',
-    'views/canvas'
+    'controllers/viewman',
+    'views/canvas',
+    'views/gamelist'
 ], function(
     Backbone,
     main,
@@ -17,17 +18,22 @@ define([
     register,
     profile,
     viewman,
-    canvas
+    canvas,
+    gamelist
     
 ){
-    viewman.subscribe([main, game, login, scoreboard, register, profile, canvas])
+    viewman.subscribe([main, game, login, scoreboard, register, profile, canvas, gamelist])
 
     var Router = Backbone.Router.extend({
         initialize: function () {
             this.listenTo(login, 'success', this.toIndex);
             this.listenTo(main, 'success', this.toIndex);
-            this.listenTo(profile, 'anonymous', this.toLogin);
             this.listenTo(register, 'success', this.toLogin);
+
+            this.listenTo(profile, 'anonymous', this.toLogin);
+            this.listenTo(gamelist, 'anonymous', this.toLogin);
+
+            this.listenTo(gamelist, 'start', this.toGame);
         },
 
         routes: {
@@ -38,6 +44,7 @@ define([
             'register': 'registerAction',
             'profile': 'profileAction',
             'canvas': 'canvasAction',
+            'gamelist': 'gamelistAction',
             '*default': 'defaultActions'
         },
 
@@ -62,11 +69,18 @@ define([
         profileAction: function () {
             profile.show();
         },
+        gamelistAction: function () {
+            gamelist.show();
+        },
         canvasAction: function () {
             canvas.show();
         },
+
         toIndex: function () {
             this.navigate('', {trigger: true});
+        },
+        toGame: function () {
+            this.navigate('game', {trigger: true});
         },
         toLogin: function () {
             this.navigate('login', {trigger: true});

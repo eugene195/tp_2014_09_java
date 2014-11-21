@@ -1,0 +1,5 @@
+<class type='global.resources.ServerResource'>
+    <port>8081</port>
+    <database>g01_java_db</database>
+    <dbuser>g01_user</dbuser>
+</class>

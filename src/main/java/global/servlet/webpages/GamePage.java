@@ -15,6 +15,7 @@ public class GamePage extends WebPage {
     public static final String TML_PATH = "GamePage.html";
 
     @Override
+//    TODO
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
@@ -25,7 +26,6 @@ public class GamePage extends WebPage {
             context.put("myName", session.getAttribute("login").toString());
         }
         else {
-            //TODO: Send error to AuthPage
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.sendRedirect(AuthPage.URL);
         }

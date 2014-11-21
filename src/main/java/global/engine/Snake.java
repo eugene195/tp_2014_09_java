@@ -4,21 +4,27 @@ package global.engine;
  * Created by max on 25.10.14.
  */
 public class Snake {
+    private long snakeId;
     private Location loc;
     private Color color;
     private Direct curDirect;
     private boolean _isAlive;
 
     public Snake() {
-        this(0, 0, Direct.RIGHT, Color.BLACK);
+        this(-1, 0, 0, Direct.RIGHT, Color.BLACK);
     }
 
-    public Snake(Color color) {
-        this(0, 0, Direct.RIGHT, color);
+    public Snake(long snakeId, Color color) {
+        this(snakeId, 0, 0, Direct.RIGHT, color);
     }
 
-    public Snake(int X, int Y, Direct direct, Color color) {
-        this.loc = new Location(X, Y);
+    public Snake(long snakeId, int X, int Y, Direct direct, Color color) {
+        this(snakeId, new Location(X, Y), direct, color);
+    }
+
+    public Snake(long snakeId, Location loc, Direct direct, Color color) {
+        this.snakeId = snakeId;
+        this.loc = loc;
         this.color = color;
         this.curDirect = direct;
         this._isAlive = true;
@@ -48,20 +54,25 @@ public class Snake {
             curDirect = direct;
     }
 
-    public void grasp(Cell cell) {
+    /**
+     * This function is for grasping of new cell
+     * @param cell new cell to grasp
+     * @return justKilled
+     */
+    public boolean grasp(Cell cell) {
         if (! _isAlive)
-            return;
+            return false;
 
         if (cell.isGrasped()) {
             _isAlive = false;
-
-            // TODO: COLLISION
-
-            return;
+            return true;
         }
 
-        cell.setColor(color);
+        cell.setOwner(snakeId);
+        return false;
     }
+
+    public long getId() { return snakeId; }
 
     public Location getLocation() {
         return loc;
@@ -79,5 +90,13 @@ public class Snake {
 
     public boolean isAlive() {
         return _isAlive;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public Direct getDirect() {
+        return this.curDirect;
     }
 }

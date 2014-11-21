@@ -41,10 +41,10 @@ public class LogoutPage extends WebPage {
                 this.userSessions.remove(login);
             }
 
-            JObject.put("status", "1");
+            JObject.put("status", OK);
         }
         else {
-            JObject.put("status", "-1");
+            JObject.put("status", FAILED);
             JObject.put("message", "There is no session for you");
         }
 

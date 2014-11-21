@@ -23,7 +23,7 @@ public class AdminPage extends WebPage {
 
     public AdminPage(MessageSystem msys) {
         this.msys = msys;
-        this.registered = new ArrayList<UserDataSet>();
+        this.registered = new ArrayList<>();
         this.loggedIn = new HashSet();
     }
     @Override
@@ -36,7 +36,7 @@ public class AdminPage extends WebPage {
         this.setZombie();
 
         Map<String, Object> context = new LinkedHashMap<>();
-        response.setContentType("text/html;charset=utf-8");
+        response.setContentType(WebPage.CONTENT_TYPE);
         response.setStatus(HttpServletResponse.SC_OK);
 
         String timeString = request.getParameter("shutdown");

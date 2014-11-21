@@ -1,19 +1,21 @@
 package global;
 
-import global.models.Player;
+import global.engine.Params;
+import global.mechanic.GameSession;
 import global.mechanic.sockets.GameWebSocket;
+import java.util.Map;
 
 /**
  * Created by eugene on 10/19/14.
  */
 public interface WebSocketService {
-    public void addUser(GameWebSocket user);
+    void startGameSession(Params params, GameWebSocket user);
+    void addUser(int sessionId, GameWebSocket user);
 
-    public void notifyMyNewScore(Player user);
+    void sendToClients(String action, Map<String, Object> data, GameSession session);
+    void sendToEngine(String action, Map<String, Object> data, String myName);
 
-    public void notifyEnemyNewScore(Player user);
-
-    public void notifyStartGame(Player user);
-
-    public void notifyGameOver(Player user, boolean win);
+    void notifyStart(GameSession session);
+    void notifyEnd(GameSession session);
+    void handleKey(String playerName, String direction);
 }

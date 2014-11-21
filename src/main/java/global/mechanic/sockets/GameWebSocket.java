@@ -1,14 +1,16 @@
 package global.mechanic.sockets;
 
-import global.GameMechanics;
-import global.models.Player;
 import global.WebSocketService;
+import global.engine.Params;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by eugene on 10/19/14.
@@ -17,12 +19,10 @@ import org.json.simple.JSONObject;
 public class GameWebSocket {
     private String myName;
     private Session session;
-    private GameMechanics gameMechanics;
     private WebSocketService webSocketService;
 
-    public GameWebSocket(String myName, GameMechanics gameMechanics, WebSocketService webSocketService) {
+    public GameWebSocket(String myName, WebSocketService webSocketService) {
         this.myName = myName;
-        this.gameMechanics = gameMechanics;
         this.webSocketService = webSocketService;
     }
 
@@ -30,60 +30,77 @@ public class GameWebSocket {
         return myName;
     }
 
-    public void startGame(Player user) {
-        try {
-            JSONObject jsonStart = new JSONObject();
-            jsonStart.put("status", "start");
-            jsonStart.put("enemyName", user.getEnemyName());
-            session.getRemote().sendString(jsonStart.toJSONString());
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
-    }
-
-    public void gameOver(Player user, boolean win) {
-        try {
-            JSONObject jsonStart = new JSONObject();
-            jsonStart.put("status", "finish");
-            jsonStart.put("win", win);
-            session.getRemote().sendString(jsonStart.toJSONString());
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
-    }
-
     @OnWebSocketMessage
-    public void onMessage(String data) {
-        gameMechanics.incrementScore(myName);
+    public void onMessage(String message) {
+        JSONObject json = new JSONObject(message);
+
+        if (json.has("confirm")) {
+            String confirm = json.getString("confirm");
+            this.handleConfirm(confirm, json);
+        }
+        else if (json.has("action")) {
+            String action = json.getString("action");
+            this.handleAction(action, json);
+        }
+    }
+
+    private void handleConfirm(String confirm, JSONObject json) {
+        if (confirm.equals("loaded")) {
+
+        }
+    }
+
+    private void handleAction(String action, JSONObject json) {
+        if (action.equals("startGameSession")) {
+            setSession(session);
+
+            Params params = new Params();
+            params.setParams(json);
+
+            webSocketService.startGameSession(params, this);
+        }
+        else if (action.equals("addUser")) {
+            int sessionId = json.getInt("sessionId");
+            webSocketService.addUser(sessionId, this);
+        }
+        else {
+            JSONObject dataJson = json.getJSONObject("data");
+
+            Map<String, Object> data = new HashMap<>();
+            for (Object objKey : dataJson.keySet()) {
+                String key = (String) objKey;
+                data.put(key, dataJson.get(key));
+            }
+
+            webSocketService.sendToEngine(action, data, myName);
+        }
     }
 
     @OnWebSocketConnect
     public void onOpen(Session session) {
         setSession(session);
-        webSocketService.addUser(this);
-        gameMechanics.addUser(myName);
     }
 
-    public void setMyScore(Player user) {
-        JSONObject jsonStart = new JSONObject();
-        jsonStart.put("status", "increment");
-        jsonStart.put("name", myName);
-        jsonStart.put("score", user.getMyScore());
+    public void sendToClient(String action, Map<String, Object> data) {
+        JSONObject json = new JSONObject();
+        json.put("action", action);
+        json.put("status", "OK");
+        json.put("data", data);
+
         try {
-            session.getRemote().sendString(jsonStart.toJSONString());
+            session.getRemote().sendString(json.toString());
         } catch (Exception e) {
             System.out.print(e.toString());
         }
     }
 
-    public void setEnemyScore(Player user) {
-        JSONObject jsonStart = new JSONObject();
-        jsonStart.put("status", "increment");
-        jsonStart.put("name", user.getEnemyName());
-//        jsonStart.put("name", user.getEnemyNames());
-        jsonStart.put("score", user.getEnemyScore());
+    public void sendToClient(String action) {
+        JSONObject json = new JSONObject();
+        json.put("action", action);
+        json.put("status", "OK");
+
         try {
-            session.getRemote().sendString(jsonStart.toJSONString());
+            session.getRemote().sendString(json.toString());
         } catch (Exception e) {
             System.out.print(e.toString());
         }

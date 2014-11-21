@@ -25,12 +25,10 @@ public class AuthPage extends WebPage {
 
     private UserSession userSession;
 
-
     public AuthPage(MessageSystem msys, Map<String, UserSession> userSessions) {
         this.msys = msys;
         this.userSessions = userSessions;
     }
-
 
     @Override
     public void handlePost(HttpServletRequest request, HttpServletResponse response)
@@ -45,9 +43,8 @@ public class AuthPage extends WebPage {
             return;
         }
 
-        if (this.userSessions.containsKey(login)) {
+        if (this.userSessions.containsKey(login))
             this.userSessions.remove(login);
-        }
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
@@ -65,10 +62,10 @@ public class AuthPage extends WebPage {
             session.setAttribute("userId", this.userSession.getUserId());
             this.userSessions.put(userLogin, this.userSession);
 
-            JObject.put("status", "1");
+            JObject.put("status", OK);
         }
         else {
-            JObject.put("status", "-1");
+            JObject.put("status", FAILED);
             JObject.put("message", "Incorrect login or password");
         }
         printout.print(JObject);
