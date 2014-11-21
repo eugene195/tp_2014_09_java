@@ -25,12 +25,8 @@ import static java.lang.Thread.sleep;
  */
 
 public class ServletImpl extends HttpServlet implements Servlet {
-<<<<<<< HEAD
-
     private static final String SERVLET_ADDRESS = "servlet";
     private static Pattern patternUrl =  Pattern.compile("^/\\w+");
-=======
->>>>>>> 62c9db8d2b0031cf9cf4a869422eefb7c28c8916
     private final MessageSystem msys;
     private final Map<String, WebPage> pageMap = new HashMap<>();
     private final Map<String, UserSession> userSessions = new HashMap<>();
