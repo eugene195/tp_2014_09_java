@@ -17,11 +17,9 @@ import java.util.Map;
 public class LogoutPage extends WebPage {
     public static final String URL = "/logout";
 
-    private final MessageSystem msys;
     private final Map<String, UserSession> userSessions;
 
     public LogoutPage(MessageSystem msys, Map<String, UserSession> userSessions) {
-        this.msys = msys;
         this.userSessions = userSessions;
     }
 

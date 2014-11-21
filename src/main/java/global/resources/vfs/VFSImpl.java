@@ -14,11 +14,6 @@ public class VFSImpl implements VFS {
     }
 
     @Override
-    public boolean isDirectory(String path) {
-        return new File(root + path).isDirectory();
-    }
-
-    @Override
     public boolean isFile(String path) {
         return new File(path).isFile();
     }
@@ -62,27 +57,6 @@ public class VFSImpl implements VFS {
     @Override
     public String getAbsolutePath(String file) {
         return new File(root + file).getAbsolutePath();
-    }
-
-
-    @Override
-    public boolean isExist(String path) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-
-    @Override
-    public byte[] getBytes(String file) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public String getUFT8Text(String file) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }
