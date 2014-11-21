@@ -1,6 +1,6 @@
 <fest:template xmlns:fest="http://fest.mail.ru">
 
-<div class="wrapper">
+<div class="wrapper-top">
 
   <form name="register-form" class="form" data-action="/profile" method="POST">
    
