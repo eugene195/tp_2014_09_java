@@ -130,7 +130,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
         }
     }
 
-    @Override
+
     public void deleteUser(String login) {
         try {
             UsersDAO userDAO = new UsersDAO(executor);

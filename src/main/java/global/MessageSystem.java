@@ -13,5 +13,4 @@ public interface MessageSystem {
 
     void executeFor(Runnable abonent);
 
-    void printAddresses();
 }
