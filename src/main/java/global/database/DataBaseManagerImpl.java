@@ -113,7 +113,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
 
     @Override
     public void registerUser(String login, String passw) {
-        if (this.userExists(login)) {
+        if (userExists(login)) {
             this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already Exists"), "servlet");
         }
         else {

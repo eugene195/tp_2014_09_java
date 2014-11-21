@@ -33,7 +33,7 @@ public class AdminPage extends WebPage {
         fullInfo = 0;
         this.msys.sendMessage(new GetUsersQuery(), "dbman");
         this.msys.sendMessage(new GetOnlineUsersQuery(), "servlet");
-        this.setZombie();
+        setZombie();
 
         Map<String, Object> context = new LinkedHashMap<>();
         response.setContentType("text/html;charset=utf-8");
@@ -71,7 +71,7 @@ public class AdminPage extends WebPage {
         context.put("regCount", this.registered.size());
         context.put("logCount", this.loggedIn.size());
 
-        String page = this.generateHTML(TML_PATH, context);
+        String page = generateHTML(TML_PATH, context);
         printout.print(page);
     }
 
@@ -88,6 +88,6 @@ public class AdminPage extends WebPage {
             fullInfo++;
         }
         if (fullInfo == 2)
-            this.resume();
+            resume();
     }
 }

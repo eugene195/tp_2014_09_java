@@ -35,7 +35,7 @@ public class ScorePage extends WebPage {
 
         this.scores = null;
         this.msys.sendMessage(new BestScoresQuery(), "dbman");
-        this.setZombie();
+        setZombie();
 
 
         if (this.scores != null) {
@@ -57,7 +57,7 @@ public class ScorePage extends WebPage {
         if (a_msg instanceof BestScoresAnswer) {
             BestScoresAnswer msg = (BestScoresAnswer) a_msg;
             this.scores = msg.getScores();
-            this.resume();
+            resume();
         }
     }
 }
