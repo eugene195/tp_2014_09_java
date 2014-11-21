@@ -1,7 +1,8 @@
-package global.msgsystem.messages;
+package global.msgsystem.messages.toServlet;
 
 import global.Servlet;
 import global.database.dataSets.UserDataSet;
+import global.msgsystem.messages.AbstractMsg;
 import global.servlet.webpages.AdminPage;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by eugene on 9/27/14.
  */
-public class GetUsersAnswer extends AbstractMsg {
+public class GetUsersAnswer extends AbstractToServlet {
 
     private ArrayList<UserDataSet> users;
     public GetUsersAnswer(ArrayList<UserDataSet> users){
@@ -21,13 +22,7 @@ public class GetUsersAnswer extends AbstractMsg {
     }
 
     @Override
-    public void exec(Runnable abonent) {
-        if (abonent instanceof Servlet) {
-            Servlet servlet = (Servlet) abonent;
-            servlet.transmitToPage(AdminPage.URL, this);
-        }
-        else{
-            System.out.println("ProfileInfoAnswer exception during execution");
-        }
+    public void exec(Servlet servlet) {
+        servlet.transmitToPage(AdminPage.URL, this);
     }
 }

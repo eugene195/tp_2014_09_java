@@ -3,9 +3,9 @@ package global.servlet.webpages;
 import global.AddressService;
 import global.MessageSystem;
 import global.models.Score;
-import global.msgsystem.messages.AbstractMsg;
-import global.msgsystem.messages.BestScoresAnswer;
-import global.msgsystem.messages.BestScoresQuery;
+import global.msgsystem.messages.toServlet.AbstractToServlet;
+import global.msgsystem.messages.toServlet.BestScoresAnswer;
+import global.msgsystem.messages.toDB.BestScoresQuery;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,7 +54,7 @@ public class ScorePage extends WebPage {
     }
 
     @Override
-    public void finalizeAsync(AbstractMsg absMsg) {
+    public void finalizeAsync(AbstractToServlet absMsg) {
         if (absMsg instanceof BestScoresAnswer) {
             BestScoresAnswer msg = (BestScoresAnswer) absMsg;
             this.scores = msg.getScores();

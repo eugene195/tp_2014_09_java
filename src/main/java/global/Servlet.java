@@ -1,11 +1,10 @@
 package global;
 
-import global.msgsystem.messages.AbstractMsg;
+import global.msgsystem.messages.toServlet.AbstractToServlet;
 
 /**
  * Created by eugene on 10/16/14.
  */
 public interface Servlet extends Runnable, javax.servlet.Servlet {
-
-    public void transmitToPage(String URL, AbstractMsg msg);
+    public void transmitToPage(String URL, AbstractToServlet msg);
 }

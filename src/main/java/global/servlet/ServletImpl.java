@@ -3,8 +3,8 @@ package global.servlet;
 import global.AddressService;
 import global.MessageSystem;
 import global.Servlet;
-import global.msgsystem.messages.AbstractMsg;
 import global.models.UserSession;
+import global.msgsystem.messages.toServlet.AbstractToServlet;
 import global.servlet.webpages.*;
 
 import javax.servlet.ServletException;
@@ -91,7 +91,7 @@ public class ServletImpl extends HttpServlet implements Servlet {
     }
 
     @Override
-    public void transmitToPage(String URL, AbstractMsg msg) {
+    public void transmitToPage(String URL, AbstractToServlet msg) {
         WebPage page = this.pageMap.get(URL);
         if (page != null) {
             page.finalizeAsync(msg);

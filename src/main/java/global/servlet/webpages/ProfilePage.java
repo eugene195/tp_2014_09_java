@@ -2,7 +2,9 @@ package global.servlet.webpages;
 
 import global.AddressService;
 import global.MessageSystem;
-import global.msgsystem.messages.*;
+import global.msgsystem.messages.toServlet.AbstractToServlet;
+import global.msgsystem.messages.toServlet.ChangePasswordAnswer;
+import global.msgsystem.messages.toDB.ChangePasswordQuery;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +63,7 @@ public class ProfilePage extends WebPage {
 
 
     @Override
-    public void finalizeAsync(AbstractMsg absMsg) {
+    public void finalizeAsync(AbstractToServlet absMsg) {
         if (absMsg instanceof ChangePasswordAnswer) {
             ChangePasswordAnswer msg = (ChangePasswordAnswer) absMsg;
             this.successChangeProfile = msg.isChangePasswordSuccess();

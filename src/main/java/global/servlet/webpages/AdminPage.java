@@ -3,6 +3,12 @@ import global.AddressService;
 import global.MessageSystem;
 import global.database.dataSets.UserDataSet;
 import global.msgsystem.messages.*;
+import global.msgsystem.messages.toServlet.AbstractToServlet;
+import global.msgsystem.messages.toServlet.GetOnlineUsersAnswer;
+import global.msgsystem.messages.toServlet.GetOnlineUsersQuery;
+import global.msgsystem.messages.toServlet.GetUsersAnswer;
+import global.msgsystem.messages.toDB.GetUsersQuery;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -76,7 +82,8 @@ public class AdminPage extends WebPage {
         printout.print(page);
     }
 
-    public void finalizeAsync(AbstractMsg absMsg) {
+    @Override
+    public void finalizeAsync(AbstractToServlet absMsg) {
 
         if (absMsg instanceof GetUsersAnswer) {
             GetUsersAnswer msg = (GetUsersAnswer) absMsg;

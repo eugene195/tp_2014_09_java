@@ -2,7 +2,6 @@ package global.servlet.webpages;
 
 import global.AddressService;
 import global.MessageSystem;
-import global.msgsystem.messages.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +10,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import java.io.PrintWriter;
+
+import global.msgsystem.messages.toServlet.AbstractToServlet;
+import global.msgsystem.messages.toServlet.RegistrationAnswer;
+import global.msgsystem.messages.toDB.RegistrationQuery;
 import org.json.JSONObject;
 
 
@@ -62,7 +65,7 @@ public class RegisterPage extends WebPage {
 
 
     @Override
-    public void finalizeAsync(AbstractMsg absMsg) {
+    public void finalizeAsync(AbstractToServlet absMsg) {
         if (absMsg instanceof RegistrationAnswer) {
             RegistrationAnswer msg = (RegistrationAnswer) absMsg;
 

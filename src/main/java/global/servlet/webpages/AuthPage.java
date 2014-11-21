@@ -2,7 +2,6 @@ package global.servlet.webpages;
 
 import global.AddressService;
 import global.MessageSystem;
-import global.msgsystem.messages.*;
 import global.models.UserSession;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +11,12 @@ import java.io.IOException;
 import java.util.Map;
 
 import java.io.PrintWriter;
+
+import global.msgsystem.messages.toServlet.AbstractToServlet;
+import global.msgsystem.messages.toServlet.AuthAnswer;
+import global.msgsystem.messages.toDB.AuthQuery;
+import global.msgsystem.messages.toServlet.GetOnlineUsersAnswer;
+import global.msgsystem.messages.toServlet.GetOnlineUsersQuery;
 import org.json.JSONObject;
 
 /**
@@ -77,7 +82,7 @@ public class AuthPage extends WebPage {
     }
 
     @Override
-    public void finalizeAsync(AbstractMsg absMsg) {
+    public void finalizeAsync(AbstractToServlet absMsg) {
 
         if (absMsg instanceof AuthAnswer) {
             AuthAnswer msg = (AuthAnswer) absMsg;

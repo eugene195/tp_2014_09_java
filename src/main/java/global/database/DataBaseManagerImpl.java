@@ -5,9 +5,9 @@ import global.DataBaseManager;
 import global.MessageSystem;
 import global.database.dao.UsersDAO;
 import global.database.dataSets.UserDataSet;
-import global.msgsystem.messages.*;
 import global.models.Score;
 import global.models.UserSession;
+import global.msgsystem.messages.toServlet.*;
 import snaq.db.ConnectionPool;
 
 import java.sql.*;

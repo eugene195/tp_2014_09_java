@@ -1,5 +1,5 @@
 import global.MessageSystem;
-import global.msgsystem.messages.RegistrationAnswer;
+import global.msgsystem.messages.toServlet.RegistrationAnswer;
 import global.servlet.webpages.RegisterPage;
 import org.junit.*;
 import utils.MinMessageHelper;

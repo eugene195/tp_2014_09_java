@@ -1,4 +1,4 @@
-package global.msgsystem.messages;
+package global.msgsystem.messages.toServlet;
 
 import global.Servlet;
 import global.models.UserSession;
@@ -7,7 +7,7 @@ import global.servlet.webpages.AuthPage;
 /**
  * Created by Евгений on 28.08.2014.
  */
-public class AuthAnswer extends AbstractMsg {
+public class AuthAnswer extends AbstractToServlet {
     private final UserSession userSession;
 
     public AuthAnswer(UserSession userSession) {
@@ -19,13 +19,7 @@ public class AuthAnswer extends AbstractMsg {
     }
 
     @Override
-    public void exec(Runnable abonent){
-        if(abonent instanceof Servlet){
-            Servlet srv = (Servlet) abonent;
-            srv.transmitToPage(AuthPage.URL, this);
-        }
-        else{
-            System.out.println("AuthAnswer exception during execution");
-        }
+    public void exec(Servlet servlet){
+        servlet.transmitToPage(AuthPage.URL, this);
     }
 }
