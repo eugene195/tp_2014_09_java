@@ -1,5 +1,6 @@
 package global.servlet.webpages;
 
+import global.AddressService;
 import global.MessageSystem;
 import global.msgsystem.messages.*;
 import org.json.JSONObject;
@@ -40,29 +41,29 @@ public class ProfilePage extends WebPage {
 
         String login = session.getAttribute("login").toString();
 
-        this.msys.sendMessage(new ChangePasswordQuery(login, curPassw, passw), "dbman");
+        this.msys.sendMessage(new ChangePasswordQuery(login, curPassw, passw), AddressService.getDBManAddr());
         this.setZombie();
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
-        JSONObject JObject = new JSONObject();
+        JSONObject json = new JSONObject();
 
         if (this.successChangeProfile) {
-            JObject.put("status", "1");
+            json.put("status", "1");
         }
         else {
-            JObject.put("status", "-1");
-            JObject.put("message", messageError);
+            json.put("status", "-1");
+            json.put("message", messageError);
         }
-        printout.print(JObject);
+        printout.print(json);
         printout.flush();
     }
 
 
     @Override
-    public void finalizeAsync(AbstractMsg abs_msg) {
-        if (abs_msg instanceof ChangePasswordAnswer) {
-            ChangePasswordAnswer msg = (ChangePasswordAnswer) abs_msg;
+    public void finalizeAsync(AbstractMsg absMsg) {
+        if (absMsg instanceof ChangePasswordAnswer) {
+            ChangePasswordAnswer msg = (ChangePasswordAnswer) absMsg;
             this.successChangeProfile = msg.isChangePasswordSuccess();
             this.messageError = msg.getErrMsg();
             this.resume();

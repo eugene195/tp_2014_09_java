@@ -30,7 +30,7 @@ public class LogoutPage extends WebPage {
         throws IOException
     {
         PrintWriter printout = response.getWriter();
-        JSONObject JObject = new JSONObject();
+        JSONObject json = new JSONObject();
 
         HttpSession session = request.getSession(false);
         if (session != null) {
@@ -41,15 +41,15 @@ public class LogoutPage extends WebPage {
                 this.userSessions.remove(login);
             }
 
-            JObject.put("status", "1");
+            json.put("status", "1");
         }
         else {
-            JObject.put("status", "-1");
-            JObject.put("message", "There is no session for you");
+            json.put("status", "-1");
+            json.put("message", "There is no session for you");
         }
 
         response.setContentType("application/json; charset=UTF-8");
-        printout.print(JObject);
+        printout.print(json);
         printout.flush();
     }
 }

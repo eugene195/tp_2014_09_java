@@ -16,4 +16,13 @@ public class PageNotFound extends WebPage {
         response.setContentType(WebPage.CONTENT_TYPE);
         response.getWriter().println("<h1>Page not Found</h1>");
     }
+
+    @Override
+    public void handlePost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException
+    {
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        response.setContentType(WebPage.CONTENT_TYPE);
+        response.getWriter().println("<h1>Page not Found</h1>");
+    }
 }

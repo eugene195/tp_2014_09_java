@@ -1,5 +1,6 @@
 package global.servlet;
 
+import global.AddressService;
 import global.MessageSystem;
 import global.Servlet;
 import global.msgsystem.messages.AbstractMsg;
@@ -24,15 +25,13 @@ import static java.lang.Thread.sleep;
  */
 
 public class ServletImpl extends HttpServlet implements Servlet {
-
-    private static final String SERVLET_ADDRESS = "servlet";
     private final MessageSystem msys;
     private final Map<String, WebPage> pageMap = new HashMap<>();
     private final Map<String, UserSession> userSessions = new HashMap<>();
 
     public ServletImpl(MessageSystem msys) {
         this.msys = msys;
-        msys.register(this, SERVLET_ADDRESS);
+        msys.register(this, AddressService.getServletAddr());
 
         this.pageMap.put(AuthPage.URL, new AuthPage(this.msys, this.userSessions));
         this.pageMap.put(GamePage.URL, new GamePage());

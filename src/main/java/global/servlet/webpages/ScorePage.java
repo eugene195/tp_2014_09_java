@@ -1,5 +1,6 @@
 package global.servlet.webpages;
 
+import global.AddressService;
 import global.MessageSystem;
 import global.models.Score;
 import global.msgsystem.messages.AbstractMsg;
@@ -31,31 +32,31 @@ public class ScorePage extends WebPage {
             throws IOException
     {
         PrintWriter printout = response.getWriter();
-        JSONObject JObject = new JSONObject();
+        JSONObject json = new JSONObject();
 
         this.scores = null;
-        this.msys.sendMessage(new BestScoresQuery(), "dbman");
+        this.msys.sendMessage(new BestScoresQuery(), AddressService.getDBManAddr());
         this.setZombie();
 
 
         if (this.scores != null) {
-            JObject.put("status", "1");
-            JObject.put("bestScores", scores);
+            json.put("status", "1");
+            json.put("bestScores", scores);
         }
         else {
-            JObject.put("status", "-1");
-            JObject.put("message", "There is no session for you");
+            json.put("status", "-1");
+            json.put("message", "There is no session for you");
         }
 
         response.setContentType("application/json; charset=UTF-8");
-        printout.print(JObject);
+        printout.print(json);
         printout.flush();
     }
 
     @Override
-    public void finalizeAsync(AbstractMsg a_msg) {
-        if (a_msg instanceof BestScoresAnswer) {
-            BestScoresAnswer msg = (BestScoresAnswer) a_msg;
+    public void finalizeAsync(AbstractMsg absMsg) {
+        if (absMsg instanceof BestScoresAnswer) {
+            BestScoresAnswer msg = (BestScoresAnswer) absMsg;
             this.scores = msg.getScores();
             this.resume();
         }
