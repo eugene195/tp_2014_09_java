@@ -1,7 +1,6 @@
-package global.msgsystem.messages;
+package global.msgsystem.messages.toServlet;
 
 import global.Servlet;
-import global.database.dataSets.UserDataSet;
 import global.models.Score;
 import global.servlet.webpages.ScorePage;
 
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by max on 02.10.14.
  */
-public class BestScoresAnswer extends AbstractMsg {
+public class BestScoresAnswer extends AbstractToServlet {
 
     private final ArrayList<Score> scores;
 
@@ -23,10 +22,7 @@ public class BestScoresAnswer extends AbstractMsg {
     }
 
     @Override
-    public void exec(Runnable runnable) {
-        if (runnable instanceof Servlet) {
-            Servlet servletImpl = (Servlet) runnable;
-            servletImpl.transmitToPage(ScorePage.URL, this);
-        }
+    public void exec(Servlet servlet) {
+        servlet.transmitToPage(ScorePage.URL, this);
     }
 }

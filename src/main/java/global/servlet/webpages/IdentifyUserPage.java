@@ -29,22 +29,22 @@ public class IdentifyUserPage extends WebPage {
     {
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
-        JSONObject JObject = new JSONObject();
+        JSONObject json = new JSONObject();
         HttpSession session = request.getSession(false);
         if (session == null) {
-            JObject.put("status", FAILED);
+            json.put("status", FAILED);
         } else {
-            long userId = this.getUserId(session);
+            long userId = getUserId(session);
             if (userId == -1) {
-                JObject.put("status", FAILED);
+                json.put("status", FAILED);
             } else {
-                JObject.put("status", OK);
-                JObject.put("login", session.getAttribute("login").toString());
+                json.put("status", OK);
+                json.put("login", session.getAttribute("login").toString());
                 System.out.append("login:").append(session.getAttribute("login").toString());
             }
         }
 
-        printout.print(JObject);
+        printout.print(json);
         printout.flush();
 
     }

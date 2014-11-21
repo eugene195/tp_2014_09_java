@@ -1,10 +1,10 @@
 import global.database.DataBaseManagerImpl;
 import global.database.dataSets.UserDataSet;
-import global.msgsystem.messages.*;
 
 import global.models.Score;
 import global.models.User;
 import global.models.UserSession;
+import global.msgsystem.messages.toServlet.*;
 import org.junit.*;
 import utils.MessageHelper;
 

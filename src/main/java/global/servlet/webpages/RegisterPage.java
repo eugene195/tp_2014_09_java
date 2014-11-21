@@ -1,7 +1,7 @@
 package global.servlet.webpages;
 
+import global.AddressService;
 import global.MessageSystem;
-import global.msgsystem.messages.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import java.io.PrintWriter;
+
+import global.msgsystem.messages.toServlet.AbstractToServlet;
+import global.msgsystem.messages.toServlet.RegistrationAnswer;
+import global.msgsystem.messages.toDB.RegistrationQuery;
 import org.json.JSONObject;
 
 
@@ -44,30 +48,30 @@ public class RegisterPage extends WebPage {
         String passw = request.getParameter("passw");
 
         this.msys.sendMessage(new RegistrationQuery(login, passw), "dbman");
-        this.setZombie();
+        setZombie();
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
-        JSONObject jObject = new JSONObject();
+        JSONObject json = new JSONObject();
 
         if (this.successReg)
-            jObject.put("status", OK);
+            json.put("status", OK);
         else {
-            jObject.put("status", FAILED);
-            jObject.put("message", "Username already exists");
+            json.put("status", FAILED);
+            json.put("message", "Username already exists");
         }
-        printout.print(jObject);
+        printout.print(json);
     }
 
 
     @Override
-    public void finalizeAsync(AbstractMsg abs_msg) {
-        if (abs_msg instanceof RegistrationAnswer) {
-            RegistrationAnswer msg = (RegistrationAnswer) abs_msg;
+    public void finalizeAsync(AbstractToServlet absMsg) {
+        if (absMsg instanceof RegistrationAnswer) {
+            RegistrationAnswer msg = (RegistrationAnswer) absMsg;
 
             this.successReg = msg.isRegistrationSuccess();
             this.msgList.add(msg.getErrMsg());
-            this.resume();
+            resume();
         }
     }
 }

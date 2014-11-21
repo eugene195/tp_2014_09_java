@@ -29,7 +29,7 @@ public class GamePage extends WebPage {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.sendRedirect(AuthPage.URL);
         }
-        String page = this.generateHTML(TML_PATH, context);
+        String page = generateHTML(TML_PATH, context);
 
         response.getWriter().print(page);
         response.setContentType(WebPage.CONTENT_TYPE);

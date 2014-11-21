@@ -56,7 +56,7 @@ public class MessageSystemImpl implements MessageSystem {
     /**
      * The helpful tool for a programmer.
      */
-    @Override
+
     public void printAddresses() {
         System.out.println("Current content of address set: ");
         this.addresses.forEach((address, obj) -> System.out.println(address));

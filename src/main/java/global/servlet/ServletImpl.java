@@ -1,9 +1,10 @@
 package global.servlet;
 
+import global.AddressService;
 import global.MessageSystem;
 import global.Servlet;
-import global.msgsystem.messages.AbstractMsg;
 import global.models.UserSession;
+import global.msgsystem.messages.toServlet.AbstractToServlet;
 import global.servlet.webpages.*;
 
 import javax.servlet.ServletException;
@@ -24,15 +25,15 @@ import static java.lang.Thread.sleep;
  */
 
 public class ServletImpl extends HttpServlet implements Servlet {
-
     private static final String SERVLET_ADDRESS = "servlet";
+    private static Pattern patternUrl =  Pattern.compile("^/\\w+");
     private final MessageSystem msys;
     private final Map<String, WebPage> pageMap = new HashMap<>();
     private final Map<String, UserSession> userSessions = new HashMap<>();
 
     public ServletImpl(MessageSystem msys) {
         this.msys = msys;
-        msys.register(this, SERVLET_ADDRESS);
+        msys.register(this, AddressService.getServletAddr());
 
         this.pageMap.put(AuthPage.URL, new AuthPage(this.msys, this.userSessions));
         this.pageMap.put(GamePage.URL, new GamePage());
@@ -62,17 +63,16 @@ public class ServletImpl extends HttpServlet implements Servlet {
                       HttpServletResponse response)
             throws IOException, ServletException
     {
-        WebPage currentPage = this.getPageByURL(request.getRequestURI());
+        WebPage currentPage = getPageByURL(request.getRequestURI());
         currentPage.handleGet(request, response);
     }
 
     private WebPage getPageByURL(String requestURI) {
-        Matcher matcher = Pattern.compile("^/\\w+").matcher(requestURI);
+        Matcher matcher = patternUrl.matcher(requestURI);
 
         System.out.println(requestURI);
         if (matcher.find()) {
             String requestURL = matcher.group();
-            // System.out.println(requestURL);
             WebPage currentPage = this.pageMap.get(requestURL);
 
             if (currentPage != null) {
@@ -88,12 +88,12 @@ public class ServletImpl extends HttpServlet implements Servlet {
                       HttpServletResponse response)
             throws IOException, ServletException
     {
-        WebPage currentPage = this.getPageByURL(request.getRequestURI());
+        WebPage currentPage = getPageByURL(request.getRequestURI());
         currentPage.handlePost(request, response);
     }
 
     @Override
-    public void transmitToPage(String URL, AbstractMsg msg) {
+    public void transmitToPage(String URL, AbstractToServlet msg) {
         WebPage page = this.pageMap.get(URL);
         if (page != null) {
             page.finalizeAsync(msg);

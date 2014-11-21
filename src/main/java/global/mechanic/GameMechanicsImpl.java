@@ -6,8 +6,7 @@ import global.engine.Engine;
 import global.engine.Params;
 import global.mechanic.sockets.WebSocketServiceImpl;
 import global.WebSocketService;
-import global.msgsystem.messages.GameSessionsAnswer;
-import sun.plugin2.message.Message;
+import global.msgsystem.messages.toServlet.GameSessionsAnswer;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;

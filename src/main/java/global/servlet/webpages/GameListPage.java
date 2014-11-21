@@ -2,9 +2,9 @@ package global.servlet.webpages;
 
 import global.MessageSystem;
 import global.mechanic.GameSession;
-import global.msgsystem.messages.AbstractMsg;
-import global.msgsystem.messages.GameSessionsAnswer;
+import global.msgsystem.messages.toServlet.GameSessionsAnswer;
 import global.msgsystem.messages.GameSessionsQuery;
+import global.msgsystem.messages.toServlet.AbstractToServlet;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -55,7 +55,7 @@ public class GameListPage extends WebPage {
     }
 
     @Override
-    public void finalizeAsync(AbstractMsg absMsg) {
+    public void finalizeAsync(AbstractToServlet absMsg) {
         if (absMsg instanceof GameSessionsAnswer) {
             GameSessionsAnswer msg = (GameSessionsAnswer) absMsg;
             this.sessions = msg.getSessions();

@@ -66,7 +66,6 @@ public class UsersDAO extends AbstractDAO {
                     while(result.next()) {
                         users.add(new UserDataSet(result.getLong("userId"),
                                 result.getString("login"),
-                                result.getString("passw"),
                                 result.getInt("score")));
                     }
 

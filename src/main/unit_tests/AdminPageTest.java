@@ -1,6 +1,6 @@
 import global.database.dataSets.UserDataSet;
-import global.msgsystem.messages.GetOnlineUsersAnswer;
-import global.msgsystem.messages.GetUsersAnswer;
+import global.msgsystem.messages.toServlet.GetOnlineUsersAnswer;
+import global.msgsystem.messages.toServlet.GetUsersAnswer;
 import global.servlet.webpages.AdminPage;
 
 import org.junit.*;
@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import static java.lang.Thread.sleep;

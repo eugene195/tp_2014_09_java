@@ -17,11 +17,9 @@ import java.util.Map;
 public class LogoutPage extends WebPage {
     public static final String URL = "/logout";
 
-    private final MessageSystem msys;
     private final Map<String, UserSession> userSessions;
 
     public LogoutPage(MessageSystem msys, Map<String, UserSession> userSessions) {
-        this.msys = msys;
         this.userSessions = userSessions;
     }
 
@@ -30,7 +28,7 @@ public class LogoutPage extends WebPage {
         throws IOException
     {
         PrintWriter printout = response.getWriter();
-        JSONObject JObject = new JSONObject();
+        JSONObject json = new JSONObject();
 
         HttpSession session = request.getSession(false);
         if (session != null) {
@@ -40,16 +38,15 @@ public class LogoutPage extends WebPage {
             if (this.userSessions.containsKey(login)) {
                 this.userSessions.remove(login);
             }
-
-            JObject.put("status", OK);
+            json.put("status", OK);
         }
         else {
-            JObject.put("status", FAILED);
-            JObject.put("message", "There is no session for you");
+            json.put("status", FAILED);
+            json.put("message", "There is no session for you");
         }
 
         response.setContentType("application/json; charset=UTF-8");
-        printout.print(JObject);
+        printout.print(json);
         printout.flush();
     }
 }

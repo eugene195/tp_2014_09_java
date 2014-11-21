@@ -17,6 +17,4 @@ public interface DataBaseManager extends Runnable {
 
     void changePassword(String login, String curPassw, String newPassw);
 
-    public void deleteUser(String login);
-
 }
