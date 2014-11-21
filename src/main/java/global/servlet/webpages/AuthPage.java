@@ -1,5 +1,6 @@
 package global.servlet.webpages;
 
+import global.AddressService;
 import global.MessageSystem;
 import global.msgsystem.messages.*;
 import global.models.UserSession;
@@ -51,9 +52,10 @@ public class AuthPage extends WebPage {
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
-        JSONObject JObject = new JSONObject();
+        JSONObject json = new JSONObject();
 
         this.userSession = new UserSession(login);
+
         this.msys.sendMessage(new AuthQuery(this.userSession, passw), "dbman");
         setZombie();
 
@@ -65,25 +67,25 @@ public class AuthPage extends WebPage {
             session.setAttribute("userId", this.userSession.getUserId());
             this.userSessions.put(userLogin, this.userSession);
 
-            JObject.put("status", "1");
+            json.put("status", "1");
         }
         else {
-            JObject.put("status", "-1");
-            JObject.put("message", "Incorrect login or password");
+            json.put("status", "-1");
+            json.put("message", "Incorrect login or password");
         }
-        printout.print(JObject);
+        printout.print(json);
         printout.flush();
     }
 
     @Override
-    public void finalizeAsync(AbstractMsg abs_msg) {
+    public void finalizeAsync(AbstractMsg absMsg) {
 
-        if (abs_msg instanceof AuthAnswer) {
-            AuthAnswer msg = (AuthAnswer) abs_msg;
+        if (absMsg instanceof AuthAnswer) {
+            AuthAnswer msg = (AuthAnswer) absMsg;
             this.userSession = msg.getUserSession();
             resume();
         }
-        else if (abs_msg instanceof GetOnlineUsersQuery) {
+        else if (absMsg instanceof GetOnlineUsersQuery) {
             this.msys.sendMessage(new GetOnlineUsersAnswer(this.userSessions.keySet()), "servlet");
         }
     }

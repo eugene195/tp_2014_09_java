@@ -1,5 +1,6 @@
 package global.servlet.webpages;
 
+import global.AddressService;
 import global.MessageSystem;
 import global.msgsystem.messages.*;
 
@@ -47,23 +48,23 @@ public class RegisterPage extends WebPage {
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
-        JSONObject JObject = new JSONObject();
+        JSONObject json = new JSONObject();
 
         if (this.successReg) {
-            JObject.put("status", "1");
+            json.put("status", "1");
         }
         else {
-            JObject.put("status", "-1");
-            JObject.put("message", "Username already exists");
+            json.put("status", "-1");
+            json.put("message", "Username already exists");
         }
-        printout.print(JObject);
+        printout.print(json);
     }
 
 
     @Override
-    public void finalizeAsync(AbstractMsg abs_msg) {
-        if (abs_msg instanceof RegistrationAnswer) {
-            RegistrationAnswer msg = (RegistrationAnswer) abs_msg;
+    public void finalizeAsync(AbstractMsg absMsg) {
+        if (absMsg instanceof RegistrationAnswer) {
+            RegistrationAnswer msg = (RegistrationAnswer) absMsg;
 
             this.successReg = msg.isRegistrationSuccess();
             this.msgList.add(msg.getErrMsg());

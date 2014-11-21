@@ -1,5 +1,6 @@
 package global.database;
 
+import global.AddressService;
 import global.DataBaseManager;
 import global.MessageSystem;
 import global.database.dao.UsersDAO;
@@ -18,7 +19,6 @@ import static java.lang.Thread.sleep;
  * Created by Евгений on 28.08.2014.
  */
 public class DataBaseManagerImpl implements DataBaseManager {
-    private static final String DBMAN_ADDRESS = "dbman";
     private final MessageSystem msys;
     private Executor executor;
 
@@ -26,7 +26,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
             throws SQLException
     {
         this.msys = msys;
-        msys.register(this, DBMAN_ADDRESS);
+        msys.register(this, AddressService.getDBManAddr());
 
         String baseUrl = "jdbc:mysql://localhost/" + baseName;
         String baseUserName = userName;
@@ -80,7 +80,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
         try {
             UsersDAO userDAO = new UsersDAO(executor);
             ArrayList<UserDataSet> users = userDAO.getAll();
-            this.msys.sendMessage(new GetUsersAnswer(users), "servlet");
+            this.msys.sendMessage(new GetUsersAnswer(users), AddressService.getServletAddr());
         }
         catch (Exception e) {
             System.out.println("Sql exception during getUsers()");
@@ -96,36 +96,38 @@ public class DataBaseManagerImpl implements DataBaseManager {
             if (user != null) {
                 userSession.setSuccessAuth(true);
                 userSession.setUserId(user.getId());
-                this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
+                this.msys.sendMessage(new AuthAnswer(userSession), AddressService.getServletAddr());
             }
             else {
                 userSession.setSuccessAuth(false);
-                this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
+                this.msys.sendMessage(new AuthAnswer(userSession), AddressService.getServletAddr());
             }
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Sql exception during checkAuth()");
             userSession.setSuccessAuth(false);
-            this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
+            this.msys.sendMessage(new AuthAnswer(userSession), AddressService.getServletAddr());
         }
     }
 
     @Override
     public void registerUser(String login, String passw) {
+
         if (userExists(login)) {
             this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already Exists"), "servlet");
+
         }
         else {
             try {
                 UsersDAO userDAO = new UsersDAO(executor);
                 userDAO.add(login, passw);
-                this.msys.sendMessage(new RegistrationAnswer(true, login, ""), "servlet");
+                this.msys.sendMessage(new RegistrationAnswer(true, login, ""), AddressService.getServletAddr());
             }
             catch (SQLException e){
                 e.printStackTrace();
                 System.out.println("Exception during DB insert in registration");
-                this.msys.sendMessage(new RegistrationAnswer(false, "", "Cannot add User "), "servlet");
+                this.msys.sendMessage(new RegistrationAnswer(false, "", "Cannot add User "), AddressService.getServletAddr());
             }
         }
     }
@@ -158,7 +160,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
                 scores.add(new Score(user.getLogin(), user.getScore()));
             }
 
-            this.msys.sendMessage(new BestScoresAnswer(scores), "servlet");
+            this.msys.sendMessage(new BestScoresAnswer(scores), AddressService.getServletAddr());
         }
         catch (Exception e) {
             System.out.println("Exception during DB select in bestScores");
@@ -173,15 +175,15 @@ public class DataBaseManagerImpl implements DataBaseManager {
 
             if (user != null) {
                 userDAO.changePassw(login, newPassw);
-                this.msys.sendMessage(new ChangePasswordAnswer(true, ""), "servlet");
+                this.msys.sendMessage(new ChangePasswordAnswer(true, ""), AddressService.getServletAddr());
             }
             else {
-                this.msys.sendMessage(new ChangePasswordAnswer(false, "Wrong current password"), "servlet");
+                this.msys.sendMessage(new ChangePasswordAnswer(false, "Wrong current password"), AddressService.getServletAddr());
             }
         }
         catch (SQLException e) {
             System.out.println("Sql exception during changePassword()");
-            this.msys.sendMessage(new ChangePasswordAnswer(false, "Cannot change password"), "servlet");
+            this.msys.sendMessage(new ChangePasswordAnswer(false, "Cannot change password"), AddressService.getServletAddr());
         }
     }
 

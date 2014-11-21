@@ -1,4 +1,5 @@
 package global.servlet.webpages;
+import global.AddressService;
 import global.MessageSystem;
 import global.database.dataSets.UserDataSet;
 import global.msgsystem.messages.*;
@@ -31,6 +32,7 @@ public class AdminPage extends WebPage {
             throws IOException {
 
         fullInfo = 0;
+
         this.msys.sendMessage(new GetUsersQuery(), "dbman");
         this.msys.sendMessage(new GetOnlineUsersQuery(), "servlet");
         setZombie();
@@ -75,15 +77,15 @@ public class AdminPage extends WebPage {
         printout.print(page);
     }
 
-    public void finalizeAsync(AbstractMsg abs_msg) {
+    public void finalizeAsync(AbstractMsg absMsg) {
 
-        if (abs_msg instanceof GetUsersAnswer) {
-            GetUsersAnswer msg = (GetUsersAnswer) abs_msg;
+        if (absMsg instanceof GetUsersAnswer) {
+            GetUsersAnswer msg = (GetUsersAnswer) absMsg;
             this.registered = msg.getUsers();
             fullInfo++;
         }
-        else if (abs_msg instanceof GetOnlineUsersAnswer) {
-            GetOnlineUsersAnswer msg = (GetOnlineUsersAnswer) abs_msg;
+        else if (absMsg instanceof GetOnlineUsersAnswer) {
+            GetOnlineUsersAnswer msg = (GetOnlineUsersAnswer) absMsg;
             this.loggedIn = msg.getSet();
             fullInfo++;
         }
