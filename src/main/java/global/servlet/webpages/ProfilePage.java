@@ -43,8 +43,8 @@ public class ProfilePage extends WebPage {
 
         String login = session.getAttribute("login").toString();
 
-        this.msys.sendMessage(new ChangePasswordQuery(login, curPassw, passw), AddressService.getDBManAddr());
-        this.setZombie();
+        this.msys.sendMessage(new ChangePasswordQuery(login, curPassw, passw), "dbman");
+        setZombie();
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
@@ -68,7 +68,7 @@ public class ProfilePage extends WebPage {
             ChangePasswordAnswer msg = (ChangePasswordAnswer) absMsg;
             this.successChangeProfile = msg.isChangePasswordSuccess();
             this.messageError = msg.getErrMsg();
-            this.resume();
+            resume();
         }
     }
 

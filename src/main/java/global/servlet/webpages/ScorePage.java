@@ -35,9 +35,9 @@ public class ScorePage extends WebPage {
         JSONObject json = new JSONObject();
 
         this.scores = null;
-        this.msys.sendMessage(new BestScoresQuery(), AddressService.getDBManAddr());
-        this.setZombie();
 
+        this.msys.sendMessage(new BestScoresQuery(), "dbman");
+        setZombie();
 
         if (this.scores != null) {
             json.put("status", "1");
@@ -58,7 +58,7 @@ public class ScorePage extends WebPage {
         if (absMsg instanceof BestScoresAnswer) {
             BestScoresAnswer msg = (BestScoresAnswer) absMsg;
             this.scores = msg.getScores();
-            this.resume();
+            resume();
         }
     }
 }

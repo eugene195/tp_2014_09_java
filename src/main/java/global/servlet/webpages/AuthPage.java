@@ -60,8 +60,9 @@ public class AuthPage extends WebPage {
         JSONObject json = new JSONObject();
 
         this.userSession = new UserSession(login);
-        this.msys.sendMessage(new AuthQuery(this.userSession, passw), AddressService.getDBManAddr());
-        this.setZombie();
+
+        this.msys.sendMessage(new AuthQuery(this.userSession, passw), "dbman");
+        setZombie();
 
         if (this.userSession.isAuthSuccess()) {
             String userLogin = this.userSession.getLogin();
@@ -87,7 +88,7 @@ public class AuthPage extends WebPage {
         if (absMsg instanceof AuthAnswer) {
             AuthAnswer msg = (AuthAnswer) absMsg;
             this.userSession = msg.getUserSession();
-            this.resume();
+            resume();
         }
         else if (absMsg instanceof GetOnlineUsersQuery) {
             this.msys.sendMessage(new GetOnlineUsersAnswer(this.userSessions.keySet()), "servlet");

@@ -25,6 +25,12 @@ import static java.lang.Thread.sleep;
  */
 
 public class ServletImpl extends HttpServlet implements Servlet {
+<<<<<<< HEAD
+
+    private static final String SERVLET_ADDRESS = "servlet";
+    private static Pattern patternUrl =  Pattern.compile("^/\\w+");
+=======
+>>>>>>> 62c9db8d2b0031cf9cf4a869422eefb7c28c8916
     private final MessageSystem msys;
     private final Map<String, WebPage> pageMap = new HashMap<>();
     private final Map<String, UserSession> userSessions = new HashMap<>();
@@ -60,17 +66,16 @@ public class ServletImpl extends HttpServlet implements Servlet {
                       HttpServletResponse response)
             throws IOException, ServletException
     {
-        WebPage currentPage = this.getPageByURL(request.getRequestURI());
+        WebPage currentPage = getPageByURL(request.getRequestURI());
         currentPage.handleGet(request, response);
     }
 
     private WebPage getPageByURL(String requestURI) {
-        Matcher matcher = Pattern.compile("^/\\w+").matcher(requestURI);
+        Matcher matcher = patternUrl.matcher(requestURI);
 
         System.out.println(requestURI);
         if (matcher.find()) {
             String requestURL = matcher.group();
-            // System.out.println(requestURL);
             WebPage currentPage = this.pageMap.get(requestURL);
 
             if (currentPage != null) {
@@ -86,7 +91,7 @@ public class ServletImpl extends HttpServlet implements Servlet {
                       HttpServletResponse response)
             throws IOException, ServletException
     {
-        WebPage currentPage = this.getPageByURL(request.getRequestURI());
+        WebPage currentPage = getPageByURL(request.getRequestURI());
         currentPage.handlePost(request, response);
     }
 

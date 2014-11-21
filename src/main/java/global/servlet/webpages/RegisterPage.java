@@ -46,8 +46,8 @@ public class RegisterPage extends WebPage {
         String login = request.getParameter("login");
         String passw = request.getParameter("passw");
 
-        this.msys.sendMessage(new RegistrationQuery(login, passw), AddressService.getDBManAddr());
-        this.setZombie();
+        this.msys.sendMessage(new RegistrationQuery(login, passw), "dbman");
+        setZombie();
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
@@ -71,7 +71,7 @@ public class RegisterPage extends WebPage {
 
             this.successReg = msg.isRegistrationSuccess();
             this.msgList.add(msg.getErrMsg());
-            this.resume();
+            resume();
         }
     }
 }

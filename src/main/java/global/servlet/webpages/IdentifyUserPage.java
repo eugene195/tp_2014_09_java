@@ -34,7 +34,7 @@ public class IdentifyUserPage extends WebPage {
         if (session == null) {
             json.put("status", "-1");
         } else {
-            long userId = this.getUserId(session);
+            long userId = getUserId(session);
             if (userId == -1) {
                 json.put("status", "-1");
             } else {
