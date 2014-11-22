@@ -1,14 +1,17 @@
 package global.database;
 
+import global.AddressService;
 import global.DataBaseManager;
 import global.MessageSystem;
-import global.msgsystem.messages.*;
+import global.database.dao.UsersDAO;
+import global.database.dataSets.UserDataSet;
 import global.models.Score;
 import global.models.UserSession;
+import global.msgsystem.messages.toServlet.*;
+import snaq.db.ConnectionPool;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static java.lang.Thread.sleep;
 
@@ -16,85 +19,68 @@ import static java.lang.Thread.sleep;
  * Created by Евгений on 28.08.2014.
  */
 public class DataBaseManagerImpl implements DataBaseManager {
-
-    private Connection conn;
-    private static final String DBMAN_ADDRESS = "dbman";
     private final MessageSystem msys;
+    private Executor executor;
 
     public DataBaseManagerImpl(MessageSystem msys, String baseName, String userName, String userPasswd)
             throws SQLException
     {
         this.msys = msys;
-        msys.register(this, DBMAN_ADDRESS);
+        msys.register(this, AddressService.getDBManAddr());
 
         String baseUrl = "jdbc:mysql://localhost/" + baseName;
         String baseUserName = userName;
         String baseUserPasswd = userPasswd;
 
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            this.conn = DriverManager.getConnection(baseUrl, baseUserName, baseUserPasswd);
+            Class c = Class.forName("com.mysql.jdbc.Driver");
+            Driver driver = (Driver)c.newInstance();
+            DriverManager.registerDriver(driver);
+
+            ConnectionPool conPool = new ConnectionPool("local",
+                    5, 10, 30, 180, baseUrl, baseUserName, baseUserPasswd);
+
+            this.executor = new Executor(conPool);
             System.out.println("DB connected");
         }
         catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            System.err.println ("Cannot connect to DB");
+            throw new SQLException(e.getCause());
         }
+
     }
 
     @Override
     protected void finalize() throws Throwable {
-        if (this.conn != null) {
-            try {
-                this.conn.close();
-                System.out.println("DB connection terminated");
-            }
-            catch (Exception e) {
-                System.out.println("DB cannot be terminated");
-            }
+        try {
+            this.executor.releaseConnectionPool();
+            System.out.println("DB connection terminated");
         }
-    }
-
-    private static int getResultCount(ResultSet resultSet) throws SQLException {
-        resultSet.last();
-        int count = resultSet.getRow();
-        resultSet.beforeFirst();
-        return count;
+        catch (Exception e) {
+            System.out.println("DB cannot be terminated");
+            }
     }
 
     public boolean userExists(String login){
-        String query = "SELECT * FROM User WHERE login=?;";
         try {
-            PreparedStatement statement = this.conn.prepareStatement(query);
-            statement.setString(1, login);
-
-            ResultSet result = statement.executeQuery();
-            if (getResultCount(result) >= 1) {
+            UsersDAO userDAO = new UsersDAO(executor);
+            UserDataSet user = userDAO.get(login);
+            if (user != null) {
                 return true;
             }
         }
         catch (Exception e){
-            System.out.println("Exception during DB Select in registration");
+            System.out.println(e.getMessage());
+            System.out.println("Exception during DB Select in userExists");
         }
         return false;
     }
 
     @Override
     public void getUsers(){
-        String query = "SELECT * FROM User;";
         try {
-            PreparedStatement statement = this.conn.prepareStatement(query);
-            ResultSet result = statement.executeQuery();
-
-            int rows = getResultCount(result);
-            HashMap<String, Long> map = new HashMap<>();
-            while(rows > 0) {
-                result.next();
-                Long userId = result.getLong("userId");
-                String username = result.getString("login");
-                map.put(username, userId);
-                rows--;
-            }
-            this.msys.sendMessage(new GetUsersAnswer(map), "servlet");
+            UsersDAO userDAO = new UsersDAO(executor);
+            ArrayList<UserDataSet> users = userDAO.getAll();
+            this.msys.sendMessage(new GetUsersAnswer(users), AddressService.getServletAddr());
         }
         catch (Exception e) {
             System.out.println("Sql exception during getUsers()");
@@ -103,130 +89,59 @@ public class DataBaseManagerImpl implements DataBaseManager {
 
     @Override
     public void checkAuth(UserSession userSession, String passw) {
-        String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
-
         try {
-            PreparedStatement statement = this.conn.prepareStatement(query);
-            statement.setString(1, userSession.getLogin());
-            statement.setString(2, passw);
-            ResultSet result = statement.executeQuery();
+            UsersDAO userDAO = new UsersDAO(executor);
+            UserDataSet user = userDAO.get(userSession.getLogin(), passw);
 
-            if (getResultCount(result) == 1) {
-                result.next();
-                long userId = result.getLong("userId");
-
+            if (user != null) {
                 userSession.setSuccessAuth(true);
-                userSession.setUserId(userId);
-                this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
+                userSession.setUserId(user.getId());
+                this.msys.sendMessage(new AuthAnswer(userSession), AddressService.getServletAddr());
             }
             else {
                 userSession.setSuccessAuth(false);
-                this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
+                this.msys.sendMessage(new AuthAnswer(userSession), AddressService.getServletAddr());
             }
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             System.out.println("Sql exception during checkAuth()");
             userSession.setSuccessAuth(false);
-            this.msys.sendMessage(new AuthAnswer(userSession), "servlet");
-        }
-    }
-
-    public void deleteUser(String login) {
-        if (this.userExists(login)) {
-            String query = "DELETE FROM User WHERE login = ?;";
-            try {
-                PreparedStatement statement = this.conn.prepareStatement(query);
-                statement.setString(1, login);
-                int rowsUpdated = statement.executeUpdate();
-
-                if (rowsUpdated != 1) {
-                    System.out.print("Delete in SQL affected more/less than one row");
-                }
-            } catch (SQLException exc) {
-                exc.printStackTrace();
-                System.out.print("SQL exception during delete");
-            }
-        }
-        else {
-            System.out.print("User does not exist");
+            this.msys.sendMessage(new AuthAnswer(userSession), AddressService.getServletAddr());
         }
     }
 
     @Override
     public void registerUser(String login, String passw) {
-        if (this.userExists(login)) {
+
+        if (userExists(login)) {
             this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already Exists"), "servlet");
-            System.out.println("User with this login already Exists");
+
         }
         else {
-            String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
             try {
-                PreparedStatement statement = this.conn.prepareStatement(query);
-                statement.setString(1, login);
-                statement.setString(2, passw);
-
-                int rowsAffected = statement.executeUpdate();
-                if(rowsAffected < 1) {
-                    System.out.println("Smth bad happened. Insert affected < 1 rows");
-                    this.msys.sendMessage(new RegistrationAnswer(false, "", "SQL Insert error"), "servlet");
-                }
-                this.msys.sendMessage(new RegistrationAnswer(true, login, ""), "servlet");
+                UsersDAO userDAO = new UsersDAO(executor);
+                userDAO.add(login, passw);
+                this.msys.sendMessage(new RegistrationAnswer(true, login, ""), AddressService.getServletAddr());
             }
             catch (SQLException e){
                 e.printStackTrace();
-                System.out.println("Exception during DB insert  in registration");
+                System.out.println("Exception during DB insert in registration");
+                this.msys.sendMessage(new RegistrationAnswer(false, "", "Cannot add User "), AddressService.getServletAddr());
             }
         }
     }
 
-    @Override
-    public void bestScores() {
-        String query = "SELECT login, score FROM User ORDER BY score DESC LIMIT 10;";
 
+    public void deleteUser(String login) {
         try {
-            PreparedStatement statement = this.conn.prepareStatement(query);
-            ResultSet result = statement.executeQuery();
+            UsersDAO userDAO = new UsersDAO(executor);
+            UserDataSet user = userDAO.get(login);
 
-            ArrayList<Score> scores = new ArrayList<>();
-
-            String login;
-            int score;
-            while (result.next()) {
-                login = result.getString("login");
-                score = result.getInt("score");
-                scores.add(new Score(login, score));
-            }
-            this.msys.sendMessage(new BestScoresAnswer(scores), "servlet");
-        }
-        catch (Exception e) {
-            System.out.println("Exception during DB select in bestScores");
-        }
-    }
-
-    @Override
-    public void changePassword(String login, String curPassw, String newPassw) {
-        String query = "SELECT * FROM User WHERE login=? AND passw=md5(?);";
-        try {
-            PreparedStatement statement = this.conn.prepareStatement(query);
-            statement.setString(1, login);
-            statement.setString(2, curPassw);
-            ResultSet result = statement.executeQuery();
-
-            if (getResultCount(result) == 1) {
-                query = "UPDATE User Set passw = md5(?) WHERE login = ?;";
-                statement = this.conn.prepareStatement(query);
-                statement.setString(1, newPassw);
-                statement.setString(2, login);
-
-                int rowsAffected = statement.executeUpdate();
-                if(rowsAffected < 1) {
-                    System.out.println("Smth bad happened. Update password affected < 1 rows");
-                    this.msys.sendMessage(new ChangePasswordAnswer(false, "DB Error"), "servlet");
-                }
-                this.msys.sendMessage(new ChangePasswordAnswer(true, ""), "servlet");
-            }
-            else {
-                this.msys.sendMessage(new ChangePasswordAnswer(false, "Failed to change password"), "servlet");
+            if (user != null) {
+                userDAO.delete(login);
+            } else {
+                System.out.println("Error in deleteUser; User does not exist");
             }
         }
         catch (SQLException e) {
@@ -235,8 +150,41 @@ public class DataBaseManagerImpl implements DataBaseManager {
     }
 
     @Override
-    public void getProfileInfo(long userId) {
-        this.msys.sendMessage(new ProfileInfoAnswer(), "servlet");
+    public void bestScores() {
+        try {
+            UsersDAO userDAO = new UsersDAO(executor);
+            ArrayList<UserDataSet> users = userDAO.getTop();
+
+            ArrayList<Score> scores = new ArrayList();
+            for (UserDataSet user: users) {
+                scores.add(new Score(user.getLogin(), user.getScore()));
+            }
+
+            this.msys.sendMessage(new BestScoresAnswer(scores), AddressService.getServletAddr());
+        }
+        catch (Exception e) {
+            System.out.println("Exception during DB select in bestScores");
+        }
+    }
+
+    @Override
+    public void changePassword(String login, String curPassw, String newPassw) {
+        try {
+            UsersDAO userDAO = new UsersDAO(executor);
+            UserDataSet user = userDAO.get(login, curPassw);
+
+            if (user != null) {
+                userDAO.changePassw(login, newPassw);
+                this.msys.sendMessage(new ChangePasswordAnswer(true, ""), AddressService.getServletAddr());
+            }
+            else {
+                this.msys.sendMessage(new ChangePasswordAnswer(false, "Wrong current password"), AddressService.getServletAddr());
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("Sql exception during changePassword()");
+            this.msys.sendMessage(new ChangePasswordAnswer(false, "Cannot change password"), AddressService.getServletAddr());
+        }
     }
 
     @Override

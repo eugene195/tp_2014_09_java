@@ -12,5 +12,4 @@ public interface MessageSystem {
     boolean sendMessage(AbstractMsg message, String addressTo);
     void executeFor(Runnable abonent);
 
-    void printAddresses();
 }

@@ -1,6 +1,8 @@
 
-function Snake(snakeObj) {
-    this.head = new Circle(snakeObj.posX, snakeObj.posY, 5);
+function Snake(snakeObj, size) {
+    this.width = size;
+//    this.head = new Circle(snakeObj.posX, snakeObj.posY, this.width / 2);
+    this.head = new Rectangle(snakeObj.posX, snakeObj.posY, this.width / 2);
     this.tail = new Tail();
 
     this.color = snakeObj.color.toLowerCase();
@@ -15,8 +17,8 @@ function Snake(snakeObj) {
         if (this.head.x && this.head.y) {
             this.grow();
         }
-        this.head.x = x;
-        this.head.y = y;
+        this.head.x = x * this.width;
+        this.head.y = y * this.width;
     };
 
     this.changeDirection = function(newDirection) {
@@ -30,9 +32,9 @@ function Snake(snakeObj) {
     };
 
     this.drawSnake = function (context) {
-        this.head.clear(context);
-        this.tail.drawTail(context, this.color);
-        this.head.drawCircle(context, '#00FF00', 1);
+        //this.head.clear(context);
+//        this.tail.drawTail(context, this.color);
+        this.head.draw(context, this.color, 1);
     };
 }
 //

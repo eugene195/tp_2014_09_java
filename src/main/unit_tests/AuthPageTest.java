@@ -1,5 +1,5 @@
 import global.msgsystem.MessageSystemImpl;
-import global.msgsystem.messages.AuthAnswer;
+import global.msgsystem.messages.toServlet.AuthAnswer;
 
 import global.models.UserSession;
 import global.servlet.webpages.AuthPage;

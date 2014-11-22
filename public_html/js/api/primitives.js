@@ -8,7 +8,7 @@ function Tail() {
 
     this.drawTail = function (context, color) {
         context.beginPath();
-        context.lineWidth = 4;
+        context.lineWidth = 10;
         context.strokeStyle = color;
 
         if (this.tail.length == 0) return;
@@ -36,18 +36,40 @@ function Tail() {
     };
 }
 
+function Rectangle(x, y, size) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+
+    this.draw = function(context, color, borderWidth) {
+        context.beginPath();
+        context.rect(this.x - this.size, this.y - this.size, this.size * 2, this.size * 2);
+        context.fillStyle = color;
+        context.fill();
+        context.lineWidth = borderWidth;
+        context.strokeStyle = color;
+        context.stroke();
+    };
+
+    this.clear = function (context) {
+        context.clearRect(this.x - this.size, this.y - this.size, this.size, this.size);
+    };
+}
+
 function Circle(x, y, radius) {
     this.x = x;
     this.y = y;
     this.radius = radius;
 
-    this.drawCircle = function(context, color, borderWidth) {
+    this.draw = function(context, color, borderWidth) {
         context.beginPath();
         context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+//        context.rect(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
         context.fillStyle = color;
         context.fill();
         context.lineWidth = borderWidth;
-        context.strokeStyle = '#003300';
+        //context.strokeStyle = '#003300';
+        context.strokeStyle = color;
         context.stroke();
     };
 

@@ -17,6 +17,7 @@ var GameView = Backbone.View.extend({
     viewman: viewMan,
     width: 0,
     height: 0,
+    sizeModifier: 1,
     snakeHolder : new CurrentSnakeHolder(),
     snakes : [],
     started : false,
@@ -41,11 +42,13 @@ var GameView = Backbone.View.extend({
     startGame: function(data) {
         this.width = data.width;
         this.height = data.height;
+//        Remove to Class Property
+        this.sizeModifier = this.width * this.height * 0.001 / 2;
         var myID = data.snakeId;
         var length = data.snakes.length;
         for (var i = 0; i < length; i++) {
             var current = data.snakes[i];
-            var snake = new Snake(current);
+            var snake = new Snake(current, this.sizeModifier);
             if (current.snakeId == myID)
                 this.snakeHolder.setSnake(snake);
             this.snakes.push(snake);
@@ -89,8 +92,8 @@ var GameView = Backbone.View.extend({
     },
 
     render: function () {
-        var sizes = { width: this.width,
-                      height: this.height
+        var sizes = { width: this.width * this.sizeModifier,
+                      height: this.height * this.sizeModifier
                     };
         this.$el.html(this.template(sizes));
     },
@@ -158,7 +161,7 @@ var GameView = Backbone.View.extend({
             }
         }
         else
-            Console.log("Unknown key");
+            console.log("Unknown key");
     }
 
     });

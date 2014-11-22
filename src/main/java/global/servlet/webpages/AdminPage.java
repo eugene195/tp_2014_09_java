@@ -1,6 +1,14 @@
 package global.servlet.webpages;
+import global.AddressService;
 import global.MessageSystem;
+import global.database.dataSets.UserDataSet;
 import global.msgsystem.messages.*;
+import global.msgsystem.messages.toServlet.AbstractToServlet;
+import global.msgsystem.messages.toServlet.GetOnlineUsersAnswer;
+import global.msgsystem.messages.toServlet.GetOnlineUsersQuery;
+import global.msgsystem.messages.toServlet.GetUsersAnswer;
+import global.msgsystem.messages.toDB.GetUsersQuery;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -14,7 +22,7 @@ public class AdminPage extends WebPage {
     public static final String URL = "/admin";
     public static final String TML_PATH = "AdminPage.html";
 
-    private HashMap<String, Long> registered;
+    private ArrayList<UserDataSet> registered;
     private Set<String> loggedIn;
 
     private int fullInfo;
@@ -22,20 +30,21 @@ public class AdminPage extends WebPage {
 
     public AdminPage(MessageSystem msys) {
         this.msys = msys;
-        this.registered = new HashMap<>();
-        this.loggedIn = new HashSet<>();
+        this.registered = new ArrayList<>();
+        this.loggedIn = new HashSet();
     }
     @Override
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
         fullInfo = 0;
+
         this.msys.sendMessage(new GetUsersQuery(), "dbman");
         this.msys.sendMessage(new GetOnlineUsersQuery(), "servlet");
-        this.setZombie();
+        setZombie();
 
         Map<String, Object> context = new LinkedHashMap<>();
-        response.setContentType("text/html;charset=utf-8");
+        response.setContentType(WebPage.CONTENT_TYPE);
         response.setStatus(HttpServletResponse.SC_OK);
 
         String timeString = request.getParameter("shutdown");
@@ -70,23 +79,24 @@ public class AdminPage extends WebPage {
         context.put("regCount", this.registered.size());
         context.put("logCount", this.loggedIn.size());
 
-        String page = this.generateHTML(TML_PATH, context);
+        String page = generateHTML(TML_PATH, context);
         printout.print(page);
     }
 
-    public void finalizeAsync(AbstractMsg abs_msg) {
+    @Override
+    public void finalizeAsync(AbstractToServlet absMsg) {
 
-        if (abs_msg instanceof GetUsersAnswer) {
-            GetUsersAnswer msg = (GetUsersAnswer) abs_msg;
-            this.registered = msg.getMap();
+        if (absMsg instanceof GetUsersAnswer) {
+            GetUsersAnswer msg = (GetUsersAnswer) absMsg;
+            this.registered = msg.getUsers();
             fullInfo++;
         }
-        else if (abs_msg instanceof GetOnlineUsersAnswer) {
-            GetOnlineUsersAnswer msg = (GetOnlineUsersAnswer) abs_msg;
+        else if (absMsg instanceof GetOnlineUsersAnswer) {
+            GetOnlineUsersAnswer msg = (GetOnlineUsersAnswer) absMsg;
             this.loggedIn = msg.getSet();
             fullInfo++;
         }
         if (fullInfo == 2)
-            this.resume();
+            resume();
     }
 }

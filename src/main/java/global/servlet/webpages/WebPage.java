@@ -1,6 +1,6 @@
 package global.servlet.webpages;
 
-import global.msgsystem.messages.AbstractMsg;
+import global.msgsystem.messages.toServlet.AbstractToServlet;
 import global.servlet.Templater;
 import org.apache.velocity.exception.ResourceNotFoundException;
 
@@ -16,6 +16,8 @@ import java.util.Map;
 public abstract class WebPage {
     protected static final String CONTENT_TYPE = "text/html;charset=utf-8";
     protected boolean zombie;
+    protected static final String OK = "1";
+    protected static final String FAILED = "-1";
 
     public WebPage() {
         this.zombie = false;
@@ -56,7 +58,7 @@ public abstract class WebPage {
      * It is a final handler of the async query, from the Concrete Page.
      * @param msg message to page
      */
-    public void finalizeAsync(AbstractMsg msg) {
+    public void finalizeAsync(AbstractToServlet msg) {
         System.out.println("Warning! WebPage.finalizeAsync was invoked");
     }
 

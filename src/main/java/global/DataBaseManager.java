@@ -17,6 +17,4 @@ public interface DataBaseManager extends Runnable {
 
     void changePassword(String login, String curPassw, String newPassw);
 
-    void getProfileInfo(long userId);
-
 }

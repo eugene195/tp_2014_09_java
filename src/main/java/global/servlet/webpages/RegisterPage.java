@@ -1,7 +1,7 @@
 package global.servlet.webpages;
 
+import global.AddressService;
 import global.MessageSystem;
-import global.msgsystem.messages.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import java.io.PrintWriter;
+
+import global.msgsystem.messages.toServlet.AbstractToServlet;
+import global.msgsystem.messages.toServlet.RegistrationAnswer;
+import global.msgsystem.messages.toDB.RegistrationQuery;
 import org.json.JSONObject;
 
 
@@ -18,7 +22,6 @@ import org.json.JSONObject;
  */
 public class RegisterPage extends WebPage {
     public static final String URL = "/register";
-
     private final MessageSystem msys;
 
     private boolean successReg;
@@ -32,6 +35,8 @@ public class RegisterPage extends WebPage {
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
+        PrintWriter printout = response.getWriter();
+        msgList.forEach(printout::print);
         this.msgList.clear();
     }
 
@@ -43,31 +48,30 @@ public class RegisterPage extends WebPage {
         String passw = request.getParameter("passw");
 
         this.msys.sendMessage(new RegistrationQuery(login, passw), "dbman");
-        this.setZombie();
+        setZombie();
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
-        JSONObject JObject = new JSONObject();
+        JSONObject json = new JSONObject();
 
-        if (this.successReg) {
-            JObject.put("status", "1");
-        }
+        if (this.successReg)
+            json.put("status", OK);
         else {
-            JObject.put("status", "-1");
-            JObject.put("message", "Username already exists");
+            json.put("status", FAILED);
+            json.put("message", "Username already exists");
         }
-        printout.print(JObject);
+        printout.print(json);
     }
 
 
     @Override
-    public void finalizeAsync(AbstractMsg abs_msg) {
-        if (abs_msg instanceof RegistrationAnswer) {
-            RegistrationAnswer msg = (RegistrationAnswer) abs_msg;
+    public void finalizeAsync(AbstractToServlet absMsg) {
+        if (absMsg instanceof RegistrationAnswer) {
+            RegistrationAnswer msg = (RegistrationAnswer) absMsg;
 
             this.successReg = msg.isRegistrationSuccess();
             this.msgList.add(msg.getErrMsg());
-            this.resume();
+            resume();
         }
     }
 }

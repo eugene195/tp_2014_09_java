@@ -1,7 +1,7 @@
 package global.servlet.webpages;
 
+import global.AddressService;
 import global.MessageSystem;
-import global.msgsystem.messages.*;
 import global.models.UserSession;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +11,12 @@ import java.io.IOException;
 import java.util.Map;
 
 import java.io.PrintWriter;
+
+import global.msgsystem.messages.toServlet.AbstractToServlet;
+import global.msgsystem.messages.toServlet.AuthAnswer;
+import global.msgsystem.messages.toDB.AuthQuery;
+import global.msgsystem.messages.toServlet.GetOnlineUsersAnswer;
+import global.msgsystem.messages.toServlet.GetOnlineUsersQuery;
 import org.json.JSONObject;
 
 /**
@@ -25,12 +31,10 @@ public class AuthPage extends WebPage {
 
     private UserSession userSession;
 
-
     public AuthPage(MessageSystem msys, Map<String, UserSession> userSessions) {
         this.msys = msys;
         this.userSessions = userSessions;
     }
-
 
     @Override
     public void handlePost(HttpServletRequest request, HttpServletResponse response)
@@ -45,17 +49,17 @@ public class AuthPage extends WebPage {
             return;
         }
 
-        if (this.userSessions.containsKey(login)) {
+        if (this.userSessions.containsKey(login))
             this.userSessions.remove(login);
-        }
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
-        JSONObject JObject = new JSONObject();
+        JSONObject json = new JSONObject();
 
         this.userSession = new UserSession(login);
+
         this.msys.sendMessage(new AuthQuery(this.userSession, passw), "dbman");
-        this.setZombie();
+        setZombie();
 
         if (this.userSession.isAuthSuccess()) {
             String userLogin = this.userSession.getLogin();
@@ -64,26 +68,25 @@ public class AuthPage extends WebPage {
             session.setAttribute("login", userLogin);
             session.setAttribute("userId", this.userSession.getUserId());
             this.userSessions.put(userLogin, this.userSession);
-
-            JObject.put("status", "1");
+            json.put("status", OK);
         }
         else {
-            JObject.put("status", "-1");
-            JObject.put("message", "Incorrect login or password");
+            json.put("status", FAILED);
+            json.put("message", "Incorrect login or password");
         }
-        printout.print(JObject);
+        printout.print(json);
         printout.flush();
     }
 
     @Override
-    public void finalizeAsync(AbstractMsg abs_msg) {
+    public void finalizeAsync(AbstractToServlet absMsg) {
 
-        if (abs_msg instanceof AuthAnswer) {
-            AuthAnswer msg = (AuthAnswer) abs_msg;
+        if (absMsg instanceof AuthAnswer) {
+            AuthAnswer msg = (AuthAnswer) absMsg;
             this.userSession = msg.getUserSession();
-            this.resume();
+            resume();
         }
-        else if (abs_msg instanceof GetOnlineUsersQuery) {
+        else if (absMsg instanceof GetOnlineUsersQuery) {
             this.msys.sendMessage(new GetOnlineUsersAnswer(this.userSessions.keySet()), "servlet");
         }
     }

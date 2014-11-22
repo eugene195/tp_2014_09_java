@@ -1,7 +1,10 @@
 package global.servlet.webpages;
 
+import global.AddressService;
 import global.MessageSystem;
-import global.msgsystem.messages.*;
+import global.msgsystem.messages.toServlet.AbstractToServlet;
+import global.msgsystem.messages.toServlet.ChangePasswordAnswer;
+import global.msgsystem.messages.toDB.ChangePasswordQuery;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +36,6 @@ public class ProfilePage extends WebPage {
             throws IOException
     {
         String passw = request.getParameter("newPassw");
-        String repeatPassw = request.getParameter("confirmPassw");
         String curPassw = request.getParameter("curPassw");
 
         HttpSession session = request.getSession(false);
@@ -41,31 +43,31 @@ public class ProfilePage extends WebPage {
         String login = session.getAttribute("login").toString();
 
         this.msys.sendMessage(new ChangePasswordQuery(login, curPassw, passw), "dbman");
-        this.setZombie();
+        setZombie();
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
-        JSONObject JObject = new JSONObject();
+        JSONObject json = new JSONObject();
 
         if (this.successChangeProfile) {
-            JObject.put("status", "1");
+            json.put("status", OK);
         }
         else {
-            JObject.put("status", "-1");
-            JObject.put("message", messageError);
+            json.put("status", FAILED);
+            json.put("message", messageError);
         }
-        printout.print(JObject);
+        printout.print(json);
         printout.flush();
     }
 
 
     @Override
-    public void finalizeAsync(AbstractMsg abs_msg) {
-        if (abs_msg instanceof ChangePasswordAnswer) {
-            ChangePasswordAnswer msg = (ChangePasswordAnswer) abs_msg;
+    public void finalizeAsync(AbstractToServlet absMsg) {
+        if (absMsg instanceof ChangePasswordAnswer) {
+            ChangePasswordAnswer msg = (ChangePasswordAnswer) absMsg;
             this.successChangeProfile = msg.isChangePasswordSuccess();
             this.messageError = msg.getErrMsg();
-            this.resume();
+            resume();
         }
     }
 

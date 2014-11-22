@@ -1,17 +1,18 @@
-package global.msgsystem.messages;
+package global.msgsystem.messages.toServlet;
 
 /**
  * Created by Евгений on 06.09.2014.
  */
 
 import global.Servlet;
+import global.msgsystem.messages.AbstractMsg;
 import global.servlet.webpages.RegisterPage;
 
 /**
  * Created by Евгений on 28.08.2014.
  */
 
-public class RegistrationAnswer extends AbstractMsg {
+public class RegistrationAnswer extends AbstractToServlet {
     private final boolean success;
     private final String login;
     private final String errorMessage;
@@ -21,7 +22,6 @@ public class RegistrationAnswer extends AbstractMsg {
         this.login = login;
         this.errorMessage = errMsg;
     }
-
 
     public boolean isRegistrationSuccess() {
         return this.success;
@@ -34,14 +34,8 @@ public class RegistrationAnswer extends AbstractMsg {
     public String getErrMsg() { return this.errorMessage; }
 
     @Override
-    public void exec(Runnable abonent) {
-        if(abonent instanceof Servlet) {
-            Servlet srv = (Servlet) abonent;
-            srv.transmitToPage(RegisterPage.URL, this);
-        }
-        else{
-            System.out.println("RegistrationAnswer exception during execution");
-        }
+    public void exec(Servlet servlet) {
+        servlet.transmitToPage(RegisterPage.URL, this);
     }
 }
 

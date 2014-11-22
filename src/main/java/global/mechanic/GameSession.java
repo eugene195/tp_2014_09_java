@@ -34,11 +34,7 @@ public class GameSession {
         long id = idCounter.getAndIncrement();
         Player player = new Player(name, id);
         players.put(name, player);
-
-        if (players.size() == params.playersCnt) {
-            return true;
-        }
-        return false;
+        return (players.size() == params.playersCnt);
     }
 
     public Params getParams() { return this.params; }

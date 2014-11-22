@@ -1,10 +1,11 @@
 package global.servlet.webpages;
 
+import global.AddressService;
 import global.MessageSystem;
-import global.msgsystem.messages.AbstractMsg;
-import global.msgsystem.messages.BestScoresAnswer;
-import global.msgsystem.messages.BestScoresQuery;
 import global.models.Score;
+import global.msgsystem.messages.toServlet.AbstractToServlet;
+import global.msgsystem.messages.toServlet.BestScoresAnswer;
+import global.msgsystem.messages.toDB.BestScoresQuery;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,32 +32,31 @@ public class ScorePage extends WebPage {
             throws IOException
     {
         PrintWriter printout = response.getWriter();
-        JSONObject JObject = new JSONObject();
-
+        JSONObject json = new JSONObject();
         this.scores = null;
         this.msys.sendMessage(new BestScoresQuery(), "dbman");
-        this.setZombie();
+        setZombie();
 
         if (this.scores != null) {
-            JObject.put("status", "1");
-            JObject.put("bestScores", this.scores);
+            json.put("status", OK);
+            json.put("bestScores", scores);
         }
         else {
-            JObject.put("status", "-1");
-            JObject.put("message", "There is no session for you");
+            json.put("status", FAILED);
+            json.put("message", "There is no session for you");
         }
 
         response.setContentType("application/json; charset=UTF-8");
-        printout.print(JObject);
+        printout.print(json);
         printout.flush();
     }
 
     @Override
-    public void finalizeAsync(AbstractMsg a_msg) {
-        if (a_msg instanceof BestScoresAnswer) {
-            BestScoresAnswer msg = (BestScoresAnswer) a_msg;
+    public void finalizeAsync(AbstractToServlet absMsg) {
+        if (absMsg instanceof BestScoresAnswer) {
+            BestScoresAnswer msg = (BestScoresAnswer) absMsg;
             this.scores = msg.getScores();
-            this.resume();
+            resume();
         }
     }
 }

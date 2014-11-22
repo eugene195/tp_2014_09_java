@@ -2,9 +2,9 @@ package global.servlet.webpages;
 
 import global.MessageSystem;
 import global.mechanic.GameSession;
-import global.msgsystem.messages.AbstractMsg;
-import global.msgsystem.messages.GameSessionsAnswer;
-import global.msgsystem.messages.GameSessionsQuery;
+import global.msgsystem.messages.toServlet.GameSessionsAnswer;
+import global.msgsystem.messages.toGameMechanics.GameSessionsQuery;
+import global.msgsystem.messages.toServlet.AbstractToServlet;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -38,24 +38,24 @@ public class GameListPage extends WebPage {
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
 
-        JSONObject json = new JSONObject();
+        JSONObject jObject = new JSONObject();
 
         if (this.sessions != null) {
-            json.put("sessions", this.getData());
-            json.put("status", "1");
+            jObject.put("sessions", this.getData());
+            jObject.put("status", OK);
         }
         else {
-            json.put("status", "-1");
-            json.put("message", "Internal server error");
+            jObject.put("status", FAILED);
+            jObject.put("message", "Internal server error");
         }
         this.sessions = null;
 
-        printout.print(json);
+        printout.print(jObject);
         printout.flush();
     }
 
     @Override
-    public void finalizeAsync(AbstractMsg absMsg) {
+    public void finalizeAsync(AbstractToServlet absMsg) {
         if (absMsg instanceof GameSessionsAnswer) {
             GameSessionsAnswer msg = (GameSessionsAnswer) absMsg;
             this.sessions = msg.getSessions();
