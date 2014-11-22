@@ -1,5 +1,5 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="scores">
-<div class="wrapper">
+<div class="wrapper-top">
 
 	<div class="form">
  

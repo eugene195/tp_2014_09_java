@@ -22,7 +22,7 @@ var GameList = Backbone.View.extend({
     template: tmpl,
 
     events: {
-        "submit .new-game__form": "createGame",
+        "submit form[name=gamelist-form]": "createGame",
         "click .sessions__entry": "addUser"
     },
 
