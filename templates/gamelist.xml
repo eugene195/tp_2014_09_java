@@ -1,60 +1,89 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="sessions">
 
-<div>
-  <div class="header">
-    <div class="header__infobar">
-      <h2>Games list</h2>
-      <h3>Choose Yours</h3>
+<div class="wrapper-top">
+   
+  <form class="form" name="gamelist-form" data-action="/startGame" method="POST">
+   
+    <div class="form__header">
+      <h1 class="form__header__h1">Game List</h1>
+      <span class="form__header__span">Let's get started.</span>
     </div>
-  </div>
 
-  <br/>
-  <div class="new-game">
-    <form class="new-game__form" data-action="/startGame" method="POST">
-      <label for="players-cnt">Количество игроков:</label>
-      <input name="players-cnt" type="number" value="2"/>
-      <br/>
-      <p>Размеры игрового поля:</p>
-      <label name="width">W:</label>
-      <input name="width" type="number" value="400"/>
-      <label name="height">H:</label>
-      <input name="height" type="number" value="400"/>
-      <label for="speed">Скорость игры:</label>
-      <select name="speed">
-          <option value="1">Быстро</option>
-          <option value="2">Нормально</option>
-          <option value="3">Медленно</option>
-      </select>
-      <label for="launch-time">Время до начала игры:</label>
-      <select name="launch-time">
-        <option>1 мин</option>
-        <option>5 мин</option>
-        <option>10 мин</option>
-      </select>
-      <br/>
-      <button type="submit">Создать заявку</button>
-    </form>
-  </div>
-
-  <br/>
-  <div class="sessions">
-    <fest:each iterate="sessions" index="i" value="game">
-      <hr/>
-      <div class="sessions__players">
-        <fest:each iterate="game.players" index="j" value="player">
-          <strong>
-            <fest:value>player</fest:value>
-          </strong>
-        </fest:each>
+    <div class="form__content">
+      <div class="form__content__row">
+        <label for="players-cnt">Players:</label>
+        <input class="input-number right" name="players-cnt" type="number" min="2" value="2"/>
       </div>
-      <br/>
-      <button class="sessions__entry">Вступить</button>
-      <br/>
-      <input class="sessions__id" type="hidden" value="<fest:value>game.sessionId</fest:value>"/>
-      <fest:value>game.playersCnt</fest:value>
-      <fest:value>game.time</fest:value>
-    </fest:each>
-  </div>
+      <div class="form__content__row">
+        <label>Screen size:</label>
+        <input class="input-number right" name="width" type="number" value="400"/>
+        <img class="icon-size right" src="../images/size_width_32.png"/>
+        <input class="input-number right" name="height" type="number" value="400"/>
+        <img class="icon-size right" src="../images/size_height_32.png"/>
+      </div>
+      <div class="form__content__row form__content_row_fixed">
+      <label for="speed">Game Mode:</label>
+      <span class="css3-metro-dropdown right">
+        <select name="speed">
+          <option value="1">Fast</option>
+          <option value="2">Normal</option>
+          <option value="3">Slow</option>
+        </select>
+      </span>
+      </div>
+      <div class="form__content__row form__content_row_fixed">
+        <label for="launch-time">Waiting time:</label>
+        <span class="css3-metro-dropdown right">
+          <select name="launch-time">
+            <option>1 min</option>
+            <option>5 min</option>
+            <option>10 min</option>
+          </select>   
+        </span> 
+      </div> 
+      <!--START-->
+      <div class="form__content__button">
+        <input type="submit" name="submit" value="Create New Game" class="form__footer__button form__footer__button_green" />
+      </div>
+      
+      
+      <fest:each iterate="sessions" index="i" value="game">
+        <div class="session">
+        <div class="sessions__players">
+          <fest:each iterate="game.players" index="j" value="player">
+              
+              <fest:value>player</fest:value>
+          </fest:each>
+        </div>
+        
+        <button class="sessions__entry form__footer__button form__footer__button_small">Join</button>
+
+        <input class="sessions__id" type="hidden" value="<fest:value>game.sessionId</fest:value>"/>
+        <div class="sessions__info">
+          <fest:for from="1" to="game.playersCnt" index="i">
+            
+              <img class="icon-size right" src="../images/user.png"/>
+
+          </fest:for>
+          <fest:value>game.time</fest:value>
+        </div>
+
+        
+       
+        
+        </div>
+      </fest:each>  
+      
+    </div>
+    <div class="form__footer">
+      
+      <!--BACK-->
+      <a href="#" class="form__footer__button form__footer__button_orange">Back</a>
+    </div>
+    
+  </form>
+
 </div>
 
+<div class="gradient"></div> 
 </fest:template>

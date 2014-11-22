@@ -42,14 +42,16 @@ public class GameMechanicsImpl implements GameMechanics {
 
     @Override
     public void run() {
+        int I = 0;
         while (true) {
             this.msys.executeFor(this);
             try {
+                System.out.println(I++);
                 sleep(STEP_TIME);
+                this.gmStep();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            this.gmStep();
         }
     }
 
@@ -97,6 +99,7 @@ public class GameMechanicsImpl implements GameMechanics {
         if (this.checkAlready(player)) {
             boolean filled = gameSession.add(player);
             if (filled) {
+                this.waitingPlayers.remove(sessionId);
                 this.startGame(gameSession);
                 this.waitingPlayers.remove(sessionId);
             }
@@ -112,7 +115,7 @@ public class GameMechanicsImpl implements GameMechanics {
         this.webSocketService.notifyStart(gameSession);
 
         Params params = gameSession.getParams();
-        Engine newEngine = new Engine(this, params.width, params.height, params.speed);
+        Engine newEngine = new Engine(msys, this, params.width, params.height, params.speed);
         newEngine.generateSnakes(gameSession);
         this.engines.add(newEngine);
 

@@ -1,3 +1,44 @@
 @import url("login_register.css");
 @import url("game.css");
+@import url("selector.css");
 
+.right {
+	float: right;
+}
+
+.input-number {
+	width: 40px;
+}
+
+.icon-size {
+	width: 20px;
+	padding-left: 5px;
+}
+
+.form__content__button {
+	padding-top:10px;
+	padding-bottom:5px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.session {
+	padding: 10px;
+	margin-top: 10px;
+	margin-bottom:5px;
+	background-color: #e9d9ff;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.sessions__players {
+	float: left;
+}
+
+.sessions__info {
+	padding-top: 6px;
+	padding-right: 10px;
+	float: right;
+}
