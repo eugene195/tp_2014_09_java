@@ -88,21 +88,19 @@ HEADER
 *******************/
 .form__header {
   padding: 40px 30px 30px 30px; }
-
-.form__header__h1 {
-  font-family: 'Bree Serif', serif;
-  font-weight: 300;
-  font-size: 28px;
-  line-height: 34px;
-  color: #414848;
-  text-shadow: 1px 1px 0 white;
-  margin-bottom: 10px; }
-
-.form__header__span {
-  font-size: 11px;
-  line-height: 16px;
-  color: #678889;
-  text-shadow: 1px 1px 0 white; }
+  .form__header__h1 {
+    font-family: 'Bree Serif', serif;
+    font-weight: 300;
+    font-size: 28px;
+    line-height: 34px;
+    color: #414848;
+    text-shadow: 1px 1px 0 white;
+    margin-bottom: 10px; }
+  .form__header__span {
+    font-size: 11px;
+    line-height: 16px;
+    color: #678889;
+    text-shadow: 1px 1px 0 white; }
 
 /*******************
 CONTENT
@@ -196,7 +194,7 @@ CONTENT
   border-radius: 6px;
   overflow: hidden; }
 
-.form__content_row_fixed {
+.form__content__row_fixed {
   height: 40px; }
 
 .form__content__menu-item:hover {

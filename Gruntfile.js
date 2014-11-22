@@ -32,7 +32,7 @@ module.exports = function (grunt) {
             css: {
                 files: [{
                     expand: true,
-                    cwd: 'public_html/scss', /* исходная директория */
+                    cwd: 'public_html/css', /* исходная директория */
                     src: '*.scss',
                     dest: 'public_html/css', /* результирующая директория */
                     ext:  '.css'
@@ -49,7 +49,7 @@ module.exports = function (grunt) {
                 }
             },
             sass: {
-                files: ['public_html/scss'],
+                files: ['public_html/css'],
                 tasks: ['sass'],
                 options: {
                     interrupt: true,

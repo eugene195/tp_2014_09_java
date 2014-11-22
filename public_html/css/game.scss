@@ -1,0 +1,82 @@
+$white: #ffffff;
+$greeny: #2EB82E;
+
+$full-size: 100%;
+$base-gap: 10px;
+$base-size: 10px;
+$base-br: 20px;
+$font-weight: 400;
+
+@mixin panel() {
+    margin-top: $base-gap;
+    margin-bottom: $base-gap;
+    right: $base-size;
+    left: $base-size;
+    min-width: $full-size;
+    height: $base-size * 4;
+    background: $greeny;
+    border-radius: $base-br;
+}
+
+@mixin bar() {
+    margin-left: $base-gap;
+    margin-top: $base-gap;
+    display: inline-block;
+    float: left;
+    font-weight: $font-weight;
+    font-size: 14px;
+    color: $white;
+    text-align: center;
+}
+
+@mixin base-text() {
+    text-align: center;
+    font-weight: $font-weight;
+    font-size: 30px;
+    color: $white;
+}
+
+.gamepage__header {
+    @include panel();
+
+    &__infobar_status {
+        @include bar();
+    }
+}
+
+.gamepage__body {
+    @include base-text();
+
+    margin-top: $base-gap;
+    margin-bottom: $base-gap;
+    right: $base-size * 10;
+    left: $base-size * 10;
+    //	background: url(../images/tentacle.png) repeat;
+    height: $base-size * 45;
+    border-radius: $base-br / 4;
+}
+
+.gamepage__menu__infobar__menu-btn {
+    @include base-text();
+
+    margin-top: $base-gap / 2;
+    margin-right: $base-gap * 3;
+    width: $base-size * 6;
+    height: $base-size * 5/2;
+    float: right;
+    border-radius: $base-br * 2;
+    background: #FCBE2B;
+    border: 1px solid #FFA200;
+}
+
+.gamepage__footer {
+  @include panel();
+
+    &__controlbar {
+        @include bar();
+
+        &__menu-btn {
+          @include panel();
+        }
+    }
+}
