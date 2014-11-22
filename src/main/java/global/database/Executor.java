@@ -47,6 +47,7 @@ public class Executor {
 
         result.close();
         stmt.close();
+        connection.close();
         return value;
     }
 
@@ -70,11 +71,11 @@ public class Executor {
             }
 
             connection.commit();
-            connection.setAutoCommit(true);
+            connection.close();
 
         } catch (SQLException e) {
             connection.rollback();
-            connection.setAutoCommit(true);
+            connection.close();
             System.out.println("Exception during DB execUpdate");
             throw e;
         }

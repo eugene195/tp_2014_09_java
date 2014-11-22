@@ -42,11 +42,9 @@ public class GameMechanicsImpl implements GameMechanics {
 
     @Override
     public void run() {
-        int I = 0;
         while (true) {
             this.msys.executeFor(this);
             try {
-                System.out.println(I++);
                 sleep(STEP_TIME);
                 this.gmStep();
             } catch (InterruptedException e) {
