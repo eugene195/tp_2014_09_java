@@ -81,6 +81,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     @Override
     public void notifyEnd(GameSession gameSession) {
         gameSession.getPlayers().forEach(this.nameToGame::remove);
+        gameSession.getPlayers().forEach(this.userSockets::remove);
 
         for (String user : gameSession.getPlayers()) {
             GameWebSocket socket = userSockets.get(user);

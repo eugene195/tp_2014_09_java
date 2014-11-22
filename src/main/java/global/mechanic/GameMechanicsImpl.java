@@ -98,6 +98,7 @@ public class GameMechanicsImpl implements GameMechanics {
             boolean filled = gameSession.add(player);
             if (filled) {
                 this.startGame(gameSession);
+                this.waitingPlayers.remove(sessionId);
             }
         }
         else {
@@ -107,10 +108,8 @@ public class GameMechanicsImpl implements GameMechanics {
 
     @Override
     public void startGame(GameSession gameSession) {
-        this.waitingPlayers.remove(gameSession);
         this.playing.add(gameSession);
         this.webSocketService.notifyStart(gameSession);
-
 
         Params params = gameSession.getParams();
         Engine newEngine = new Engine(this, params.width, params.height, params.speed);
@@ -129,7 +128,7 @@ public class GameMechanicsImpl implements GameMechanics {
             this.engines.remove(index);
             GameSession gameSession = playing.get(index);
             this.webSocketService.notifyEnd(gameSession);
-            this.playing.remove(gameSession);
+            this.playing.remove(index);
         } else {
             System.out.println("endGame index error");
         }
