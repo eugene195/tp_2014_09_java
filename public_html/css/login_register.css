@@ -76,7 +76,7 @@ body {
   margin: 0 auto;
   position: relative;
   z-index: 5;
-  border: 1px solid #fff;
+  border: 1px solid #ffffff;
   border-radius: 5px;
   background: #f3f3f3;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
@@ -113,37 +113,31 @@ CONTENT
     line-height: 16px;
     color: #678889;
     text-shadow: 1px 1px 0 white; }
-
-/* Input field */
-.form__content__input {
-  width: 188px;
-  padding: 15px 25px;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  color: #9d9e9e;
-  text-shadow: 1px 1px 0 white;
-  background: #fff;
-  border: 1px solid #fff;
-  border-radius: 5px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5); }
-
-/* Second input field */
-.form__content__input_password {
-  margin-top: 25px; }
-
-.form__content__input:hover {
-  background: #dfe9ec;
-  color: #414848; }
-
-.form__content__input:focus {
-  background: #dfe9ec;
-  color: #414848;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
-  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25); }
+  .form__content__input {
+    width: 188px;
+    padding: 15px 25px;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #9d9e9e;
+    text-shadow: 1px 1px 0 white;
+    background: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5); }
+    .form__content__input_password {
+      margin-top: 25px; }
+    .form__content__input:hover {
+      background: #dfe9ec;
+      color: #414848; }
+    .form__content__input:focus {
+      background: #dfe9ec;
+      color: #414848;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+      -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+      -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25); }
 
 .user-icon, .pass-icon, .pass-icon2 {
   width: 46px;
@@ -192,13 +186,11 @@ CONTENT
   -moz-border-radius: 6px;
   border-radius: 6px;
   overflow: hidden; }
-
-.form__content__row_fixed {
-  height: 40px; }
+  .form__content__row_fixed {
+    height: 40px; }
 
 .form__content__menu-item:hover {
   background-color: #c0c0c0; }
-
 .form__content__menu-item__link {
   padding: 5px;
   margin-right: 5px;
@@ -211,9 +203,8 @@ CONTENT
   color: #414848;
   text-shadow: 0px 1px 0 rgba(255, 255, 255, 0.5);
   text-decoration: none; }
-
-.form__content__menu-item__link:hover {
-  text-decoration: underline; }
+  .form__content__menu-item__link:hover {
+    text-decoration: underline; }
 
 /* Animation */
 .form__content__input, .user-icon, .pass-icon,
@@ -231,81 +222,67 @@ FOOTER
   padding: 25px 30px 40px 15px;
   overflow: auto;
   background: #d4dedf;
-  border-top: 1px solid #fff;
+  border-top: 1px solid #ffffff;
   box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.15);
   -moz-box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.15);
   -webkit-box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.15); }
-
-/*  button */
-.form__footer__button {
-  float: right;
-  padding: 11px 25px;
-  font-family: 'Bree Serif', serif;
-  font-weight: 300;
-  font-size: 18px;
-  color: #fff;
-  text-shadow: 0px 1px 0 rgba(0, 0, 0, 0.25);
-  background: #56c2e1;
-  border: 1px solid #46b3d3;
-  border-radius: 5px;
-  cursor: pointer;
-  box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.75);
-  -moz-box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.75);
-  -webkit-box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.75);
-  text-decoration: none; }
-
-.form__footer__button:hover {
-  background: #3f9db8;
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5); }
-
-.form__footer__button:focus {
-  position: relative;
-  bottom: -1px;
-  background: #56c2e1;
-  box-shadow: inset 0 1px 6px rgba(255, 255, 255, 0.75);
-  -moz-box-shadow: inset 0 1px 6px rgba(255, 255, 255, 0.75);
-  -webkit-box-shadow: inset 0 1px 6px rgba(255, 255, 255, 0.75); }
-
-.form__footer__button_small {
-  padding: 3px 10px; }
-
-.form__footer__button_orange {
-  background: #FCBE2B;
-  border: 1px solid #FFA200;
-  margin-right: 20px; }
-
-.form__footer__button_orange:hover {
-  background: #FFA200; }
-
-.form__footer__button_orange:focus {
-  background: #FFA200; }
-
-.form__footer__button_green {
-  background: #78da00;
-  border: 1px solid #78da00;
-  margin-right: 20px;
-  float: none; }
-
-.form__footer__button_green:hover {
-  background: #78ba00; }
-
-.form__footer__button_green:focus {
-  background: #78da00; }
-
-.form__footer__button_disabled {
-  background: #aaa !important;
-  border: 1px solid #999 !important; }
-
-.form__footer__button_disabled:hover {
-  background: #aaa !important;
-  border: 1px solid #999 !important; }
-
-.form__footer__button_disabled:focus {
-  background: #aaa !important;
-  border: 1px solid #999 !important; }
+  .form__footer__button {
+    float: right;
+    padding: 11px 25px;
+    font-family: 'Bree Serif', serif;
+    font-weight: 300;
+    font-size: 18px;
+    color: #ffffff;
+    text-shadow: 0px 1px 0 rgba(0, 0, 0, 0.25);
+    background: #56c2e1;
+    border: 1px solid #46b3d3;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.75);
+    -moz-box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.75);
+    -webkit-box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.75);
+    text-decoration: none; }
+    .form__footer__button:hover {
+      background: #3f9db8;
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+      -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+      -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5); }
+    .form__footer__button:focus {
+      position: relative;
+      bottom: -1px;
+      background: #56c2e1;
+      box-shadow: inset 0 1px 6px rgba(255, 255, 255, 0.75);
+      -moz-box-shadow: inset 0 1px 6px rgba(255, 255, 255, 0.75);
+      -webkit-box-shadow: inset 0 1px 6px rgba(255, 255, 255, 0.75); }
+    .form__footer__button_small {
+      padding: 3px 10px; }
+    .form__footer__button_orange {
+      background: #FCBE2B;
+      border: 1px solid #FFA200;
+      margin-right: 20px; }
+      .form__footer__button_orange:hover {
+        background: #FFA200; }
+      .form__footer__button_orange:focus {
+        background: #FFA200; }
+    .form__footer__button_green {
+      background: #78da00;
+      border: 1px solid #78da00;
+      margin-right: 20px;
+      float: none; }
+      .form__footer__button_green:hover {
+        background: #78ba00; }
+      .form__footer__button_green:focus {
+        background: #78da00; }
+    .form__footer__button_disabled {
+      background: #aaa !important;
+      border: 1px solid #999 !important; }
+      .form__footer__button_disabled:hover {
+        background: #aaa !important;
+        border: 1px solid #999 !important; }
+      .form__footer__button_disabled:focus {
+        background: #aaa !important;
+        border: 1px solid #999 !important; }
 
 input::-moz-focus-inner {
   border: 0; }
