@@ -1,11 +1,11 @@
-package global.mechanic;
+package global.mechanics;
 
 import global.GameMechanics;
 import global.MessageSystem;
 import global.engine.Engine;
 import global.engine.Params;
-import global.mechanic.sockets.WebSocketServiceImpl;
-import global.WebSocketService;
+import global.mechanics.sockets.SocketServiceImpl;
+import global.SocketService;
 import global.msgsystem.messages.toServlet.GameSessionsAnswer;
 
 import java.util.*;
@@ -22,7 +22,7 @@ public class GameMechanicsImpl implements GameMechanics {
     private static AtomicLong idCounter = new AtomicLong();
 
     private final MessageSystem msys;
-    private final WebSocketService webSocketService;
+    private final SocketService socketService;
 
     private final Map<Long, GameSession> waitingPlayers = new HashMap<>();
     private final ArrayList<GameSession> playing = new ArrayList<>();
@@ -32,12 +32,12 @@ public class GameMechanicsImpl implements GameMechanics {
         this.msys = msys;
         this.msys.register(this, MECHANIC_ADDRESS);
 
-        this.webSocketService = new WebSocketServiceImpl(this);
+        this.socketService = new SocketServiceImpl(this);
     }
 
     @Override
-    public WebSocketService getWebSocketService() {
-        return webSocketService;
+    public SocketService getSocketService() {
+        return socketService;
     }
 
     @Override
@@ -110,7 +110,7 @@ public class GameMechanicsImpl implements GameMechanics {
     @Override
     public void startGame(GameSession gameSession) {
         this.playing.add(gameSession);
-        this.webSocketService.notifyStart(gameSession);
+        this.socketService.notifyStart(gameSession);
 
         Params params = gameSession.getParams();
         Engine newEngine = new Engine(msys, this, params.width, params.height, params.speed);
@@ -128,7 +128,7 @@ public class GameMechanicsImpl implements GameMechanics {
         if (index != -1) {
             this.engines.remove(index);
             GameSession gameSession = playing.get(index);
-            this.webSocketService.notifyEnd(gameSession);
+            this.socketService.notifyEnd(gameSession);
             this.playing.remove(index);
         } else {
             System.out.println("endGame index error");
@@ -141,7 +141,7 @@ public class GameMechanicsImpl implements GameMechanics {
 
         if (index != -1) {
             GameSession session = this.playing.get(index);
-            this.webSocketService.sendToClients(action, data, session);
+            this.socketService.sendToClients(action, data, session);
         } else {
             System.out.println("sendToClients index error");
         }

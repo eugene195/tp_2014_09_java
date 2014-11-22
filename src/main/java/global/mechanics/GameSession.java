@@ -1,4 +1,4 @@
-package global.mechanic;
+package global.mechanics;
 
 import global.engine.Params;
 import global.models.Player;

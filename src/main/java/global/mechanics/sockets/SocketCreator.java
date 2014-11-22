@@ -1,6 +1,6 @@
-package global.mechanic.sockets;
+package global.mechanics.sockets;
 
-import global.WebSocketService;
+import global.SocketService;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
@@ -10,11 +10,11 @@ import javax.servlet.http.HttpSession;
 /**
  * Created by eugene on 10/19/14.
  */
-public class CustomWebSocketCreator implements WebSocketCreator {
-    private final WebSocketService webSocketService;
+public class SocketCreator implements WebSocketCreator {
+    private final SocketService socketService;
 
-    public CustomWebSocketCreator(WebSocketService webSocketService) {
-        this.webSocketService = webSocketService;
+    public SocketCreator(SocketService socketService) {
+        this.socketService = socketService;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class CustomWebSocketCreator implements WebSocketCreator {
             String login = session.getAttribute("login").toString();
 
             if (login != null) {
-                return new GameWebSocket(login, webSocketService);
+                return new GameSocket(login, socketService);
             }
         }
         return null;

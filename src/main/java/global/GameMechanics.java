@@ -2,7 +2,7 @@ package global;
 
 import global.engine.Engine;
 import global.engine.Params;
-import global.mechanic.GameSession;
+import global.mechanics.GameSession;
 
 import java.util.Map;
 
@@ -13,7 +13,7 @@ public interface GameMechanics extends Runnable {
 
     void run();
 
-    WebSocketService getWebSocketService();
+    SocketService getSocketService();
 
     void sendToClients(String action, Map<String, Object> data, Engine from);
     void sendToEngine(String action, Map<String, Object> data, GameSession session);

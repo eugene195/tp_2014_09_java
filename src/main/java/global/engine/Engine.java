@@ -3,7 +3,7 @@ package global.engine;
 import global.AddressService;
 import global.GameMechanics;
 import global.MessageSystem;
-import global.mechanic.GameSession;
+import global.mechanics.GameSession;
 import global.msgsystem.messages.toGameMechanics.EndGameQuery;
 
 import java.util.ArrayList;

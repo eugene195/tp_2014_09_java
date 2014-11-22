@@ -1,9 +1,9 @@
-package global.mechanic.sockets;
+package global.mechanics.sockets;
 
 import global.GameMechanics;
 import global.engine.Params;
-import global.mechanic.GameSession;
-import global.WebSocketService;
+import global.mechanics.GameSession;
+import global.SocketService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,19 +11,19 @@ import java.util.Map;
 /**
  * Created by eugene on 10/19/14.
  */
-public class WebSocketServiceImpl implements WebSocketService {
+public class SocketServiceImpl implements SocketService {
 
-    private final Map<String, GameWebSocket> userSockets = new HashMap<>();
+    private final Map<String, GameSocket> userSockets = new HashMap<>();
     private final Map<String, GameSession> nameToGame = new HashMap<>();
 
     private final GameMechanics mechanics;
 
-    public WebSocketServiceImpl(GameMechanics mechanics) {
+    public SocketServiceImpl(GameMechanics mechanics) {
         this.mechanics = mechanics;
     }
 
     @Override
-    public void startGameSession(Params params, GameWebSocket user) {
+    public void startGameSession(Params params, GameSocket user) {
         String myName = user.getMyName();
 
         if (! nameToGame.containsKey(myName)) {
@@ -36,7 +36,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     }
 
     @Override
-    public void addUser(int sessionId, GameWebSocket user) {
+    public void addUser(int sessionId, GameSocket user) {
         String myName = user.getMyName();
 
         if (! nameToGame.containsKey(myName)) {
@@ -52,7 +52,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     public void sendToClients(String action, Map<String, Object> data, GameSession session) {
         int userId = 0;
         for (String user : session.getPlayers()) {
-            GameWebSocket socket = userSockets.get(user);
+            GameSocket socket = userSockets.get(user);
             data.put("snakeId", userId);
             socket.sendToClient(action, data);
             userId++;
@@ -73,7 +73,7 @@ public class WebSocketServiceImpl implements WebSocketService {
         }
 
         for (String user : gameSession.getPlayers()) {
-            GameWebSocket socket = userSockets.get(user);
+            GameSocket socket = userSockets.get(user);
             socket.sendToClient("notifyStart");
         }
     }
@@ -84,7 +84,7 @@ public class WebSocketServiceImpl implements WebSocketService {
         gameSession.getPlayers().forEach(this.userSockets::remove);
 
         for (String user : gameSession.getPlayers()) {
-            GameWebSocket socket = userSockets.get(user);
+            GameSocket socket = userSockets.get(user);
             socket.sendToClient("notifyEnd");
         }
     }

@@ -6,9 +6,8 @@ import global.resources.ResourceFactoryImpl;
 import global.servlet.ServletImpl;
 import global.resources.ServerResource;
 
-import global.mechanic.GameMechanicsImpl;
-import global.mechanic.sockets.WebSocketGameServlet;
-import global.mechanic.sockets.WebSocketServiceImpl;
+import global.mechanics.GameMechanicsImpl;
+import global.mechanics.sockets.SocketServlet;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -38,11 +37,11 @@ public class Main
             DataBaseManager dbman = createDbMan(msys, conf);
 
             GameMechanics gameMechanics = new GameMechanicsImpl(msys);
-            WebSocketService webSocketService = gameMechanics.getWebSocketService();
+            SocketService socketService = gameMechanics.getSocketService();
 
             configureThreads(servletImpl, dbman, gameMechanics);
 
-            ServletContextHandler context = createContext(servletImpl, webSocketService);
+            ServletContextHandler context = createContext(servletImpl, socketService);
             HandlerList handlers = createServerHandlers();
             handlers.addHandler(context);
 
@@ -89,10 +88,10 @@ public class Main
     }
 
     private static ServletContextHandler createContext( ServletImpl servletImpl,
-                                                       WebSocketService webSocketService)
+                                                       SocketService socketService)
     {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(new WebSocketGameServlet(webSocketService)), "/gameplay");
+        context.addServlet(new ServletHolder(new SocketServlet(socketService)), "/gameplay");
         context.addServlet(new ServletHolder(servletImpl), "/");
         return context;
     }

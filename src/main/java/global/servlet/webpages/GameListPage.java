@@ -1,7 +1,7 @@
 package global.servlet.webpages;
 
 import global.MessageSystem;
-import global.mechanic.GameSession;
+import global.mechanics.GameSession;
 import global.msgsystem.messages.toServlet.GameSessionsAnswer;
 import global.msgsystem.messages.toGameMechanics.GameSessionsQuery;
 import global.msgsystem.messages.toServlet.AbstractToServlet;

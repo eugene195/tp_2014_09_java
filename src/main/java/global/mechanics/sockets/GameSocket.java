@@ -1,6 +1,6 @@
-package global.mechanic.sockets;
+package global.mechanics.sockets;
 
-import global.WebSocketService;
+import global.SocketService;
 import global.engine.Params;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -16,14 +16,14 @@ import java.util.Map;
  * Created by eugene on 10/19/14.
  */
 @WebSocket
-public class GameWebSocket {
+public class GameSocket {
     private String myName;
     private Session session;
-    private WebSocketService webSocketService;
+    private SocketService socketService;
 
-    public GameWebSocket(String myName, WebSocketService webSocketService) {
+    public GameSocket(String myName, SocketService socketService) {
         this.myName = myName;
-        this.webSocketService = webSocketService;
+        this.socketService = socketService;
     }
 
     public String getMyName() {
@@ -57,11 +57,11 @@ public class GameWebSocket {
             Params params = new Params();
             params.setParams(json);
 
-            webSocketService.startGameSession(params, this);
+            socketService.startGameSession(params, this);
         }
         else if (action.equals("addUser")) {
             int sessionId = json.getInt("sessionId");
-            webSocketService.addUser(sessionId, this);
+            socketService.addUser(sessionId, this);
         }
         else {
             JSONObject dataJson = json.getJSONObject("data");
@@ -72,7 +72,7 @@ public class GameWebSocket {
                 data.put(key, dataJson.get(key));
             }
 
-            webSocketService.sendToEngine(action, data, myName);
+            socketService.sendToEngine(action, data, myName);
         }
     }
 

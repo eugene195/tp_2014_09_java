@@ -1,8 +1,7 @@
 package global.msgsystem.messages.toServlet;
 
 import global.Servlet;
-import global.mechanic.GameSession;
-import global.msgsystem.messages.toServlet.AbstractToServlet;
+import global.mechanics.GameSession;
 import global.servlet.webpages.GameListPage;
 
 import java.util.Map;
