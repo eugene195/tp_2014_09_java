@@ -29,16 +29,15 @@ public class DataBaseManagerImpl implements DataBaseManager {
         msys.register(this, AddressService.getDBManAddr());
 
         String baseUrl = "jdbc:mysql://localhost/" + baseName;
-        String baseUserName = userName;
-        String baseUserPasswd = userPasswd;
 
         try {
             Class c = Class.forName("com.mysql.jdbc.Driver");
             Driver driver = (Driver)c.newInstance();
             DriverManager.registerDriver(driver);
 
+            int minPool = 5, maxPool = 10, maxSize = 30, idleTime = 180;
             ConnectionPool conPool = new ConnectionPool("local",
-                    5, 10, 30, 180, baseUrl, baseUserName, baseUserPasswd);
+                    minPool, maxPool, maxSize, idleTime, baseUrl, userName, userPasswd);
 
             this.executor = new Executor(conPool);
             System.out.println("DB connected");
@@ -57,7 +56,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
         }
         catch (Exception e) {
             System.out.println("DB cannot be terminated");
-            }
+        }
     }
 
     public boolean userExists(String login){
@@ -69,8 +68,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
             }
         }
         catch (Exception e){
-            System.out.println(e.getMessage());
-            System.out.println("Exception during DB Select in userExists");
+            System.out.println(e.getMessage() + "\n" + "Exception during DB Select in userExists");
         }
         return false;
     }
@@ -83,7 +81,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
             this.msys.sendMessage(new GetUsersAnswer(users), AddressService.getServletAddr());
         }
         catch (Exception e) {
-            System.out.println("Sql exception during getUsers()");
+            System.out.println(e.getMessage() + "\nSql exception during getUsers()");
         }
     }
 
@@ -104,8 +102,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
             }
         }
         catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Sql exception during checkAuth()");
+            System.out.println(e.getMessage() + "\nSql exception during checkAuth()");
             userSession.setSuccessAuth(false);
             this.msys.sendMessage(new AuthAnswer(userSession), AddressService.getServletAddr());
         }
@@ -113,10 +110,8 @@ public class DataBaseManagerImpl implements DataBaseManager {
 
     @Override
     public void registerUser(String login, String passw) {
-
         if (userExists(login)) {
             this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already Exists"), "servlet");
-
         }
         else {
             try {
@@ -145,7 +140,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
             }
         }
         catch (SQLException e) {
-            System.out.println("Sql exception during changePassword()");
+            System.out.println("Sql exception during user deletion()");
         }
     }
 
@@ -153,9 +148,9 @@ public class DataBaseManagerImpl implements DataBaseManager {
     public void bestScores() {
         try {
             UsersDAO userDAO = new UsersDAO(executor);
-            ArrayList<UserDataSet> users = userDAO.getTop();
+            ArrayList<UserDataSet> users = userDAO.getTopScorers();
 
-            ArrayList<Score> scores = new ArrayList();
+            ArrayList<Score> scores = new ArrayList<>();
             for (UserDataSet user: users) {
                 scores.add(new Score(user.getLogin(), user.getScore()));
             }
@@ -198,5 +193,4 @@ public class DataBaseManagerImpl implements DataBaseManager {
             }
         }
     }
-
 }
