@@ -107,13 +107,12 @@ CONTENT
 *******************/
 .form__content {
   padding: 0 30px 25px 30px; }
-
-.form__content__label {
-  font-family: 'Bree Serif', serif;
-  font-size: 15px;
-  line-height: 16px;
-  color: #678889;
-  text-shadow: 1px 1px 0 white; }
+  .form__content__label {
+    font-family: 'Bree Serif', serif;
+    font-size: 15px;
+    line-height: 16px;
+    color: #678889;
+    text-shadow: 1px 1px 0 white; }
 
 /* Input field */
 .form__content__input {
