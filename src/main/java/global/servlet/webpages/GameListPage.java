@@ -59,10 +59,10 @@ public class GameListPage extends WebPage {
         if (absMsg instanceof GameSessionsAnswer) {
             GameSessionsAnswer msg = (GameSessionsAnswer) absMsg;
             this.sessions = msg.getSessions();
+            this.resume();
         } else {
             System.out.println("Error during GameList.finalizeAsync");
         }
-        this.resume();
     }
 
     private JSONArray getData() {

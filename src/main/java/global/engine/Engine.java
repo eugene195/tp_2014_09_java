@@ -1,7 +1,10 @@
 package global.engine;
 
+import global.AddressService;
 import global.GameMechanics;
+import global.MessageSystem;
 import global.mechanic.GameSession;
+import global.msgsystem.messages.toGameMechanics.EndGameQuery;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,10 +25,12 @@ public class Engine {
     private final ArrayList<Snake> snakes = new ArrayList<>();
 
     private final GameMechanics mechanic;
+    private final MessageSystem msys;
 
     //---------------------------------------------------------------------------------------------------
 
-    public Engine(GameMechanics mechanic, int width, int height, int speed) {
+    public Engine(MessageSystem msys, GameMechanics mechanic, int width, int height, int speed) {
+        this.msys = msys;
         this.launched = false;
         this.mechanic = mechanic;
         this.speed = speed;
@@ -218,7 +223,7 @@ public class Engine {
         }
 
         mechanic.sendToClients("endGame", data, this);
-        mechanic.endGame(this);
+        msys.sendMessage(new EndGameQuery(this), AddressService.getMechanic());
     }
 
     public void execAction(String action, Map<String, Object> data) {
