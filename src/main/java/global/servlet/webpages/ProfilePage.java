@@ -36,7 +36,6 @@ public class ProfilePage extends WebPage {
             throws IOException
     {
         String passw = request.getParameter("newPassw");
-        String repeatPassw = request.getParameter("confirmPassw");
         String curPassw = request.getParameter("curPassw");
 
         HttpSession session = request.getSession(false);
