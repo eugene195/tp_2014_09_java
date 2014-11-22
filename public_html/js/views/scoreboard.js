@@ -10,7 +10,6 @@ define([
 
 var View = Backbone.View.extend({
     el: $('.scoreboard'),
-    collection: scoreCollection,
     template: tmpl,
 
     events: {
@@ -18,6 +17,7 @@ var View = Backbone.View.extend({
     },
 
     initialize: function () {
+        this.collection.on("reset", this.render, this);
         this.render();
         this.$el.hide();
     },
@@ -31,5 +31,5 @@ var View = Backbone.View.extend({
     }
 });
 
-    return new View();
+    return new View({collection: scoreCollection});
 });
