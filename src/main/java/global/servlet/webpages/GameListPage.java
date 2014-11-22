@@ -3,7 +3,7 @@ package global.servlet.webpages;
 import global.MessageSystem;
 import global.mechanic.GameSession;
 import global.msgsystem.messages.toServlet.GameSessionsAnswer;
-import global.msgsystem.messages.GameSessionsQuery;
+import global.msgsystem.messages.toGameMechanics.GameSessionsQuery;
 import global.msgsystem.messages.toServlet.AbstractToServlet;
 import org.json.JSONArray;
 import org.json.JSONObject;

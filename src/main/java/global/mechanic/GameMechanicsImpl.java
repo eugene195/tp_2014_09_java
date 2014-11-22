@@ -98,8 +98,6 @@ public class GameMechanicsImpl implements GameMechanics {
             boolean filled = gameSession.add(player);
             if (filled) {
                 this.startGame(gameSession);
-//                TODO
-                this.waitingPlayers.remove(sessionId);
             }
         }
         else {

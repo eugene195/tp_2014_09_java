@@ -1,10 +1,8 @@
 package global.database.dao;
 
 import global.database.Executor;
-import global.database.handlers.ResultHandler;
 import global.database.dataSets.UserDataSet;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -57,20 +55,16 @@ public class UsersDAO extends AbstractDAO {
     private ArrayList<UserDataSet> getUsers(String query, String... params)
             throws SQLException {
 
-        return exec.execQuery(query,
-            params,
-            new ResultHandler<UserDataSet>() {
-
-                public ArrayList<UserDataSet> handle(ResultSet result) throws SQLException {
-                    ArrayList<UserDataSet> users = new ArrayList();
-                    while(result.next()) {
-                        users.add(new UserDataSet(result.getLong("userId"),
-                                result.getString("login"),
-                                result.getInt("score")));
-                    }
-
-                    return users;
+        return exec.execQuery(query, params,
+            result -> {
+                ArrayList<UserDataSet> users = new ArrayList<>();
+                while(result.next()) {
+                    users.add(new UserDataSet(result.getLong("userId"),
+                                  result.getString("login"),
+                                  result.getInt("score")));
                 }
+
+                return users;
             });
     }
 
