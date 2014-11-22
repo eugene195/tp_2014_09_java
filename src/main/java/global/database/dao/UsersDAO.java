@@ -30,7 +30,7 @@ public class UsersDAO extends AbstractDAO {
         return getUsers("SELECT * FROM User");
     }
 
-    public ArrayList<UserDataSet> getTop() throws SQLException {
+    public ArrayList<UserDataSet> getTopScorers() throws SQLException {
         return getUsers("SELECT * FROM User ORDER BY score DESC LIMIT 10;");
     }
 
