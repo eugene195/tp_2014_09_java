@@ -28,10 +28,29 @@ module.exports = function (grunt) {
                 }
             }
         },
+        sass: {
+            css: {
+                files: [{
+                    expand: true,
+                    cwd: 'public_html/css', /* исходная директория */
+                    src: '*.scss',
+                    dest: 'public_html/css', /* результирующая директория */
+                    ext:  '.css'
+                }]
+            }
+        },
         watch: {
             fest: {
                 files: ['templates/*.xml'],
                 tasks: ['fest'],
+                options: {
+                    interrupt: true,
+                    atBegin: true
+                }
+            },
+            sass: {
+                files: ['public_html/css'],
+                tasks: ['sass'],
                 options: {
                     interrupt: true,
                     atBegin: true
@@ -55,6 +74,7 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-shell');
