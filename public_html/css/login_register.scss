@@ -81,21 +81,15 @@ body {
  FORM
 *******************/
 
-@mixin box-shadow($radius, $alpha) {
-    box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
-    -moz-box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
-    -webkit-box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
-}
-
 .form {
+    @include box-shadow(3px, 0.5);
+    @include border-radius(5px);
+
 	margin: 0 auto;
 	position: relative;
 	z-index: 5;
 	border: 1px solid $white;
-	border-radius: 5px;
 	background: #f3f3f3;
-
-    @include box-shadow(3, 0.5);
 }
 
 /*******************
@@ -140,6 +134,9 @@ CONTENT
     }
 
     &__input {
+        @include box-shadow(3px, 0.5);
+        @include border-radius(5px);
+
         width: 188px;
         padding: 15px 25px;
 
@@ -152,33 +149,30 @@ CONTENT
 
         background: $white;
         border: 1px solid $white;
-        border-radius: 5px;
-
-        @include box-shadow(3, 0.5);
 
         &_password {
             margin-top: 25px;
         }
 
         &:hover {
-            background: #dfe9ec;
+            background: $light-grayish-cyan;
             color: $very-dark-grayish-cyan;
         }
 
         &:focus {
-            background: #dfe9ec;
+            @include box-shadow(2px, 0.25);
+            background: $light-grayish-cyan;
             color: $very-dark-grayish-cyan;
-            @include box-shadow(2, 0.25);
         }
     }
 
     &__row {
+        @include border-radius(6px);
+
         padding: 10px 10px 5px 10px;
         margin-bottom: 10px;
         background-color: $very-light-gray;
         overflow: hidden;
-
-        @include border-radius(6px);
 
         &_fixed {
           height: 40px;
@@ -186,11 +180,11 @@ CONTENT
     }
 
     &__menu-item {
+        @include border-radius(6px);
+
         padding: 5px 10px 5px 10px;
         margin-bottom: 10px;
         background-color: $very-light-gray;
-
-        @include border-radius(6px);
 
         &:hover {
             background-color: #c0c0c0;
@@ -219,15 +213,15 @@ CONTENT
 }
 
 .user-icon, .pass-icon, .pass-icon2 {
-	width: 46px;
+    @include border-radius(5px);
+
+    width: 46px;
 	height: 47px;
 	display: block;
 	position: absolute;
 	left: 0px;
 	padding-right: 2px;
 	z-index: 3;
-
-    @include border-radius(5px);
 }
 
 .user-icon {
@@ -276,6 +270,8 @@ ERROR INFO
 *******************/
 
 .alert {
+  @include border-radius(4px);
+
   display: none;
   padding: 8px 35px 8px 14px;
   margin-top: 15px;
@@ -283,8 +279,6 @@ ERROR INFO
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 
   border: 1px solid $light-grayish-orange;
-
-  @include border-radius(4px);
 }
 
 .alert-error {
