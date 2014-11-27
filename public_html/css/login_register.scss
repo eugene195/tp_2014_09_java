@@ -1,5 +1,4 @@
 @import "constants";
-@import "buttons";
 
 /*******************
 FONTS
@@ -82,10 +81,10 @@ body {
  FORM
 *******************/
 
-@mixin box-shadow($alpha) {
-    box-shadow: 0 1px 3px rgba(0,0,0,$alpha);
-    -moz-box-shadow: 0 1px 3px rgba(0,0,0,$alpha);
-    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,$alpha);
+@mixin box-shadow($radius, $alpha) {
+    box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
+    -moz-box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
+    -webkit-box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
 }
 
 .form {
@@ -96,7 +95,7 @@ body {
 	border-radius: 5px;
 	background: #f3f3f3;
 
-    @include box-shadow(0.5);
+    @include box-shadow(3, 0.5);
 }
 
 /*******************
@@ -153,9 +152,7 @@ CONTENT
         border: 1px solid $white;
         border-radius: 5px;
 
-        box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
-        -moz-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
-        -webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
+        @include box-shadow(3, 0.5);
 
         &_password {
             margin-top: 25px;
@@ -169,10 +166,7 @@ CONTENT
         &:focus {
             background: #dfe9ec;
             color: $very-dark-grayish-cyan;
-
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
-            -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
-            -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
+            @include box-shadow(2, 0.25);
         }
     }
 }
@@ -185,11 +179,8 @@ CONTENT
 	left: 0px;
 	padding-right: 2px;
 	z-index: 3;
-	
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius-bottomleft: 5px;
-	-webkit-border-top-left-radius: 5px;
-	-webkit-border-bottom-left-radius: 5px;
+
+    @include border-radius(5px);
 }
 
 .user-icon {
@@ -209,28 +200,20 @@ CONTENT
 
 
 .form__content__menu-item {
-	padding-top:5px;
-	padding-bottom:5px;
-	
-	padding-left: 10px;
+    padding: 5px 10px 5px 10px;
 	margin-bottom: 10px;
-	background-color: #e0e0e0;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
+	background-color: $very-light-gray;
+
+    @include border-radius(6px);
 }
 
 .form__content__row {
-	padding-top:10px;
-	padding-bottom:5px;
-	padding-right: 10px;
-	padding-left: 10px;
+    padding: 10px 10px 5px 10px;
 	margin-bottom: 10px;
-	background-color: #e0e0e0;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
+	background-color: $very-light-gray;
 	overflow: hidden;
+
+    @include border-radius(6px);
 
     &_fixed {
         height: 40px;
@@ -264,15 +247,10 @@ CONTENT
     }
 }
 
-
 /* Animation */
 .form__content__input, .user-icon, .pass-icon,
 .pass-icon2, .form__footer__button {
-	transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-webkit-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	-ms-transition: all 0.5s;
+	@include animation(0.5s);
 }
 
 /*******************
@@ -288,7 +266,9 @@ FOOTER
 }
 
 
-input::-moz-focus-inner {border:0}
+input::-moz-focus-inner {
+  border:0
+}
 
 
 
@@ -296,33 +276,31 @@ input::-moz-focus-inner {border:0}
 ERROR INFO
 *******************/
 
-.alert-error {
-  	display: none;
-	padding: 8px 35px 8px 14px;
-	margin-top: 15px;
-	margin-bottom: 5px;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-	color: #b94a48;
-	background-color: #f2dede;
-	border-color: #eed3d7;
-	border: 1px solid #fbeed5;
-	-webkit-border-radius: 4px;
-	 -moz-border-radius: 4px;
-	      border-radius: 4px;
-}
-
-.alert-success {
+.alert {
   display: none;
   padding: 8px 35px 8px 14px;
   margin-top: 15px;
   margin-bottom: 5px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+
+  border: 1px solid $light-grayish-orange;
+
+  @include border-radius(4px);
+}
+
+.alert-error {
+  @extend .alert;
+
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.alert-success {
+  @extend .alert;
+
   color: #468847;
   background-color: #dff0d8;
   border-color: #d6e9c6;
-  border: 1px solid #fbeed5;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-      border-radius: 4px;
 }
 

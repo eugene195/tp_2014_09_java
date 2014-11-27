@@ -23,12 +23,6 @@ $base-gap: 5px;
   text-align: center;
 }
 
-@mixin border-radius($value) {
-  -webkit-border-radius: $value;
-  -moz-border-radius: $value;
-  border-radius: $value;
-}
-
 .session {
   padding: $base-gap * 2;
   margin-top: $base-gap * 2;
