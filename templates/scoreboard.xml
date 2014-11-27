@@ -23,7 +23,9 @@
 
       </div>
       <div class="form__footer">
-        	<a href="#" class="button_orange">Back</a>
+        <div class="buttons_wrapper">
+        	<a href="#" class="button_orange left">Back</a>
+        </div>  
       </div>	
     </div>
 </div>

@@ -43,7 +43,6 @@ $large-font-size: ($large-width + $large-height) / 2;
 
     &:focus {
         position: relative;
-        bottom: -1px;
         background: $cyan;
     }
 }
@@ -109,4 +108,12 @@ $large-font-size: ($large-width + $large-height) / 2;
 .counter {
     @extend .button_small;
     cursor: none;
+}
+
+.buttons_wrapper {
+    width: 100%;
+    display:inline-block;
+    overflow: auto;
+    white-space: nowrap;
+    margin:0px auto;
 }
