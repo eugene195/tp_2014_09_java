@@ -15,6 +15,7 @@ $bright-orange: #FCBE2B;
 
 $cyan: #3f9db8;
 $light-cyan: #56c2e1;
+$light-grayish-cyan: #dfe9ec;
 $moderate-cyan: #46b3d3;
 $dark-grayish-cyan: #678889;
 $very-dark-grayish-cyan: #414848;
@@ -33,6 +34,12 @@ $rich-font-weight: 400;
 $default-border-radius: 5px;
 
 // OFTEN MIXINS
+@mixin box-shadow($radius, $alpha) {
+  box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
+  -moz-box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
+  -webkit-box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
+}
+
 @mixin border-radius($value) {
   -webkit-border-radius: $value;
   -moz-border-radius: $value;
