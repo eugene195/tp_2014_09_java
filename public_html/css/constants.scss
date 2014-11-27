@@ -1,5 +1,7 @@
 // SIZES
 $full-size: 100%;
+$half-size: 50%;
+$null-size: 0;
 
 // COLORS
 $white: #ffffff;
@@ -14,8 +16,14 @@ $bright-orange: #FCBE2B;
 $cyan: #3f9db8;
 $light-cyan: #56c2e1;
 $moderate-cyan: #46b3d3;
+$dark-grayish-cyan: #678889;
+$very-dark-grayish-cyan: #414848;
 
 $light-gray: #d4dedf;
+$very-light-gray: #e0e0e0;
+$light-grayish-orange: #fbeed5;
+
+$soft-pink: #f676b2;
 
 // FONTS
 $default-font-weight: 200;
@@ -23,3 +31,18 @@ $rich-font-weight: 400;
 
 // BORDERS
 $default-border-radius: 5px;
+
+// OFTEN MIXINS
+@mixin border-radius($value) {
+  -webkit-border-radius: $value;
+  -moz-border-radius: $value;
+  border-radius: $value;
+}
+
+@mixin animation($delay) {
+  transition: all $delay;
+  -moz-transition: all $delay;
+  -webkit-transition: all $delay;
+  -o-transition: all $delay;
+  -ms-transition: all $delay;
+}

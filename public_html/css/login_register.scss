@@ -1,5 +1,4 @@
 @import "constants";
-@import "buttons";
 
 /*******************
 FONTS
@@ -11,13 +10,16 @@ FONTS
 SELECTION STYLING
 *******************/
 
+.selection {
+  color: $white;
+  background: $soft-pink;
+}
+
 ::selection {
-	color: #fff;
-	background: #f676b2; /* Safari */
+    @extend .selection; /* Safari */
 }
 ::-moz-selection {
-	color: #fff;
-	background: #f676b2; /* Firefox */
+    @extend .selection; /* Firefox */
 }
 
 /*******************
@@ -25,15 +27,15 @@ BODY STYLING
 *******************/
 
 * {
-	margin: 0;
-	padding: 0;
-	border: 0;
+	margin: $null-size;
+	padding: $null-size;
+	border: $null-size;
 }
 
 body {
 	background: url(../images/bg.png) repeat;
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-	font-weight:300;
+	font-weight: 300;
 	text-align: left;
 	text-decoration: none;
 }
@@ -43,21 +45,14 @@ body {
 	width: 300px;
 	height: 400px;
 	position: absolute;
-	left: 50%;
-	top: 50%;
+	left: $half-size;
+	top: $half-size;
 	margin-left: -150px;
 	margin-top: -200px;
 }
 
 .wrapper-top {
-	/* Center wrapper perfectly */
-	width: 300px;
-	height: 400px;
-	position: absolute;
-	left: 50%;
-	top: 35%;
-	margin-left: -150px;
-	margin-top: -200px;
+  @extend .wrapper;
 }
 
 .gradient {
@@ -65,8 +60,8 @@ body {
 	width: 600px;
 	height: 600px;
 	position: fixed;
-	left: 50%;
-	top: 50%;
+	left: $half-size;
+	top: $half-size;
 	margin-left: -300px;
 	margin-top: -300px;
 	
@@ -86,17 +81,21 @@ body {
  FORM
 *******************/
 
+@mixin box-shadow($radius, $alpha) {
+    box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
+    -moz-box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
+    -webkit-box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
+}
+
 .form {
 	margin: 0 auto;
 	position: relative;
-	z-index:5;
+	z-index: 5;
 	border: 1px solid $white;
 	border-radius: 5px;
 	background: #f3f3f3;
 
-	box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    @include box-shadow(3, 0.5);
 }
 
 /*******************
@@ -111,7 +110,7 @@ HEADER
         font-weight: 300;
         font-size: 28px;
         line-height:34px;
-        color: #414848;
+        color: $very-dark-grayish-cyan;
         text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
         margin-bottom: 10px;
     }
@@ -119,7 +118,7 @@ HEADER
     &__span {
         font-size: 11px;
         line-height: 16px;
-        color: #678889;
+        color: $dark-grayish-cyan;
         text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
     }
 }
@@ -135,7 +134,7 @@ CONTENT
         font-family: 'Bree Serif', serif;
         font-size: 15px;
         line-height: 16px;
-        color: #678889;
+        color: $dark-grayish-cyan;
         text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
     }
 
@@ -153,9 +152,7 @@ CONTENT
         border: 1px solid $white;
         border-radius: 5px;
 
-        box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
-        -moz-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
-        -webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
+        @include box-shadow(3, 0.5);
 
         &_password {
             margin-top: 25px;
@@ -163,16 +160,13 @@ CONTENT
 
         &:hover {
             background: #dfe9ec;
-            color: #414848;
+            color: $very-dark-grayish-cyan;
         }
 
         &:focus {
             background: #dfe9ec;
-            color: #414848;
-
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
-            -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
-            -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
+            color: $very-dark-grayish-cyan;
+            @include box-shadow(2, 0.25);
         }
     }
 }
@@ -185,11 +179,8 @@ CONTENT
 	left: 0px;
 	padding-right: 2px;
 	z-index: 3;
-	
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius-bottomleft: 5px;
-	-webkit-border-top-left-radius: 5px;
-	-webkit-border-bottom-left-radius: 5px;
+
+    @include border-radius(5px);
 }
 
 .user-icon {
@@ -209,28 +200,20 @@ CONTENT
 
 
 .form__content__menu-item {
-	padding-top:5px;
-	padding-bottom:5px;
-	
-	padding-left: 10px;
+    padding: 5px 10px 5px 10px;
 	margin-bottom: 10px;
-	background-color: #e0e0e0;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
+	background-color: $very-light-gray;
+
+    @include border-radius(6px);
 }
 
 .form__content__row {
-	padding-top:10px;
-	padding-bottom:5px;
-	padding-right: 10px;
-	padding-left: 10px;
+    padding: 10px 10px 5px 10px;
 	margin-bottom: 10px;
-	background-color: #e0e0e0;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
+	background-color: $very-light-gray;
 	overflow: hidden;
+
+    @include border-radius(6px);
 
     &_fixed {
         height: 40px;
@@ -254,7 +237,7 @@ CONTENT
         font-family: 'Bree Serif', serif;
         font-weight: 300;
         font-size: 22px;
-        color: #414848;
+        color: $very-dark-grayish-cyan;
         text-shadow: 0px 1px 0 rgba(256,256,256,0.5);
         text-decoration: none;
 
@@ -264,15 +247,10 @@ CONTENT
     }
 }
 
-
 /* Animation */
 .form__content__input, .user-icon, .pass-icon,
 .pass-icon2, .form__footer__button {
-	transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-webkit-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	-ms-transition: all 0.5s;
+	@include animation(0.5s);
 }
 
 /*******************
@@ -288,7 +266,9 @@ FOOTER
 }
 
 
-input::-moz-focus-inner {border:0}
+input::-moz-focus-inner {
+  border:0
+}
 
 
 
@@ -296,33 +276,31 @@ input::-moz-focus-inner {border:0}
 ERROR INFO
 *******************/
 
-.alert-error {
-  	display: none;
-	padding: 8px 35px 8px 14px;
-	margin-top: 15px;
-	margin-bottom: 5px;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-	color: #b94a48;
-	background-color: #f2dede;
-	border-color: #eed3d7;
-	border: 1px solid #fbeed5;
-	-webkit-border-radius: 4px;
-	 -moz-border-radius: 4px;
-	      border-radius: 4px;
-}
-
-.alert-success {
+.alert {
   display: none;
   padding: 8px 35px 8px 14px;
   margin-top: 15px;
   margin-bottom: 5px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+
+  border: 1px solid $light-grayish-orange;
+
+  @include border-radius(4px);
+}
+
+.alert-error {
+  @extend .alert;
+
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.alert-success {
+  @extend .alert;
+
   color: #468847;
   background-color: #dff0d8;
   border-color: #d6e9c6;
-  border: 1px solid #fbeed5;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-      border-radius: 4px;
 }
 
