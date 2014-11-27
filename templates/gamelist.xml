@@ -13,17 +13,19 @@
       <div class="form__content__row">
 
         <label for="players-cnt">Players:</label>
-          <a href="#" class="button_small button_green">+</a>
-        <input class="input-number right" name="players-cnt" type="number" min="2" value="2"/>
-          <a href="#" class="button_small button_green">-</a>
+          <a href="#" class="button_small button_green right">+</a>
+
+          <div class="counter right" name="players-cnt">2</div>
+
+          <a href="#" class="button_small button_green right">-</a>
       </div>
       <div class="form__content__row">
         <label>Screen size:</label>
           <span class="css3-metro-dropdown right">
               <select name="size">
-                  <option value="1">Small (2 players)</option>
-                  <option value="2">Medium (4 players)</option>
-                  <option value="3">Large (8 players)</option>
+                  <option value="1">Small</option>
+                  <option value="2">Medium</option>
+                  <option value="3">Large</option>
               </select>
           </span>
       </div>
@@ -79,11 +81,11 @@
       
     </div>
     <div class="form__footer">
-      
-      <!--BACK-->
-      <a href="#" class="form__footer__button form__footer__button_orange">Back</a>
-        <!--START-->
-        <input type="submit" name="submit" value="Create New Game" class="button_green" />
+
+
+      <a href="#" class="button_orange">Back</a>
+      <input type="submit" name="submit" value="Create" class="button_green" />
+
     </div>
     
   </form>

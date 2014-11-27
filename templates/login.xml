@@ -24,10 +24,8 @@
     </div>
 
     <div class="form__footer">
-      <!--LOGIN-->
-      <input type="submit" name="submit" value="Login" class="form__footer__button" />
-      <!--BACK-->
-      <a href="#" class="form__footer__button form__footer__button_orange">Back</a>
+      <a href="#" class="button_orange">Back</a>
+      <input type="submit" name="submit" value="Login" class="button" />
     </div>
     
   </form>

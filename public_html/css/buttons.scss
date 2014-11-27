@@ -15,12 +15,12 @@ $small-height: 5px;
 $min-width: 6px;
 $min-height: 3px;
 
-$small-font-size: ($small-width + $small-height) / 2;
+$small-font-size: ($small-width + $small-height) / 1.5;
 $normal-font-size: ($normal-width + $normal-height) / 2;
 $large-font-size: ($large-width + $large-height) / 2;
 
 .button {
-    float:right;
+    //float:right;
     font-family: 'Bree Serif', serif;    
     color: $white;
     text-shadow: 0px 1px 0 rgba(0,0,0,0.25);
@@ -104,4 +104,9 @@ $large-font-size: ($large-width + $large-height) / 2;
         background: #aaa !important;
         border: 1px solid #999 !important;
     }
+}
+
+.counter {
+    @extend .button_small;
+    cursor: none;
 }
