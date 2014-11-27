@@ -29,9 +29,9 @@
 	  </div>
 	  <div class="form__footer">
 		  <!--LOGIN-->
-		  <a href="#login" class="form__footer__button auth">Sign in</a>
+		  <a href="#login" class="button auth">Sign in</a>
 		  <!--REGISTER-->
-		  <a href="#register" class="form__footer__button form__footer__button_orange reg">Sign up</a>
+		  <a href="#register" class="button_orange reg">Sign up</a>
 	  </div>
 	  
 	</form>

@@ -23,7 +23,7 @@
 
       </div>
       <div class="form__footer">
-        	<a href="#" class="form__footer__button form__footer__button_orange">Back</a>
+        	<a href="#" class="button_orange">Back</a>
       </div>	
     </div>
 </div>
