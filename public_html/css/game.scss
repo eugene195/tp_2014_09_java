@@ -1,5 +1,4 @@
-$white: #ffffff;
-$greeny: #2EB82E;
+@import "constants";
 
 $full-size: 100%;
 $base-gap: 10px;
@@ -14,7 +13,7 @@ $font-weight: 400;
     left: $base-size;
     min-width: $full-size;
     height: $base-size * 4;
-    background: $greeny;
+    background: $green;
     border-radius: $base-br;
 }
 

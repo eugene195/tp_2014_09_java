@@ -1,0 +1,57 @@
+.button, .button_small, .button_large, .button_green {
+  float: right;
+  font-family: 'Bree Serif', serif;
+  color: #ffffff;
+  text-shadow: 0px 1px 0 rgba(0, 0, 0, 0.25);
+  padding: 10px 25px;
+  font-weight: 200;
+  font-size: 17.5px;
+  background: #56c2e1;
+  border: 1px solid #46b3d3;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none; }
+  .button:hover, .button_small:hover, .button_large:hover, .button_green:hover {
+    background: #3f9db8;
+    border: 1px solid rgba(255, 255, 255, 0.75); }
+  .button:focus, .button_small:focus, .button_large:focus, .button_green:focus {
+    position: relative;
+    bottom: -1px;
+    background: #3f9db8; }
+  .button_orange {
+    background: #FCBE2B;
+    border: 1px solid #FFA200;
+    margin-right: 20px; }
+    .button_orange:hover {
+      background: #FFA200; }
+    .button_orange:focus {
+      background: #FFA200; }
+  .button_disabled {
+    background: #aaa !important;
+    border: 1px solid #999 !important; }
+    .button_disabled:hover {
+      background: #aaa !important;
+      border: 1px solid #999 !important; }
+    .button_disabled:focus {
+      background: #aaa !important;
+      border: 1px solid #999 !important; }
+
+.button_small {
+  padding: 5px 12px;
+  font-size: 8.5px; }
+
+.button_large {
+  padding: 20px 45px;
+  font-size: 32.5px; }
+
+.button_green {
+  background: #78ba00;
+  border: 1px solid #78da00;
+  margin-right: 20px;
+  float: none; }
+  .button_green:hover {
+    background: #78da00; }
+  .button_green:focus {
+    background: #2EB82E; }
+
+/*# sourceMappingURL=buttons.css.map */

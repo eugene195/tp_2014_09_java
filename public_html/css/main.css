@@ -1,7 +1,63 @@
+@import url(http://fonts.googleapis.com/css?family=Bree+Serif);
+.button, .button_small, .button_large, .button_green {
+  float: right;
+  font-family: 'Bree Serif', serif;
+  color: #ffffff;
+  text-shadow: 0px 1px 0 rgba(0, 0, 0, 0.25);
+  padding: 10px 25px;
+  font-weight: 200;
+  font-size: 17.5px;
+  background: #56c2e1;
+  border: 1px solid #46b3d3;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none; }
+  .button:hover, .button_small:hover, .button_large:hover, .button_green:hover {
+    background: #3f9db8;
+    border: 1px solid rgba(255, 255, 255, 0.75); }
+  .button:focus, .button_small:focus, .button_large:focus, .button_green:focus {
+    position: relative;
+    bottom: -1px;
+    background: #3f9db8; }
+  .button_orange {
+    background: #FCBE2B;
+    border: 1px solid #FFA200;
+    margin-right: 20px; }
+    .button_orange:hover {
+      background: #FFA200; }
+    .button_orange:focus {
+      background: #FFA200; }
+  .button_disabled {
+    background: #aaa !important;
+    border: 1px solid #999 !important; }
+    .button_disabled:hover {
+      background: #aaa !important;
+      border: 1px solid #999 !important; }
+    .button_disabled:focus {
+      background: #aaa !important;
+      border: 1px solid #999 !important; }
+
+.button_small {
+  padding: 5px 12px;
+  font-size: 8.5px; }
+
+.button_large {
+  padding: 20px 45px;
+  font-size: 32.5px; }
+
+.button_green {
+  background: #78ba00;
+  border: 1px solid #78da00;
+  margin-right: 20px;
+  float: none; }
+  .button_green:hover {
+    background: #78da00; }
+  .button_green:focus {
+    background: #2EB82E; }
+
 /*******************
 FONTS
 *******************/
-@import url(http://fonts.googleapis.com/css?family=Bree+Serif);
 /*******************
 SELECTION STYLING
 *******************/
@@ -222,41 +278,33 @@ FOOTER
   padding: 25px 30px 40px 15px;
   overflow: auto;
   background: #d4dedf;
-  border-top: 1px solid #ffffff;
-  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.15);
-  -webkit-box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.15); }
+  border-top: 1px solid #ffffff; }
   .form__footer__button {
     float: right;
-    padding: 11px 25px;
     font-family: 'Bree Serif', serif;
-    font-weight: 300;
-    font-size: 18px;
     color: #ffffff;
     text-shadow: 0px 1px 0 rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-weight: 200;
+    font-size: 17.5px;
     background: #56c2e1;
     border: 1px solid #46b3d3;
-    border-radius: 5px;
     cursor: pointer;
-    box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.75);
-    -moz-box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.75);
-    -webkit-box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.75);
     text-decoration: none; }
+    .form__footer__button_small {
+      padding: 5px 12px;
+      font-size: 8.5px; }
+    .form__footer__button_large {
+      padding: 20px 45px;
+      font-size: 32.5px; }
     .form__footer__button:hover {
       background: #3f9db8;
-      border: 1px solid rgba(255, 255, 255, 0.75);
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
-      -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
-      -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5); }
+      border: 1px solid rgba(255, 255, 255, 0.75); }
     .form__footer__button:focus {
       position: relative;
       bottom: -1px;
-      background: #56c2e1;
-      box-shadow: inset 0 1px 6px rgba(255, 255, 255, 0.75);
-      -moz-box-shadow: inset 0 1px 6px rgba(255, 255, 255, 0.75);
-      -webkit-box-shadow: inset 0 1px 6px rgba(255, 255, 255, 0.75); }
-    .form__footer__button_small {
-      padding: 3px 10px; }
+      background: #3f9db8; }
     .form__footer__button_orange {
       background: #FCBE2B;
       border: 1px solid #FFA200;
@@ -266,14 +314,14 @@ FOOTER
       .form__footer__button_orange:focus {
         background: #FFA200; }
     .form__footer__button_green {
-      background: #78da00;
+      background: #78ba00;
       border: 1px solid #78da00;
       margin-right: 20px;
       float: none; }
       .form__footer__button_green:hover {
-        background: #78ba00; }
+        background: #2EB82E; }
       .form__footer__button_green:focus {
-        background: #78da00; }
+        background: #2EB82E; }
     .form__footer__button_disabled {
       background: #aaa !important;
       border: 1px solid #999 !important; }
