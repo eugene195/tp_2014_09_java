@@ -1,0 +1,107 @@
+@import "constants";
+
+$max-width: 70px;
+$max-height: 30px;
+
+$large-width: 45px;
+$large-height: 20px;
+
+$normal-width: 25px;
+$normal-height: 10px;
+
+$small-width: 12px;
+$small-height: 5px;
+
+$min-width: 6px;
+$min-height: 3px;
+
+$small-font-size: ($small-width + $small-height) / 2;
+$normal-font-size: ($normal-width + $normal-height) / 2;
+$large-font-size: ($large-width + $large-height) / 2;
+
+.button {
+    float:right;
+    font-family: 'Bree Serif', serif;    
+    color: $white;
+    text-shadow: 0px 1px 0 rgba(0,0,0,0.25);
+
+    padding: $normal-height $normal-width;
+    font-weight: $default-font-weight;
+    font-size: $normal-font-size;
+
+    background: $light-cyan;
+    border: 1px solid $moderate-cyan;
+    border-radius: 5px;
+    cursor: pointer;
+
+    text-decoration: none;
+
+    &:hover {
+        background: $cyan;
+        border: 1px solid rgba(256,256,256,0.75);
+    }
+
+    &:focus {
+        position: relative;
+        bottom: -1px;
+        background: $cyan;
+    }
+}
+
+.button_small {
+    @extend .button;
+    padding: $small-height $small-width;
+    font-size: $small-font-size;    
+}
+
+.button_large {
+    @extend .button;
+    padding: $large-height $large-width;
+    font-size: $large-font-size;
+}
+
+.button_green {
+    @extend .button;
+    background: $lime-green;
+    border: 1px solid $green;
+    margin-right: 20px;
+    float: none;
+
+    &:hover {
+        background: $strong-green;
+    }
+
+    &:focus {
+        background: $green;
+    }
+}
+
+.button_orange {
+    @extend .button;
+    background: $bright-orange;
+    border: 1px solid $orange;
+    margin-right: 20px;
+
+    &:hover {
+        background: $orange;
+    }
+
+    &:focus {
+        background: $orange;
+    }
+}
+
+.button_disabled {
+    background: #aaa !important;
+    border: 1px solid #999 !important;
+
+    &:hover {
+        background: #aaa !important;
+        border: 1px solid #999 !important;
+    }
+
+    &:focus {
+        background: #aaa !important;
+        border: 1px solid #999 !important;
+    }
+}
