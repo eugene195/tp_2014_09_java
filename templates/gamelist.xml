@@ -15,7 +15,7 @@
         <label for="players-cnt">Players:</label>
           <a href="#" class="button_small button_green right">+</a>
 
-          <div class="counter right" name="players-cnt">2</div>
+          <div class="counter right" id="players-cnt">2</div>
 
           <a href="#" class="button_small button_green right">-</a>
       </div>
@@ -50,8 +50,6 @@
         </span> 
       </div> 
 
-      
-      
       <fest:each iterate="sessions" index="i" value="game">
         <div class="session">
         <div class="sessions__players">
@@ -61,7 +59,7 @@
           </fest:each>
         </div>
         
-        <button class="sessions__entry form__footer__button form__footer__button_small">Join</button>
+        <button class="sessions__entry button_small">Join</button>
 
         <input class="sessions__id" type="hidden" value="<fest:value>game.sessionId</fest:value>"/>
         <div class="sessions__info">
@@ -73,9 +71,6 @@
           <fest:value>game.time</fest:value>
         </div>
 
-        
-       
-        
         </div>
       </fest:each>  
       
