@@ -27,10 +27,10 @@ define([
         load: function () {
             if (storageSupport()) {
                 var localStorage = window.localStorage;
-                this.amp = localStorage['amp'] || 100;
-                this.freq = localStorage['freq'] || 40;
-                this.base = localStorage['base'] || 200;
-                this.time = localStorage['time'] || 0;
+                this.amp = parseInt(localStorage['amp']) || 100;
+                this.freq = parseInt(localStorage['freq']) || 40;
+                this.base = parseInt(localStorage['base']) || 200;
+                this.time = parseInt(localStorage['time']) || 0;
             }
         },
         save: function () {
@@ -110,7 +110,7 @@ define([
                     Params.time += interval;
 
                     circle.clear(context);
-                    tail.drawTail(context);
+                    tail.drawTail(context, 'black');
 
                     if (newX < canvas.width - circle.diameter()) {
                         circle.x = newX;
@@ -123,7 +123,7 @@ define([
                         context.clearRect(0, 0, canvas.width, canvas.height);
                     }
 
-                    circle.drawCircle(context, '#00FFFF', 2);
+                    circle.draw(context, '#00FFFF', 2);
                 }
             }.bind(this);
 
