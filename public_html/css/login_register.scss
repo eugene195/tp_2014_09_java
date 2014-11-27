@@ -169,6 +169,51 @@ CONTENT
             @include box-shadow(2, 0.25);
         }
     }
+
+    &__row {
+        padding: 10px 10px 5px 10px;
+        margin-bottom: 10px;
+        background-color: $very-light-gray;
+        overflow: hidden;
+
+        @include border-radius(6px);
+
+        &_fixed {
+          height: 40px;
+        }
+    }
+
+    &__menu-item {
+        padding: 5px 10px 5px 10px;
+        margin-bottom: 10px;
+        background-color: $very-light-gray;
+
+        @include border-radius(6px);
+
+        &:hover {
+            background-color: #c0c0c0;
+        }
+
+        &__link {
+            padding: 5px;
+            margin-right: 5px;
+
+            background: none;
+            border: none;
+            cursor: pointer;
+
+            font-family: 'Bree Serif', serif;
+            font-weight: 300;
+            font-size: 22px;
+            color: $very-dark-grayish-cyan;
+            text-shadow: 0px 1px 0 rgba(256,256,256,0.5);
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
 }
 
 .user-icon, .pass-icon, .pass-icon2 {
@@ -198,54 +243,6 @@ CONTENT
 	background: rgba(65,72,72,0.75) url(../images/pass-icon.png) no-repeat center;
 }
 
-
-.form__content__menu-item {
-    padding: 5px 10px 5px 10px;
-	margin-bottom: 10px;
-	background-color: $very-light-gray;
-
-    @include border-radius(6px);
-}
-
-.form__content__row {
-    padding: 10px 10px 5px 10px;
-	margin-bottom: 10px;
-	background-color: $very-light-gray;
-	overflow: hidden;
-
-    @include border-radius(6px);
-
-    &_fixed {
-        height: 40px;
-    }
-}
-
-
-.form__content__menu-item {
-    &:hover {
-        background-color: #c0c0c0;
-    }
-
-    &__link {
-        padding: 5px;
-        margin-right: 5px;
-
-        background: none;
-        border: none;
-        cursor: pointer;
-
-        font-family: 'Bree Serif', serif;
-        font-weight: 300;
-        font-size: 22px;
-        color: $very-dark-grayish-cyan;
-        text-shadow: 0px 1px 0 rgba(256,256,256,0.5);
-        text-decoration: none;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-}
 
 /* Animation */
 .form__content__input, .user-icon, .pass-icon,
