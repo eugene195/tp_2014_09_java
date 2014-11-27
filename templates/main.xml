@@ -28,10 +28,8 @@
 
 	  </div>
 	  <div class="form__footer">
-		  <!--LOGIN-->
-		  <a href="#login" class="button auth">Sign in</a>
-		  <!--REGISTER-->
 		  <a href="#register" class="button_orange reg">Sign up</a>
+          <a href="#login" class="button auth">Sign in</a>
 	  </div>
 	  
 	</form>

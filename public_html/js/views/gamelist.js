@@ -62,13 +62,19 @@ var GameList = Backbone.View.extend({
 
     createGame: function(event) {
         event.preventDefault();
-
-        var target = event.target,
-            playersCnt = target[0].value,
-            width = target[1].value,
-            height = target[2].value,
-            speed = target[3].value,
-            launchTime = target[4].value;
+        debugger;
+        var target = event.target;
+        var playersCnt = $('div[name^=players-cnt]');
+        var width, height;
+        var size = target[0].value;
+        if (size == 1)
+            width = height = 50;
+        else if (size == 2)
+            width = height = 75;
+        else
+            width = height = 100;
+        var speed = target[1].value;
+        var launchTime = target[2].value;
 
         playersCnt = parseInt(playersCnt);
 
