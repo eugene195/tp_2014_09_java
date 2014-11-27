@@ -1,10 +1,8 @@
 @import "constants";
 
-$full-size: 100%;
 $base-gap: 10px;
 $base-size: 10px;
 $base-br: 20px;
-$font-weight: 400;
 
 .panel {
     margin-top: $base-gap;
@@ -22,7 +20,7 @@ $font-weight: 400;
     margin-top: $base-gap;
     display: inline-block;
     float: left;
-    font-weight: $font-weight;
+    font-weight: $rich-font-weight;
     font-size: 14px;
     color: $white;
     text-align: center;
@@ -30,7 +28,7 @@ $font-weight: 400;
 
 @mixin base-text($font-size) {
     text-align: center;
-    font-weight: $font-weight;
+    font-weight: $rich-font-weight;
     font-size: $font-size;
     color: $white;
 }

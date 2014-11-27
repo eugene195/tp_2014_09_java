@@ -49,7 +49,7 @@ module.exports = function (grunt) {
                 }
             },
             sass: {
-                files: ['public_html/css'],
+                files: ['public_html/css/**/*scss'],
                 tasks: ['sass'],
                 options: {
                     interrupt: true,
