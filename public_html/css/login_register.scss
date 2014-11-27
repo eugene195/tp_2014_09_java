@@ -34,8 +34,8 @@ BODY STYLING
 
 body {
 	background: url(../images/bg.png) repeat;
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-	font-weight: 300;
+	font-family: $default-font-family;
+	font-weight: $default-font-weight;
 	text-align: left;
 	text-decoration: none;
 }
@@ -106,18 +106,18 @@ HEADER
 	padding: 40px 30px 30px 30px;
 
     &__h1 {
-        font-family: 'Bree Serif', serif;
-        font-weight: 300;
-        font-size: 28px;
-        line-height:34px;
+        font-family: $link-font-family;
+        font-weight: $default-font-weight;
+        font-size: 30px;
+        line-height:35px;
         color: $very-dark-grayish-cyan;
         text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
         margin-bottom: 10px;
     }
 
     &__span {
-        font-size: 11px;
-        line-height: 16px;
+        font-size: 10px;
+        line-height: 15px;
         color: $dark-grayish-cyan;
         text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
     }
@@ -128,12 +128,13 @@ CONTENT
 *******************/
 
 .form__content {
+
 	padding: 0 30px 25px 30px;
 
     &__label {
-        font-family: 'Bree Serif', serif;
-        font-size: 15px;
-        line-height: 16px;
+        font-family: $link-font-family;
+        font-size: $content-font-size;
+        line-height: 15px;
         color: $dark-grayish-cyan;
         text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
     }
@@ -142,10 +143,11 @@ CONTENT
         width: 188px;
         padding: 15px 25px;
 
-        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-        font-weight: 400;
-        font-size: 14px;
-        color: #9d9e9e;
+        font-family: $default-font-family;
+        font-weight: $rich-font-weight;
+        font-size: $content-font-size;
+
+        color: $dark-grayish-cyan;
         text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
 
         background: $white;
@@ -202,9 +204,9 @@ CONTENT
             border: none;
             cursor: pointer;
 
-            font-family: 'Bree Serif', serif;
-            font-weight: 300;
-            font-size: 22px;
+            font-family: $link-font-family;
+            font-weight: $default-font-weight;
+            font-size: 20px;
             color: $very-dark-grayish-cyan;
             text-shadow: 0px 1px 0 rgba(256,256,256,0.5);
             text-decoration: none;

@@ -29,6 +29,13 @@ $soft-pink: #f676b2;
 $default-font-weight: 200;
 $rich-font-weight: 400;
 
+$content-font-size: 15px;
+
+
+
+$default-font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+$link-font-family: 'Bree Serif', serif;
+
 // BORDERS
 $default-border-radius: 5px;
 
@@ -45,4 +52,13 @@ $default-border-radius: 5px;
   -webkit-transition: all $delay;
   -o-transition: all $delay;
   -ms-transition: all $delay;
+}
+
+@mixin base-text($font-size, $font-weight, $font-family, $color) {
+    font-family: $font-family;
+    text-align: center;
+    font-weight: $default-font-weight;
+    font-size: $font-size;
+    color: $color;
+    text-shadow: 0px 1px 0 rgba(0,0,0,0.25);
 }
