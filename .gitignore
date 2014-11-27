@@ -20,4 +20,6 @@ hs_err_pid*
 target/
 node_modules/
 *META-INF*
-
+*.css
+*.css.map
+.sass-cache/

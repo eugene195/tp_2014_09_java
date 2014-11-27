@@ -6,7 +6,7 @@ $base-size: 10px;
 $base-br: 20px;
 $font-weight: 400;
 
-@mixin panel() {
+.panel {
     margin-top: $base-gap;
     margin-bottom: $base-gap;
     right: $base-size;
@@ -17,7 +17,7 @@ $font-weight: 400;
     border-radius: $base-br;
 }
 
-@mixin bar() {
+.bar {
     margin-left: $base-gap;
     margin-top: $base-gap;
     display: inline-block;
@@ -36,10 +36,10 @@ $font-weight: 400;
 }
 
 .gamepage__header {
-    @include panel();
+    @extend .panel;
 
     &__infobar_status {
-        @include bar();
+        @extend .bar;
     }
 }
 
@@ -69,13 +69,13 @@ $font-weight: 400;
 }
 
 .gamepage__footer {
-  @include panel();
+  @extend .panel;
 
     &__controlbar {
-        @include bar();
+        @extend .bar;
 
         &__menu-btn {
-          @include panel();
+          @extend .panel;
         }
     }
 }
