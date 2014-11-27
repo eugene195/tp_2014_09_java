@@ -1,53 +1,5 @@
 @import "login_register";
 @import "game";
 @import "selector";
+@import "gamelist";
 @import "constants";
-
-$base-size: 20px;
-$base-gap: 5px;
-
-.right {
-	float: right;
-}
-
-.input-number {
-	width: $base-size * 2;
-}
-
-.icon-size {
-	width: $base-size;
-	padding-left: $base-gap;
-}
-
-.form__content__button {
-	padding-top: $base-gap * 2;
-	padding-bottom: $base-gap;
-	margin: 0 auto;
-	text-align: center;
-}
-
-@mixin border-radius($value) {
-    -webkit-border-radius: $value;
-    -moz-border-radius: $value;
-    border-radius: $value;
-}
-
-.session {
-	padding: $base-gap * 2;
-	margin-top: $base-gap * 2;
-	margin-bottom: $base-gap;
-	background-color: #e9d9ff;
-	overflow: hidden;
-
-    @include border-radius(6px);
-
-    &__players {
-        float: left;
-    }
-
-    &__info {
-        padding-top: $base-gap + 1;
-        padding-right: $base-gap * 2;
-        float: right;
-    }
-}
