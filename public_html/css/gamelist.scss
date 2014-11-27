@@ -20,13 +20,13 @@ $base-gap: 5px;
 }
 
 .session {
+  @include border-radius(6px);
+
   padding: $base-gap * 2;
   margin-top: $base-gap * 2;
   margin-bottom: $base-gap;
   background-color: #e9d9ff;
   overflow: hidden;
-
-  @include border-radius(6px);
 
   &__players {
     float: left;

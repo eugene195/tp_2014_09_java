@@ -67,11 +67,11 @@ var GameList = Backbone.View.extend({
         var width, height;
         var size = target[0].value;
         if (size == 1)
-            width = height = 50;
-        else if (size == 2)
-            width = height = 75;
-        else
             width = height = 100;
+        else if (size == 2)
+            width = height = 125;
+        else
+            width = height = 150;
         var speed = target[1].value;
         var launchTime = target[2].value;
 

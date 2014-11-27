@@ -26,13 +26,6 @@ $base-br: 20px;
     text-align: center;
 }
 
-@mixin base-text($font-size) {
-    text-align: center;
-    font-weight: $rich-font-weight;
-    font-size: $font-size;
-    color: $white;
-}
-
 .gamepage__header {
     @extend .panel;
 
@@ -42,7 +35,7 @@ $base-br: 20px;
 }
 
 .gamepage__body {
-    @include base-text(30px);
+    @include base-text($base-size * 3, $default-font-weight, $link-font-family, $white);
 
     margin-top: $base-gap;
     margin-bottom: $base-gap;
@@ -54,7 +47,7 @@ $base-br: 20px;
 }
 
 .gamepage__menu__infobar__menu-btn {
-    @include base-text(14px);
+    @include base-text($base-size * 3/2, $default-font-weight, $link-font-family, $white);
 
     margin-top: $base-gap / 2;
     margin-right: $base-gap * 3;

@@ -15,6 +15,7 @@ $bright-orange: #FCBE2B;
 
 $cyan: #3f9db8;
 $light-cyan: #56c2e1;
+$light-grayish-cyan: #dfe9ec;
 $moderate-cyan: #46b3d3;
 $dark-grayish-cyan: #678889;
 $very-dark-grayish-cyan: #414848;
@@ -29,10 +30,29 @@ $soft-pink: #f676b2;
 $default-font-weight: 200;
 $rich-font-weight: 400;
 
+$content-font-size: 15px;
+
+
+
+$default-font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+$link-font-family: 'Bree Serif', serif;
+
 // BORDERS
 $default-border-radius: 5px;
 
 // OFTEN MIXINS
+@mixin box-shadow($radius, $alpha) {
+  box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
+  -moz-box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
+  -webkit-box-shadow: 0 1px $radius rgba(0,0,0,$alpha);
+}
+
+@mixin box-shadow-inset($radius, $alpha) {
+  box-shadow: inset 0 1px $radius rgba(0,0,0,$alpha);
+  -moz-box-shadow: inset 0 1px $radius rgba(0,0,0,$alpha);
+  -webkit-box-shadow: inset 0 1px $radius rgba(0,0,0,$alpha);
+}
+
 @mixin border-radius($value) {
   -webkit-border-radius: $value;
   -moz-border-radius: $value;
@@ -45,4 +65,13 @@ $default-border-radius: 5px;
   -webkit-transition: all $delay;
   -o-transition: all $delay;
   -ms-transition: all $delay;
+}
+
+@mixin base-text($font-size, $font-weight, $font-family, $color) {
+    font-family: $font-family;
+    text-align: center;
+    font-weight: $default-font-weight;
+    font-size: $font-size;
+    color: $color;
+    text-shadow: 0px 1px 0 rgba(0,0,0,0.25);
 }
