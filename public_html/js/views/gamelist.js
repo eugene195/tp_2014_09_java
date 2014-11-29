@@ -23,7 +23,9 @@ var GameList = Backbone.View.extend({
 
     events: {
         "submit form[name=gamelist-form]": "createGame",
-        "click .sessions__entry": "addUser"
+        "click .sessions__entry": "addUser",
+        "click #addPlayer": "addPlr",
+        "click #subPlayer": "subPlr"
     },
 
     initialize: function() {
@@ -44,11 +46,11 @@ var GameList = Backbone.View.extend({
 
     show: function () {
         this.session.postIdentifyUser('gamelist');
+        this.update();
     },
 
     userIdentified: function () {
         this.controller.setGameSocket();
-        this.update();
     },
 
     userNotIdentified: function () {
@@ -56,26 +58,30 @@ var GameList = Backbone.View.extend({
     },
 
     update: function() {
+        debugger;
         this.collection.fetch();
         this.trigger('rerender', this);
     },
 
     createGame: function(event) {
+        var sizes = {
+            1: {h: 100, w: 100},
+            2: {h: 110, w: 110},
+            3: {h: 110, w: 120}
+        };
+
         event.preventDefault();
         var target = event.target;
-        var playersCnt = $('#players-cnt').html();
-        var width, height;
-        var size = target[0].value;
-        if (size == 1)
-            width = height = 100;
-        else if (size == 2)
-            width = height = 125;
-        else
-            width = height = 150;
-        var speed = target[1].value;
-        var launchTime = target[2].value;
 
+        var playersCnt = $('#players-cnt').html();
         playersCnt = parseInt(playersCnt);
+
+        var sizeCode = target[2].value;
+        var width = sizes[sizeCode].w, height = sizes[sizeCode].h;
+
+        var speed = target[3].value;
+        var launchTime = target[4].value;
+
 
         this.controller.sendMessage({
             action: "startGameSession",
@@ -94,6 +100,19 @@ var GameList = Backbone.View.extend({
             action: "addUser",
             sessionId: sessionId
         });
+    },
+
+    addPlr: function () {
+        var playersCnt = $('#players-cnt').html();
+        playersCnt = parseInt(playersCnt);
+        $('#players-cnt').innerHTML = playersCnt++;
+    },
+//TODO
+    subPlr: function () {
+        var playersCnt = $('#players-cnt').html();
+        playersCnt = parseInt(playersCnt);
+        if (playersCnt > 2)
+            $('#players-cnt').innerHTML = playersCnt--;
     },
 
     gameStarted: function(data) {
