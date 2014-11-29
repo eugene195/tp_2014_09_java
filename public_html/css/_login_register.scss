@@ -17,61 +17,6 @@ SELECTION STYLING
 
 
 /*******************
-BODY STYLING
-*******************/
-
-* {
-	margin: $null-size;
-	padding: $null-size;
-	border: $null-size;
-}
-
-body {
-	background: url(../images/bg.png) repeat;
-	font-family: $default-font-family;
-	font-weight: $default-font-weight;
-	text-align: left;
-	text-decoration: none;
-}
-
-.wrapper {
-	/* Center wrapper perfectly */
-	width: 300px;
-	height: 400px;
-	position: absolute;
-	left: $half-size;
-	top: $half-size;
-	margin-left: -150px;
-	margin-top: -200px;
-}
-
-.wrapper-top {
-  @extend .wrapper;
-}
-
-.gradient {
-	/* Center Positioning */
-	width: 600px;
-	height: 600px;
-	position: fixed;
-	left: $half-size;
-	top: $half-size;
-	margin-left: -300px;
-	margin-top: -300px;
-	
-	/* Fallback */ 
-	background-image: url(../images/gradient.png); 
-	background-repeat: no-repeat; 
-	
-	/* CSS3 Gradient */
-	background-image: -webkit-gradient(radial, 0% 0%, 0% 100%, from(rgba(213,246,255,1)), to(rgba(213,246,255,0)));
-	background-image: -webkit-radial-gradient(50% 50%, 40% 40%, rgba(213,246,255,1), rgba(213,246,255,0));
-	background-image: -moz-radial-gradient(50% 50%, 50% 50%, rgba(213,246,255,1), rgba(213,246,255,0));
-	background-image: -ms-radial-gradient(50% 50%, 50% 50%, rgba(213,246,255,1), rgba(213,246,255,0));
-	background-image: -o-radial-gradient(50% 50%, 50% 50%, rgba(213,246,255,1), rgba(213,246,255,0));
-}
-
-/*******************
  FORM
 *******************/
 

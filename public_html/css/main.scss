@@ -1,15 +1,7 @@
-@import "buttons";
-@import "login_register";
-@import "game";
-@import "selector";
-@import "gamelist";
-@import "buttons";
-
-.right {
-  float: right;
-}
-
-.left {
-	float: left;
-}
-
+@import "_body";
+@import "_buttons";
+@import "_login_register";
+@import "_game";
+@import "_selector";
+@import "_gamelist";
+@import "_buttons";
