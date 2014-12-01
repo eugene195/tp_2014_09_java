@@ -58,7 +58,6 @@ var GameList = Backbone.View.extend({
     },
 
     update: function() {
-        debugger;
         this.collection.fetch();
         this.trigger('rerender', this);
     },
@@ -105,14 +104,14 @@ var GameList = Backbone.View.extend({
     addPlr: function () {
         var playersCnt = $('#players-cnt').html();
         playersCnt = parseInt(playersCnt);
-        $('#players-cnt').innerHTML = playersCnt++;
+        $('#players-cnt').html(++playersCnt);
     },
 //TODO
     subPlr: function () {
         var playersCnt = $('#players-cnt').html();
         playersCnt = parseInt(playersCnt);
         if (playersCnt > 2)
-            $('#players-cnt').innerHTML = playersCnt--;
+            $('#players-cnt').html(--playersCnt);
     },
 
     gameStarted: function(data) {

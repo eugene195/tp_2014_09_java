@@ -5,6 +5,7 @@ import global.engine.Params;
 import global.mechanics.GameSession;
 import global.SocketService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,9 +52,15 @@ public class SocketServiceImpl implements SocketService {
     @Override
     public void sendToClients(String action, Map<String, Object> data, GameSession session) {
         int userId = 0;
+        ArrayList<String> users = new ArrayList<>();
+        for (String user : session.getPlayers()) {
+            users.add(user);
+        }
+
         for (String user : session.getPlayers()) {
             GameSocket socket = userSockets.get(user);
             data.put("snakeId", userId);
+            data.put("names", users);
             socket.sendToClient(action, data);
             userId++;
         }

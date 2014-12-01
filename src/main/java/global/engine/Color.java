@@ -4,13 +4,13 @@ package global.engine;
  * Created by max on 25.10.14.
  */
 public enum Color {
-    BLACK,
+    BLUE,
     ORANGE,
     WHITE,
     RED,
+    BLACK,
     VIOLET,
     GREEN,
-    BLUE,
     CYAN,
     BROWN,
     UNKNOWN;
