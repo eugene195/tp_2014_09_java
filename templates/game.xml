@@ -9,12 +9,11 @@
                         </div>
 
                             <fest:each iterate="gameContent.snakes" index="i" value="snake">
-                                <div class="form__content__row">
+                                <div class="form__content__menu-item">
                                     <fest:attributes>
-                                        <fest:attribute name="style"><fest:value>snake.color</fest:value></fest:attribute>
+                                        <fest:attribute name="style"><fest:value>"background-color: " + snake.color</fest:value></fest:attribute>
                                     </fest:attributes>
                                     <td><fest:value>snake.name</fest:value></td>
-                                    <td align="right"><fest:value>snake.color</fest:value></td>
                                 </div>
                             </fest:each>
                     </form>
