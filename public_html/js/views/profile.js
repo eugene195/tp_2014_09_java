@@ -1,26 +1,26 @@
 define([
     'backbone',
     'tmpl/profile',
-    'models/session'
+    'models/user'
 ], function(
     Backbone,
     tmpl,
-    sessionModel
+    userModel
 ){
 
     var View = Backbone.View.extend({
         el: $('.profile'),
         template: tmpl,
-        session: sessionModel,
+        user: userModel,
         events: {
             "click input[name=submit]": "saveProfileClick"
         },
 
         initialize: function () {
-            this.listenTo(this.session, 'successChangePassword', this.passwSuccess);
-            this.listenTo(this.session, 'errorChangePassword', this.passwError);
-            this.listenTo(this.session, 'profile:anonymous', this.userNotIdentified);
-            this.listenTo(this.session, 'profile:known', this.userIdentified);
+            this.listenTo(this.user, 'successChangePassword', this.passwSuccess);
+            this.listenTo(this.user, 'errorChangePassword', this.passwError);
+            this.listenTo(this.user, 'profile:anonymous', this.userNotIdentified);
+            this.listenTo(this.user, 'profile:known', this.userIdentified);
             this.render();
             this.$el.hide();
         },
@@ -30,7 +30,7 @@ define([
         },
 
         show: function () {
-            this.session.postIdentifyUser('profile');
+            this.user.identifyUser('profile');
         },
 
         saveProfileClick: function(event) {
@@ -50,7 +50,7 @@ define([
 
             if (this.validate(curPassw, newPassw, confirmPassw)) {
                 var url = this.$('.form').data('action');
-                this.session.postChangePassword(url, {
+                this.user.changePassword({
                     curPassw: curPassw,
                     newPassw: newPassw,
                     confirmPassw: confirmPassw
@@ -92,6 +92,7 @@ define([
         },
 
         userIdentified: function(data) {
+            console.log(data);
             if (window.location.hash.substring(1) == 'profile') { // TODO delete
                 this.$('h1').html("Profile " + data.login)
             }
