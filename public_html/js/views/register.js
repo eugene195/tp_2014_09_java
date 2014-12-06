@@ -1,17 +1,17 @@
 define([
     'backbone',
     'tmpl/register',
-    'models/session'
+    'models/user'
 ], function(
     Backbone,
     tmpl,
-    sessionModel
+    userModel
 ){
 
     var View = Backbone.View.extend({
         el: $('.register'),
         template: tmpl,
-        session: sessionModel,
+        user: userModel,
 
         events: {
             "submit form[name=register-form]": "registerClick",
@@ -24,8 +24,8 @@ define([
         },
 
         initialize: function () {
-            this.listenTo(this.session, 'successReg', this.registerSuccess);
-            this.listenTo(this.session, 'errorReg', this.registerError);
+            this.listenTo(this.user, 'successReg', this.registerSuccess);
+            this.listenTo(this.user, 'errorReg', this.registerError);
             this.render();
             this.$el.hide();
         },
@@ -56,7 +56,7 @@ define([
             if (this.validate(username, newPassw, confirmPassw)) {
                 var url = this.$('.form').data('action');
 
-                this.session.postReg(url, {
+                this.user.register({ 
                     login: username,
                     passw: newPassw,
                     passw2: confirmPassw

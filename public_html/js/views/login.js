@@ -1,18 +1,17 @@
 define([
     'backbone',
     'tmpl/login',
-    'models/session'
+    'models/user'
 ], function(
     Backbone,
     tmpl,
-    sessionModel
+    userModel
 ){
 
     var View = Backbone.View.extend({
         el: $('.login'),
         template: tmpl,
-        session: sessionModel,
-
+        user: userModel,
         events: {
             "submit form[name=login-form]": "authClick",
             "click input[name=login]": "loginClick",
@@ -22,8 +21,8 @@ define([
         },
 
         initialize: function () {
-            this.listenTo(this.session, 'successAuth', this.loginSuccess);
-            this.listenTo(this.session, 'errorAuth', this.loginError);
+            this.listenTo(this.user, 'successAuth', this.loginSuccess);
+            this.listenTo(this.user, 'errorAuth', this.loginError);
             this.render();
             this.$el.hide();
         },
@@ -52,8 +51,7 @@ define([
 
             if (this.validate(username, password)) {
                 var url = this.$('.form').data('action');
-
-                this.session.postAuth(url, {
+                this.user.login({
                     login: username,
                     passw: password
                 });

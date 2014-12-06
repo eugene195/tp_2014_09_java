@@ -1,25 +1,25 @@
 define([
     'backbone',
     'tmpl/main',
-    'models/session'
+    'models/user'
 ], function(
     Backbone,
     tmpl,
-    sessionModel
+    userModel
 ){
 
     var View = Backbone.View.extend({
         el: $('.main'),
         template: tmpl,
-        session: sessionModel,
+        user: userModel,
         events: {
             "click .logout": "logout"
         },
         initialize: function () {
-            this.listenTo(this.session, 'main:anonymous', this.userNotIdentified);
-            this.listenTo(this.session, 'main:known', this.userIdentified);
-            this.listenTo(this.session, 'successLogout', this.logoutSuccess);
-            this.listenTo(this.session, 'errorLogout', this.logoutError);
+            this.listenTo(this.user, 'main:anonymous', this.userNotIdentified);
+            this.listenTo(this.user, 'main:known', this.userIdentified);
+            this.listenTo(this.user, 'successLogout', this.logoutSuccess);
+            this.listenTo(this.user, 'errorLogout', this.logoutError);
             this.render();
             this.$el.hide();
         },
@@ -29,11 +29,11 @@ define([
         },
 
         show: function () {
-            this.session.postIdentifyUser('main');
+            this.user.identifyUser('main');
         },
         logout: function (event) {
             event.preventDefault();
-            this.session.postLogout();
+            this.user.logout();
         },
         
         userIdentified: function(data) {

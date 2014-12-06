@@ -33,10 +33,10 @@
 
     <div class="form__footer">
       <div class="buttons_wrapper">
-        <!--LOGIN-->
-        <input class="button left" type="submit" name="submit"  value="Save"/>
         <!--BACK-->
-        <a href="#" class="button_orange right">Back</a>
+        <a href="#" class="button_orange left">Back</a>
+        <!--LOGIN-->
+        <input class="button right" type="submit" name="submit"  value="Save"/>
       </div>
     </div>
     
