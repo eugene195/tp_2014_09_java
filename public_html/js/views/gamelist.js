@@ -48,6 +48,7 @@ var GameList = Backbone.View.extend({
 
     userIdentified: function () {
         this.controller.setGameSocket();
+        this.update();
     },
 
     userNotIdentified: function () {

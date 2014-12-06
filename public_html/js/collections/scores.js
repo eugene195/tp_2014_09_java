@@ -10,8 +10,7 @@ define([
 
     var ScoreCollection = Backbone.Collection.extend({
         model: ScoreModel,
-        url: "/",
-        sync: ApiSync,
+        url: "/scores",
 
         parse: function (response) {
             if (response.status == 1) {

@@ -101,7 +101,6 @@ var GameView = Backbone.View.extend({
                     width: this.width * this.sizeModifier,
                     height: this.height * this.sizeModifier }
         };
-        debugger;
         this.$el.html(this.template(gameContent));
     },
 
