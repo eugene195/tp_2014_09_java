@@ -1,32 +1,29 @@
-<fest:template xmlns:fest="http://fest.mail.ru" context_name="sizes">
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="gameContent">
 
-    <div class="gamepage__header">
-        <div class="gamepage__header__infobar">
-            Score: Over 9000
-            Lives left: 3
-        </div>
-        <a href="#" class="gamepage__menu__infobar__menu-btn">Pause</a>
-        <a href="#" class="gamepage__menu__infobar__menu-btn">Quit</a>
-    </div>
+            <div class="container-centered">
 
-    <div class="gamepage__body">
-        <input type="button" id="gmscr" value="Play" name="gamebtn" />
-        Game Screen
-        <a href="/game">Let's do it</a>
+                <div class="content-centered">
+                    <form class="form">
+                        <div class="form__header">
+                            <h1 class="form__header__h1">Player List</h1>
+                        </div>
 
-<br/>
+                            <fest:each iterate="gameContent.snakes" index="i" value="snake">
+                                <div class="form__content__menu-item">
+                                    <fest:attributes>
+                                        <fest:attribute name="style"><fest:value>"background-color: " + snake.color</fest:value></fest:attribute>
+                                    </fest:attributes>
+                                    <td><fest:value>snake.name</fest:value></td>
+                                </div>
+                            </fest:each>
+                    </form>
+                </div>
+                <canvas id="snakeGame" class="content-centered" style="border: black solid 2px">
+                    <fest:attributes>
+                        <fest:attribute name="width"><fest:value>gameContent.sizes.width</fest:value></fest:attribute>
+                        <fest:attribute name="height"><fest:value>gameContent.sizes.height</fest:value></fest:attribute>
+                    </fest:attributes>
+                </canvas>
+            </div>
 
-        <canvas id="snakeGame" style="border: black solid 2px">
-            <fest:attributes>
-                <fest:attribute name="width"><fest:value>sizes.width</fest:value></fest:attribute>
-                <fest:attribute name="height"><fest:value>sizes.height</fest:value></fest:attribute>
-            </fest:attributes>
-        </canvas>
-    </div>
-
-    <div class="gamepage__footer">
-        <div class="gamepage__footer__controlbar-status">
-            Footer info
-        </div>
-    </div>
 </fest:template>

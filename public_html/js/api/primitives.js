@@ -1,3 +1,18 @@
+function colorCheck (strColor) {
+    this.colors = {
+        "WHITE": "#ffffff",
+        "BLACK": "#000000",
+        "ORANGE": "#FFA200",
+        "BLUE": "#0000FF",
+        "RED": "#FF0000",
+        "GREEN": "#00FF00",
+        "CYAN": "#3f9db8",
+        "BROWN": "#A52A2A"
+    }
+
+    return this.colors[strColor];
+}
+
 function Point (x, y) {
     this.x = x;
     this.y = y;
@@ -47,7 +62,7 @@ function Rectangle(x, y, size) {
         context.fillStyle = color;
         context.fill();
         context.lineWidth = borderWidth;
-        context.strokeStyle = color;
+        context.strokeStyle = "#ffffff";
         context.stroke();
     };
 

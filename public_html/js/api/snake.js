@@ -1,11 +1,10 @@
 
-function Snake(snakeObj, size) {
+function Snake(snakeObj, size, name) {
     this.width = size;
-//    this.head = new Circle(snakeObj.posX, snakeObj.posY, this.width / 2);
     this.head = new Rectangle(snakeObj.posX, snakeObj.posY, this.width / 2);
     this.tail = new Tail();
-
-    this.color = snakeObj.color.toLowerCase();
+    this.name = name;
+    this.color = colorCheck(snakeObj.color);
     this.direction = snakeObj.direction;
     this.snakeId = snakeObj.snakeId;
 

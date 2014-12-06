@@ -19,14 +19,16 @@ var GameView = Backbone.View.extend({
     height: 0,
     sizeModifier: 1,
     snakeHolder : new CurrentSnakeHolder(),
+//    Ids
     snakes : [],
+//    Names
+    names : [],
     started : false,
 
     el: $('.game'),
     template: tmpl,
 
     events: {
-        "click #gmscr": "gameClick"
     },
 
     showWait: function () {
@@ -45,10 +47,11 @@ var GameView = Backbone.View.extend({
 //        Remove to Class Property
         this.sizeModifier = this.width * this.height * 0.001 / 2;
         var myID = data.snakeId;
+        var names = data.names;
         var length = data.snakes.length;
         for (var i = 0; i < length; i++) {
             var current = data.snakes[i];
-            var snake = new Snake(current, this.sizeModifier);
+            var snake = new Snake(current, this.sizeModifier, names[i]);
             if (current.snakeId == myID)
                 this.snakeHolder.setSnake(snake);
             this.snakes.push(snake);
@@ -92,10 +95,13 @@ var GameView = Backbone.View.extend({
     },
 
     render: function () {
-        var sizes = { width: this.width * this.sizeModifier,
-                      height: this.height * this.sizeModifier
-                    };
-        this.$el.html(this.template(sizes));
+        var gameContent = {
+            snakes: this.snakes,
+            sizes: {
+                    width: this.width * this.sizeModifier,
+                    height: this.height * this.sizeModifier }
+        };
+        this.$el.html(this.template(gameContent));
     },
 
     show: function () {
@@ -109,8 +115,6 @@ var GameView = Backbone.View.extend({
             this.showNoGame();
             return;
         }
-
-//      Need to be somewhere else
 
         var canvas = document.getElementById('snakeGame'),
         context = canvas.getContext('2d');
@@ -136,9 +140,6 @@ var GameView = Backbone.View.extend({
 
 //---------------------
 //      Events
-    gameClick: function(event) {
-        alert("Great shot");
-    },
 
     keyPressed: function(e) {
         var that = e.data.object;

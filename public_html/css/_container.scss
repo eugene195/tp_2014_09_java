@@ -1,0 +1,11 @@
+.container-centered {
+	float: left;  
+    position:relative;
+    left: 50%;
+}
+
+.content-centered {
+	position:relative;
+    left: -50%;
+    float: left;
+}

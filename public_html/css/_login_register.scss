@@ -15,12 +15,6 @@ SELECTION STYLING
   background: $soft-pink;
 }
 
-::selection {
-    @extend .selection; /* Safari */
-}
-::-moz-selection {
-    @extend .selection; /* Firefox */
-}
 
 /*******************
  FORM

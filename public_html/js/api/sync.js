@@ -3,10 +3,10 @@ define(function ApiSync() {
 
     var methodMap = {
         'create': 'POST',
-        'update': 'UPDATE',
+        'update': 'POST',
         'patch':  'PATCH',
         'delete': 'POST',
-        'read':   'POST'
+        'read':   'GET'
     };
 
     var urlMap  = {
@@ -23,17 +23,18 @@ define(function ApiSync() {
         
         if (method == 'read') {
             data = options.data;
-        } {
+        }
+        else {
             data = (model instanceof Backbone.Model)?model.toJSON():{};    
-        }                    
-            
+        }
         var xhr = $.ajax({
             type: methodMap[method],
             url: model.url + urlMap[options.method],
             data: data,
             dataType: 'json',
-        }).done(function(data) { 
-            if (data.status == 1) {  
+        }).done(function(data) {
+            if (data.status == 1) {
+                debugger;
                 options.success();
                 callSuccess(data); 
             } else {

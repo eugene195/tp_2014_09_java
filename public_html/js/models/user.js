@@ -22,9 +22,9 @@ define([
         },
 
         login: function(args) {
-            args = _.extend({'data': args}, {'method': 'login'},
+            var options = _.extend({'method': 'login'},
                 {'callbacks': this.callbacks('successAuth', 'errorAuth')});
-            this.fetch(args);
+            this.save(args, options);
         },
 
         register: function(args) {
