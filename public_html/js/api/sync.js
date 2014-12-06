@@ -23,7 +23,8 @@ define(function ApiSync() {
         
         if (method == 'read') {
             data = options.data;
-        } {
+        }
+        else {
             data = (model instanceof Backbone.Model)?model.toJSON():{};    
         }                    
             
