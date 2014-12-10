@@ -29,6 +29,8 @@ var GameView = Backbone.View.extend({
     template: tmpl,
 
     events: {
+        "click .game_overlay": "modalClose",
+        "click #game_show": "modalClose"
     },
 
     showWait: function () {
@@ -44,16 +46,17 @@ var GameView = Backbone.View.extend({
     startGame: function(data) {
         this.width = data.width;
         this.height = data.height;
-//        Remove to Class Property
         this.sizeModifier = this.width * this.height * 0.001 / 2;
         var myID = data.snakeId;
         var names = data.names;
         var length = data.snakes.length;
         for (var i = 0; i < length; i++) {
             var current = data.snakes[i];
-            var snake = new Snake(current, this.sizeModifier, names[i]);
+            current.name = names[i];
+            current.size = this.sizeModifier;
+            var snake = new Snake(current);
             if (current.snakeId == myID)
-                this.snakeHolder.setSnake(snake);
+                this.snakeHolder = new CurrentSnakeHolder(snake)
             this.snakes.push(snake);
         }
         this.started = true;
@@ -74,9 +77,16 @@ var GameView = Backbone.View.extend({
     endGame: function (data) {
         var winnerId = data.winner;
         if (this.snakeHolder.isWinner(winnerId))
-            alert("You are a winner");
+            $('#result_message').html("You are a winner");
         else
-            alert("You are a loser");
+            $('#result_message').html("You are a loser");
+
+        $('.game_overlay').fadeIn(400, // сначала плавно показываем темную подложку
+            function(){ // после выполнения предъидущей анимации
+                $('.game_modal_form')
+                    .css('display', 'block') // убираем у модального окна display: none;
+                    .animate({opacity: 1, top: '50%'}, 200); // плавно прибавляем прозрачность одновременно со съезжанием вниз
+        });
     },
 
     initialize: function() {
@@ -140,6 +150,17 @@ var GameView = Backbone.View.extend({
 
 //---------------------
 //      Events
+
+    modalClose: function(e) {
+        console.log("Close");
+        $('.game_modal_form')
+            .animate({opacity: 0, top: '45%'}, 200,  // плавно меняем прозрачность на 0 и одновременно двигаем окно вверх
+            function(){ // после анимации
+                $('.game_modal_form').css('display', 'none'); // делаем ему display: none;
+                $('.game_overlay').fadeOut(400); // скрываем подложку
+            }
+        );
+    },
 
     keyPressed: function(e) {
         var that = e.data.object;

@@ -84,6 +84,10 @@ $large-font-size: ($large-width + $large-height) / 2;
     }
 }
 
+.button_blue {
+    @extend .button;
+}
+
 .button_disabled {
     background: #aaa !important;
     border: 1px solid #999 !important;

@@ -1,0 +1,35 @@
+@import "constants";
+
+$width: 300px;
+$height: 300px;
+$modal-form-zindex: 10;
+
+.game_overlay {
+    z-index: $modal-form-zindex; /* подложка должна быть выше слоев элементов сайта, но ниже слоя модального окна */
+    position: fixed; /* всегда перекрывает весь сайт */
+    background-color: $black; /* черная */
+    opacity: 0.8; /* но немного прозрачна */
+    width: $full-size; 
+    height: $full-size; /* размером во весь экран */
+    top: 0; 
+    left: 0; /* сверху и слева 0, обязательные свойства! */
+    cursor: pointer;
+    display: none; /* в обычном состоянии её нет) */
+}
+
+.game_modal_form {
+    width: $width; 
+    height: $height; /* Размеры должны быть фиксированы */
+    border-radius: $default-border-radius;
+    border: 3px $white solid;
+    background: $white;
+    position: fixed; /* чтобы окно было в видимой зоне в любом месте */
+    top: $half-size; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
+    left: $half-size; /* половина экрана слева */
+    margin-top: -($height/2);
+    margin-left: -($width/2); /* тут вся магия центровки css, отступаем влево и вверх минус половину ширины и высоты соответственно =) */
+    display: none; /* в обычном состоянии окна не должно быть */
+    opacity: 0; /* полностью прозрачно для анимирования */
+    z-index: $modal-form-zindex + 1; /* окно должно быть наиболее большем слое */
+    padding: 20px 10px;
+}

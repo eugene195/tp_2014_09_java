@@ -7,15 +7,22 @@
                         <div class="form__header">
                             <h1 class="form__header__h1">Player List</h1>
                         </div>
-
+                        <div class="form__content">
                             <fest:each iterate="gameContent.snakes" index="i" value="snake">
                                 <div class="form__content__menu-item">
                                     <fest:attributes>
-                                        <fest:attribute name="style"><fest:value>"background-color: " + snake.color</fest:value></fest:attribute>
+                                        <fest:attribute name="style"><fest:value>"background-color: " + snake.color + "; color: white;"</fest:value></fest:attribute>
                                     </fest:attributes>
                                     <td><fest:value>snake.name</fest:value></td>
                                 </div>
                             </fest:each>
+                        </div>
+                        <div class="form__footer">
+                            <div class="buttons_wrapper">
+                                <a href="#" class="button_orange left">Main</a>
+                                <a href="#scoreboard" class="button right">Scoreboard</a>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <canvas id="snakeGame" class="content-centered" style="border: black solid 2px">
@@ -25,5 +32,14 @@
                     </fest:attributes>
                 </canvas>
             </div>
-
+            <div class="game_modal_form">
+                <div id="result_message"></div>
+                <div class="container-centered">
+                    <div class="buttons_wrapper content-centered">
+                        <a href="#" class="button_orange left">Main</a>
+                        <button class="button" id="game_show">Back</button>
+                    </div>
+                </div>
+            </div>
+            <div class="game_overlay"></div>
 </fest:template>
