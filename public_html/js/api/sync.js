@@ -34,7 +34,6 @@ define(function ApiSync() {
             dataType: 'json',
         }).done(function(data) {
             if (data.status == 1) {
-                debugger;
                 options.success();
                 callSuccess(data); 
             } else {

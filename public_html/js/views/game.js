@@ -29,6 +29,8 @@ var GameView = Backbone.View.extend({
     template: tmpl,
 
     events: {
+        "click .game_overlay": "modalClose",
+        "click #game_show": "modalClose"
     },
 
     showWait: function () {
@@ -37,27 +39,31 @@ var GameView = Backbone.View.extend({
     },
 
     showNoGame: function () {
-//    TODO
-//        alert("The game hasn't started yet");
+        $('.spinner').css('display', 'block');
+        $('#result_message').html("No Game in Action");
+        this.fade();
     },
 
     startGame: function(data) {
         this.width = data.width;
         this.height = data.height;
-//        Remove to Class Property
         this.sizeModifier = this.width * this.height * 0.001 / 2;
         var myID = data.snakeId;
         var names = data.names;
         var length = data.snakes.length;
         for (var i = 0; i < length; i++) {
             var current = data.snakes[i];
-            var snake = new Snake(current, this.sizeModifier, names[i]);
+            current.name = names[i];
+            current.size = this.sizeModifier;
+            var snake = new Snake(current);
             if (current.snakeId == myID)
-                this.snakeHolder.setSnake(snake);
+                this.snakeHolder = new CurrentSnakeHolder(snake)
             this.snakes.push(snake);
         }
         this.started = true;
         this.update();
+
+        this.modalClose();
     },
 
     onTick: function(data) {
@@ -73,10 +79,13 @@ var GameView = Backbone.View.extend({
 
     endGame: function (data) {
         var winnerId = data.winner;
+        $('.spinner').css('display', 'none');
+
         if (this.snakeHolder.isWinner(winnerId))
-            alert("You are a winner");
+            $('#result_message').html("You Win");
         else
-            alert("You are a loser");
+            $('#result_message').html("You Lose");
+        this.fade();
     },
 
     initialize: function() {
@@ -106,13 +115,13 @@ var GameView = Backbone.View.extend({
 
     show: function () {
         this.trigger('rerender', this);
-        this.started = true;
+        if (! this.started)
+            this.showNoGame();
     },
 
     update: function () {
         this.trigger('rerender', this);
         if (! this.started) {
-            this.showNoGame();
             return;
         }
 
@@ -134,12 +143,31 @@ var GameView = Backbone.View.extend({
         if (this === view) {
 //            $(document).off('keydown');
             this.started = false;
-//            this.controller.dropSocket();
         }
+    },
+
+    fade: function () {
+       $('.game_overlay').fadeIn(400,
+            function(){
+                $('.game_modal_form')
+                    .css('display', 'block')
+                    .animate({opacity: 1, top: '50%'}, 200);
+        });
     },
 
 //---------------------
 //      Events
+
+    modalClose: function() {
+        debugger;
+        $('.game_modal_form')
+            .animate({opacity: 0, top: '45%'}, 200,
+                function(){
+                    $('.game_overlay').fadeOut(400);
+                }
+            );
+         $('.game_modal_form').css('display', 'none');
+    },
 
     keyPressed: function(e) {
         var that = e.data.object;

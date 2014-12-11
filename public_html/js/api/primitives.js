@@ -3,10 +3,10 @@ function colorCheck (strColor) {
         "WHITE": "#ffffff",
         "BLACK": "#000000",
         "ORANGE": "#FFA200",
-        "BLUE": "#0000FF",
+        "BLUE": "#3f9db8",
         "RED": "#FF0000",
         "GREEN": "#00FF00",
-        "CYAN": "#3f9db8",
+        "CYAN": "#dfe9ec",
         "BROWN": "#A52A2A"
     }
 
