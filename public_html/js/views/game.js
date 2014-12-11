@@ -39,8 +39,9 @@ var GameView = Backbone.View.extend({
     },
 
     showNoGame: function () {
-//    TODO
-//        alert("The game hasn't started yet");
+        $('.spinner').css('display', 'block');
+        $('#result_message').html("No Game in Action");
+        this.fade();
     },
 
     startGame: function(data) {
@@ -61,6 +62,8 @@ var GameView = Backbone.View.extend({
         }
         this.started = true;
         this.update();
+
+        this.modalClose();
     },
 
     onTick: function(data) {
@@ -76,17 +79,13 @@ var GameView = Backbone.View.extend({
 
     endGame: function (data) {
         var winnerId = data.winner;
-        if (this.snakeHolder.isWinner(winnerId))
-            $('#result_message').html("You are a winner");
-        else
-            $('#result_message').html("You are a loser");
+        $('.spinner').css('display', 'none');
 
-        $('.game_overlay').fadeIn(400, // сначала плавно показываем темную подложку
-            function(){ // после выполнения предъидущей анимации
-                $('.game_modal_form')
-                    .css('display', 'block') // убираем у модального окна display: none;
-                    .animate({opacity: 1, top: '50%'}, 200); // плавно прибавляем прозрачность одновременно со съезжанием вниз
-        });
+        if (this.snakeHolder.isWinner(winnerId))
+            $('#result_message').html("You Win");
+        else
+            $('#result_message').html("You Lose");
+        this.fade();
     },
 
     initialize: function() {
@@ -116,13 +115,13 @@ var GameView = Backbone.View.extend({
 
     show: function () {
         this.trigger('rerender', this);
-        this.started = true;
+        if (! this.started)
+            this.showNoGame();
     },
 
     update: function () {
         this.trigger('rerender', this);
         if (! this.started) {
-            this.showNoGame();
             return;
         }
 
@@ -144,22 +143,30 @@ var GameView = Backbone.View.extend({
         if (this === view) {
 //            $(document).off('keydown');
             this.started = false;
-//            this.controller.dropSocket();
         }
+    },
+
+    fade: function () {
+       $('.game_overlay').fadeIn(400,
+            function(){
+                $('.game_modal_form')
+                    .css('display', 'block')
+                    .animate({opacity: 1, top: '50%'}, 200);
+        });
     },
 
 //---------------------
 //      Events
 
-    modalClose: function(e) {
-        console.log("Close");
+    modalClose: function() {
+        debugger;
         $('.game_modal_form')
-            .animate({opacity: 0, top: '45%'}, 200,  // плавно меняем прозрачность на 0 и одновременно двигаем окно вверх
-            function(){ // после анимации
-                $('.game_modal_form').css('display', 'none'); // делаем ему display: none;
-                $('.game_overlay').fadeOut(400); // скрываем подложку
-            }
-        );
+            .animate({opacity: 0, top: '45%'}, 200,
+                function(){
+                    $('.game_overlay').fadeOut(400);
+                }
+            );
+         $('.game_modal_form').css('display', 'none');
     },
 
     keyPressed: function(e) {

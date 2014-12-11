@@ -1,7 +1,7 @@
 @import "constants";
 
-$width: 300px;
-$height: 300px;
+$width: 350px;
+$height: 350px;
 $modal-form-zindex: 10;
 
 .game_overlay {
@@ -20,9 +20,11 @@ $modal-form-zindex: 10;
 .game_modal_form {
     width: $width; 
     height: $height; /* Размеры должны быть фиксированы */
-    border-radius: $default-border-radius;
-    border: 3px $white solid;
-    background: $white;
+    border-radius: 30px;
+    outline: none;
+    box-shadow: 0 0 45px #d9ff0e;
+    
+    background: radial-gradient(#081426, #36598a);
     position: fixed; /* чтобы окно было в видимой зоне в любом месте */
     top: $half-size; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
     left: $half-size; /* половина экрана слева */

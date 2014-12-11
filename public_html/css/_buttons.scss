@@ -110,6 +110,7 @@ $large-font-size: ($large-width + $large-height) / 2;
 
 .buttons_wrapper {
     width: 100%;
+    box-sizing: border-box;
     display:inline-block;
     overflow: auto;
     white-space: nowrap;

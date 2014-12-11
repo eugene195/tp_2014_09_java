@@ -4,7 +4,7 @@ define([
     Backbone
 ){
     var SocketMan = {
-        SOCKET_URL : "ws://127.0.0.1:8081/gameplay",
+        SOCKET_URL : "ws://127.0.0.1:9081/gameplay",
 
         setGameSocket : function() {
             if (this.ws) return;

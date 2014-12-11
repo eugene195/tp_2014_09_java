@@ -1,5 +1,7 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="gameContent">
-
+        <div style="display: flex;
+  padding: 50px;
+  ">
             <div class="container-centered">
 
                 <div class="content-centered">
@@ -25,15 +27,21 @@
                         </div>
                     </form>
                 </div>
-                <canvas id="snakeGame" class="content-centered" style="border: black solid 2px">
+                <canvas id="snakeGame" class="content-centered game_background">
                     <fest:attributes>
                         <fest:attribute name="width"><fest:value>gameContent.sizes.width</fest:value></fest:attribute>
                         <fest:attribute name="height"><fest:value>gameContent.sizes.height</fest:value></fest:attribute>
                     </fest:attributes>
                 </canvas>
             </div>
+
+
             <div class="game_modal_form">
-                <div id="result_message"></div>
+                <div class="spinner"></div>
+
+                <div class="container-centered">
+                    <div class="neon content-centered" id="result_message"></div>
+                </div>
                 <div class="container-centered">
                     <div class="buttons_wrapper content-centered">
                         <a href="#" class="button_orange left">Main</a>
@@ -42,4 +50,5 @@
                 </div>
             </div>
             <div class="game_overlay"></div>
+        </div>
 </fest:template>
