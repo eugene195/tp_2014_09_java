@@ -1,35 +1,6 @@
 module.exports = function (grunt) {
 
     grunt.initConfig({
-        requirejs: {
-            build: {
-                options: {
-                    almond: true,
-                    baseUrl: "public_html/js",
-                    mainConfigFile: "public_html/js/main.js",
-                    name: "main",
-                    optimize: "none",
-                    out: "public_html/js/build/main.js"
-                }, 
-            }
-        },
-        concat: {
-            build: {
-                separator: ';\n',
-                src: [
-                      'public_html/js/lib/almond.js',
-                      'public_html/js/build/main.js'
-                ],
-                dest: 'public_html/js/build.js'
-            }
-        },
-        uglify: {
-            build: {
-                files: {
-                    'public_html/js/build.min.js': ['public_html/js/build.js']
-                }
-            }
-        },
         shell: {
             options: {
                 stdout: true,
@@ -58,9 +29,6 @@ module.exports = function (grunt) {
             }
         },
         sass: {
-            options: {
-                style: "compressed"
-            },
             css: {
                 files: [{
                     expand: true,
@@ -106,10 +74,6 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-concurrent');
@@ -118,11 +82,4 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', ['concurrent']);
 
-    grunt.registerTask(
-        'build',
-        [
-            'fest', 'requirejs:build',
-            'concat:build', 'uglify:build'
-        ]
-    );
 };

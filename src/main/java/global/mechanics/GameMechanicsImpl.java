@@ -1,6 +1,5 @@
 package global.mechanics;
 
-import global.AddressService;
 import global.GameMechanics;
 import global.MessageSystem;
 import global.engine.Engine;
@@ -18,6 +17,7 @@ import static java.lang.Thread.sleep;
  * Created by eugene on 10/19/14.
  */
 public class GameMechanicsImpl implements GameMechanics {
+    private static final String MECHANIC_ADDRESS = "gamemech";
     private static final int STEP_TIME = 30;
     private static AtomicLong idCounter = new AtomicLong();
 
@@ -30,7 +30,7 @@ public class GameMechanicsImpl implements GameMechanics {
 
     public GameMechanicsImpl(MessageSystem msys) {
         this.msys = msys;
-        this.msys.register(this, AddressService.getMechanic());
+        this.msys.register(this, MECHANIC_ADDRESS);
 
         this.socketService = new SocketServiceImpl(this);
     }
@@ -162,6 +162,6 @@ public class GameMechanicsImpl implements GameMechanics {
     @Override
     public void getGameSessions() {
         GameSessionsAnswer msg = new GameSessionsAnswer(this.waitingPlayers);
-        this.msys.sendMessage(msg, AddressService.getServletAddr());
+        this.msys.sendMessage(msg, "servlet");
     }
 }
