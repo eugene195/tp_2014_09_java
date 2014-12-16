@@ -1,23 +1,17 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="sessions">
 
-<div class="wrapper-top">
    
   <form class="form" name="gamelist-form" data-action="/startGame" method="POST">
-   
     <div class="form__header">
       <h1 class="form__header__h1">Game List</h1>
       <span class="form__header__span">Let's get started.</span>
     </div>
-
     <div class="form__content">
       <div class="form__content__row">
-
         <label for="players-cnt">Players:</label>
-          <div class="buttons_wrapper">
-              <input type="button" class="button_small button_green" id="addPlayer" value="+"/>
-              <div id="players-cnt">2</div>
-              <input type="button" class="button_small button_green" id="subPlayer" value="-"/>
-          </div>
+          <input type="button" class="button_small button_green" id="addPlayer" value="+"/>
+          <div id="players-cnt">2</div>
+          <input type="button" class="button_small button_green" id="subPlayer" value="-"/>
       </div>
       <div class="form__content__row">
         <label>Screen size:</label>
@@ -29,17 +23,17 @@
               </select>
           </span>
       </div>
-      <div class="form__content__row form__content_row_fixed">
-      <label for="speed">Game Speed:</label>
-      <span class="css3-metro-dropdown right">
-        <select name="speed">
-          <option value="1">Fast</option>
-          <option value="2">Normal</option>
-          <option value="3">Slow</option>
-        </select>
-      </span>
+      <div class="form__content__row">
+          <label for="speed">Game Speed:</label>
+          <span class="css3-metro-dropdown right">
+            <select name="speed">
+              <option value="1">Fast</option>
+              <option value="2">Normal</option>
+              <option value="3">Slow</option>
+            </select>
+          </span>
       </div>
-      <div class="form__content__row form__content_row_fixed">
+      <div class="form__content__row">
         <label for="launch-time">Waiting time:</label>
         <span class="css3-metro-dropdown right">
           <select name="launch-time">
@@ -48,45 +42,32 @@
             <option>10 min</option>
           </select>   
         </span> 
-      </div> 
-
-      <fest:each iterate="sessions" index="i" value="game">
-        <div class="session">
-        <div class="sessions__players">
-          <fest:each iterate="game.players" index="j" value="player">
-              
-              <fest:value>player</fest:value>
-          </fest:each>
-        </div>
-        
-        <button class="sessions__entry button_small">Join</button>
-
-        <input class="sessions__id" type="hidden" value="<fest:value>game.sessionId</fest:value>"/>
-        <div class="sessions__info">
-          <fest:for from="1" to="game.playersCnt" index="i">
-            
-              <img class="icon-size right" src="../images/user.png"/>
-
-          </fest:for>
-          <fest:value>game.time</fest:value>
-        </div>
-
-        </div>
-      </fest:each>  
-      
-    </div>
-    <div class="form__footer">
-
-      <div class="buttons_wrapper">
-          <a href="#" class="button_orange">Back</a>
-          <input type="submit" name="submit" value="Create" class="button_green" />
       </div>
-
     </div>
-    
-  </form>
+      <fest:each iterate="sessions" index="i" value="game">
+          <div class="session">
+              <div class="sessions__players">
+                  <fest:each iterate="game.players" index="j" value="player">
+                      <fest:value>player</fest:value>
+                  </fest:each>
+              </div>
 
-</div>
+              <button class="sessions__entry button_small">Join</button>
+
+              <input class="sessions__id" type="hidden" value="<fest:value>game.sessionId</fest:value>"/>
+              <div class="sessions__info">
+                  <fest:for from="1" to="game.playersCnt" index="i">
+                      <img class="icon-size right" src="../images/user.png"/>
+                  </fest:for>
+                  <fest:value>game.time</fest:value>
+              </div>
+          </div>
+      </fest:each>
+    <div class="form__footer">
+      <a href="#" class="button_orange">Back</a>
+      <input type="submit" name="submit" value="Create" class="button_green" />
+    </div>
+  </form>
 
 <div class="gradient"></div> 
 </fest:template>

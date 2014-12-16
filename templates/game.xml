@@ -36,19 +36,19 @@
             </div>
 
 
-            <div class="game_modal_form">
-                <div class="spinner"></div>
+            <div class="modal">
+                <div class="spinner modal__spinner"></div>
 
                 <div class="container-centered">
-                    <div class="neon content-centered" id="result_message"></div>
+                    <div class="neon content-centered modal__header" id="result_message"></div>
                 </div>
-                <div class="container-centered">
+                <div class="container-centered modal__footer">
                     <div class="buttons_wrapper content-centered">
-                        <a href="#" class="button_orange left">Main</a>
+                        <a href="#" class="button_orange">Main</a>
                         <button class="button" id="game_show">Back</button>
                     </div>
                 </div>
             </div>
-            <div class="game_overlay"></div>
+            <div class="overlay"></div>
         </div>
 </fest:template>

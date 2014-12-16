@@ -23,7 +23,6 @@ var GameView = Backbone.View.extend({
     snakes : [],
 //    Names
     names : [],
-    started : false,
 
     el: $('.game'),
     template: tmpl,
@@ -47,6 +46,8 @@ var GameView = Backbone.View.extend({
     startGame: function(data) {
         this.width = data.width;
         this.height = data.height;
+
+        // Вопрос 1
         this.sizeModifier = this.width * this.height * 0.001 / 2;
         var myID = data.snakeId;
         var names = data.names;
@@ -57,13 +58,11 @@ var GameView = Backbone.View.extend({
             current.size = this.sizeModifier;
             var snake = new Snake(current);
             if (current.snakeId == myID)
-                this.snakeHolder = new CurrentSnakeHolder(snake)
+                this.snakeHolder = new CurrentSnakeHolder(snake);
             this.snakes.push(snake);
         }
         this.started = true;
         this.update();
-
-        this.modalClose();
     },
 
     onTick: function(data) {
@@ -78,6 +77,7 @@ var GameView = Backbone.View.extend({
     },
 
     endGame: function (data) {
+        this.started = false;
         var winnerId = data.winner;
         $('.spinner').css('display', 'none');
 
@@ -86,6 +86,7 @@ var GameView = Backbone.View.extend({
         else
             $('#result_message').html("You Lose");
         this.fade();
+        this.snakes = [];
     },
 
     initialize: function() {
@@ -115,8 +116,6 @@ var GameView = Backbone.View.extend({
 
     show: function () {
         this.trigger('rerender', this);
-        if (! this.started)
-            this.showNoGame();
     },
 
     update: function () {
@@ -141,15 +140,14 @@ var GameView = Backbone.View.extend({
 
     onhide: function (view) {
         if (this === view) {
-//            $(document).off('keydown');
             this.started = false;
         }
     },
 
     fade: function () {
-       $('.game_overlay').fadeIn(400,
+       $('.overlay').fadeIn(400,
             function(){
-                $('.game_modal_form')
+                $('.modal')
                     .css('display', 'block')
                     .animate({opacity: 1, top: '50%'}, 200);
         });
@@ -159,17 +157,17 @@ var GameView = Backbone.View.extend({
 //      Events
 
     modalClose: function() {
-        debugger;
-        $('.game_modal_form')
+        $('.modal')
             .animate({opacity: 0, top: '45%'}, 200,
                 function(){
-                    $('.game_overlay').fadeOut(400);
+                    $('.overlay').fadeOut(400);
                 }
             );
-         $('.game_modal_form').css('display', 'none');
+         $('.modal').css('display', 'none');
     },
 
     keyPressed: function(e) {
+        //e.preventDefault();
         var that = e.data.object;
         var code = e.keyCode || e.which;
         var dirs = {

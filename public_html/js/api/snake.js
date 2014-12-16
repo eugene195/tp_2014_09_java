@@ -72,4 +72,4 @@ function CurrentSnakeHolder (snakeObj) {
     };
 }
 
-CurrentSnakeHolder.prototype = new Snake();
+CurrentSnakeHolder.prototype = Object.create(Snake.prototype);

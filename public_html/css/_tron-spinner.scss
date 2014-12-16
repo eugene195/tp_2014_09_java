@@ -1,11 +1,12 @@
 
+@import "constants";
+
 // Config ----------------------------------
 
-$spinner-size: 100px;                 // 200px
-$spinner-thickness: 4px;              // 4px
+$spinner-size: 100px;                 // 100px
+$spinner-thickness: 5px;              // 5px
 $spinner-speed: 1.2s;                 // 1.2s
 
-$spinner-3d: false;                    // true
 $spinner-loops: infinite;             // infinite (be careful, save the batteries!)
 
 
@@ -19,24 +20,8 @@ $spinner-loops: infinite;             // infinite (be careful, save the batterie
   width: $spinner-size;
   height: $spinner-size;
   border-radius: $spinner-size / 2;
-  border: $spinner-thickness solid hsla(0,0%,100%,.1);
-  @if ($spinner-3d) {
-    // mask smoothens out the anti-aliasing artifacts in the back. 
-    -webkit-mask: linear-gradient(hsla(0,0%,0%,1), hsla(0,0%,0%,1)  00% );
-    transform-origin: 00% 00%;
-    transform: perspective($spinner-size) rotateX(0deg);
-    animation: spinner-wiggle $spinner-speed $spinner-loops;
-  }
-  
+  border: $spinner-thickness solid hsla(160,0%,100%,.1);
 }
-
-@keyframes spinner-wiggle {
-  90% { transform: perspective($spinner-size) rotateX(0deg); }
-  90% { transform: perspective($spinner-size) rotateX(90deg); }
-  90% { transform: perspective($spinner-size) rotateX(0deg); }
-  90% { transform: perspective($spinner-size) rotateX(0deg); }
-}
-
 
 .spinner:before,
 .spinner:after {
@@ -50,26 +35,24 @@ $spinner-loops: infinite;             // infinite (be careful, save the batterie
   opacity: 1;
   border: inherit;
   border-color: transparent;
-  animation: spinner-spin $spinner-speed cubic-bezier(.1,.1,0,.1) $spinner-loops,
+  animation: spinner-spin $spinner-speed linear $spinner-loops,
              spinner-fade $spinner-speed linear $spinner-loops;
   
 }
 
 .spinner:before {
-  border-top-color: hsl(190,100%,70%);
+  /*Синяя линия*/
+  border-top-color: hsl(190,100%,80%);
 }
 
 .spinner:after {
-  border-top-color: hsl(50,80%,70%);
-  animation-delay: $spinner-speed * .7;
+  /*Желтая линия*/
+  border-top-color: hsl(50,100%,70%);
+  /*Выбираем, какой отрыв между двумя линиями*/
+  animation-delay: $spinner-speed * .5;
 }
 
 @keyframes spinner-spin {
   100% { transform: rotate(360deg); }
 }
 
-@keyframes spinner-fade {
-  100% { opacity: 1; }
-  100% { opacity: 1; }
-  100% { opacity: 1; }
-}
