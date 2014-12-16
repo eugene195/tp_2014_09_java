@@ -14,11 +14,27 @@
     <div class="canvas"></div>
     <div class="gamelist"></div>
 
+    <div class="wrapper">
+        <div class="container-centered">
+            <div class="content-centered">
+                <form class="form_dark">
+                    <div class="form__header">
+                        <h1 class="neon form__header__h1">Loading...</h1>
+                    </div>
+                    <div class="form-content spinner"></div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script src="js/build.min.js"></script>
     <script>
+        setInterval(function () {
         require(['main'], function() {
             console.log('hello');
+            $('.spinner').css('display', 'none');
+            $('.form_dark').css('display', 'none');
         });
+        }, 1000);
     </script>
 
     <script src="//localhost:35729/livereload.js"></script>

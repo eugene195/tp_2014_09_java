@@ -1,6 +1,6 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="sessions">
 
-   
+
   <form class="form" name="gamelist-form" data-action="/startGame" method="POST">
     <div class="form__header">
       <h1 class="form__header__h1">Game List</h1>
