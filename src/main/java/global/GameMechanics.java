@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by eugene on 10/19/14.
  */
-public interface GameMechanics extends Runnable {
+public interface GameMechanics extends Runnable, Abonent {
 
     void run();
 

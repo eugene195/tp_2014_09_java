@@ -1,5 +1,6 @@
 package global.msgsystem.messages.toGameMechanics;
 
+import global.Abonent;
 import global.GameMechanics;
 import global.msgsystem.messages.AbstractMsg;
 
@@ -10,7 +11,7 @@ public abstract class AbstractToMechanics extends AbstractMsg {
     public abstract void exec(GameMechanics mechanics);
 
     @Override
-    public void exec(Runnable abonent) {
+    public void exec(Abonent abonent) {
         if (abonent instanceof GameMechanics) {
             GameMechanics mechanics = (GameMechanics) abonent;
             exec(mechanics);
