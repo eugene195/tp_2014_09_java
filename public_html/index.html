@@ -28,13 +28,14 @@
     </div>
     <script src="js/build.min.js"></script>
     <script>
-        setInterval(function () {
+        var timerID = setInterval(function () {
         require(['main'], function() {
             console.log('hello');
             $('.spinner').css('display', 'none');
             $('.form_dark').css('display', 'none');
+            clearInterval(timerID);
         });
-        }, 1000);
+        }, 6000);
     </script>
 
     <script src="//localhost:35729/livereload.js"></script>
