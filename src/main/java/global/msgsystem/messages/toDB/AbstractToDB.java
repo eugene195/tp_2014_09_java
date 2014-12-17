@@ -1,5 +1,6 @@
 package global.msgsystem.messages.toDB;
 
+import global.Abonent;
 import global.DataBaseManager;
 import global.database.DataBaseManagerImpl;
 import global.msgsystem.messages.AbstractMsg;
@@ -10,7 +11,7 @@ import global.msgsystem.messages.AbstractMsg;
 public abstract class AbstractToDB extends AbstractMsg {
 
     @Override
-    public void exec(Runnable abonent) {
+    public void exec(Abonent abonent) {
         if (abonent instanceof DataBaseManagerImpl) {
             DataBaseManager dbman = (DataBaseManager) abonent;
             exec(dbman);

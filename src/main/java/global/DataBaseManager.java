@@ -5,7 +5,7 @@ import global.models.UserSession;
 /**
  * Created by eugene on 10/11/14.
  */
-public interface DataBaseManager extends Runnable {
+public interface DataBaseManager extends Runnable, Abonent {
 
     void getUsers();
 
