@@ -22,7 +22,7 @@ public interface GameMechanics extends Runnable {
     void addToSession(long sessionId, String player);
 
     void startGame(GameSession gameSession);
-    void endGame(Engine endine);
+    void endGame(Engine endine, Long winnerSnakeId);
 
     void getGameSessions();
 }

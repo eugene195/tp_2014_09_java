@@ -15,7 +15,7 @@ public class AuthAnswer extends AbstractToServlet {
     }
 
     public UserSession getUserSession(){
-        return this.userSession;
+        return userSession;
     }
 
     @Override

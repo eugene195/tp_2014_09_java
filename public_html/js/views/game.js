@@ -73,6 +73,9 @@ var GameView = Backbone.View.extend({
 
     endGame: function (data) {
         var winnerId = data.winner;
+        console.log(this.names);
+        console.log(this.snakes);
+        console.log(data);
         if (this.snakeHolder.isWinner(winnerId))
             alert("You are a winner");
         else

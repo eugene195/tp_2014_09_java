@@ -19,6 +19,6 @@ public class ChangePasswordQuery extends AbstractToDB {
 
     @Override
     public void exec(DataBaseManager dbman) {
-        dbman.changePassword(this.login, this.curPassw, this.newPassw);
+        dbman.changePassword(login, curPassw, newPassw);
     }
 }

@@ -18,7 +18,7 @@ public class BestScoresAnswer extends AbstractToServlet {
     }
 
     public ArrayList<Score> getScores() {
-        return this.scores;
+        return scores;
     }
 
     @Override

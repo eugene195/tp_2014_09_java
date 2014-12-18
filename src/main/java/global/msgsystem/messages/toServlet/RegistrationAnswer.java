@@ -24,14 +24,14 @@ public class RegistrationAnswer extends AbstractToServlet {
     }
 
     public boolean isRegistrationSuccess() {
-        return this.success;
+        return success;
     }
 
     public String getLogin() {
-        return this.login;
+        return login;
     }
 
-    public String getErrMsg() { return this.errorMessage; }
+    public String getErrMsg() { return errorMessage; }
 
     @Override
     public void exec(Servlet servlet) {

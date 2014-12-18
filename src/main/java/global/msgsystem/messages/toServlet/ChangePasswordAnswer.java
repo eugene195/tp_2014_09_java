@@ -16,10 +16,10 @@ public class ChangePasswordAnswer  extends AbstractToServlet {
     }
 
     public boolean isChangePasswordSuccess() {
-        return this.success;
+        return success;
     }
 
-    public String getErrMsg() { return this.errorMessage; }
+    public String getErrMsg() { return errorMessage; }
 
     @Override
     public void exec(Servlet servlet) {

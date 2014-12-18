@@ -16,7 +16,7 @@ public class GetOnlineUsersAnswer extends AbstractToServlet {
     }
 
     public Set<String> getSet(){
-        return this.keyset;
+        return keyset;
     }
 
     @Override

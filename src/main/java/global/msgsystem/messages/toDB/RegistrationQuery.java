@@ -16,6 +16,6 @@ public class RegistrationQuery extends AbstractToDB {
 
     @Override
     public void exec(DataBaseManager dbman) {
-        dbman.registerUser(this.login, this.password);
+        dbman.registerUser(login, password);
     }
 }

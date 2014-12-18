@@ -7,6 +7,8 @@ import global.engine.Engine;
 import global.engine.Params;
 import global.mechanics.sockets.SocketServiceImpl;
 import global.SocketService;
+import global.models.Player;
+import global.msgsystem.messages.toDB.ChangeScoresQuery;
 import global.msgsystem.messages.toServlet.GameSessionsAnswer;
 
 import java.util.*;
@@ -19,6 +21,7 @@ import static java.lang.Thread.sleep;
  */
 public class GameMechanicsImpl implements GameMechanics {
     private static final int STEP_TIME = 30;
+    private static final int EXTRA_SCORE = 10;
     private static AtomicLong idCounter = new AtomicLong();
 
     private final MessageSystem msys;
@@ -122,14 +125,18 @@ public class GameMechanicsImpl implements GameMechanics {
     }
 
     @Override
-    public void endGame(Engine engine) {
+    public void endGame(Engine engine, Long winnerSnakeId) {
         int index = this.engines.indexOf(engine);
 
         if (index != -1) {
             this.engines.remove(index);
             GameSession gameSession = playing.get(index);
-            this.socketService.notifyEnd(gameSession);
-            this.playing.remove(index);
+            ArrayList<Player> players = gameSession.getArrayPlayers();
+
+            ChangeScoresQuery msg = new ChangeScoresQuery(getExtraScoresUsers(players, winnerSnakeId));
+            msys.sendMessage(msg, AddressService.getDBManAddr());
+            socketService.notifyEnd(gameSession);
+            playing.remove(index);
         } else {
             System.out.println("endGame index error");
         }
@@ -163,5 +170,19 @@ public class GameMechanicsImpl implements GameMechanics {
     public void getGameSessions() {
         GameSessionsAnswer msg = new GameSessionsAnswer(this.waitingPlayers);
         this.msys.sendMessage(msg, AddressService.getServletAddr());
+    }
+
+    private Map<String, Integer> getExtraScoresUsers(ArrayList<Player> players, Long  winnerSnakeId) {
+        Map<String, Integer> extraScoresUsers = new HashMap();
+
+        for (Player player: players) {
+            if (player.getSnake() == winnerSnakeId) {
+                extraScoresUsers.put(player.getName(), EXTRA_SCORE);
+            } else {
+                extraScoresUsers.put(player.getName(), -EXTRA_SCORE);
+            }
+        }
+
+        return extraScoresUsers;
     }
 }

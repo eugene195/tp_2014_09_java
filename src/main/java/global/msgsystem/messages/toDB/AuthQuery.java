@@ -18,6 +18,6 @@ public class AuthQuery extends AbstractToDB {
 
     @Override
     public void exec(DataBaseManager dbman){
-        dbman.checkAuth(this.userSession, this.password);
+        dbman.checkAuth(userSession, password);
     }
 }

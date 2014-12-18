@@ -12,6 +12,7 @@ import snaq.db.ConnectionPool;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
@@ -138,6 +139,17 @@ public class DataBaseManagerImpl implements DataBaseManager {
             } else {
                 System.out.println("Error in deleteUser; User does not exist");
             }
+        }
+        catch (SQLException e) {
+            System.out.println("Sql exception during user deletion()");
+        }
+    }
+
+    @Override
+    public void changeScores(Map<String, Integer> extraScoresUsers) {
+        try {
+            UsersDAO userDAO = new UsersDAO(executor);
+            userDAO.changeScores(extraScoresUsers);
         }
         catch (SQLException e) {
             System.out.println("Sql exception during user deletion()");

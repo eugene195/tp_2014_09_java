@@ -22,6 +22,6 @@ public class GameSessionsAnswer extends AbstractToServlet {
     }
 
     public Map<Long, GameSession> getSessions() {
-        return this.sessions;
+        return sessions;
     }
 }

@@ -213,8 +213,9 @@ public class Engine {
 
     private void endGame(Snake winner) {
         Map<String, Object> data = new HashMap<>();
-
+        Long winnerSnakeId = null;
         if (winner != null) {
+            winnerSnakeId = winner.getId();
             data.put("winner", winner.getId());
             data.put("color", winner.getColor().name());
         } else {
@@ -223,7 +224,7 @@ public class Engine {
         }
 
         mechanic.sendToClients("endGame", data, this);
-        msys.sendMessage(new EndGameQuery(this), AddressService.getMechanic());
+        msys.sendMessage(new EndGameQuery(this, winnerSnakeId), AddressService.getMechanic());
     }
 
     public void execAction(String action, Map<String, Object> data) {

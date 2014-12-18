@@ -18,7 +18,7 @@ public class GetUsersAnswer extends AbstractToServlet {
     }
 
     public ArrayList<UserDataSet> getUsers() {
-        return this.users;
+        return users;
     }
 
     @Override

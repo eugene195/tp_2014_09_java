@@ -5,6 +5,7 @@ import global.database.dataSets.UserDataSet;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class UsersDAO extends AbstractDAO {
 
@@ -38,6 +39,13 @@ public class UsersDAO extends AbstractDAO {
         String query = "INSERT INTO User (login, passw)" + " VALUES (?, md5(?));";
 
         exec.execUpdate(query, login, passw);
+    }
+
+    public void changeScores(Map<String, Integer> extraScoresUsers) throws SQLException {
+        for (String key: extraScoresUsers.keySet()) {
+            String query = "UPDATE User Set score = score + ? WHERE login = ?;";
+            exec.execUpdate(query, extraScoresUsers.get(key).toString(), key);
+        }
     }
 
     public void changePassw(String login, String passw) throws SQLException {
