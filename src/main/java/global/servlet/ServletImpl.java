@@ -25,7 +25,6 @@ import static java.lang.Thread.sleep;
  */
 
 public class ServletImpl extends HttpServlet implements Servlet {
-    private static final String SERVLET_ADDRESS = "servlet";
     private static Pattern patternUrl =  Pattern.compile("^/\\w+");
     private final MessageSystem msys;
     private final Map<String, WebPage> pageMap = new HashMap<>();
@@ -33,7 +32,7 @@ public class ServletImpl extends HttpServlet implements Servlet {
 
     public ServletImpl(MessageSystem msys) {
         this.msys = msys;
-        msys.register(this, AddressService.getServletAddr());
+        msys.register(this);
 
         this.pageMap.put(AuthPage.URL, new AuthPage(this.msys, this.userSessions));
         this.pageMap.put(GamePage.URL, new GamePage());
@@ -44,6 +43,11 @@ public class ServletImpl extends HttpServlet implements Servlet {
         this.pageMap.put(AdminPage.URL, new AdminPage(this.msys));
         this.pageMap.put(ScorePage.URL, new ScorePage(this.msys));
         this.pageMap.put(GameListPage.URL, new GameListPage(this.msys));
+    }
+
+    @Override
+    public String getAddress() {
+        return AddressService.getServletAddr();
     }
 
     @Override

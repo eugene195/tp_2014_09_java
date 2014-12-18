@@ -33,9 +33,14 @@ public class GameMechanicsImpl implements GameMechanics {
 
     public GameMechanicsImpl(MessageSystem msys) {
         this.msys = msys;
-        this.msys.register(this, AddressService.getMechanic());
+        this.msys.register(this);
 
         this.socketService = new SocketServiceImpl(this);
+    }
+
+    @Override
+    public String getAddress() {
+        return AddressService.getMechanic();
     }
 
     @Override

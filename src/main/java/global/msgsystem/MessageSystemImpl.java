@@ -1,5 +1,6 @@
 package global.msgsystem;
 
+import global.Abonent;
 import global.MessageSystem;
 import global.msgsystem.messages.AbstractMsg;
 
@@ -16,14 +17,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class MessageSystemImpl implements MessageSystem {
 
-    private final Map<Runnable, ConcurrentLinkedQueue<AbstractMsg>> messages = new HashMap<>();
-    private final Map<String, Runnable> addresses = new HashMap<>();
+    private final Map<String, ConcurrentLinkedQueue<AbstractMsg>> messages = new HashMap<>();
 
 
     @Override
-    public void register(Runnable abonent, String address) {
-        this.addresses.put(address, abonent);
-        this.messages.put(abonent, new ConcurrentLinkedQueue<>());
+    public void register(Abonent abonent) {
+        String address = abonent.getAddress();
+        this.messages.put(address, new ConcurrentLinkedQueue<>());
     }
 
     //TODO: append unregister method
@@ -31,8 +31,7 @@ public class MessageSystemImpl implements MessageSystem {
     @Override
     public boolean sendMessage(AbstractMsg message, String addressTo) {
         boolean result;
-        Runnable reciever = this.addresses.get(addressTo);
-        Queue<AbstractMsg> messageQueue = this.messages.get(reciever);
+        Queue<AbstractMsg> messageQueue = this.messages.get(addressTo);
 
         try {
             messageQueue.add(message);
@@ -44,21 +43,13 @@ public class MessageSystemImpl implements MessageSystem {
     }
 
     @Override
-    public void executeFor(Runnable abonent) {
-        Queue<AbstractMsg> messageQueue = this.messages.get(abonent);
+    public void executeFor(Abonent abonent) {
+        String address = abonent.getAddress();
+        Queue<AbstractMsg> messageQueue = this.messages.get(address);
 
         while (!messageQueue.isEmpty()) {
             AbstractMsg message = messageQueue.poll();
             message.exec(abonent);
         }
-    }
-
-    /**
-     * The helpful tool for a programmer.
-     */
-
-    public void printAddresses() {
-        System.out.println("Current content of address set: ");
-        this.addresses.forEach((address, obj) -> System.out.println(address));
     }
 }

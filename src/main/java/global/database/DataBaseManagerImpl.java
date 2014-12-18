@@ -27,7 +27,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
             throws SQLException
     {
         this.msys = msys;
-        msys.register(this, AddressService.getDBManAddr());
+        msys.register(this);
 
         String baseUrl = "jdbc:mysql://localhost/" + baseName;
 
@@ -46,7 +46,11 @@ public class DataBaseManagerImpl implements DataBaseManager {
         catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new SQLException(e.getCause());
         }
+    }
 
+    @Override
+    public String getAddress() {
+        return AddressService.getDBManAddr();
     }
 
     @Override
