@@ -1,15 +1,9 @@
 @import "constants";
 
-// Config ----------------------------------
-
-$spinner-size: 100px;                 // 100px
-$spinner-thickness: 5px;              // 5px
-$spinner-speed: 1.2s;                 // 1.2s
-
-$spinner-loops: infinite;             // infinite (be careful, save the batteries!)
-
-
-// Spinner ----------------------------------
+$spinner-size: 100px;                
+$spinner-thickness: 5px;             
+$spinner-speed: 1.2s;              
+$spinner-loops: infinite;
 
 .spinner {
   position: relative;
