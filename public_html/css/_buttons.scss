@@ -103,6 +103,23 @@ $large-font-size: ($large-width + $large-height) / 2;
     }
 }
 
+
+.background {
+    padding: 5px 5px;
+    background: $light-gray;
+}
+
+.button-spinbox {
+    @extend .button;
+    padding: 5px 5px;
+    width: 30px;
+    height: 30px;
+    background: $light-cyan;
+    font-size: 13px;
+    font-weight: bold;
+    color: $black;
+}
+
 .counter {
     @extend .button_small;
     cursor: none;
