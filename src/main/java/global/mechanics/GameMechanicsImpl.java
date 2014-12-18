@@ -20,6 +20,7 @@ import static java.lang.Thread.sleep;
  * Created by eugene on 10/19/14.
  */
 public class GameMechanicsImpl implements GameMechanics {
+    private static final String MECHANIC_ADDRESS = "gamemech";
     private static final int STEP_TIME = 30;
     private static final int EXTRA_SCORE = 10;
     private static AtomicLong idCounter = new AtomicLong();
@@ -174,7 +175,7 @@ public class GameMechanicsImpl implements GameMechanics {
     @Override
     public void getGameSessions() {
         GameSessionsAnswer msg = new GameSessionsAnswer(this.waitingPlayers);
-        this.msys.sendMessage(msg, AddressService.getServletAddr());
+        this.msys.sendMessage(msg, "servlet");
     }
 
     private Map<String, Integer> getExtraScoresUsers(ArrayList<Player> players, Long  winnerSnakeId) {

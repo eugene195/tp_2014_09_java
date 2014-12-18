@@ -60,6 +60,10 @@ var GameList = Backbone.View.extend({
         this.trigger('rerender', this);
     },
 
+//---------------------------------------------------
+// Events
+//---------------------------------------------------
+
     createGame: function(event) {
         var sizes = {
             1: {h: 100, w: 100},
@@ -104,7 +108,7 @@ var GameList = Backbone.View.extend({
         playersCnt = parseInt(playersCnt);
         $('#players-cnt').html(++playersCnt);
     },
-//TODO
+
     subPlr: function () {
         var playersCnt = $('#players-cnt').html();
         playersCnt = parseInt(playersCnt);

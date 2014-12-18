@@ -1,6 +1,5 @@
 package global.servlet.webpages;
 
-import global.AddressService;
 import global.MessageSystem;
 import global.mechanics.GameSession;
 import global.msgsystem.messages.toServlet.GameSessionsAnswer;
@@ -33,7 +32,7 @@ public class GameListPage extends WebPage {
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-        this.msys.sendMessage(new GameSessionsQuery(), AddressService.getMechanic());
+        this.msys.sendMessage(new GameSessionsQuery(), "gamemech");
         this.setZombie();
 
         response.setContentType("application/json; charset=UTF-8");

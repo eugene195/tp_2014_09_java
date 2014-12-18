@@ -4,6 +4,15 @@ $base-gap: 10px;
 $base-size: 10px;
 $base-br: 20px;
 
+.game_background {
+    border: 2px solid;
+    border-radius: 15px;
+    outline: none;
+    border-color: $magenta;
+    box-shadow: 0 0 30px $magenta;
+    background: radial-gradient( hsl(200,40%,20%), hsl(200,30%,6%) );
+}
+
 .panel {
     margin-top: $base-gap;
     margin-bottom: $base-gap;

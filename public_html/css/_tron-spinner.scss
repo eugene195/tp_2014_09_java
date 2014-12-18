@@ -1,0 +1,56 @@
+@import "constants";
+
+// Config ----------------------------------
+
+$spinner-size: 100px;                 // 100px
+$spinner-thickness: 5px;              // 5px
+$spinner-speed: 1.2s;                 // 1.2s
+
+$spinner-loops: infinite;             // infinite (be careful, save the batteries!)
+
+
+// Spinner ----------------------------------
+
+.spinner {
+  position: relative;
+  margin: auto;
+  box-sizing: border-box;
+  background-clip: padding-box;
+  width: $spinner-size;
+  height: $spinner-size;
+  border-radius: $spinner-size / 2;
+  border: $spinner-thickness solid hsla(160,0%,100%,.1);
+}
+
+.spinner:before,
+.spinner:after {
+  content: "";
+  position: absolute;
+  margin: -$spinner-thickness;
+  box-sizing: inherit;
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  opacity: 1;
+  border: inherit;
+  border-color: transparent;
+  animation: spinner-spin $spinner-speed linear $spinner-loops,
+             spinner-fade $spinner-speed linear $spinner-loops;
+  
+}
+
+.spinner:before {
+  /*Синяя линия*/
+  border-top-color: hsl(190,100%,80%);
+}
+
+.spinner:after {
+  /*Желтая линия*/
+  border-top-color: hsl(50,100%,70%);
+  /*Выбираем, какой отрыв между двумя линиями*/
+  animation-delay: $spinner-speed * .5;
+}
+
+@keyframes spinner-spin {
+  100% { transform: rotate(360deg); }
+}

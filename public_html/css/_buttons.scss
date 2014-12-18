@@ -84,6 +84,10 @@ $large-font-size: ($large-width + $large-height) / 2;
     }
 }
 
+.button_blue {
+    @extend .button;
+}
+
 .button_disabled {
     background: #aaa !important;
     border: 1px solid #999 !important;
@@ -99,6 +103,23 @@ $large-font-size: ($large-width + $large-height) / 2;
     }
 }
 
+
+.background {
+    padding: 5px 5px;
+    background: $light-gray;
+}
+
+.button-spinbox {
+    @extend .button;
+    padding: 5px 5px;
+    width: 30px;
+    height: 30px;
+    background: $light-cyan;
+    font-size: 13px;
+    font-weight: bold;
+    color: $black;
+}
+
 .counter {
     @extend .button_small;
     cursor: none;
@@ -106,6 +127,7 @@ $large-font-size: ($large-width + $large-height) / 2;
 
 .buttons_wrapper {
     width: 100%;
+    box-sizing: border-box;
     display:inline-block;
     overflow: auto;
     white-space: nowrap;

@@ -1,5 +1,7 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="gameContent">
-
+        <div style="display: flex;
+  padding: 50px;
+  ">
             <div class="container-centered">
 
                 <div class="content-centered">
@@ -7,18 +9,25 @@
                         <div class="form__header">
                             <h1 class="form__header__h1">Player List</h1>
                         </div>
-
+                        <div class="form__content">
                             <fest:each iterate="gameContent.snakes" index="i" value="snake">
                                 <div class="form__content__menu-item">
                                     <fest:attributes>
-                                        <fest:attribute name="style"><fest:value>"background-color: " + snake.color</fest:value></fest:attribute>
+                                        <fest:attribute name="style"><fest:value>"background-color: " + snake.color + "; color: white;"</fest:value></fest:attribute>
                                     </fest:attributes>
                                     <td><fest:value>snake.name</fest:value></td>
                                 </div>
                             </fest:each>
+                        </div>
+                        <div class="form__footer">
+                            <div class="buttons_wrapper">
+                                <a href="#" class="button_orange left">Main</a>
+                                <a href="#scoreboard" class="button right">Scoreboard</a>
+                            </div>
+                        </div>
                     </form>
                 </div>
-                <canvas id="snakeGame" class="content-centered" style="border: black solid 2px">
+                <canvas id="snakeGame" class="content-centered game_background">
                     <fest:attributes>
                         <fest:attribute name="width"><fest:value>gameContent.sizes.width</fest:value></fest:attribute>
                         <fest:attribute name="height"><fest:value>gameContent.sizes.height</fest:value></fest:attribute>
@@ -26,4 +35,20 @@
                 </canvas>
             </div>
 
+
+            <div class="modal">
+                <div class="spinner modal__spinner"></div>
+
+                <div class="container-centered">
+                    <div class="neon content-centered modal__header" id="result_message"></div>
+                </div>
+                <div class="container-centered modal__footer">
+                    <div class="buttons_wrapper content-centered">
+                        <a href="#" class="button_orange">Main</a>
+                        <button class="button" id="game_show">Back</button>
+                    </div>
+                </div>
+            </div>
+            <div class="overlay"></div>
+        </div>
 </fest:template>

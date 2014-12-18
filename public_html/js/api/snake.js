@@ -1,9 +1,9 @@
 
-function Snake(snakeObj, size, name) {
-    this.width = size;
+function Snake(snakeObj) {
+    this.width = snakeObj.size;
     this.head = new Rectangle(snakeObj.posX, snakeObj.posY, this.width / 2);
     this.tail = new Tail();
-    this.name = name;
+    this.name = snakeObj.name;
     this.color = colorCheck(snakeObj.color);
     this.direction = snakeObj.direction;
     this.snakeId = snakeObj.snakeId;
@@ -47,12 +47,8 @@ function Snake(snakeObj, size, name) {
 //
 //SnakeControl.prototype = Snake;
 
-function CurrentSnakeHolder () {
-    this.snake = null;
-
-    this.setSnake = function(snake) {
-        this.snake = snake;
-    };
+function CurrentSnakeHolder (snakeObj) {
+    this.snake = snakeObj;
 
     this.setCoordinates = function(x, y) {
         this.snake.setCoordinates(x, y);
@@ -63,8 +59,17 @@ function CurrentSnakeHolder () {
     };
 
     this.setDirection = function(direction) {
-//        Some BS code
+    /*
+        console.log(snake.direction);
+        console.log(direction);
+        console.log((snake.direction in ["RIGHT", "LEFT"] && direction in ["RIGHT", "LEFT"]));
+        if ( (snake.direction in ["RIGHT", "LEFT"] && direction in ["RIGHT", "LEFT"]) ||
+             (snake.direction in ["UP", "DOWN"] && direction in ["UP", "DOWN"]) )
+             return false;
+    */
         this.snake.changeDirection(direction);
         return true;
     };
 }
+
+CurrentSnakeHolder.prototype = Object.create(Snake.prototype);
