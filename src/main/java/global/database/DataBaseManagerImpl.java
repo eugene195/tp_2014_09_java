@@ -7,8 +7,6 @@ import global.database.dao.UsersDAO;
 import global.database.dataSets.UserDataSet;
 import global.models.Score;
 import global.models.UserSession;
-import global.msgsystem.messages.toDB.AuthQuery;
-import global.msgsystem.messages.toDB.GetUsersQuery;
 import global.msgsystem.messages.toServlet.*;
 import snaq.db.ConnectionPool;
 
@@ -29,7 +27,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     public DataBaseManagerImpl(MessageSystem msys, String baseName, String userName, String userPasswd)
             throws SQLException
     {
-        this.address = AddressService.getDBManAddr();
+        this.address = AddressService.registerDBMan();
         this.msys = msys;
         msys.register(this);
 

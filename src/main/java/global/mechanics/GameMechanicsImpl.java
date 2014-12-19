@@ -33,7 +33,7 @@ public class GameMechanicsImpl implements GameMechanics {
     private final ArrayList<Engine> engines = new ArrayList<>();
 
     public GameMechanicsImpl(MessageSystem msys) {
-        this.address = AddressService.getMechanic();
+        this.address = AddressService.registerMechanic();
         this.msys = msys;
         this.msys.register(this);
 

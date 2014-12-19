@@ -33,7 +33,7 @@ public class ServletImpl extends HttpServlet implements Servlet {
     private final String address;
 
     public ServletImpl(MessageSystem msys) {
-        this.address = AddressService.getServletAddr();
+        this.address = AddressService.registerServlet();
         this.msys = msys;
         msys.register(this);
 
