@@ -9,7 +9,8 @@ public class EndGameQuery extends AbstractToMechanics {
     private Engine engine;
     private Long winnerSnakeId;
 
-    public EndGameQuery(Engine engine, Long winnerSnakeId) {
+    public EndGameQuery(String addressFrom, Engine engine, Long winnerSnakeId) {
+        super(addressFrom);
         this.engine = engine;
         this.winnerSnakeId = winnerSnakeId;
     }

@@ -20,19 +20,20 @@ import static java.lang.Thread.sleep;
  * Created by eugene on 10/19/14.
  */
 public class GameMechanicsImpl implements GameMechanics {
-    private static final String MECHANIC_ADDRESS = "gamemech";
     private static final int STEP_TIME = 30;
     private static final int EXTRA_SCORE = 10;
     private static AtomicLong idCounter = new AtomicLong();
 
     private final MessageSystem msys;
     private final SocketService socketService;
+    private final String address;
 
     private final Map<Long, GameSession> waitingPlayers = new HashMap<>();
     private final ArrayList<GameSession> playing = new ArrayList<>();
     private final ArrayList<Engine> engines = new ArrayList<>();
 
     public GameMechanicsImpl(MessageSystem msys) {
+        this.address = AddressService.getMechanic();
         this.msys = msys;
         this.msys.register(this);
 
@@ -41,7 +42,7 @@ public class GameMechanicsImpl implements GameMechanics {
 
     @Override
     public String getAddress() {
-        return AddressService.getMechanic();
+        return this.address;
     }
 
     @Override
@@ -139,7 +140,7 @@ public class GameMechanicsImpl implements GameMechanics {
             GameSession gameSession = playing.get(index);
             ArrayList<Player> players = gameSession.getArrayPlayers();
 
-            ChangeScoresQuery msg = new ChangeScoresQuery(getExtraScoresUsers(players, winnerSnakeId));
+            ChangeScoresQuery msg = new ChangeScoresQuery(address, getExtraScoresUsers(players, winnerSnakeId));
             msys.sendMessage(msg, AddressService.getDBManAddr());
             socketService.notifyEnd(gameSession);
             playing.remove(index);
@@ -173,9 +174,9 @@ public class GameMechanicsImpl implements GameMechanics {
     }
 
     @Override
-    public void getGameSessions() {
-        GameSessionsAnswer msg = new GameSessionsAnswer(this.waitingPlayers);
-        this.msys.sendMessage(msg, "servlet");
+    public void getGameSessions(String addressTo) {
+        GameSessionsAnswer msg = new GameSessionsAnswer(address, this.waitingPlayers);
+        this.msys.sendMessage(msg, addressTo);
     }
 
     private Map<String, Integer> getExtraScoresUsers(ArrayList<Player> players, Long  winnerSnakeId) {

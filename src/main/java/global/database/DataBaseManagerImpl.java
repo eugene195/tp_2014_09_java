@@ -7,6 +7,8 @@ import global.database.dao.UsersDAO;
 import global.database.dataSets.UserDataSet;
 import global.models.Score;
 import global.models.UserSession;
+import global.msgsystem.messages.toDB.AuthQuery;
+import global.msgsystem.messages.toDB.GetUsersQuery;
 import global.msgsystem.messages.toServlet.*;
 import snaq.db.ConnectionPool;
 
@@ -22,10 +24,12 @@ import static java.lang.Thread.sleep;
 public class DataBaseManagerImpl implements DataBaseManager {
     private final MessageSystem msys;
     private Executor executor;
+    private final String address;
 
     public DataBaseManagerImpl(MessageSystem msys, String baseName, String userName, String userPasswd)
             throws SQLException
     {
+        this.address = AddressService.getDBManAddr();
         this.msys = msys;
         msys.register(this);
 
@@ -50,7 +54,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
 
     @Override
     public String getAddress() {
-        return AddressService.getDBManAddr();
+        return this.address;
     }
 
     @Override
@@ -79,11 +83,11 @@ public class DataBaseManagerImpl implements DataBaseManager {
     }
 
     @Override
-    public void getUsers(){
+    public void getUsers(String addressTo) {
         try {
             UsersDAO userDAO = new UsersDAO(executor);
             ArrayList<UserDataSet> users = userDAO.getAll();
-            this.msys.sendMessage(new GetUsersAnswer(users), AddressService.getServletAddr());
+            this.msys.sendMessage(new GetUsersAnswer(address, users), addressTo);
         }
         catch (Exception e) {
             System.out.println(e.getMessage() + "\nSql exception during getUsers()");
@@ -91,7 +95,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     }
 
     @Override
-    public void checkAuth(UserSession userSession, String passw) {
+    public void checkAuth(String addressTo, UserSession userSession, String passw) {
         try {
             UsersDAO userDAO = new UsersDAO(executor);
             UserDataSet user = userDAO.get(userSession.getLogin(), passw);
@@ -99,35 +103,35 @@ public class DataBaseManagerImpl implements DataBaseManager {
             if (user != null) {
                 userSession.setSuccessAuth(true);
                 userSession.setUserId(user.getId());
-                this.msys.sendMessage(new AuthAnswer(userSession), AddressService.getServletAddr());
+                this.msys.sendMessage(new AuthAnswer(address, userSession), addressTo);
             }
             else {
                 userSession.setSuccessAuth(false);
-                this.msys.sendMessage(new AuthAnswer(userSession), AddressService.getServletAddr());
+                this.msys.sendMessage(new AuthAnswer(address, userSession), addressTo);
             }
         }
         catch (Exception e) {
             System.out.println(e.getMessage() + "\nSql exception during checkAuth()");
             userSession.setSuccessAuth(false);
-            this.msys.sendMessage(new AuthAnswer(userSession), AddressService.getServletAddr());
+            this.msys.sendMessage(new AuthAnswer(address, userSession), addressTo);
         }
     }
 
     @Override
-    public void registerUser(String login, String passw) {
+    public void registerUser(String addressTo, String login, String passw) {
         if (userExists(login)) {
-            this.msys.sendMessage(new RegistrationAnswer(false, "", "User with this login already Exists"), "servlet");
+            this.msys.sendMessage(new RegistrationAnswer(address, false, "", "User with this login already Exists"), addressTo);
         }
         else {
             try {
                 UsersDAO userDAO = new UsersDAO(executor);
                 userDAO.add(login, passw);
-                this.msys.sendMessage(new RegistrationAnswer(true, login, ""), AddressService.getServletAddr());
+                this.msys.sendMessage(new RegistrationAnswer(address, true, login, ""), addressTo);
             }
             catch (SQLException e){
                 e.printStackTrace();
                 System.out.println("Exception during DB insert in registration");
-                this.msys.sendMessage(new RegistrationAnswer(false, "", "Cannot add User "), AddressService.getServletAddr());
+                this.msys.sendMessage(new RegistrationAnswer(address, false, "", "Cannot add User "), addressTo);
             }
         }
     }
@@ -150,7 +154,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     }
 
     @Override
-    public void changeScores(Map<String, Integer> extraScoresUsers) {
+    public void changeScores(String addressTo, Map<String, Integer> extraScoresUsers) {
         try {
             UsersDAO userDAO = new UsersDAO(executor);
             userDAO.changeScores(extraScoresUsers);
@@ -161,7 +165,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
     }
 
     @Override
-    public void bestScores() {
+    public void bestScores(String addressTo) {
         try {
             UsersDAO userDAO = new UsersDAO(executor);
             ArrayList<UserDataSet> users = userDAO.getTopScorers();
@@ -171,7 +175,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
                 scores.add(new Score(user.getLogin(), user.getScore()));
             }
 
-            this.msys.sendMessage(new BestScoresAnswer(scores), AddressService.getServletAddr());
+            this.msys.sendMessage(new BestScoresAnswer(address, scores), addressTo);
         }
         catch (Exception e) {
             System.out.println("Exception during DB select in bestScores");
@@ -179,22 +183,22 @@ public class DataBaseManagerImpl implements DataBaseManager {
     }
 
     @Override
-    public void changePassword(String login, String curPassw, String newPassw) {
+    public void changePassword(String addressTo, String login, String curPassw, String newPassw) {
         try {
             UsersDAO userDAO = new UsersDAO(executor);
             UserDataSet user = userDAO.get(login, curPassw);
 
             if (user != null) {
                 userDAO.changePassw(login, newPassw);
-                this.msys.sendMessage(new ChangePasswordAnswer(true, ""), AddressService.getServletAddr());
+                this.msys.sendMessage(new ChangePasswordAnswer(address, true, ""), addressTo);
             }
             else {
-                this.msys.sendMessage(new ChangePasswordAnswer(false, "Wrong current password"), AddressService.getServletAddr());
+                this.msys.sendMessage(new ChangePasswordAnswer(address, false, "Wrong current password"), addressTo);
             }
         }
         catch (SQLException e) {
             System.out.println("Sql exception during changePassword()");
-            this.msys.sendMessage(new ChangePasswordAnswer(false, "Cannot change password"), AddressService.getServletAddr());
+            this.msys.sendMessage(new ChangePasswordAnswer(address, false, "Cannot change password"), addressTo);
         }
     }
 

@@ -24,5 +24,5 @@ public interface GameMechanics extends Runnable, Abonent {
     void startGame(GameSession gameSession);
     void endGame(Engine endine, Long winnerSnakeId);
 
-    void getGameSessions();
+    void getGameSessions(String addressTo);
 }

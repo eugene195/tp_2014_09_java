@@ -9,16 +9,16 @@ import java.util.Map;
  */
 public interface DataBaseManager extends Runnable, Abonent {
 
-    void getUsers();
+    void getUsers(String addressTo);
 
-    void checkAuth(UserSession userSession, String passw);
+    void checkAuth(String addressTo, UserSession userSession, String passw);
 
-    void registerUser(String login, String passw);
+    void registerUser(String addressTo, String login, String passw);
 
-    void bestScores();
+    void bestScores(String addressTo);
 
-    void changeScores(Map<String, Integer> extraScoresUsers);
+    void changeScores(String addressTo, Map<String, Integer> extraScoresUsers);
 
-    void changePassword(String login, String curPassw, String newPassw);
+    void changePassword(String addressTo, String login, String curPassw, String newPassw);
 
 }

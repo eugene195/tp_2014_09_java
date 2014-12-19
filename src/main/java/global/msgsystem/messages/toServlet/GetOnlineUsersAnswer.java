@@ -9,9 +9,10 @@ import java.util.Set;
  * Created by eugene on 9/27/14.
  */
 public class GetOnlineUsersAnswer extends AbstractToServlet {
-
     private Set<String> keyset;
-    public GetOnlineUsersAnswer(Set<String> set){
+
+    public GetOnlineUsersAnswer(String addressFrom, Set<String> set){
+        super(addressFrom);
         this.keyset = set;
     }
 

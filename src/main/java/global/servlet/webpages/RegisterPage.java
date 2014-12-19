@@ -21,14 +21,13 @@ import org.json.JSONObject;
  * Created by Евгений on 28.08.2014.
  */
 public class RegisterPage extends WebPage {
-    public static final String URL = "/register";
-    private final MessageSystem msys;
 
+    public static final String URL = "/register";
     private boolean successReg;
     private final ArrayList<String> msgList = new ArrayList<>();
 
-    public RegisterPage(MessageSystem msys) {
-        this.msys = msys;
+    public RegisterPage(String address, MessageSystem msys) {
+        super(address, msys);
     }
 
     @Override
@@ -47,7 +46,7 @@ public class RegisterPage extends WebPage {
         String login = request.getParameter("login");
         String passw = request.getParameter("passw");
 
-        this.msys.sendMessage(new RegistrationQuery(login, passw), "dbman");
+        this.msys.sendMessage(new RegistrationQuery(address, login, passw), AddressService.getDBManAddr());
         setZombie();
 
         response.setContentType("application/json; charset=UTF-8");

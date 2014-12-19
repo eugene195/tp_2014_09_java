@@ -11,9 +11,10 @@ import java.util.ArrayList;
  * Created by eugene on 9/27/14.
  */
 public class GetUsersAnswer extends AbstractToServlet {
-
     private ArrayList<UserDataSet> users;
-    public GetUsersAnswer(ArrayList<UserDataSet> users){
+
+    public GetUsersAnswer(String addressFrom, ArrayList<UserDataSet> users){
+        super(addressFrom);
         this.users = users;
     }
 

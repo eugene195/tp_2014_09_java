@@ -1,5 +1,6 @@
 package global.servlet.webpages;
 
+import global.AddressService;
 import global.MessageSystem;
 import global.mechanics.GameSession;
 import global.msgsystem.messages.toServlet.GameSessionsAnswer;
@@ -18,21 +19,20 @@ import java.util.Map;
  * Created by max on 13.11.14.
  */
 public class GameListPage extends WebPage {
-    public static final String URL = "/gameList";
-    private final MessageSystem msys;
 
+    public static final String URL = "/gameList";
     private Map<Long, GameSession> sessions;
 
-    public GameListPage(MessageSystem msys) {
+    public GameListPage(String address, MessageSystem msys) {
+        super(address, msys);
         this.sessions = null;
-        this.msys = msys;
     }
 
     @Override
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-        this.msys.sendMessage(new GameSessionsQuery(), "gamemech");
+        this.msys.sendMessage(new GameSessionsQuery(address), AddressService.getMechanic());
         this.setZombie();
 
         response.setContentType("application/json; charset=UTF-8");

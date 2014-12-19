@@ -1,6 +1,7 @@
 package global.msgsystem.messages.toDB;
 
 import global.Abonent;
+import global.AddressService;
 import global.DataBaseManager;
 import global.database.DataBaseManagerImpl;
 import global.msgsystem.messages.AbstractMsg;
@@ -9,6 +10,10 @@ import global.msgsystem.messages.AbstractMsg;
  * Created by max on 22.11.14.
  */
 public abstract class AbstractToDB extends AbstractMsg {
+
+    public AbstractToDB(String addressFrom) {
+        super(addressFrom, AddressService.getDBManAddr());
+    }
 
     @Override
     public void exec(Abonent abonent) {

@@ -26,28 +26,31 @@ import static java.lang.Thread.sleep;
 
 public class ServletImpl extends HttpServlet implements Servlet {
     private static Pattern patternUrl =  Pattern.compile("^/\\w+");
-    private final MessageSystem msys;
     private final Map<String, WebPage> pageMap = new HashMap<>();
     private final Map<String, UserSession> userSessions = new HashMap<>();
 
+    private final MessageSystem msys;
+    private final String address;
+
     public ServletImpl(MessageSystem msys) {
+        this.address = AddressService.getServletAddr();
         this.msys = msys;
         msys.register(this);
 
-        this.pageMap.put(AuthPage.URL, new AuthPage(this.msys, this.userSessions));
-        this.pageMap.put(GamePage.URL, new GamePage());
-        this.pageMap.put(RegisterPage.URL, new RegisterPage(this.msys));
-        this.pageMap.put(ProfilePage.URL, new ProfilePage(this.msys));
-        this.pageMap.put(LogoutPage.URL, new LogoutPage(this.msys, this.userSessions));
-        this.pageMap.put(IdentifyUserPage.URL, new IdentifyUserPage());
-        this.pageMap.put(AdminPage.URL, new AdminPage(this.msys));
-        this.pageMap.put(ScorePage.URL, new ScorePage(this.msys));
-        this.pageMap.put(GameListPage.URL, new GameListPage(this.msys));
+        this.pageMap.put(AuthPage.URL, new AuthPage(address, this.msys, this.userSessions));
+        this.pageMap.put(GamePage.URL, new GamePage(address, this.msys));
+        this.pageMap.put(RegisterPage.URL, new RegisterPage(address, this.msys));
+        this.pageMap.put(ProfilePage.URL, new ProfilePage(address, this.msys));
+        this.pageMap.put(LogoutPage.URL, new LogoutPage(address, this.msys, this.userSessions));
+        this.pageMap.put(IdentifyUserPage.URL, new IdentifyUserPage(address, this.msys));
+        this.pageMap.put(AdminPage.URL, new AdminPage(address, this.msys));
+        this.pageMap.put(ScorePage.URL, new ScorePage(address, this.msys));
+        this.pageMap.put(GameListPage.URL, new GameListPage(address, this.msys));
     }
 
     @Override
     public String getAddress() {
-        return AddressService.getServletAddr();
+        return this.address;
     }
 
     @Override
@@ -84,7 +87,7 @@ public class ServletImpl extends HttpServlet implements Servlet {
             }
         }
 
-        return new PageNotFound();
+        return new PageNotFound(address, msys);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package global.engine;
 
-import global.AddressService;
 import global.GameMechanics;
 import global.MessageSystem;
 import global.mechanics.GameSession;
@@ -224,7 +223,8 @@ public class Engine {
         }
 
         mechanic.sendToClients("endGame", data, this);
-        msys.sendMessage(new EndGameQuery(this, winnerSnakeId), AddressService.getMechanic());
+        String address = mechanic.getAddress();
+        msys.sendMessage(new EndGameQuery(address, this, winnerSnakeId), address);
     }
 
     public void execAction(String action, Map<String, Object> data) {

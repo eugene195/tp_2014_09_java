@@ -17,7 +17,8 @@ public class RegistrationAnswer extends AbstractToServlet {
     private final String login;
     private final String errorMessage;
 
-    public RegistrationAnswer(boolean success, String login, String errMsg) {
+    public RegistrationAnswer(String addressFrom, boolean success, String login, String errMsg) {
+        super(addressFrom);
         this.success = success;
         this.login = login;
         this.errorMessage = errMsg;

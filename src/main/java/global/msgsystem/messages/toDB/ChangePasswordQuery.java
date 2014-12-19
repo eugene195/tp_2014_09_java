@@ -11,7 +11,8 @@ public class ChangePasswordQuery extends AbstractToDB {
     private final String curPassw;
     private final String newPassw;
 
-    public ChangePasswordQuery(String login, String curPassw, String newPassw) {
+    public ChangePasswordQuery(String addressFrom, String login, String curPassw, String newPassw) {
+        super(addressFrom);
         this.login = login;
         this.curPassw = curPassw;
         this.newPassw = newPassw;
@@ -19,6 +20,6 @@ public class ChangePasswordQuery extends AbstractToDB {
 
     @Override
     public void exec(DataBaseManager dbman) {
-        dbman.changePassword(login, curPassw, newPassw);
+        dbman.changePassword(getAddressFrom(), login, curPassw, newPassw);
     }
 }

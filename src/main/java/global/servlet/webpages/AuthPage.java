@@ -24,15 +24,13 @@ import org.json.JSONObject;
  * The page for a user authentication.
  */
 public class AuthPage extends WebPage {
+
     public static final String URL = "/auth";
-
     private final Map<String, UserSession> userSessions;
-    private final MessageSystem msys;
-
     private UserSession userSession;
 
-    public AuthPage(MessageSystem msys, Map<String, UserSession> userSessions) {
-        this.msys = msys;
+    public AuthPage(String address, MessageSystem msys, Map<String, UserSession> userSessions) {
+        super(address, msys);
         this.userSessions = userSessions;
     }
 
@@ -58,7 +56,7 @@ public class AuthPage extends WebPage {
 
         this.userSession = new UserSession(login);
 
-        this.msys.sendMessage(new AuthQuery(this.userSession, passw), "dbman");
+        this.msys.sendMessage(new AuthQuery(address, this.userSession, passw), AddressService.getDBManAddr());
         setZombie();
 
         if (this.userSession.isAuthSuccess()) {
@@ -87,7 +85,7 @@ public class AuthPage extends WebPage {
             resume();
         }
         else if (absMsg instanceof GetOnlineUsersQuery) {
-            this.msys.sendMessage(new GetOnlineUsersAnswer(this.userSessions.keySet()), "servlet");
+            this.msys.sendMessage(new GetOnlineUsersAnswer(address, this.userSessions.keySet()), AddressService.getServletAddr());
         }
     }
 }

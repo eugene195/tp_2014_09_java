@@ -10,7 +10,8 @@ public class ChangePasswordAnswer  extends AbstractToServlet {
     private final boolean success;
     private final String errorMessage;
 
-    public ChangePasswordAnswer(boolean success, String errMsg) {
+    public ChangePasswordAnswer(String addressFrom, boolean success, String errMsg) {
+        super(addressFrom);
         this.success = success;
         this.errorMessage = errMsg;
     }
