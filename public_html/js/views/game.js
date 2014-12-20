@@ -20,7 +20,7 @@ var GameView = Backbone.View.extend({
     sizeModifier: 1,
     snakeHolder : new CurrentSnakeHolder(),
 //    Ids
-    snakes : [],
+    snakes : {},
 //    Names
     names : [],
 
@@ -52,6 +52,7 @@ var GameView = Backbone.View.extend({
         var myID = data.snakeId;
         var names = data.names;
         var length = data.snakes.length;
+
         for (var i = 0; i < length; i++) {
             var current = data.snakes[i];
             current.name = names[i];
@@ -59,7 +60,8 @@ var GameView = Backbone.View.extend({
             var snake = new Snake(current);
             if (current.snakeId == myID)
                 this.snakeHolder = new CurrentSnakeHolder(snake);
-            this.snakes.push(snake);
+
+            this.snakes[current.snakeId] = snake;
         }
         this.started = true;
         this.update();
@@ -85,7 +87,8 @@ var GameView = Backbone.View.extend({
         else
             $('#result_message').html("You Lose");
         this.fade();
-        this.snakes = [];
+        this.snakes = {};
+        this.controller.dropSocket();
     },
 
     initialize: function() {
@@ -104,8 +107,15 @@ var GameView = Backbone.View.extend({
     },
 
     render: function () {
+        var snakes = [];
+        for (var I in this.snakes) {
+            if (this.snakes.hasOwnProperty(I)) {
+                snakes.push(this.snakes[I]);
+            }
+        }
+
         var gameContent = {
-            snakes: this.snakes,
+            snakes: snakes,
             sizes: {
                     width: this.width * this.sizeModifier,
                     height: this.height * this.sizeModifier }
