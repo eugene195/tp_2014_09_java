@@ -7,12 +7,11 @@ import global.msgsystem.MessageSystemImpl;
 import global.msgsystem.messages.AbstractMsg;
 import global.msgsystem.messages.toGameMechanics.AbstractToMechanics;
 import global.msgsystem.messages.toGameMechanics.GameSessionsQuery;
+import global.msgsystem.messages.toServlet.GameSessionsAnswer;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import utils.MessageHelper;
 
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -24,7 +23,7 @@ public class MsgSystemTest {
 
     class TestThread implements Abonent, Runnable {
         private final String address;
-        public ConcurrentLinkedQueue<AbstractMsg> queue = new ConcurrentLinkedQueue<AbstractMsg>();
+        private ConcurrentLinkedQueue<AbstractMsg> queue = new ConcurrentLinkedQueue<AbstractMsg>();
 
         public TestThread() {
             address = AddressService.registerServlet();
@@ -40,19 +39,37 @@ public class MsgSystemTest {
             msys.sendMessage(new GameSessionsQuery(address));
             try {
                 Thread.sleep(500);
-                queue = msys.getQueueState(this);
+                this.queue = msys.getQueueState(this);
             } catch (InterruptedException e) {
                 System.out.println("Something was gone wrong");
             }
+        }
+
+        public ConcurrentLinkedQueue<AbstractMsg> getQueue(){
+            return this.queue;
         }
     }
 
     @Test
     public void test() {
         new Thread(mechanics).start();
+
         TestThread test = new TestThread();
-        new Thread(test).start();
-        Assert.assertEquals("Size queue", 1, test.queue.size());
+        Thread thread = new Thread(test);
+        thread.start();
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Assert.assertEquals("Wrong size queue", 1, test.getQueue().size());
+
+        AbstractMsg msg = test.getQueue().poll();
+        boolean typeMatch = msg instanceof GameSessionsAnswer;
+
+        Assert.assertEquals("Wrong msg type", true, typeMatch);
     }
 
 }
