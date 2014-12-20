@@ -31,21 +31,9 @@ function Snake(snakeObj) {
     };
 
     this.drawSnake = function (context) {
-        //this.head.clear(context);
-//        this.tail.drawTail(context, this.color);
         this.head.draw(context, this.color, 1);
     };
 }
-//
-//function SnakeControl(snakeObj) {
-//    this.constructor(snakeObj);
-//    this.setDirection = function (direction) {
-//        this.changeDirection(direction);
-//        return true;
-//    };
-//}
-//
-//SnakeControl.prototype = Snake;
 
 function CurrentSnakeHolder (snakeObj) {
     this.left_right = ["", "RIGHT", "LEFT"];
@@ -61,12 +49,11 @@ function CurrentSnakeHolder (snakeObj) {
     };
 
     this.setDirection = function(direction) {
-        console.log(snake.direction);
-        console.log(direction);
-        if ((left_right.indexOf(this.snake.snake.direction) && left_right.indexOf(direction)) > 0)
+        if ((this.left_right.indexOf(this.snake.direction) > 0) && (this.left_right.indexOf(direction) > 0))
             return false;
-        if ((up_down.indexOf(this.snake.snake.direction) && up_down.indexOf(direction)) > 0)
+        if ( (this.up_down.indexOf(this.snake.direction) > 0) && (this.up_down.indexOf(direction) > 0))
             return false;
+        console.log("second");
         this.snake.changeDirection(direction);
         return true;
     };

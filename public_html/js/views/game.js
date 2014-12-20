@@ -36,7 +36,6 @@ var GameView = Backbone.View.extend({
         this.width = data.width;
         this.height = data.height;
 
-        // Вопрос 1
         this.sizeModifier = this.width * this.height * 0.001 / 2;
         var myID = data.snakeId;
         var names = data.names;
@@ -68,11 +67,13 @@ var GameView = Backbone.View.extend({
     endGame: function (data) {
         this.started = false;
         var winnerId = data.winner;
-        $('.spinner').css('display', 'none');
+        this.$('.spinner').css('display', 'none');
+
         if (this.snakeHolder.isWinner(winnerId))
-            $('#result_message').html("You Win");
+            this.$('#result_message').html("You Win");
         else
-            $('#result_message').html("You Lose");
+            this.$('#result_message').html("You Lose");
+
         this.fade();
         this.snakes = [];
     },
