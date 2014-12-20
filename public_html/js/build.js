@@ -13520,6 +13520,8 @@ function Snake(snakeObj) {
 //SnakeControl.prototype = Snake;
 
 function CurrentSnakeHolder (snakeObj) {
+    this.left_right = ["", "RIGHT", "LEFT"];
+    this.up_down = ["", "UP", "DOWN"];
     this.snake = snakeObj;
 
     this.setCoordinates = function(x, y) {
@@ -13531,14 +13533,12 @@ function CurrentSnakeHolder (snakeObj) {
     };
 
     this.setDirection = function(direction) {
-    /*
         console.log(snake.direction);
         console.log(direction);
-        console.log((snake.direction in ["RIGHT", "LEFT"] && direction in ["RIGHT", "LEFT"]));
-        if ( (snake.direction in ["RIGHT", "LEFT"] && direction in ["RIGHT", "LEFT"]) ||
-             (snake.direction in ["UP", "DOWN"] && direction in ["UP", "DOWN"]) )
-             return false;
-    */
+        if ((left_right.indexOf(snake.direction) && left_right.indexOf(direction)) > 0)
+            return false;
+        if ((up_down.indexOf(snake.direction) && up_down.indexOf(direction)) > 0)
+            return false;
         this.snake.changeDirection(direction);
         return true;
     };
@@ -13579,17 +13579,6 @@ var GameView = Backbone.View.extend({
     events: {
         "click .game_overlay": "modalClose",
         "click #game_show": "modalClose"
-    },
-
-    showWait: function () {
-//    Todo
-        alert("Please wait for data to load");
-    },
-
-    showNoGame: function () {
-        $('.spinner').css('display', 'block');
-        $('#result_message').html("No Game in Action");
-        this.fade();
     },
 
     startGame: function(data) {
@@ -13642,13 +13631,13 @@ var GameView = Backbone.View.extend({
         this.render();
         this.$el.hide();
 
-        this.started = false;
         this.listenTo(this.controller, 'startLoad', this.showWait);
         this.listenTo(this.controller, 'adjustGame', this.startGame);
         this.listenTo(this.controller, 'endGame', this.endGame);
         this.listenTo(this.controller, 'tick', this.onTick);
         this.listenTo(this.viewman, 'view-hide', this.onhide);
 
+        this.started = false;
         $(document).on('keydown', {object : this}, this.keyPressed);
 
     },
@@ -13716,7 +13705,6 @@ var GameView = Backbone.View.extend({
     },
 
     keyPressed: function(e) {
-        //e.preventDefault();
         var that = e.data.object;
         var code = e.keyCode || e.which;
         var dirs = {

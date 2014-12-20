@@ -32,17 +32,6 @@ var GameView = Backbone.View.extend({
         "click #game_show": "modalClose"
     },
 
-    showWait: function () {
-//    Todo
-        alert("Please wait for data to load");
-    },
-
-    showNoGame: function () {
-        $('.spinner').css('display', 'block');
-        $('#result_message').html("No Game in Action");
-        this.fade();
-    },
-
     startGame: function(data) {
         this.width = data.width;
         this.height = data.height;
@@ -93,13 +82,13 @@ var GameView = Backbone.View.extend({
         this.render();
         this.$el.hide();
 
-        this.started = false;
         this.listenTo(this.controller, 'startLoad', this.showWait);
         this.listenTo(this.controller, 'adjustGame', this.startGame);
         this.listenTo(this.controller, 'endGame', this.endGame);
         this.listenTo(this.controller, 'tick', this.onTick);
         this.listenTo(this.viewman, 'view-hide', this.onhide);
 
+        this.started = false;
         $(document).on('keydown', {object : this}, this.keyPressed);
 
     },
@@ -167,7 +156,6 @@ var GameView = Backbone.View.extend({
     },
 
     keyPressed: function(e) {
-        //e.preventDefault();
         var that = e.data.object;
         var code = e.keyCode || e.which;
         var dirs = {
