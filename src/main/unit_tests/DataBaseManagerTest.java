@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DataBaseManagerTest {
-
+    private static final String address = "";
     private static MessageHelper msys = new MessageHelper();
     private static ArrayList<User> registeredUsersList = new ArrayList<>();
     private static ArrayList<User> unRegisteredUsersList = new ArrayList<>();
@@ -31,7 +31,7 @@ public class DataBaseManagerTest {
             unRegisteredUsersList.add(new User("tUnregPass", "tUnregLogin"));
 
             for (User user : registeredUsersList)
-                dbMan.registerUser(user.getLogin(), user.getPass());
+                dbMan.registerUser(address, user.getLogin(), user.getPass());
         }
         catch (SQLException xc) {
             System.out.println("Cannot connect to DataBase");
@@ -49,13 +49,13 @@ public class DataBaseManagerTest {
     public void testRegisterUser() throws Exception {
         String login = unRegisteredUsersList.get(0).getLogin(),
                 pass = unRegisteredUsersList.get(0).getPass();
-        dbMan.registerUser(login, pass);
+        dbMan.registerUser(address, login, pass);
         RegistrationAnswer msg = msys.getMsg();
 
         Assert.assertEquals("Passed registration test", "", msg.getErrMsg());
         Assert.assertEquals("Passed registration test", true, msg.isRegistrationSuccess());
 
-        dbMan.registerUser(login, pass);
+        dbMan.registerUser(address, login, pass);
         msg = msys.getMsg();
 
         Assert.assertEquals("Duplicate registration test", "User with this login already Exists", msg.getErrMsg());
@@ -70,14 +70,14 @@ public class DataBaseManagerTest {
                 pass = unRegisteredUsersList.get(1).getPass();
         UserSession failSession = new UserSession(login);
 
-        dbMan.checkAuth(failSession, pass);
+        dbMan.checkAuth(address, failSession, pass);
         AuthAnswer msg = msys.getMsg();
         Assert.assertEquals("Wrong user authorisation test", false, msg.getUserSession().isAuthSuccess());
 
         login = registeredUsersList.get(1).getLogin();
         pass = registeredUsersList.get(1).getPass();
         UserSession passSession = new UserSession(login);
-        dbMan.checkAuth(passSession, pass);
+        dbMan.checkAuth(address, passSession, pass);
         msg = msys.getMsg();
         Assert.assertEquals("Right user authorisation test", true, msg.getUserSession().isAuthSuccess());
 
@@ -87,7 +87,7 @@ public class DataBaseManagerTest {
     public void testChangePasswordFalse() throws Exception {
         String login = unRegisteredUsersList.get(0).getLogin(),
                pass = unRegisteredUsersList.get(0).getPass();
-        dbMan.changePassword(login, pass, "newPass");
+        dbMan.changePassword(address, login, pass, "newPass");
 
         ChangePasswordAnswer msg = msys.getMsg();
 
@@ -97,19 +97,19 @@ public class DataBaseManagerTest {
         login = registeredUsersList.get(0).getLogin();
         pass = registeredUsersList.get(0).getPass();
 
-        dbMan.changePassword(login, pass, "newPass");
+        dbMan.changePassword(address, login, pass, "newPass");
 
         msg = msys.getMsg();
 
         Assert.assertEquals("Passed change pass", "", msg.getErrMsg());
         Assert.assertEquals("Passed change pass", true, msg.isChangePasswordSuccess());
 
-        dbMan.changePassword(login, "newPass", pass);
+        dbMan.changePassword(address, login, "newPass", pass);
     }
 
     @Test
     public void testGetUsers() throws Exception {
-        dbMan.getUsers();
+        dbMan.getUsers(address);
         GetUsersAnswer msg = msys.getMsg();
 
         ArrayList<String> userLogins = new ArrayList();
@@ -127,7 +127,7 @@ public class DataBaseManagerTest {
     @Test
     public void testBestScores() throws Exception {
         final int ZERO = 0;
-        dbMan.bestScores();
+        dbMan.bestScores(address);
         BestScoresAnswer msg = msys.getMsg();
 
         ArrayList<Score> scores = new ArrayList<>();

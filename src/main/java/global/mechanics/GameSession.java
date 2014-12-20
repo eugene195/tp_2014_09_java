@@ -43,8 +43,12 @@ public class GameSession {
         return this.params.playersCnt;
     }
 
-    public Set<String> getPlayers() {
+    public Set<String> getPlayerNames() {
         return players.keySet();
+    }
+
+    public Collection<Player> getPlayers() {
+        return players.values();
     }
 
     public long getSnakeId(String name) {

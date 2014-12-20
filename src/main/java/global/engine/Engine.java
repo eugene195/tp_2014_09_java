@@ -1,6 +1,5 @@
 package global.engine;
 
-import global.AddressService;
 import global.GameMechanics;
 import global.MessageSystem;
 import global.mechanics.GameSession;
@@ -63,7 +62,7 @@ public class Engine {
         Location center = new Location(width / 2, height / 2);
 
         int I = 0;
-        for (String playerName : session.getPlayers()) {
+        for (String playerName : session.getPlayerNames()) {
             long id = session.getSnakeId(playerName);
 
             double posX = distX*Math.cos(angle*I),
@@ -213,8 +212,9 @@ public class Engine {
 
     private void endGame(Snake winner) {
         Map<String, Object> data = new HashMap<>();
-
+        Long winnerSnakeId = null;
         if (winner != null) {
+            winnerSnakeId = winner.getId();
             data.put("winner", winner.getId());
             data.put("color", winner.getColor().name());
         } else {
@@ -223,7 +223,8 @@ public class Engine {
         }
 
         mechanic.sendToClients("endGame", data, this);
-        msys.sendMessage(new EndGameQuery(this), AddressService.getMechanic());
+        String address = mechanic.getAddress();
+        msys.sendMessage(new EndGameQuery(address, this, winnerSnakeId));
     }
 
     public void execAction(String action, Map<String, Object> data) {

@@ -1,8 +1,12 @@
 @import "constants";
+
+$font-size_default: 35px;
+$font-size_small: 15px;
+
 .neon{
 	color: $pale-cyan;
 	font-family: 'OrbitronLight';
-	font-size: 35px;
+	font-size: $font-size_default;
 	text-shadow: 0 0 5px #A5F1FF, 0 0 10px #A5F1FF, 
 				 0 0 20px #A5F1FF, 0 0 30px #A5F1FF, 
 				 0 0 40px #A5F1FF;
@@ -10,4 +14,20 @@
 
 .neon_cyan{
 	@extend .neon;
+}
+
+.neon_cyan_small{
+	@extend .neon;
+	font-size: $font-size_small;
+}
+
+.neon_orange{
+	@extend .neon;
+	color: $bright-orange;
+}
+
+.neon_orange_small{
+	@extend .neon;
+	font-size: $font-size_small;
+	color: $bright-orange;
 }

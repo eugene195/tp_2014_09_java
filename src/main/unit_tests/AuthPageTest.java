@@ -21,6 +21,7 @@ import static org.mockito.Mockito.*;
 public class AuthPageTest {
 
     private static AuthPage testPage;
+    private static final String address = "";
     private static MessageSystemImpl msys;
 
     private static HttpServletRequest request;
@@ -47,7 +48,7 @@ public class AuthPageTest {
                         UserSession us = new UserSession("max");
                         us.setSuccessAuth(this.isSuccess);
 
-                        this.testPage.finalizeAsync(new AuthAnswer(us));
+                        this.testPage.finalizeAsync(new AuthAnswer(address, address, us));
                         break;
                     }
 
@@ -69,7 +70,7 @@ public class AuthPageTest {
         session = mock(HttpSession.class);
         when(request.getSession()).thenReturn(session);
 
-        testPage = new AuthPage(msys, userSessions);
+        testPage = new AuthPage(address, msys, userSessions);
     }
 
     @Test

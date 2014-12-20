@@ -7,9 +7,9 @@ import global.msgsystem.messages.AbstractMsg;
  */
 public interface MessageSystem {
 
-    void register(Runnable abonent, String address);
+    void register(Abonent abonent);
 
-    boolean sendMessage(AbstractMsg message, String addressTo);
-    void executeFor(Runnable abonent);
+    boolean sendMessage(AbstractMsg message);
+    void executeFor(Abonent abonent);
 
 }

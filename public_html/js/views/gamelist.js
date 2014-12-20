@@ -23,7 +23,8 @@ var GameList = Backbone.View.extend({
         "submit form[name=gamelist-form]": "createGame",
         "click .sessions__entry": "addUser",
         "click #addPlayer": "addPlr",
-        "click #subPlayer": "subPlr"
+        "click #subPlayer": "subPlr",
+        "click #form__footer__back": "onback"
     },
 
     initialize: function() {
@@ -95,11 +96,14 @@ var GameList = Backbone.View.extend({
         this.update();
     },
 
-    addUser: function() {
-        var sessionId = 0;
+    addUser: function(event) {
+        var target = $(event.target);
+        var idItem = target.siblings('.sessions__id');
+        var sessionId = idItem.attr('value');
+
         this.controller.sendMessage({
             action: "addUser",
-            sessionId: sessionId
+            sessionId: parseInt(sessionId)
         });
     },
 
@@ -118,6 +122,10 @@ var GameList = Backbone.View.extend({
 
     gameStarted: function(data) {
         this.trigger('start');
+    },
+
+    onback: function () {
+        this.controller.dropSocket();
     }
 });
     return new GameList();

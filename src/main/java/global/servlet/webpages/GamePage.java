@@ -1,5 +1,7 @@
 package global.servlet.webpages;
 
+import global.MessageSystem;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,6 +15,10 @@ import java.util.Map;
 public class GamePage extends WebPage {
     public static final String URL = "/game";
     public static final String TML_PATH = "GamePage.html";
+
+    public GamePage(String address, MessageSystem msys) {
+        super(address, msys);
+    }
 
     @Override
 //    TODO

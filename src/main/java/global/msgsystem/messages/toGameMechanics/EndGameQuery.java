@@ -7,13 +7,16 @@ import global.engine.Engine;
  */
 public class EndGameQuery extends AbstractToMechanics {
     private Engine engine;
+    private Long winnerSnakeId;
 
-    public EndGameQuery(Engine engine) {
+    public EndGameQuery(String addressFrom, Engine engine, Long winnerSnakeId) {
+        super(addressFrom);
         this.engine = engine;
+        this.winnerSnakeId = winnerSnakeId;
     }
 
     @Override
     public void exec(GameMechanics mechanics) {
-        mechanics.endGame(this.engine);
+        mechanics.endGame(engine, winnerSnakeId);
     }
 }

@@ -12,16 +12,17 @@ import java.util.Map;
 public class GameSessionsAnswer extends AbstractToServlet {
     private final Map<Long, GameSession> sessions;
 
-    public GameSessionsAnswer(Map<Long, GameSession> sessions) {
+    public GameSessionsAnswer(String addressFrom, String addressTo, Map<Long, GameSession> sessions) {
+        super(addressFrom, addressTo);
         this.sessions = sessions;
     }
 
     @Override
     public void exec(Servlet servlet) {
-            servlet.transmitToPage(GameListPage.URL, this);
+        servlet.transmitToPage(GameListPage.URL, this);
     }
 
     public Map<Long, GameSession> getSessions() {
-        return this.sessions;
+        return sessions;
     }
 }

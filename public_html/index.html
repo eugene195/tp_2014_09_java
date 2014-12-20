@@ -14,6 +14,29 @@
     <div class="canvas"></div>
     <div class="gamelist"></div>
 
-    <script data-main="js/main" src="js/lib/require.js"></script>
+    <div class="wrapper">
+        <div class="container-centered">
+            <div class="content-centered">
+                <form class="form_dark">
+                    <div class="form__header">
+                        <h1 class="neon form__header__h1">Loading...</h1>
+                    </div>
+                    <div class="form-content spinner"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="js/build.min.js"></script>
+    <script>
+        var timerID = setInterval(function () {
+        require(['main'], function() {
+            console.log('hello');
+            $('.spinner').css('display', 'none');
+            $('.form_dark').css('display', 'none');
+            clearInterval(timerID);
+        });
+        }, 10);
+    </script>
+
     <script src="//localhost:35729/livereload.js"></script>
 </body></html>

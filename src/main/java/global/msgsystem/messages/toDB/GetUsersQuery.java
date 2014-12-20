@@ -7,8 +7,12 @@ import global.DataBaseManager;
  */
 public class GetUsersQuery extends AbstractToDB {
 
+    public GetUsersQuery(String addressFrom) {
+        super(addressFrom);
+    }
+
     @Override
     public void exec(DataBaseManager dbman) {
-        dbman.getUsers();
+        dbman.getUsers(getAddressFrom());
     }
 }

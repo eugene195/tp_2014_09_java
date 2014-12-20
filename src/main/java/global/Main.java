@@ -51,6 +51,9 @@ public class Main
             server.setHandler(handlers);
             server.start();
             server.join();
+
+
+
         }
         catch (SQLException e) {
             System.out.println("Cannot connect to DB");

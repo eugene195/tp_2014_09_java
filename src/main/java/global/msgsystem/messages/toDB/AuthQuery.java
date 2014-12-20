@@ -11,13 +11,14 @@ public class AuthQuery extends AbstractToDB {
     private final UserSession userSession;
     private final String password;
 
-    public AuthQuery(UserSession userSession, String password){
+    public AuthQuery(String addressFrom, UserSession userSession, String password){
+        super(addressFrom);
         this.userSession = userSession;
         this.password = password;
     }
 
     @Override
     public void exec(DataBaseManager dbman){
-        dbman.checkAuth(this.userSession, this.password);
+        dbman.checkAuth(getAddressFrom(), userSession, password);
     }
 }

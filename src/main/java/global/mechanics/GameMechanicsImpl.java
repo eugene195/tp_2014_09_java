@@ -7,6 +7,8 @@ import global.engine.Engine;
 import global.engine.Params;
 import global.mechanics.sockets.SocketServiceImpl;
 import global.SocketService;
+import global.models.Player;
+import global.msgsystem.messages.toDB.ChangeScoresQuery;
 import global.msgsystem.messages.toServlet.GameSessionsAnswer;
 
 import java.util.*;
@@ -19,20 +21,28 @@ import static java.lang.Thread.sleep;
  */
 public class GameMechanicsImpl implements GameMechanics {
     private static final int STEP_TIME = 30;
+    private static final int EXTRA_SCORE = 10;
     private static AtomicLong idCounter = new AtomicLong();
 
     private final MessageSystem msys;
     private final SocketService socketService;
+    private final String address;
 
     private final Map<Long, GameSession> waitingPlayers = new HashMap<>();
     private final ArrayList<GameSession> playing = new ArrayList<>();
     private final ArrayList<Engine> engines = new ArrayList<>();
 
     public GameMechanicsImpl(MessageSystem msys) {
+        this.address = AddressService.registerMechanic();
         this.msys = msys;
-        this.msys.register(this, AddressService.getMechanic());
+        this.msys.register(this);
 
         this.socketService = new SocketServiceImpl(this);
+    }
+
+    @Override
+    public String getAddress() {
+        return this.address;
     }
 
     @Override
@@ -45,6 +55,7 @@ public class GameMechanicsImpl implements GameMechanics {
         while (true) {
             this.msys.executeFor(this);
             try {
+                //TODO: change STEP_TIME dynamically
                 sleep(STEP_TIME);
                 this.gmStep();
             } catch (InterruptedException e) {
@@ -66,7 +77,7 @@ public class GameMechanicsImpl implements GameMechanics {
      */
     private boolean checkAlready(String player) {
         for (GameSession gameSession : this.waitingPlayers.values())
-            if (gameSession.getPlayers().contains(player)) {
+            if (gameSession.getPlayerNames().contains(player)) {
                 return false;
             }
 
@@ -99,7 +110,6 @@ public class GameMechanicsImpl implements GameMechanics {
             if (filled) {
                 this.waitingPlayers.remove(sessionId);
                 this.startGame(gameSession);
-                this.waitingPlayers.remove(sessionId);
             }
         }
         else {
@@ -122,14 +132,18 @@ public class GameMechanicsImpl implements GameMechanics {
     }
 
     @Override
-    public void endGame(Engine engine) {
+    public void endGame(Engine engine, Long winnerSnakeId) {
         int index = this.engines.indexOf(engine);
 
         if (index != -1) {
             this.engines.remove(index);
             GameSession gameSession = playing.get(index);
-            this.socketService.notifyEnd(gameSession);
-            this.playing.remove(index);
+
+            ChangeScoresQuery msg = new ChangeScoresQuery(address, getExtraScoresUsers(gameSession, winnerSnakeId));
+
+            msys.sendMessage(msg);
+            socketService.notifyEnd(gameSession);
+            playing.remove(index);
         } else {
             System.out.println("endGame index error");
         }
@@ -160,8 +174,22 @@ public class GameMechanicsImpl implements GameMechanics {
     }
 
     @Override
-    public void getGameSessions() {
-        GameSessionsAnswer msg = new GameSessionsAnswer(this.waitingPlayers);
-        this.msys.sendMessage(msg, AddressService.getServletAddr());
+    public void getGameSessions(String addressTo) {
+        GameSessionsAnswer msg = new GameSessionsAnswer(address, addressTo, this.waitingPlayers);
+        this.msys.sendMessage(msg);
+    }
+
+    private Map<String, Integer> getExtraScoresUsers(GameSession session, Long  winnerSnakeId) {
+        Map<String, Integer> extraScoresUsers = new HashMap();
+
+        for (Player player: session.getPlayers()) {
+            if (player.getSnake() == winnerSnakeId) {
+                extraScoresUsers.put(player.getName(), EXTRA_SCORE);
+            } else {
+                extraScoresUsers.put(player.getName(), -EXTRA_SCORE);
+            }
+        }
+
+        return extraScoresUsers;
     }
 }

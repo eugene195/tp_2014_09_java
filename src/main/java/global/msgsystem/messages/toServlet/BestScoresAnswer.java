@@ -13,12 +13,13 @@ public class BestScoresAnswer extends AbstractToServlet {
 
     private final ArrayList<Score> scores;
 
-    public BestScoresAnswer(ArrayList<Score> scores) {
+    public BestScoresAnswer(String addressFrom, String addressTo, ArrayList<Score> scores) {
+        super(addressFrom, addressTo);
         this.scores = scores;
     }
 
     public ArrayList<Score> getScores() {
-        return this.scores;
+        return scores;
     }
 
     @Override
