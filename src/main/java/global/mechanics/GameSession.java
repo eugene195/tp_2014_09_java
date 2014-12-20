@@ -47,6 +47,14 @@ public class GameSession {
         return players.keySet();
     }
 
+    public ArrayList<Player> getArrayPlayers() {
+        ArrayList<Player> arrayPlayers = new ArrayList<>();
+        for (String key: players.keySet()) {
+           arrayPlayers.add(players.get(key));
+        }
+        return arrayPlayers;
+    }
+
     public long getSnakeId(String name) {
         return players.get(name).getSnake();
     }

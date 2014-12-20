@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import java.io.PrintWriter;
+
+import global.MessageSystem;
 import org.json.JSONObject;
 
 /**
@@ -14,6 +16,10 @@ import org.json.JSONObject;
  */
 public class IdentifyUserPage extends WebPage {
     public static final String URL = "/identifyuser";
+
+    public IdentifyUserPage(String address, MessageSystem msys) {
+        super(address, msys);
+    }
 
     private long getUserId(HttpSession session) {
         Object userObjId = session.getAttribute("userId");

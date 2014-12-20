@@ -19,7 +19,8 @@ public class LogoutPage extends WebPage {
 
     private final Map<String, UserSession> userSessions;
 
-    public LogoutPage(MessageSystem msys, Map<String, UserSession> userSessions) {
+    public LogoutPage(String address, MessageSystem msys, Map<String, UserSession> userSessions) {
+        super(address, msys);
         this.userSessions = userSessions;
     }
 

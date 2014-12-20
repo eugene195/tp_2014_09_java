@@ -21,14 +21,11 @@ import java.io.PrintWriter;
 public class ProfilePage extends WebPage {
 
     public static final String URL = "/profile";
-
-    private final MessageSystem msys;
-
     private boolean successChangeProfile;
     private String messageError;
 
-    public ProfilePage(MessageSystem msys) {
-        this.msys = msys;
+    public ProfilePage(String address, MessageSystem msys) {
+        super(address, msys);
     }
 
     @Override
@@ -42,7 +39,7 @@ public class ProfilePage extends WebPage {
 
         String login = session.getAttribute("login").toString();
 
-        this.msys.sendMessage(new ChangePasswordQuery(login, curPassw, passw), "dbman");
+        this.msys.sendMessage(new ChangePasswordQuery(address, login, curPassw, passw));
         setZombie();
 
         response.setContentType("application/json; charset=UTF-8");

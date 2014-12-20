@@ -1,5 +1,6 @@
 package global.servlet.webpages;
 
+import global.MessageSystem;
 import global.msgsystem.messages.toServlet.AbstractToServlet;
 import global.servlet.Templater;
 import org.apache.velocity.exception.ResourceNotFoundException;
@@ -19,7 +20,12 @@ public abstract class WebPage {
     protected static final String OK = "1";
     protected static final String FAILED = "-1";
 
-    public WebPage() {
+    protected final MessageSystem msys;
+    protected final String address;
+
+    public WebPage(String address, MessageSystem msys) {
+        this.msys = msys;
+        this.address = address;
         this.zombie = false;
     }
 
@@ -66,6 +72,7 @@ public abstract class WebPage {
      * This method enforces the ServletImpl thread await for the async query.
      */
     public void setZombie() {
+        // TODO: escape timeout (5 sec)
         this.zombie = true;
 
         while (this.zombie) {

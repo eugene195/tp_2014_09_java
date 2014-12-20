@@ -63,9 +63,9 @@ function CurrentSnakeHolder (snakeObj) {
     this.setDirection = function(direction) {
         console.log(snake.direction);
         console.log(direction);
-        if ((left_right.indexOf(snake.direction) && left_right.indexOf(direction)) > 0)
+        if ((left_right.indexOf(this.snake.snake.direction) && left_right.indexOf(direction)) > 0)
             return false;
-        if ((up_down.indexOf(snake.direction) && up_down.indexOf(direction)) > 0)
+        if ((up_down.indexOf(this.snake.snake.direction) && up_down.indexOf(direction)) > 0)
             return false;
         this.snake.changeDirection(direction);
         return true;

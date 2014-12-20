@@ -26,10 +26,9 @@ public class AdminPage extends WebPage {
     private Set<String> loggedIn;
 
     private int fullInfo;
-    private final MessageSystem msys;
 
-    public AdminPage(MessageSystem msys) {
-        this.msys = msys;
+    public AdminPage(String address, MessageSystem msys) {
+        super(address, msys);
         this.registered = new ArrayList<>();
         this.loggedIn = new HashSet();
     }
@@ -39,8 +38,8 @@ public class AdminPage extends WebPage {
 
         fullInfo = 0;
 
-        this.msys.sendMessage(new GetUsersQuery(), "dbman");
-        this.msys.sendMessage(new GetOnlineUsersQuery(), "servlet");
+        this.msys.sendMessage(new GetUsersQuery(address));
+        this.msys.sendMessage(new GetOnlineUsersQuery(address, AddressService.getServletAddr()));
         setZombie();
 
         Map<String, Object> context = new LinkedHashMap<>();
@@ -89,6 +88,7 @@ public class AdminPage extends WebPage {
         if (absMsg instanceof GetUsersAnswer) {
             GetUsersAnswer msg = (GetUsersAnswer) absMsg;
             this.registered = msg.getUsers();
+            // TODO: two boolean flags
             fullInfo++;
         }
         else if (absMsg instanceof GetOnlineUsersAnswer) {

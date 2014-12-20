@@ -18,13 +18,12 @@ import java.util.ArrayList;
  * Created by max on 02.10.14.
  */
 public class ScorePage extends WebPage {
-    public static final String URL = "/scores";
-    private final MessageSystem msys;
 
+    public static final String URL = "/scores";
     private ArrayList<Score> scores;
 
-    public ScorePage(MessageSystem msys) {
-        this.msys = msys;
+    public ScorePage(String address, MessageSystem msys) {
+        super(address, msys);
     }
 
     @Override
@@ -34,7 +33,7 @@ public class ScorePage extends WebPage {
         PrintWriter printout = response.getWriter();
         JSONObject json = new JSONObject();
         this.scores = null;
-        this.msys.sendMessage(new BestScoresQuery(), "dbman");
+        this.msys.sendMessage(new BestScoresQuery(address));
         setZombie();
 
         if (this.scores != null) {

@@ -1,5 +1,7 @@
 package global.msgsystem.messages.toServlet;
 
+import global.Abonent;
+import global.AddressService;
 import global.Servlet;
 import global.msgsystem.messages.AbstractMsg;
 
@@ -8,10 +10,14 @@ import global.msgsystem.messages.AbstractMsg;
  */
 public abstract class AbstractToServlet extends AbstractMsg {
 
+    public AbstractToServlet(String addressFrom, String addressTo) {
+        super(addressFrom, addressTo);
+    }
+
     public abstract void exec(Servlet servlet);
 
     @Override
-    public void exec(Runnable abonent) {
+    public void exec(Abonent abonent) {
         if (abonent instanceof Servlet) {
             Servlet servlet = (Servlet) abonent;
             exec(servlet);

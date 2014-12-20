@@ -69,7 +69,6 @@ var GameView = Backbone.View.extend({
         this.started = false;
         var winnerId = data.winner;
         $('.spinner').css('display', 'none');
-
         if (this.snakeHolder.isWinner(winnerId))
             $('#result_message').html("You Win");
         else
@@ -130,6 +129,7 @@ var GameView = Backbone.View.extend({
     onhide: function (view) {
         if (this === view) {
             this.started = false;
+            this.controller.dropSocket();
         }
     },
 

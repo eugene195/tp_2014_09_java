@@ -9,7 +9,7 @@ import global.msgsystem.messages.AbstractMsg;
 
 public class MinMessageHelper extends MessageSystemImpl {
     @Override
-    public boolean sendMessage(AbstractMsg msg, String unused) {
+    public boolean sendMessage(AbstractMsg msg) {
         return true;
     }
 }

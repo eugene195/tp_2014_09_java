@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by eugene on 10/19/14.
  */
-public interface GameMechanics extends Runnable {
+public interface GameMechanics extends Runnable, Abonent {
 
     void run();
 
@@ -22,7 +22,7 @@ public interface GameMechanics extends Runnable {
     void addToSession(long sessionId, String player);
 
     void startGame(GameSession gameSession);
-    void endGame(Engine endine);
+    void endGame(Engine endine, Long winnerSnakeId);
 
-    void getGameSessions();
+    void getGameSessions(String addressTo);
 }

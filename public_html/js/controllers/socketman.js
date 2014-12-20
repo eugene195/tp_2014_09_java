@@ -29,9 +29,9 @@ define([
             }.bind(this);
         },
 
-        dropSocket : function () {
-            ws,close();
-            delete ws;
+        dropSocket: function () {
+            this.ws.close();
+            delete this.ws;
         },
 
         loadData : function () {

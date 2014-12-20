@@ -17,21 +17,22 @@ public class RegistrationAnswer extends AbstractToServlet {
     private final String login;
     private final String errorMessage;
 
-    public RegistrationAnswer(boolean success, String login, String errMsg) {
+    public RegistrationAnswer(String addressFrom, String addressTo, boolean success, String login, String errMsg) {
+        super(addressFrom, addressTo);
         this.success = success;
         this.login = login;
         this.errorMessage = errMsg;
     }
 
     public boolean isRegistrationSuccess() {
-        return this.success;
+        return success;
     }
 
     public String getLogin() {
-        return this.login;
+        return login;
     }
 
-    public String getErrMsg() { return this.errorMessage; }
+    public String getErrMsg() { return errorMessage; }
 
     @Override
     public void exec(Servlet servlet) {
