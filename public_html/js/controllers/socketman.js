@@ -30,8 +30,8 @@ define([
         },
 
         dropSocket: function () {
-            this.ws.close();
-            delete this.ws;
+            // this.ws.close();
+            // delete this.ws;
         },
 
         loadData : function () {

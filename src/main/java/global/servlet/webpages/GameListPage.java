@@ -1,6 +1,5 @@
 package global.servlet.webpages;
 
-import global.AddressService;
 import global.MessageSystem;
 import global.mechanics.GameSession;
 import global.msgsystem.messages.toServlet.GameSessionsAnswer;
@@ -75,7 +74,7 @@ public class GameListPage extends WebPage {
             GameSession session = entry.getValue();
 
             session.getParams().toJson(item);
-            item.put("players", session.getPlayers().toArray());
+            item.put("players", session.getPlayerNames().toArray());
             item.put("sessionId", (long) sessionId);
             data.put(item);
         }
