@@ -77,7 +77,7 @@ public class GameMechanicsImpl implements GameMechanics {
      */
     private boolean checkAlready(String player) {
         for (GameSession gameSession : this.waitingPlayers.values())
-            if (gameSession.getPlayers().contains(player)) {
+            if (gameSession.getPlayerNames().contains(player)) {
                 return false;
             }
 
@@ -138,9 +138,9 @@ public class GameMechanicsImpl implements GameMechanics {
         if (index != -1) {
             this.engines.remove(index);
             GameSession gameSession = playing.get(index);
-            ArrayList<Player> players = gameSession.getArrayPlayers();
 
-            ChangeScoresQuery msg = new ChangeScoresQuery(address, getExtraScoresUsers(players, winnerSnakeId));
+            ChangeScoresQuery msg = new ChangeScoresQuery(address, getExtraScoresUsers(gameSession, winnerSnakeId));
+
             msys.sendMessage(msg);
             socketService.notifyEnd(gameSession);
             playing.remove(index);
@@ -179,10 +179,10 @@ public class GameMechanicsImpl implements GameMechanics {
         this.msys.sendMessage(msg);
     }
 
-    private Map<String, Integer> getExtraScoresUsers(ArrayList<Player> players, Long  winnerSnakeId) {
+    private Map<String, Integer> getExtraScoresUsers(GameSession session, Long  winnerSnakeId) {
         Map<String, Integer> extraScoresUsers = new HashMap();
 
-        for (Player player: players) {
+        for (Player player: session.getPlayers()) {
             if (player.getSnake() == winnerSnakeId) {
                 extraScoresUsers.put(player.getName(), EXTRA_SCORE);
             } else {

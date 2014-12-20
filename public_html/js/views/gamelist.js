@@ -97,7 +97,6 @@ var GameList = Backbone.View.extend({
     },
 
     addUser: function(event) {
-        debugger;
         var target = $(event.target);
         var idItem = target.siblings('.sessions__id');
         var sessionId = idItem.attr('value');

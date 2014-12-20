@@ -62,7 +62,7 @@ public class Engine {
         Location center = new Location(width / 2, height / 2);
 
         int I = 0;
-        for (String playerName : session.getPlayers()) {
+        for (String playerName : session.getPlayerNames()) {
             long id = session.getSnakeId(playerName);
 
             double posX = distX*Math.cos(angle*I),

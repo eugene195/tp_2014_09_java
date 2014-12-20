@@ -43,16 +43,12 @@ public class GameSession {
         return this.params.playersCnt;
     }
 
-    public Set<String> getPlayers() {
+    public Set<String> getPlayerNames() {
         return players.keySet();
     }
 
-    public ArrayList<Player> getArrayPlayers() {
-        ArrayList<Player> arrayPlayers = new ArrayList<>();
-        for (String key: players.keySet()) {
-           arrayPlayers.add(players.get(key));
-        }
-        return arrayPlayers;
+    public Collection<Player> getPlayers() {
+        return players.values();
     }
 
     public long getSnakeId(String name) {

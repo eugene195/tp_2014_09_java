@@ -4,8 +4,9 @@ import global.GameMechanics;
 import global.engine.Params;
 import global.mechanics.GameSession;
 import global.SocketService;
+import global.models.Player;
 
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,18 +52,13 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void sendToClients(String action, Map<String, Object> data, GameSession session) {
-        int userId = 0;
-        ArrayList<String> users = new ArrayList<>();
-        for (String user : session.getPlayers()) {
-            users.add(user);
-        }
+        Set<String> names = session.getPlayerNames();
 
-        for (String user : session.getPlayers()) {
-            GameSocket socket = userSockets.get(user);
-            data.put("snakeId", userId);
-            data.put("names", users);
+        for (Player player : session.getPlayers()) {
+            GameSocket socket = userSockets.get(player.getName());
+            data.put("snakeId", player.getSnake());
+            data.put("names", names);
             socket.sendToClient(action, data);
-            userId++;
         }
     }
 
@@ -75,11 +71,11 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void notifyStart(GameSession gameSession) {
-        for (String user : gameSession.getPlayers()) {
+        for (String user : gameSession.getPlayerNames()) {
             nameToGame.put(user, gameSession);
         }
 
-        for (String user : gameSession.getPlayers()) {
+        for (String user : gameSession.getPlayerNames()) {
             GameSocket socket = userSockets.get(user);
             socket.sendToClient("notifyStart");
         }
@@ -87,12 +83,12 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void notifyEnd(GameSession gameSession) {
-        for (String user : gameSession.getPlayers()) {
+        for (String user : gameSession.getPlayerNames()) {
             GameSocket socket = userSockets.get(user);
             socket.sendToClient("notifyEnd");
         }
-        gameSession.getPlayers().forEach(this.nameToGame::remove);
-        gameSession.getPlayers().forEach(this.userSockets::remove);
+        gameSession.getPlayerNames().forEach(this.nameToGame::remove);
+        gameSession.getPlayerNames().forEach(this.userSockets::remove);
     }
 
     @Override
