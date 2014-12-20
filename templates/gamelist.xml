@@ -56,7 +56,14 @@
 
               <button class="sessions__entry button_small">Join</button>
 
-              <input class="sessions__id" type="hidden" value="<fest:value>game.sessionId</fest:value>"/>
+              <input class="sessions__id" type="hidden">
+                  <fest:attributes>
+                    <fest:attribute name="value">
+                      <fest:value>game.sessionId</fest:value>
+                    </fest:attribute>
+                  </fest:attributes>
+              </input>
+
               <div class="sessions__info">
                   <fest:for from="1" to="game.playersCnt" index="i">
                       <img class="icon-size right" src="../images/user.png"/>

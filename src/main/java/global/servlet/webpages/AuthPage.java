@@ -56,7 +56,7 @@ public class AuthPage extends WebPage {
 
         this.userSession = new UserSession(login);
 
-        this.msys.sendMessage(new AuthQuery(address, this.userSession, passw), AddressService.getDBManAddr());
+        this.msys.sendMessage(new AuthQuery(address, this.userSession, passw));
         setZombie();
 
         if (this.userSession.isAuthSuccess()) {
@@ -85,7 +85,8 @@ public class AuthPage extends WebPage {
             resume();
         }
         else if (absMsg instanceof GetOnlineUsersQuery) {
-            this.msys.sendMessage(new GetOnlineUsersAnswer(address, this.userSessions.keySet()), AddressService.getServletAddr());
+            String addressTo = AddressService.getServletAddr();
+            this.msys.sendMessage(new GetOnlineUsersAnswer(address, addressTo, this.userSessions.keySet()));
         }
     }
 }

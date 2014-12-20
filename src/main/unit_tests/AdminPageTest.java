@@ -34,8 +34,8 @@ public class AdminPageTest {
                     sleep(10);
 
                     if (this.testPage.isZombie()) {
-                        this.testPage.finalizeAsync(new GetUsersAnswer(new ArrayList<UserDataSet>()));
-                        this.testPage.finalizeAsync(new GetOnlineUsersAnswer(new HashSet<>()));
+                        this.testPage.finalizeAsync(new GetUsersAnswer(address, address, new ArrayList<UserDataSet>()));
+                        this.testPage.finalizeAsync(new GetOnlineUsersAnswer(address, address, new HashSet<>()));
                         break;
                     }
 
@@ -46,6 +46,7 @@ public class AdminPageTest {
         }
     }
 
+    private static final String address = "";
     private static MinMessageHelper msys;
     private static HttpServletRequest request;
     private static HttpServletResponse response;
@@ -59,7 +60,7 @@ public class AdminPageTest {
         response = mock(HttpServletResponse.class);
         when(request.getParameter("locally")).thenReturn("true");
 
-        testPage = new AdminPage(msys);
+        testPage = new AdminPage(address, msys);
     }
 
     @Test

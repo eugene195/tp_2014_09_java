@@ -12,8 +12,8 @@ import java.util.Map;
 public class GameSessionsAnswer extends AbstractToServlet {
     private final Map<Long, GameSession> sessions;
 
-    public GameSessionsAnswer(String addressFrom, Map<Long, GameSession> sessions) {
-        super(addressFrom);
+    public GameSessionsAnswer(String addressFrom, String addressTo, Map<Long, GameSession> sessions) {
+        super(addressFrom, addressTo);
         this.sessions = sessions;
     }
 

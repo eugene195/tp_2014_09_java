@@ -224,7 +224,7 @@ public class Engine {
 
         mechanic.sendToClients("endGame", data, this);
         String address = mechanic.getAddress();
-        msys.sendMessage(new EndGameQuery(address, this, winnerSnakeId), address);
+        msys.sendMessage(new EndGameQuery(address, this, winnerSnakeId));
     }
 
     public void execAction(String action, Map<String, Object> data) {

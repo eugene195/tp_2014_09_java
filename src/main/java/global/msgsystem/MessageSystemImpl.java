@@ -29,8 +29,9 @@ public class MessageSystemImpl implements MessageSystem {
     //TODO: append unregister method
 
     @Override
-    public boolean sendMessage(AbstractMsg message, String addressTo) {
+    public boolean sendMessage(AbstractMsg message) {
         boolean result;
+        String addressTo = message.getAddressTo();
         Queue<AbstractMsg> messageQueue = this.messages.get(addressTo);
 
         try {

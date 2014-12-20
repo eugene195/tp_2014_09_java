@@ -38,8 +38,8 @@ public class AdminPage extends WebPage {
 
         fullInfo = 0;
 
-        this.msys.sendMessage(new GetUsersQuery(address), AddressService.getDBManAddr());
-        this.msys.sendMessage(new GetOnlineUsersQuery(address), AddressService.getServletAddr());
+        this.msys.sendMessage(new GetUsersQuery(address));
+        this.msys.sendMessage(new GetOnlineUsersQuery(address, AddressService.getServletAddr()));
         setZombie();
 
         Map<String, Object> context = new LinkedHashMap<>();

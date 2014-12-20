@@ -85,7 +85,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
         try {
             UsersDAO userDAO = new UsersDAO(executor);
             ArrayList<UserDataSet> users = userDAO.getAll();
-            this.msys.sendMessage(new GetUsersAnswer(address, users), addressTo);
+            this.msys.sendMessage(new GetUsersAnswer(address, addressTo, users));
         }
         catch (Exception e) {
             System.out.println(e.getMessage() + "\nSql exception during getUsers()");
@@ -101,35 +101,35 @@ public class DataBaseManagerImpl implements DataBaseManager {
             if (user != null) {
                 userSession.setSuccessAuth(true);
                 userSession.setUserId(user.getId());
-                this.msys.sendMessage(new AuthAnswer(address, userSession), addressTo);
+                this.msys.sendMessage(new AuthAnswer(address, addressTo, userSession));
             }
             else {
                 userSession.setSuccessAuth(false);
-                this.msys.sendMessage(new AuthAnswer(address, userSession), addressTo);
+                this.msys.sendMessage(new AuthAnswer(address, addressTo, userSession));
             }
         }
         catch (Exception e) {
             System.out.println(e.getMessage() + "\nSql exception during checkAuth()");
             userSession.setSuccessAuth(false);
-            this.msys.sendMessage(new AuthAnswer(address, userSession), addressTo);
+            this.msys.sendMessage(new AuthAnswer(address, addressTo, userSession));
         }
     }
 
     @Override
     public void registerUser(String addressTo, String login, String passw) {
         if (userExists(login)) {
-            this.msys.sendMessage(new RegistrationAnswer(address, false, "", "User with this login already Exists"), addressTo);
+            this.msys.sendMessage(new RegistrationAnswer(address, addressTo, false, "", "User with this login already Exists"));
         }
         else {
             try {
                 UsersDAO userDAO = new UsersDAO(executor);
                 userDAO.add(login, passw);
-                this.msys.sendMessage(new RegistrationAnswer(address, true, login, ""), addressTo);
+                this.msys.sendMessage(new RegistrationAnswer(address, addressTo, true, login, ""));
             }
             catch (SQLException e){
                 e.printStackTrace();
                 System.out.println("Exception during DB insert in registration");
-                this.msys.sendMessage(new RegistrationAnswer(address, false, "", "Cannot add User "), addressTo);
+                this.msys.sendMessage(new RegistrationAnswer(address, addressTo, false, "", "Cannot add User "));
             }
         }
     }
@@ -173,7 +173,7 @@ public class DataBaseManagerImpl implements DataBaseManager {
                 scores.add(new Score(user.getLogin(), user.getScore()));
             }
 
-            this.msys.sendMessage(new BestScoresAnswer(address, scores), addressTo);
+            this.msys.sendMessage(new BestScoresAnswer(address, addressTo, scores));
         }
         catch (Exception e) {
             System.out.println("Exception during DB select in bestScores");
@@ -188,15 +188,15 @@ public class DataBaseManagerImpl implements DataBaseManager {
 
             if (user != null) {
                 userDAO.changePassw(login, newPassw);
-                this.msys.sendMessage(new ChangePasswordAnswer(address, true, ""), addressTo);
+                this.msys.sendMessage(new ChangePasswordAnswer(address, addressTo, true, ""));
             }
             else {
-                this.msys.sendMessage(new ChangePasswordAnswer(address, false, "Wrong current password"), addressTo);
+                this.msys.sendMessage(new ChangePasswordAnswer(address, addressTo, false, "Wrong current password"));
             }
         }
         catch (SQLException e) {
             System.out.println("Sql exception during changePassword()");
-            this.msys.sendMessage(new ChangePasswordAnswer(address, false, "Cannot change password"), addressTo);
+            this.msys.sendMessage(new ChangePasswordAnswer(address, addressTo, false, "Cannot change password"));
         }
     }
 

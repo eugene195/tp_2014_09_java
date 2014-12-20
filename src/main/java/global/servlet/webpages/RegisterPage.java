@@ -46,7 +46,7 @@ public class RegisterPage extends WebPage {
         String login = request.getParameter("login");
         String passw = request.getParameter("passw");
 
-        this.msys.sendMessage(new RegistrationQuery(address, login, passw), AddressService.getDBManAddr());
+        this.msys.sendMessage(new RegistrationQuery(address, login, passw));
         setZombie();
 
         response.setContentType("application/json; charset=UTF-8");

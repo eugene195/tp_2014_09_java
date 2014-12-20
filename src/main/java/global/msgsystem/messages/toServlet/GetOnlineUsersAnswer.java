@@ -11,8 +11,8 @@ import java.util.Set;
 public class GetOnlineUsersAnswer extends AbstractToServlet {
     private Set<String> keyset;
 
-    public GetOnlineUsersAnswer(String addressFrom, Set<String> set){
-        super(addressFrom);
+    public GetOnlineUsersAnswer(String addressFrom, String addressTo, Set<String> set){
+        super(addressFrom, addressTo);
         this.keyset = set;
     }
 

@@ -13,8 +13,8 @@ import java.util.ArrayList;
 public class GetUsersAnswer extends AbstractToServlet {
     private ArrayList<UserDataSet> users;
 
-    public GetUsersAnswer(String addressFrom, ArrayList<UserDataSet> users){
-        super(addressFrom);
+    public GetUsersAnswer(String addressFrom, String addressTo, ArrayList<UserDataSet> users){
+        super(addressFrom, addressTo);
         this.users = users;
     }
 

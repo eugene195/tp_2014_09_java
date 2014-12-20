@@ -141,7 +141,7 @@ public class GameMechanicsImpl implements GameMechanics {
             ArrayList<Player> players = gameSession.getArrayPlayers();
 
             ChangeScoresQuery msg = new ChangeScoresQuery(address, getExtraScoresUsers(players, winnerSnakeId));
-            msys.sendMessage(msg, AddressService.getDBManAddr());
+            msys.sendMessage(msg);
             socketService.notifyEnd(gameSession);
             playing.remove(index);
         } else {
@@ -175,8 +175,8 @@ public class GameMechanicsImpl implements GameMechanics {
 
     @Override
     public void getGameSessions(String addressTo) {
-        GameSessionsAnswer msg = new GameSessionsAnswer(address, this.waitingPlayers);
-        this.msys.sendMessage(msg, addressTo);
+        GameSessionsAnswer msg = new GameSessionsAnswer(address, addressTo, this.waitingPlayers);
+        this.msys.sendMessage(msg);
     }
 
     private Map<String, Integer> getExtraScoresUsers(ArrayList<Player> players, Long  winnerSnakeId) {

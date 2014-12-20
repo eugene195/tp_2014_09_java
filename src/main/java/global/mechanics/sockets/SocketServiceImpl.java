@@ -87,13 +87,12 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void notifyEnd(GameSession gameSession) {
-        gameSession.getPlayers().forEach(this.nameToGame::remove);
-        gameSession.getPlayers().forEach(this.userSockets::remove);
-
         for (String user : gameSession.getPlayers()) {
             GameSocket socket = userSockets.get(user);
             socket.sendToClient("notifyEnd");
         }
+        gameSession.getPlayers().forEach(this.nameToGame::remove);
+        gameSession.getPlayers().forEach(this.userSockets::remove);
     }
 
     @Override

@@ -7,8 +7,8 @@ import global.servlet.webpages.AuthPage;
  * Created by eugene on 9/27/14.
  */
 public class GetOnlineUsersQuery extends AbstractToServlet {
-    public GetOnlineUsersQuery(String addressFrom) {
-        super(addressFrom);
+    public GetOnlineUsersQuery(String addressFrom, String addressTo) {
+        super(addressFrom, addressTo);
     }
 
     @Override

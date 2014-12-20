@@ -10,8 +10,8 @@ import global.msgsystem.messages.AbstractMsg;
  */
 public abstract class AbstractToServlet extends AbstractMsg {
 
-    public AbstractToServlet(String addressFrom) {
-        super(addressFrom, AddressService.getServletAddr());
+    public AbstractToServlet(String addressFrom, String addressTo) {
+        super(addressFrom, addressTo);
     }
 
     public abstract void exec(Servlet servlet);

@@ -10,7 +10,7 @@ public class MessageHelper extends MessageSystemImpl {
     private AbstractMsg msg;
 
     @Override
-    public boolean sendMessage(AbstractMsg msg, String unused) {
+    public boolean sendMessage(AbstractMsg msg) {
         this.msg = msg;
         return true;
     }

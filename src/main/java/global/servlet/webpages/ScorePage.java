@@ -33,7 +33,7 @@ public class ScorePage extends WebPage {
         PrintWriter printout = response.getWriter();
         JSONObject json = new JSONObject();
         this.scores = null;
-        this.msys.sendMessage(new BestScoresQuery(address), AddressService.getDBManAddr());
+        this.msys.sendMessage(new BestScoresQuery(address));
         setZombie();
 
         if (this.scores != null) {

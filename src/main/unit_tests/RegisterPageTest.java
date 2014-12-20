@@ -14,6 +14,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class RegisterPageTest {
+    private static final String address = "";
     private static RegisterPage testPage;
     private static MessageSystem msys;
 
@@ -41,7 +42,7 @@ public class RegisterPageTest {
                         String error = "";
                         boolean success = this.isSuccess;
 
-                        this.testPage.finalizeAsync(new RegistrationAnswer(success, login, error));
+                        this.testPage.finalizeAsync(new RegistrationAnswer(address, address, success, login, error));
                         break;
                     }
 
@@ -61,7 +62,7 @@ public class RegisterPageTest {
         session = mock(HttpSession.class);
         when(request.getSession()).thenReturn(session);
 
-        testPage = new RegisterPage(msys);
+        testPage = new RegisterPage(address, msys);
     }
 
     @After

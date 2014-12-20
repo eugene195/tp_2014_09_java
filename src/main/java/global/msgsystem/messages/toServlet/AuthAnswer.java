@@ -10,8 +10,8 @@ import global.servlet.webpages.AuthPage;
 public class AuthAnswer extends AbstractToServlet {
     private final UserSession userSession;
 
-    public AuthAnswer(String addressFrom, UserSession userSession) {
-        super(addressFrom);
+    public AuthAnswer(String addressFrom, String addressTo, UserSession userSession) {
+        super(addressFrom, addressTo);
         this.userSession = userSession;
     }
 

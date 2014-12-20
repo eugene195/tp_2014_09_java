@@ -32,7 +32,7 @@ public class GameListPage extends WebPage {
     public void handleGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
-        this.msys.sendMessage(new GameSessionsQuery(address), AddressService.getMechanic());
+        this.msys.sendMessage(new GameSessionsQuery(address));
         this.setZombie();
 
         response.setContentType("application/json; charset=UTF-8");

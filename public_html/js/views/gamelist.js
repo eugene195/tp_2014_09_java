@@ -96,7 +96,7 @@ var GameList = Backbone.View.extend({
     },
 
     addUser: function() {
-        var sessionId = 0;
+        var sessionId = 0; // $(this).siblings('.sessions__id').attr('value');
         this.controller.sendMessage({
             action: "addUser",
             sessionId: sessionId

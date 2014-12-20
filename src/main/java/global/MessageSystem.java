@@ -9,7 +9,7 @@ public interface MessageSystem {
 
     void register(Abonent abonent);
 
-    boolean sendMessage(AbstractMsg message, String addressTo);
+    boolean sendMessage(AbstractMsg message);
     void executeFor(Abonent abonent);
 
 }
