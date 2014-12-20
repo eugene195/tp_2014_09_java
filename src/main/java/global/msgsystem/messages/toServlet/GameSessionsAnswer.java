@@ -19,7 +19,7 @@ public class GameSessionsAnswer extends AbstractToServlet {
 
     @Override
     public void exec(Servlet servlet) {
-            servlet.transmitToPage(GameListPage.URL, this);
+        servlet.transmitToPage(GameListPage.URL, this);
     }
 
     public Map<Long, GameSession> getSessions() {
