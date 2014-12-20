@@ -53,4 +53,9 @@ public class MessageSystemImpl implements MessageSystem {
             message.exec(abonent);
         }
     }
+
+    public ConcurrentLinkedQueue<AbstractMsg> getQueueState(Abonent abonent) {
+        String address = abonent.getAddress();
+        return this.messages.get(address);
+    }
 }
