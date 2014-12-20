@@ -74,7 +74,7 @@
       </fest:each>
     <div class="form__footer">
         <div class="buttons_wrapper">
-          <a href="#" class="button_orange left">Back</a>
+          <a href="#" id="form__footer__back" class="button_orange left">Back</a>
           <input type="submit" name="submit" value="Create" class="button right" />
         </div>
     </div>

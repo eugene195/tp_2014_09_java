@@ -140,6 +140,7 @@ var GameView = Backbone.View.extend({
     onhide: function (view) {
         if (this === view) {
             this.started = false;
+            this.controller.dropSocket();
         }
     },
 
