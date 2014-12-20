@@ -140,10 +140,11 @@ var GameView = Backbone.View.extend({
     },
 
     redraw: function (context) {
-        var length = this.snakes.length;
-        for(var i = 0; i < length; i++) {
-            var current = this.snakes[i];
-            current.drawSnake(context);
+        for (var I in this.snakes) {
+            if (this.snakes.hasOwnProperty(I)) {
+                var current = this.snakes[I];
+                current.drawSnake(context);
+            }
         }
     },
 
