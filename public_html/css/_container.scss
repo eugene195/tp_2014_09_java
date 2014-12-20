@@ -1,11 +1,12 @@
 .container-centered {
 	float: left;  
     position:relative;
-    left: 50%;
+    left: 30%;
 }
 
 .content-centered {
 	position:relative;
-    left: -50%;
+    left: -30%;
     float: left;
+    margin: 5px;
 }
