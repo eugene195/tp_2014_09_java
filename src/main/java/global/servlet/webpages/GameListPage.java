@@ -35,6 +35,7 @@ public class GameListPage extends WebPage {
         this.msys.sendMessage(new GameSessionsQuery(address));
         this.setZombie();
 
+        // TODO: execute in servlet thread  (Async)
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printout = response.getWriter();
 

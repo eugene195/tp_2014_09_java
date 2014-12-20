@@ -24,6 +24,8 @@ public class DataBaseManagerImpl implements DataBaseManager {
     private Executor executor;
     private final String address;
 
+    // TODO: enum for errors and then map it for client
+
     public DataBaseManagerImpl(MessageSystem msys, String baseName, String userName, String userPasswd)
             throws SQLException
     {

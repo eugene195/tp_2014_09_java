@@ -58,6 +58,7 @@ public class ServletImpl extends HttpServlet implements Servlet {
         while (true) {
             this.msys.executeFor(this);
             try {
+                //TODO: magic constant
                 sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();

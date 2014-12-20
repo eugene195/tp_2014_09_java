@@ -88,6 +88,7 @@ public class AdminPage extends WebPage {
         if (absMsg instanceof GetUsersAnswer) {
             GetUsersAnswer msg = (GetUsersAnswer) absMsg;
             this.registered = msg.getUsers();
+            // TODO: two boolean flags
             fullInfo++;
         }
         else if (absMsg instanceof GetOnlineUsersAnswer) {

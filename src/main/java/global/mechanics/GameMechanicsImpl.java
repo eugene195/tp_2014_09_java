@@ -55,6 +55,7 @@ public class GameMechanicsImpl implements GameMechanics {
         while (true) {
             this.msys.executeFor(this);
             try {
+                //TODO: change STEP_TIME dynamically
                 sleep(STEP_TIME);
                 this.gmStep();
             } catch (InterruptedException e) {
@@ -109,7 +110,6 @@ public class GameMechanicsImpl implements GameMechanics {
             if (filled) {
                 this.waitingPlayers.remove(sessionId);
                 this.startGame(gameSession);
-                this.waitingPlayers.remove(sessionId);
             }
         }
         else {

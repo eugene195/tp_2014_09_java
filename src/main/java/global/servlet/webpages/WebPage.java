@@ -72,6 +72,7 @@ public abstract class WebPage {
      * This method enforces the ServletImpl thread await for the async query.
      */
     public void setZombie() {
+        // TODO: escape timeout (5 sec)
         this.zombie = true;
 
         while (this.zombie) {
