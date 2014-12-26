@@ -48,10 +48,8 @@
     </div>
       <fest:each iterate="sessions" index="i" value="game">
           <div class="session">
-              <div class="sessions__players">
-                  <fest:each iterate="game.players" index="j" value="player">
-                      <fest:value>player</fest:value>
-                  </fest:each>
+              <div class="sessions__players">       
+                <fest:value>game.players[0]</fest:value>
               </div>
 
               <button class="sessions__entry button_small">Join</button>
@@ -65,10 +63,12 @@
               </input>
 
               <div class="sessions__info">
-                  <fest:for from="1" to="game.playersCnt" index="i">
+                  <fest:for from="1" to="game.players.length" index="i"> 
+                      <img class="icon-size right" src="../images/user-white.png"/>
+                  </fest:for>
+                  <fest:for from="game.players.length+1" to="game.playersCnt" index="i"> 
                       <img class="icon-size right" src="../images/user.png"/>
                   </fest:for>
-                  <fest:value>game.time</fest:value>
               </div>
           </div>
       </fest:each>
