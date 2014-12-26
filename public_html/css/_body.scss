@@ -39,6 +39,7 @@ body {
 
 .wrapper-top {
   @extend .wrapper;
+  margin-top: -300px;
 }
 
 .gradient {

@@ -24,7 +24,9 @@ $base-gap: 5px;
 
   padding: $base-gap * 2;
   margin-top: $base-gap * 2;
-  margin-bottom: $base-gap;
+  margin-bottom: $base-gap * 4;
+  margin-left: 5px;
+  margin-right: 5px;
   background-color: #e9d9ff;
   overflow: hidden;
 
@@ -37,4 +39,17 @@ $base-gap: 5px;
     padding-right: $base-gap * 2;
     float: right;
   }
+}
+
+.sessions__entry {
+  float: right;
+}
+
+.sessions__players {
+  float: left;
+  font-weight: bold;
+}
+
+.sessions__info {
+  margin-top: 5px;
 }
